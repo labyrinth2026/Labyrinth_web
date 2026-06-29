@@ -183,17 +183,17 @@ const ReportsManager: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white border border-blue-100 rounded-2xl shadow-sm p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-sm p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-xl font-bold font-grotesk text-[#1a2c4a]">Reports & Exports</h1>
-          <p className="text-[#4b6080] text-sm mt-0.5">Generate and download data reports in PDF, Excel, or Word.</p>
+          <h1 className="text-xl font-bold font-grotesk text-[#0B1F63]">Reports & Exports</h1>
+          <p className="text-[#667085] text-sm mt-0.5">Generate and download data reports in PDF, Excel, or Word.</p>
         </div>
       </div>
 
-      <div className="bg-white border border-blue-100 rounded-2xl shadow-sm p-6">
+      <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-sm p-6">
         <div className="flex flex-col md:flex-row gap-6">
           <div className="w-full md:w-1/3 space-y-4">
-            <h2 className="text-sm font-bold text-[#1a2c4a]">Select Data Source</h2>
+            <h2 className="text-sm font-bold text-[#0B1F63]">Select Data Source</h2>
             <div className="flex flex-col gap-2">
               {[
                 { id: 'events', label: 'Events Database' },
@@ -205,8 +205,8 @@ const ReportsManager: React.FC = () => {
                   onClick={() => setReportType(opt.id as any)}
                   className={`px-4 py-3 text-left rounded-xl text-sm font-semibold transition-colors border ${
                     reportType === opt.id
-                      ? 'bg-[#EAF4FF] border-[#005BAC] text-[#005BAC]'
-                      : 'bg-white border-blue-100 text-[#4b6080] hover:border-[#005BAC]'
+                      ? 'bg-[rgba(11,31,99,0.03)] border-[#0B1F63] text-[#0B1F63]'
+                      : 'bg-white border-[#E5E7EB] text-[#667085] hover:border-[#0B1F63]'
                   }`}
                 >
                   {opt.label}
@@ -214,12 +214,12 @@ const ReportsManager: React.FC = () => {
               ))}
             </div>
             
-            <div className="pt-4 border-t border-blue-50 space-y-3 mt-4">
-               <h2 className="text-sm font-bold text-[#1a2c4a]">Export As</h2>
+            <div className="pt-4 border-t border-[#E5E7EB] space-y-3 mt-4">
+               <h2 className="text-sm font-bold text-[#0B1F63]">Export As</h2>
                <button onClick={generatePDF} disabled={isExporting || isLoading || data.length === 0} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 text-red-600 border border-red-200 rounded-xl hover:bg-red-100 transition-colors disabled:opacity-50 font-semibold text-sm">
                   <FileText size={16} /> Export to PDF
                </button>
-               <button onClick={generateWord} disabled={isExporting || isLoading || data.length === 0} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-50 text-blue-600 border border-blue-200 rounded-xl hover:bg-blue-100 transition-colors disabled:opacity-50 font-semibold text-sm">
+               <button onClick={generateWord} disabled={isExporting || isLoading || data.length === 0} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[rgba(11,31,99,0.03)] text-blue-600 border border-[#E5E7EB] rounded-xl hover:bg-[rgba(11,31,99,0.05)] transition-colors disabled:opacity-50 font-semibold text-sm">
                   <FileText size={16} /> Export to Word (.docx)
                </button>
                <button onClick={generateExcel} disabled={isExporting || isLoading || data.length === 0} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-green-50 text-green-600 border border-green-200 rounded-xl hover:bg-green-100 transition-colors disabled:opacity-50 font-semibold text-sm">
@@ -230,34 +230,34 @@ const ReportsManager: React.FC = () => {
 
           <div className="w-full md:w-2/3">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-bold text-[#1a2c4a]">Data Preview ({data.length} records)</h2>
-              <button onClick={loadData} className="text-[#7a90aa] hover:text-[#005BAC]"><RefreshCw size={14} className={isLoading ? 'animate-spin' : ''} /></button>
+              <h2 className="text-sm font-bold text-[#0B1F63]">Data Preview ({data.length} records)</h2>
+              <button onClick={loadData} className="text-[#8c97a8] hover:text-[#0B1F63]"><RefreshCw size={14} className={isLoading ? 'animate-spin' : ''} /></button>
             </div>
             
-            <div className="border border-blue-50 rounded-xl overflow-hidden bg-gray-50 h-[400px] overflow-y-auto">
+            <div className="border border-[#E5E7EB] rounded-xl overflow-hidden bg-gray-50 h-[400px] overflow-y-auto">
               {isLoading ? (
-                <div className="flex flex-col items-center justify-center h-full text-[#7a90aa]">
-                   <RefreshCw size={24} className="animate-spin text-[#005BAC] mb-2" />
+                <div className="flex flex-col items-center justify-center h-full text-[#8c97a8]">
+                   <RefreshCw size={24} className="animate-spin text-[#0B1F63] mb-2" />
                    <span className="text-sm">Loading data...</span>
                 </div>
               ) : data.length === 0 ? (
-                <div className="flex items-center justify-center h-full text-[#7a90aa] text-sm">
+                <div className="flex items-center justify-center h-full text-[#8c97a8] text-sm">
                    No data available.
                 </div>
               ) : (
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-[#EAF4FF] sticky top-0">
+                  <thead className="bg-[rgba(11,31,99,0.03)] sticky top-0">
                     <tr>
                       {Object.keys(data[0]).slice(0, 4).map(key => (
-                         <th key={key} className="p-3 font-semibold text-[#005BAC] capitalize">{key}</th>
+                         <th key={key} className="p-3 font-semibold text-[#0B1F63] capitalize">{key}</th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-blue-50 bg-white">
+                  <tbody className="divide-y divide-[#E5E7EB] bg-white">
                     {data.map((item, i) => (
-                      <tr key={i} className="hover:bg-[#EAF4FF]/30">
+                      <tr key={i} className="hover:bg-[rgba(11,31,99,0.03)]/30">
                         {Object.keys(data[0]).slice(0, 4).map(key => (
-                           <td key={key} className="p-3 text-[#4b6080] truncate max-w-[150px]">
+                           <td key={key} className="p-3 text-[#667085] truncate max-w-[150px]">
                               {typeof item[key] === 'string' ? item[key] : JSON.stringify(item[key])}
                            </td>
                         ))}

@@ -66,7 +66,7 @@ const HomePage: React.FC = () => {
     return (
       <PageWrapper className="pt-0 pb-0">
         <div className="min-h-screen flex items-center justify-center">
-          <div className="w-8 h-8 border-3 border-[#005BAC] border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-3 border-[#0B1F63] border-t-transparent rounded-full animate-spin"></div>
         </div>
       </PageWrapper>
     );
@@ -76,13 +76,13 @@ const HomePage: React.FC = () => {
     <PageWrapper className="pt-0 pb-0">
 
       {/* ── Hero Section ── */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-[#EAF4FF] to-[#D6EBFF]">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-[rgba(11,31,99,0.03)] to-[rgba(11,31,99,0.07)]">
         {/* Subtle grid */}
         <div className="absolute inset-0 animated-grid opacity-40 pointer-events-none" />
 
         {/* Blue accent blobs */}
-        <div className="absolute top-1/4 left-10 w-80 h-80 bg-[#005BAC]/10 rounded-full blur-[80px] pointer-events-none animate-pulse-slow" />
-        <div className="absolute bottom-1/4 right-10 w-80 h-80 bg-[#1a8fc4]/10 rounded-full blur-[80px] pointer-events-none animate-pulse-slow" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/4 left-10 w-80 h-80 bg-[#0B1F63]/10 rounded-full blur-[80px] pointer-events-none animate-pulse-slow" />
+        <div className="absolute bottom-1/4 right-10 w-80 h-80 bg-[#163294]/10 rounded-full blur-[80px] pointer-events-none animate-pulse-slow" style={{ animationDelay: '2s' }} />
 
         <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center pt-24 pb-16">
           <motion.div
@@ -90,16 +90,16 @@ const HomePage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#EAF4FF] border border-[#D6EBFF] text-[#005BAC] text-sm font-semibold tracking-widest uppercase mb-6">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[rgba(11,31,99,0.03)] border border-[rgba(11,31,99,0.07)] text-[#0B1F63] text-sm font-semibold tracking-widest uppercase mb-6">
               <Sparkles size={14} />
               Computer Science Club · Christ University
             </span>
 
-            <h1 className="font-grotesk text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-4 text-[#1a2c4a] leading-none">
-              LABY<span className="text-[#005BAC]">RINTH</span>
+            <h1 className="font-grotesk text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-4 text-[#0B1F63] leading-none">
+              LABY<span className="text-[#0B1F63]">RINTH</span>
             </h1>
-            <p className="text-xl md:text-2xl text-[#4b6080] font-medium mb-2">Christ University, Bengaluru</p>
-            <p className="text-base md:text-lg text-[#7a90aa] max-w-xl mx-auto mb-10">
+            <p className="text-xl md:text-2xl text-[#667085] font-medium mb-2">Christ University, Bengaluru</p>
+            <p className="text-base md:text-lg text-[#8c97a8] max-w-xl mx-auto mb-10">
               The Computer Science Department's Computer Academy has been active since 1997. Labyrinth was established as the official face of this academy and serves as the only Computer Science Club of Christ University.
             </p>
           </motion.div>
@@ -127,8 +127,8 @@ const HomePage: React.FC = () => {
           >
             {statsData.slice(0, 4).map((stat, i) => (
               <div key={i} className="text-center">
-                <div className="font-grotesk text-3xl font-bold text-[#005BAC]">{stat.value}{stat.suffix}</div>
-                <div className="text-sm text-[#7a90aa] font-medium">{stat.label}</div>
+                <div className="font-grotesk text-3xl font-bold text-[#0B1F63]">{stat.value}{stat.suffix}</div>
+                <div className="text-sm text-[#8c97a8] font-medium">{stat.label}</div>
               </div>
             ))}
           </motion.div>
@@ -136,7 +136,7 @@ const HomePage: React.FC = () => {
 
         {/* Scroll Indicator */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[#7a90aa]"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[#8c97a8]"
           animate={{ y: [0, 8, 0] }}
           transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
         >
@@ -145,7 +145,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* ── Stats Section ── */}
-      <section className="py-20 bg-[#EAF4FF]">
+      <section className="py-20 bg-[rgba(11,31,99,0.03)]">
         <div className="container mx-auto px-6 max-w-7xl">
           <SectionHeading title="By The Numbers" subtitle="Our Impact" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -181,12 +181,12 @@ const HomePage: React.FC = () => {
                 transition={{ delay: i * 0.08 }}
               >
                 <Link href="/verticals" className="block group">
-                  <div className="bg-white border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:shadow-[#005BAC]/10 hover:-translate-y-1 transition-all duration-200">
-                    <div className="w-12 h-12 rounded-xl bg-[#EAF4FF] flex items-center justify-center text-[#005BAC] mb-4 group-hover:bg-[#005BAC] group-hover:text-white transition-all duration-200">
+                  <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-sm hover:shadow-lg hover:shadow-[#0B1F63]/10 hover:-translate-y-1 transition-all duration-200">
+                    <div className="w-12 h-12 rounded-xl bg-[rgba(11,31,99,0.03)] flex items-center justify-center text-[#0B1F63] mb-4 group-hover:bg-[#0B1F63] group-hover:text-white transition-all duration-200">
                       <Icon size={24} />
                     </div>
-                    <h3 className="font-grotesk font-bold text-[#1a2c4a] mb-1 group-hover:text-[#005BAC] transition-colors">{name}</h3>
-                    <p className="text-sm text-[#7a90aa]">{desc}</p>
+                    <h3 className="font-grotesk font-bold text-[#0B1F63] mb-1 group-hover:text-[#0B1F63] transition-colors">{name}</h3>
+                    <p className="text-sm text-[#8c97a8]">{desc}</p>
                   </div>
                 </Link>
               </motion.div>
@@ -197,16 +197,16 @@ const HomePage: React.FC = () => {
 
       {/* ── Featured Events Carousel ── */}
       {featuredEvents.length > 0 && (
-        <section className="py-20 bg-[#EAF4FF]">
+        <section className="py-20 bg-[rgba(11,31,99,0.03)]">
           <div className="container mx-auto px-6 max-w-7xl">
             <SectionHeading title="Featured Events" subtitle="Don't Miss Out" />
 
             <div
-              className="relative bg-white border border-blue-100 rounded-3xl shadow-md p-6 md:p-10"
+              className="relative bg-white border border-[#E5E7EB] rounded-3xl shadow-md p-6 md:p-10"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              <div className="relative h-[400px] overflow-hidden rounded-2xl bg-[#EAF4FF]">
+              <div className="relative h-[400px] overflow-hidden rounded-2xl bg-[rgba(11,31,99,0.03)]">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={currentSlide}
@@ -216,9 +216,9 @@ const HomePage: React.FC = () => {
                     transition={{ duration: 0.45, ease: 'easeInOut' }}
                     className="absolute inset-0"
                   >
-                    <div className="w-full h-full flex flex-col justify-end p-8 md:p-12 bg-gradient-to-t from-[#003b73] via-[#005BAC]/70 to-transparent rounded-2xl">
+                    <div className="w-full h-full flex flex-col justify-end p-8 md:p-12 bg-gradient-to-t from-[#003b73] via-[#0B1F63]/70 to-transparent rounded-2xl">
                       <div className="flex gap-3 mb-4">
-                        <span className="px-3 py-1 rounded-full bg-white text-[#005BAC] text-xs font-bold uppercase tracking-wider">
+                        <span className="px-3 py-1 rounded-full bg-white text-[#0B1F63] text-xs font-bold uppercase tracking-wider">
                           {featuredEvents[currentSlide].category}
                         </span>
                         <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur text-white text-xs font-medium border border-white/30">
@@ -228,7 +228,7 @@ const HomePage: React.FC = () => {
                       <h3 className="font-grotesk text-3xl md:text-4xl font-bold text-white mb-3 leading-tight">
                         {featuredEvents[currentSlide].title}
                       </h3>
-                      <p className="text-blue-100 md:text-lg mb-6 max-w-2xl line-clamp-2">
+                      <p className="text-slate-200 md:text-lg mb-6 max-w-2xl line-clamp-2">
                         {featuredEvents[currentSlide].description}
                       </p>
                       <Button variant="primary" size="sm">Register Now</Button>
@@ -239,12 +239,12 @@ const HomePage: React.FC = () => {
 
               {/* Nav Controls */}
               <div className="absolute top-1/2 -translate-y-1/2 left-3 md:-left-5">
-                <button onClick={prevSlide} className="w-10 h-10 rounded-full bg-white border border-blue-100 shadow-md flex items-center justify-center text-[#005BAC] hover:bg-[#005BAC] hover:text-white transition-all">
+                <button onClick={prevSlide} className="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] shadow-md flex items-center justify-center text-[#0B1F63] hover:bg-[#0B1F63] hover:text-white transition-all">
                   <ChevronLeft size={20} />
                 </button>
               </div>
               <div className="absolute top-1/2 -translate-y-1/2 right-3 md:-right-5">
-                <button onClick={nextSlide} className="w-10 h-10 rounded-full bg-white border border-blue-100 shadow-md flex items-center justify-center text-[#005BAC] hover:bg-[#005BAC] hover:text-white transition-all">
+                <button onClick={nextSlide} className="w-10 h-10 rounded-full bg-white border border-[#E5E7EB] shadow-md flex items-center justify-center text-[#0B1F63] hover:bg-[#0B1F63] hover:text-white transition-all">
                   <ChevronRight size={20} />
                 </button>
               </div>
@@ -256,7 +256,7 @@ const HomePage: React.FC = () => {
                     key={idx}
                     onClick={() => setCurrentSlide(idx)}
                     className={`h-2 rounded-full transition-all duration-300 ${
-                      currentSlide === idx ? 'w-7 bg-[#005BAC]' : 'w-2 bg-blue-200 hover:bg-[#005BAC]/50'
+                      currentSlide === idx ? 'w-7 bg-[#0B1F63]' : 'w-2 bg-[rgba(11,31,99,0.1)] hover:bg-[#0B1F63]/50'
                     }`}
                     aria-label={`Go to slide ${idx + 1}`}
                   />
@@ -287,7 +287,7 @@ const HomePage: React.FC = () => {
       )}
 
       {/* ── SDG Projects Initiative ── */}
-      <section className="py-20 bg-[#005BAC]">
+      <section className="py-20 bg-[#0B1F63]">
         <div className="container mx-auto px-6 max-w-5xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -300,15 +300,15 @@ const HomePage: React.FC = () => {
             <h2 className="font-grotesk text-4xl md:text-5xl font-bold text-white mb-6">
               SDG Projects Initiative
             </h2>
-            <p className="text-blue-100 text-lg md:text-xl mb-4 max-w-3xl mx-auto">
+            <p className="text-slate-200 text-lg md:text-xl mb-4 max-w-3xl mx-auto">
               Inviting project proposals aligned with the United Nations Sustainable Development Goals (SDGs) and relevant to Christ University.
             </p>
-            <p className="text-blue-100 text-lg md:text-xl mb-10 max-w-3xl mx-auto">
+            <p className="text-slate-200 text-lg md:text-xl mb-10 max-w-3xl mx-auto">
               Students are encouraged to submit innovative project ideas that address real-world challenges and create meaningful impact.
             </p>
             <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 inline-block">
               <p className="text-white font-medium mb-2 uppercase tracking-wider text-sm">Proposal Submission Email</p>
-              <a href="mailto:labyrinth@cs.christuniversity.in" className="text-xl md:text-2xl font-bold text-white hover:text-blue-200 transition-colors">
+              <a href="mailto:labyrinth@cs.christuniversity.in" className="text-xl md:text-2xl font-bold text-white hover:text-[#F4B400] transition-colors">
                 labyrinth@cs.christuniversity.in
               </a>
             </div>
@@ -317,7 +317,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* ── Team Preview ── */}
-      <section className="py-20 bg-[#EAF4FF]">
+      <section className="py-20 bg-[rgba(11,31,99,0.03)]">
         <div className="container mx-auto px-6 max-w-7xl">
           <SectionHeading title="Meet The Team" subtitle="Leadership" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -334,7 +334,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* ── CTA Banner ── */}
-      <section className="py-20 bg-[#005BAC]">
+      <section className="py-20 bg-[#0B1F63]">
         <div className="container mx-auto px-6 max-w-4xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -344,7 +344,7 @@ const HomePage: React.FC = () => {
             <h2 className="font-grotesk text-3xl md:text-4xl font-bold text-white mb-4">
               Ready to be part of something bigger?
             </h2>
-            <p className="text-blue-100 text-lg mb-8 max-w-xl mx-auto">
+            <p className="text-slate-200 text-lg mb-8 max-w-xl mx-auto">
               Join Labyrinth and collaborate with the brightest minds at Christ University.
             </p>
             <Button

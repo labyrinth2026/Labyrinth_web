@@ -33,7 +33,7 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({
       >
         {subtitle && (
           <span className={`font-semibold tracking-widest uppercase text-xs mb-3 block ${
-            light ? 'text-blue-200' : 'text-[#005BAC]'
+            light ? 'text-[#F4B400]' : 'text-[#0B1F63]'
           }`}>
             {subtitle}
           </span>
@@ -43,7 +43,7 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({
             ? 'gradient-text'
             : light
             ? 'text-white'
-            : 'text-[#1a2c4a]'
+            : 'text-[#0B1F63]'
         }`}>
           {title}
         </h2>
@@ -52,7 +52,7 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({
         <motion.div
           className={`h-1 rounded-full ${
             align === 'center' ? 'mx-auto' : ''
-          } ${light ? 'bg-white/40' : 'bg-[#005BAC]'}`}
+          } ${light ? 'bg-white/40' : 'bg-[#0B1F63]'}`}
           initial={{ width: 0 }}
           animate={isVisible ? { width: 56 } : { width: 0 }}
           transition={{ duration: 0.7, delay: 0.2, ease: "circOut" }}

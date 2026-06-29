@@ -54,7 +54,7 @@ const VerticalsPage: React.FC = () => {
     return (
       <PageWrapper>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <div className="w-8 h-8 border-3 border-[#005BAC] border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-3 border-[#0B1F63] border-t-transparent rounded-full animate-spin"></div>
         </div>
       </PageWrapper>
     );
@@ -63,16 +63,16 @@ const VerticalsPage: React.FC = () => {
   return (
     <PageWrapper>
       {/* Header */}
-      <section className="py-16 bg-gradient-to-br from-[#EAF4FF] to-white">
+      <section className="py-16 bg-gradient-to-br from-[rgba(11,31,99,0.03)] to-white">
         <div className="container mx-auto px-6 max-w-7xl text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="inline-block px-4 py-1 rounded-full bg-[#EAF4FF] border border-[#D6EBFF] text-[#005BAC] text-xs font-bold uppercase tracking-widest mb-4">
+            <span className="inline-block px-4 py-1 rounded-full bg-[rgba(11,31,99,0.03)] border border-[rgba(11,31,99,0.07)] text-[#0B1F63] text-xs font-bold uppercase tracking-widest mb-4">
               Our Domains
             </span>
-            <h1 className="font-grotesk text-5xl md:text-6xl font-bold mb-5 text-[#1a2c4a]">
-              Our <span className="text-[#005BAC]">Verticals</span>
+            <h1 className="font-grotesk text-5xl md:text-6xl font-bold mb-5 text-[#0B1F63]">
+              Our <span className="text-[#0B1F63]">Verticals</span>
             </h1>
-            <p className="text-lg text-[#4b6080] max-w-2xl mx-auto mb-10">
+            <p className="text-lg text-[#667085] max-w-2xl mx-auto mb-10">
               Ten specialized domains. Endless possibilities. Find your niche and start building.
             </p>
 
@@ -140,10 +140,10 @@ const VerticalsPage: React.FC = () => {
 
             {filteredTech.length === 0 && filteredNonTech.length === 0 && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-                <div className="text-[#7a90aa] mb-4 text-lg">No verticals found matching your search.</div>
+                <div className="text-[#8c97a8] mb-4 text-lg">No verticals found matching your search.</div>
                 <button
                   onClick={() => { setSearch(''); setFilter('all'); }}
-                  className="text-[#005BAC] font-semibold hover:underline"
+                  className="text-[#0B1F63] font-semibold hover:underline"
                 >
                   Clear filters
                 </button>

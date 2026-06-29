@@ -60,7 +60,7 @@ const EventsPage: React.FC = () => {
     return (
       <PageWrapper>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <div className="w-8 h-8 border-3 border-[#005BAC] border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-3 border-[#0B1F63] border-t-transparent rounded-full animate-spin"></div>
         </div>
       </PageWrapper>
     );
@@ -69,16 +69,16 @@ const EventsPage: React.FC = () => {
   return (
     <PageWrapper>
       {/* Header */}
-      <section className="py-16 bg-gradient-to-br from-[#EAF4FF] to-white">
+      <section className="py-16 bg-gradient-to-br from-[rgba(11,31,99,0.03)] to-white">
         <div className="container mx-auto px-6 max-w-7xl">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-center mb-12">
-            <span className="inline-block px-4 py-1 rounded-full bg-[#EAF4FF] border border-[#D6EBFF] text-[#005BAC] text-xs font-bold uppercase tracking-widest mb-4">
+            <span className="inline-block px-4 py-1 rounded-full bg-[rgba(11,31,99,0.03)] border border-[rgba(11,31,99,0.07)] text-[#0B1F63] text-xs font-bold uppercase tracking-widest mb-4">
               Calendar
             </span>
-            <h1 className="font-grotesk text-5xl md:text-6xl font-bold mb-4 text-[#1a2c4a]">
-              Events &amp; <span className="text-[#005BAC]">Hackathons</span>
+            <h1 className="font-grotesk text-5xl md:text-6xl font-bold mb-4 text-[#0B1F63]">
+              Events &amp; <span className="text-[#0B1F63]">Hackathons</span>
             </h1>
-            <p className="text-lg text-[#4b6080] max-w-2xl mx-auto">
+            <p className="text-lg text-[#667085] max-w-2xl mx-auto">
               Discover workshops, hackathons, and tech talks to level up your skills.
             </p>
           </motion.div>
@@ -86,7 +86,7 @@ const EventsPage: React.FC = () => {
           {/* Featured Carousel */}
           {carouselEvents.length > 0 && (
             <div
-              className="relative w-full h-[380px] md:h-[460px] rounded-3xl overflow-hidden shadow-xl border border-blue-100"
+              className="relative w-full h-[380px] md:h-[460px] rounded-3xl overflow-hidden shadow-xl border border-[#E5E7EB]"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
@@ -99,16 +99,16 @@ const EventsPage: React.FC = () => {
                   transition={{ duration: 0.5 }}
                   className="absolute inset-0"
                 >
-                  <div className="w-full h-full relative flex items-end bg-gradient-to-br from-[#003b73] to-[#005BAC]">
+                  <div className="w-full h-full relative flex items-end bg-gradient-to-br from-[#003b73] to-[#0B1F63]">
                     {/* Subtle grid */}
                     <div className="absolute inset-0 animated-grid opacity-20" />
                     {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#003b73]/95 via-[#005BAC]/60 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#003b73]/95 via-[#0B1F63]/60 to-transparent" />
 
                     {/* Content */}
                     <div className="relative z-10 p-8 md:p-12 w-full max-w-4xl">
                       <div className="flex flex-wrap gap-3 mb-4">
-                        <span className="px-3 py-1 rounded-full bg-white text-[#005BAC] text-xs font-bold uppercase tracking-wider">
+                        <span className="px-3 py-1 rounded-full bg-white text-[#0B1F63] text-xs font-bold uppercase tracking-wider">
                           {carouselEvents[currentSlide].category}
                         </span>
                         <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${
@@ -122,15 +122,15 @@ const EventsPage: React.FC = () => {
                       <h2 className="font-grotesk text-3xl md:text-4xl font-bold text-white mb-3 leading-tight">
                         {carouselEvents[currentSlide].title}
                       </h2>
-                      <p className="text-blue-100 md:text-base mb-5 line-clamp-2 max-w-3xl">
+                      <p className="text-slate-200 md:text-base mb-5 line-clamp-2 max-w-3xl">
                         {carouselEvents[currentSlide].description}
                       </p>
                       <div className="flex flex-wrap gap-3 mb-6">
-                        <div className="flex items-center gap-2 text-sm text-blue-100 bg-white/10 px-4 py-1.5 rounded-lg">
+                        <div className="flex items-center gap-2 text-sm text-slate-200 bg-white/10 px-4 py-1.5 rounded-lg">
                           <Calendar size={14} className="text-white/70" />
                           <span>{new Date(carouselEvents[currentSlide].date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-blue-100 bg-white/10 px-4 py-1.5 rounded-lg">
+                        <div className="flex items-center gap-2 text-sm text-slate-200 bg-white/10 px-4 py-1.5 rounded-lg">
                           <MapPin size={14} className="text-white/70" />
                           <span>{carouselEvents[currentSlide].location}</span>
                         </div>
@@ -145,10 +145,10 @@ const EventsPage: React.FC = () => {
 
               {/* Controls */}
               <div className="absolute right-4 md:right-6 bottom-6 flex gap-2 z-20">
-                <button onClick={prevSlide} className="w-9 h-9 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center text-white hover:bg-white hover:text-[#005BAC] transition-all">
+                <button onClick={prevSlide} className="w-9 h-9 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center text-white hover:bg-white hover:text-[#0B1F63] transition-all">
                   <ChevronLeft size={18} />
                 </button>
-                <button onClick={nextSlide} className="w-9 h-9 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center text-white hover:bg-white hover:text-[#005BAC] transition-all">
+                <button onClick={nextSlide} className="w-9 h-9 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center text-white hover:bg-white hover:text-[#0B1F63] transition-all">
                   <ChevronRight size={18} />
                 </button>
               </div>
@@ -170,10 +170,10 @@ const EventsPage: React.FC = () => {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-6 max-w-7xl">
           {/* Filters */}
-          <div className="bg-[#EAF4FF] border border-[#D6EBFF] rounded-2xl p-6 mb-10">
+          <div className="bg-[rgba(11,31,99,0.03)] border border-[rgba(11,31,99,0.07)] rounded-2xl p-6 mb-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-xs font-bold text-[#7a90aa] uppercase tracking-wider mb-3">Status & Search</h3>
+                <h3 className="text-xs font-bold text-[#8c97a8] uppercase tracking-wider mb-3">Status & Search</h3>
                 <SearchFilter
                   searchValue={search}
                   onSearchChange={setSearch}
@@ -187,7 +187,7 @@ const EventsPage: React.FC = () => {
                 />
               </div>
               <div>
-                <h3 className="text-xs font-bold text-[#7a90aa] uppercase tracking-wider mb-3">Category</h3>
+                <h3 className="text-xs font-bold text-[#8c97a8] uppercase tracking-wider mb-3">Category</h3>
                 <div className="flex flex-wrap gap-2">
                   {[
                     { label: 'All', value: 'all' },
@@ -202,8 +202,8 @@ const EventsPage: React.FC = () => {
                       onClick={() => setCategoryFilter(cat.value)}
                       className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all border ${
                         categoryFilter === cat.value
-                          ? 'bg-[#005BAC] text-white border-[#005BAC]'
-                          : 'bg-white text-[#4b6080] border-blue-100 hover:border-[#005BAC] hover:text-[#005BAC]'
+                          ? 'bg-[#0B1F63] text-white border-[#0B1F63]'
+                          : 'bg-white text-[#667085] border-[#E5E7EB] hover:border-[#0B1F63] hover:text-[#0B1F63]'
                       }`}
                     >
                       {cat.label}
@@ -228,10 +228,10 @@ const EventsPage: React.FC = () => {
               </motion.div>
             ) : (
               <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-                <div className="text-[#7a90aa] mb-4 text-lg">No events found matching your criteria.</div>
+                <div className="text-[#8c97a8] mb-4 text-lg">No events found matching your criteria.</div>
                 <button
                   onClick={() => { setSearch(''); setFilter('all'); setCategoryFilter('all'); }}
-                  className="text-[#005BAC] font-semibold hover:underline"
+                  className="text-[#0B1F63] font-semibold hover:underline"
                 >
                   Clear all filters
                 </button>

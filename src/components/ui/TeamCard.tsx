@@ -25,9 +25,9 @@ const getAvatarColor = (name: string) => {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
   const colors = [
-    { bg: '#005BAC', text: '#ffffff' },
-    { bg: '#1a6fc0', text: '#ffffff' },
-    { bg: '#1a8fc4', text: '#ffffff' },
+    { bg: '#0B1F63', text: '#ffffff' },
+    { bg: '#163294', text: '#ffffff' },
+    { bg: '#163294', text: '#ffffff' },
     { bg: '#2563eb', text: '#ffffff' },
     { bg: '#0369a1', text: '#ffffff' },
     { bg: '#0e7490', text: '#ffffff' },
@@ -51,11 +51,11 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
     <motion.div
       whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(0, 91, 172, 0.12)' }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="bg-white border border-blue-100 rounded-2xl shadow-sm p-6 text-center flex flex-col items-center h-full"
+      className="bg-white border border-[#E5E7EB] rounded-2xl shadow-sm p-6 text-center flex flex-col items-center h-full"
     >
       {/* Avatar */}
       <div className="relative mb-4">
-        <div className="w-20 h-20 rounded-full flex items-center justify-center text-xl font-bold border-2 border-blue-100 shadow-md overflow-hidden"
+        <div className="w-20 h-20 rounded-full flex items-center justify-center text-xl font-bold border-2 border-[#E5E7EB] shadow-md overflow-hidden"
           style={{ backgroundColor: color.bg, color: color.text }}
         >
           {member.avatar ? (
@@ -67,16 +67,16 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
       </div>
 
       {/* Info */}
-      <h3 className="text-lg font-bold text-[#1a2c4a] mb-1">{member.name}</h3>
-      <p className="text-[#005BAC] font-semibold text-sm mb-1">{member.role}</p>
+      <h3 className="text-lg font-bold text-[#0B1F63] mb-1">{member.name}</h3>
+      <p className="text-[#0B1F63] font-semibold text-sm mb-1">{member.role}</p>
       {member.designation && (
-        <p className="text-[#4b6080] text-xs mb-0.5 font-medium">{member.designation}</p>
+        <p className="text-[#667085] text-xs mb-0.5 font-medium">{member.designation}</p>
       )}
       {member.department && (
-        <p className="text-[#7a90aa] text-xs mb-3">{member.department}</p>
+        <p className="text-[#8c97a8] text-xs mb-3">{member.department}</p>
       )}
       {member.vertical && !member.department && (
-        <span className="text-xs bg-[#EAF4FF] text-[#005BAC] border border-[#D6EBFF] px-3 py-0.5 rounded-full font-medium mb-3">
+        <span className="text-xs bg-[rgba(11,31,99,0.03)] text-[#0B1F63] border border-[rgba(11,31,99,0.07)] px-3 py-0.5 rounded-full font-medium mb-3">
           {member.vertical}
         </span>
       )}
@@ -85,10 +85,10 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
       <div className="flex-grow" />
 
       {/* Links */}
-      <div className="flex justify-center gap-2 mt-4 pt-4 border-t border-blue-50 w-full">
+      <div className="flex justify-center gap-2 mt-4 pt-4 border-t border-[#E5E7EB] w-full">
         <a
           href={`mailto:${member.email}`}
-          className="w-8 h-8 rounded-full bg-[#EAF4FF] flex items-center justify-center text-[#005BAC] hover:bg-[#005BAC] hover:text-white transition-all"
+          className="w-8 h-8 rounded-full bg-[rgba(11,31,99,0.03)] flex items-center justify-center text-[#0B1F63] hover:bg-[#0B1F63] hover:text-white transition-all"
           aria-label={`Email ${member.name}`}
           title={member.email}
         >
@@ -99,7 +99,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
             href={member.linkedin}
             target="_blank"
             rel="noreferrer"
-            className="w-8 h-8 rounded-full bg-[#EAF4FF] flex items-center justify-center text-[#005BAC] hover:bg-[#005BAC] hover:text-white transition-all"
+            className="w-8 h-8 rounded-full bg-[rgba(11,31,99,0.03)] flex items-center justify-center text-[#0B1F63] hover:bg-[#0B1F63] hover:text-white transition-all"
             aria-label={`${member.name}'s LinkedIn`}
           >
             {/* LinkedIn SVG */}

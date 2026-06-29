@@ -64,7 +64,7 @@ const RoleManager: React.FC = () => {
 
   if (!can('manage_roles')) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm border border-blue-50 p-8 text-center">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] p-8 text-center">
         <h2 className="text-xl font-bold text-red-500 mb-2">Access Denied</h2>
         <p className="text-gray-500">You do not have permission to manage roles.</p>
       </div>
@@ -75,20 +75,20 @@ const RoleManager: React.FC = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#1a2c4a] mb-2 font-grotesk">Role Management</h1>
-          <p className="text-[#4b6080] text-sm">Assign administrative roles to users.</p>
+          <h1 className="text-2xl font-bold text-[#0B1F63] mb-2 font-grotesk">Role Management</h1>
+          <p className="text-[#667085] text-sm">Assign administrative roles to users.</p>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-blue-50 p-6">
-        <h3 className="font-bold text-[#1a2c4a] mb-4">Add New Role</h3>
+      <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] p-6">
+        <h3 className="font-bold text-[#0B1F63] mb-4">Add New Role</h3>
         <form onSubmit={handleAddRole} className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <input
             type="email"
             placeholder="User Email"
             value={newEmail}
             onChange={e => setNewEmail(e.target.value)}
-            className="w-full px-4 py-2 rounded-xl border border-blue-100 focus:outline-none focus:ring-2 focus:ring-[#005BAC]/20"
+            className="w-full px-4 py-2 rounded-xl border border-[#E5E7EB] focus:outline-none focus:ring-2 focus:ring-[#0B1F63]/20"
             required
           />
           <input
@@ -96,13 +96,13 @@ const RoleManager: React.FC = () => {
             placeholder="Name"
             value={newName}
             onChange={e => setNewName(e.target.value)}
-            className="w-full px-4 py-2 rounded-xl border border-blue-100 focus:outline-none focus:ring-2 focus:ring-[#005BAC]/20"
+            className="w-full px-4 py-2 rounded-xl border border-[#E5E7EB] focus:outline-none focus:ring-2 focus:ring-[#0B1F63]/20"
             required
           />
           <select
             value={newRole}
             onChange={e => setNewRole(e.target.value)}
-            className="w-full px-4 py-2 rounded-xl border border-blue-100 focus:outline-none focus:ring-2 focus:ring-[#005BAC]/20"
+            className="w-full px-4 py-2 rounded-xl border border-[#E5E7EB] focus:outline-none focus:ring-2 focus:ring-[#0B1F63]/20"
           >
             <option value="faculty_coordinator">Faculty Coordinator</option>
             <option value="tech_admin">Tech Admin</option>
@@ -111,7 +111,7 @@ const RoleManager: React.FC = () => {
           </select>
           <button
             type="submit"
-            className="w-full bg-[#005BAC] text-white font-semibold rounded-xl px-4 py-2 hover:bg-[#004a8f] transition-colors flex items-center justify-center gap-2"
+            className="w-full bg-[#0B1F63] text-white font-semibold rounded-xl px-4 py-2 hover:bg-[#071545] transition-colors flex items-center justify-center gap-2"
           >
             <Plus size={18} />
             Add Role
@@ -119,13 +119,13 @@ const RoleManager: React.FC = () => {
         </form>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-blue-50 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] overflow-hidden">
         {loading ? (
-          <div className="p-8 text-center text-[#4b6080]">Loading roles...</div>
+          <div className="p-8 text-center text-[#667085]">Loading roles...</div>
         ) : roles.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-[#4b6080]">
-              <thead className="bg-[#EAF4FF] text-[#005BAC] uppercase font-bold text-xs">
+            <table className="w-full text-left text-sm text-[#667085]">
+              <thead className="bg-[rgba(11,31,99,0.03)] text-[#0B1F63] uppercase font-bold text-xs">
                 <tr>
                   <th className="px-6 py-4">Name</th>
                   <th className="px-6 py-4">Email</th>
@@ -135,8 +135,8 @@ const RoleManager: React.FC = () => {
               </thead>
               <tbody>
                 {roles.map(role => (
-                  <tr key={role.id} className="border-b border-blue-50 hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-semibold text-[#1a2c4a]">{role.name}</td>
+                  <tr key={role.id} className="border-b border-[#E5E7EB] hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 font-semibold text-[#0B1F63]">{role.name}</td>
                     <td className="px-6 py-4">{role.email}</td>
                     <td className="px-6 py-4">
                       <span className="bg-[#F5F3FF] text-[#7c3aed] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
@@ -159,9 +159,9 @@ const RoleManager: React.FC = () => {
           </div>
         ) : (
           <div className="p-8 text-center">
-            <ShieldAlert size={48} className="mx-auto text-blue-200 mb-4" />
-            <h3 className="text-lg font-bold text-[#1a2c4a] mb-1">No Roles Assigned</h3>
-            <p className="text-[#4b6080]">There are currently no administrative roles assigned.</p>
+            <ShieldAlert size={48} className="mx-auto text-[#F4B400] mb-4" />
+            <h3 className="text-lg font-bold text-[#0B1F63] mb-1">No Roles Assigned</h3>
+            <p className="text-[#667085]">There are currently no administrative roles assigned.</p>
           </div>
         )}
       </div>

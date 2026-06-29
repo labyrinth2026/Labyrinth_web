@@ -35,17 +35,17 @@ const GalleryPage: React.FC = () => {
       case 'hackathons': return { bg: '#FEF2F2', text: '#dc2626' };
       case 'sports': return { bg: '#F0FDF4', text: '#16a34a' };
       case 'cultural': return { bg: '#F5F3FF', text: '#7c3aed' };
-      default: return { bg: '#EAF4FF', text: '#005BAC' };
+      default: return { bg: 'rgba(11,31,99,0.03)', text: '#0B1F63' };
     }
   };
 
   const getGradientForCategory = (category: string) => {
     switch (category) {
-      case 'workshops': return 'from-[#005BAC] to-[#1a8fc4]';
+      case 'workshops': return 'from-[#0B1F63] to-[#163294]';
       case 'hackathons': return 'from-[#dc2626] to-[#f97316]';
       case 'sports': return 'from-[#16a34a] to-[#0d9488]';
       case 'cultural': return 'from-[#7c3aed] to-[#db2777]';
-      default: return 'from-[#005BAC] to-[#0369a1]';
+      default: return 'from-[#0B1F63] to-[#0369a1]';
     }
   };
 
@@ -59,7 +59,7 @@ const GalleryPage: React.FC = () => {
     return (
       <PageWrapper>
         <div className="min-h-[60vh] flex items-center justify-center">
-          <div className="w-8 h-8 border-3 border-[#005BAC] border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-3 border-[#0B1F63] border-t-transparent rounded-full animate-spin"></div>
         </div>
       </PageWrapper>
     );
@@ -68,16 +68,16 @@ const GalleryPage: React.FC = () => {
   return (
     <PageWrapper>
       {/* Header */}
-      <section className="py-16 bg-gradient-to-br from-[#EAF4FF] to-white">
+      <section className="py-16 bg-gradient-to-br from-[rgba(11,31,99,0.03)] to-white">
         <div className="container mx-auto px-6 max-w-7xl text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="inline-block px-4 py-1 rounded-full bg-[#EAF4FF] border border-[#D6EBFF] text-[#005BAC] text-xs font-bold uppercase tracking-widest mb-4">
+            <span className="inline-block px-4 py-1 rounded-full bg-[rgba(11,31,99,0.03)] border border-[rgba(11,31,99,0.07)] text-[#0B1F63] text-xs font-bold uppercase tracking-widest mb-4">
               Memories
             </span>
-            <h1 className="font-grotesk text-5xl md:text-6xl font-bold mb-4 text-[#1a2c4a]">
-              Our <span className="text-[#005BAC]">Gallery</span>
+            <h1 className="font-grotesk text-5xl md:text-6xl font-bold mb-4 text-[#0B1F63]">
+              Our <span className="text-[#0B1F63]">Gallery</span>
             </h1>
-            <p className="text-lg text-[#4b6080] max-w-2xl mx-auto mb-10">
+            <p className="text-lg text-[#667085] max-w-2xl mx-auto mb-10">
               Moments from our events, workshops, and community gatherings.
             </p>
 
@@ -119,7 +119,7 @@ const GalleryPage: React.FC = () => {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.35, delay: i * 0.04 }}
-                      className={`relative group rounded-2xl overflow-hidden cursor-pointer border border-blue-100 shadow-sm hover:shadow-lg hover:shadow-[#005BAC]/10 ${getRowSpan(i)}`}
+                      className={`relative group rounded-2xl overflow-hidden cursor-pointer border border-[#E5E7EB] shadow-sm hover:shadow-lg hover:shadow-[#0B1F63]/10 ${getRowSpan(i)}`}
                       onClick={() => setSelectedImage(item)}
                     >
                       {/* Background */}
@@ -143,8 +143,8 @@ const GalleryPage: React.FC = () => {
               </motion.div>
             ) : (
               <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-                <Images size={48} className="text-blue-200 mx-auto mb-4" />
-                <p className="text-[#7a90aa] text-lg">No images found for this category.</p>
+                <Images size={48} className="text-[#F4B400] mx-auto mb-4" />
+                <p className="text-[#8c97a8] text-lg">No images found for this category.</p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -158,7 +158,7 @@ const GalleryPage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-[#1a2c4a]/90 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-[#0B1F63]/90 backdrop-blur-sm"
             onClick={() => setSelectedImage(null)}
           >
             <button
@@ -186,15 +186,15 @@ const GalleryPage: React.FC = () => {
               {/* Info Area */}
               <div className="bg-white p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-xl font-bold text-[#1a2c4a] mb-1">{selectedImage.title}</h3>
-                  <p className="text-[#4b6080] text-sm">{selectedImage.description}</p>
+                  <h3 className="text-xl font-bold text-[#0B1F63] mb-1">{selectedImage.title}</h3>
+                  <p className="text-[#667085] text-sm">{selectedImage.description}</p>
                 </div>
                 <div className="flex flex-col items-start md:items-end gap-2 shrink-0">
                   <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
                     style={{ backgroundColor: getCategoryColor(selectedImage.category).bg, color: getCategoryColor(selectedImage.category).text }}>
                     {selectedImage.category}
                   </span>
-                  <div className="flex items-center text-sm text-[#7a90aa]">
+                  <div className="flex items-center text-sm text-[#8c97a8]">
                     <Calendar size={13} className="mr-1.5" />
                     {new Date(selectedImage.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                   </div>
