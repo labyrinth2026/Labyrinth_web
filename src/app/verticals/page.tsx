@@ -1,5 +1,5 @@
 "use client";
 
-import VerticalsPage from '../../pages/VerticalsPage';
+import VerticalsPage from '../../views/VerticalsPage';
 
 export default VerticalsPage;

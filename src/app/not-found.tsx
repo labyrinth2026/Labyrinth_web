@@ -1,5 +1,5 @@
 "use client";
 
-import NotFoundPage from '../pages/NotFoundPage';
+import NotFoundPage from '../views/NotFoundPage';
 
 export default NotFoundPage;

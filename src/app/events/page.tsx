@@ -1,5 +1,5 @@
 "use client";
 
-import EventsPage from '../../pages/EventsPage';
+import EventsPage from '../../views/EventsPage';
 
 export default EventsPage;

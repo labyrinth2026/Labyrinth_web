@@ -1,5 +1,8 @@
+"use client";
+
 import React, { useState } from 'react';
-import { Outlet, NavLink } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import {
   LayoutDashboard, FileText, LogOut, ShieldAlert,
@@ -13,8 +16,9 @@ interface NavItem {
   permission?: string;
 }
 
-const AdminLayout: React.FC = () => {
+const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, login, logout, isLoading, can } = useAuth();
+  const pathname = usePathname();
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -149,22 +153,23 @@ const AdminLayout: React.FC = () => {
 
               {/* Navigation */}
               <nav className="space-y-1.5">
-                {visibleItems.map((item) => (
-                  <NavLink
-                    key={item.path}
-                    to={item.path}
-                    className={({ isActive }) =>
-                      `flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-semibold ${
+                {visibleItems.map((item) => {
+                  const isActive = pathname === item.path;
+                  return (
+                    <Link
+                      key={item.path}
+                      href={item.path}
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-semibold ${
                         isActive
                           ? 'bg-[#EAF4FF] text-[#005BAC] border border-[#D6EBFF]'
                           : 'text-[#4b6080] hover:bg-[#EAF4FF] hover:text-[#005BAC]'
-                      }`
-                    }
-                  >
-                    <item.icon size={18} />
-                    {item.label}
-                  </NavLink>
-                ))}
+                      }`}
+                    >
+                      <item.icon size={18} />
+                      {item.label}
+                    </Link>
+                  );
+                })}
               </nav>
 
               {/* Sign Out */}
@@ -180,7 +185,7 @@ const AdminLayout: React.FC = () => {
 
           {/* Main Content */}
           <div className="flex-1 min-w-0">
-            <Outlet />
+            {children}
           </div>
 
         </div>

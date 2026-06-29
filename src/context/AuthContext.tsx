@@ -13,6 +13,16 @@ interface User {
   expiresAt: number;
 }
 
+export type Permission = 
+  | 'manage_content'
+  | 'manage_infrastructure'
+  | 'manage_events'
+  | 'manage_verticals'
+  | 'manage_team'
+  | 'view_registrations'
+  | 'review_content'
+  | 'manage_roles';
+
 interface AuthContextType {
   user: User | null;
   login: (email: string, pass: string, rememberDevice?: boolean) => Promise<{ success: boolean; error?: string }>;
@@ -20,8 +30,6 @@ interface AuthContextType {
   isLoading: boolean;
   can: (action: Permission) => boolean;
 }
-
-export type Permission = 'manage_content' | 'manage_infrastructure';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -33,12 +41,43 @@ const ACCOUNTS: Record<string, { hash: string; role: Role; name: string }> = {
   'admin@labyrinth.club': { hash: process.env.NEXT_PUBLIC_ADMIN_HASH || '', role: 'developer', name: 'System Admin' },
 };
 
-// Permission matrix
+// Permission matrix mapping specific actions to roles
 const PERMISSIONS: Record<Role, Permission[]> = {
-  coordinator: ['manage_content'],
-  mentor: ['manage_content'],
-  core_committee: ['manage_content'],
-  developer: ['manage_content', 'manage_infrastructure'],
+  coordinator: [
+    'manage_content', 
+    'manage_events', 
+    'manage_verticals', 
+    'manage_team', 
+    'view_registrations', 
+    'review_content',
+    'manage_roles'
+  ],
+  mentor: [
+    'manage_content', 
+    'manage_events', 
+    'manage_verticals', 
+    'manage_team', 
+    'view_registrations', 
+    'review_content'
+  ],
+  core_committee: [
+    'manage_content', 
+    'manage_events', 
+    'manage_verticals', 
+    'manage_team', 
+    'view_registrations', 
+    'review_content'
+  ],
+  developer: [
+    'manage_content', 
+    'manage_infrastructure', 
+    'manage_events', 
+    'manage_verticals', 
+    'manage_team', 
+    'view_registrations', 
+    'review_content',
+    'manage_roles'
+  ],
   user: []
 };
 

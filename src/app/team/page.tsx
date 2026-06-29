@@ -1,5 +1,5 @@
 "use client";
 
-import TeamPage from '../../pages/TeamPage';
+import TeamPage from '../../views/TeamPage';
 
 export default TeamPage;
