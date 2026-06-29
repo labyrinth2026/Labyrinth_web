@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import bcrypt from 'bcryptjs';
 
@@ -25,10 +27,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Predefined accounts with hashed passwords from environment variables
 const ACCOUNTS: Record<string, { hash: string; role: Role; name: string }> = {
-  'coordinator@labyrinth.club': { hash: import.meta.env.VITE_COORD_HASH || '', role: 'coordinator', name: 'Faculty Coordinator' },
-  'mentor@labyrinth.club': { hash: import.meta.env.VITE_MENTOR_HASH || '', role: 'mentor', name: 'Mentor' },
-  'core@labyrinth.club': { hash: import.meta.env.VITE_CORE_HASH || '', role: 'core_committee', name: 'Core Committee' },
-  'admin@labyrinth.club': { hash: import.meta.env.VITE_ADMIN_HASH || '', role: 'developer', name: 'System Admin' },
+  'coordinator@labyrinth.club': { hash: process.env.NEXT_PUBLIC_COORD_HASH || '', role: 'coordinator', name: 'Faculty Coordinator' },
+  'mentor@labyrinth.club': { hash: process.env.NEXT_PUBLIC_MENTOR_HASH || '', role: 'mentor', name: 'Mentor' },
+  'core@labyrinth.club': { hash: process.env.NEXT_PUBLIC_CORE_HASH || '', role: 'core_committee', name: 'Core Committee' },
+  'admin@labyrinth.club': { hash: process.env.NEXT_PUBLIC_ADMIN_HASH || '', role: 'developer', name: 'System Admin' },
 };
 
 // Permission matrix
@@ -49,24 +51,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('labyrinth_admin_session');
-    if (savedUser) {
-      try {
-        const parsed: User = JSON.parse(savedUser);
-        if (parsed.expiresAt && Date.now() < parsed.expiresAt) {
-          setUser(parsed);
-        } else {
-          // Session expired
+    if (typeof window !== 'undefined') {
+      const savedUser = localStorage.getItem('labyrinth_admin_session');
+      if (savedUser) {
+        try {
+          const parsed: User = JSON.parse(savedUser);
+          if (parsed.expiresAt && Date.now() < parsed.expiresAt) {
+            setUser(parsed);
+          } else {
+            // Session expired
+            localStorage.removeItem('labyrinth_admin_session');
+          }
+        } catch {
           localStorage.removeItem('labyrinth_admin_session');
         }
-      } catch {
-        localStorage.removeItem('labyrinth_admin_session');
       }
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
 
   const getLockoutState = () => {
+    if (typeof window === 'undefined') return { attempts: 0, lockoutUntil: 0 };
     const attempts = parseInt(localStorage.getItem('labyrinth_login_attempts') || '0', 10);
     const lockoutUntil = parseInt(localStorage.getItem('labyrinth_lockout_until') || '0', 10);
     return { attempts, lockoutUntil };
@@ -97,8 +102,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     // Success! Reset attempts
-    localStorage.removeItem('labyrinth_login_attempts');
-    localStorage.removeItem('labyrinth_lockout_until');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('labyrinth_login_attempts');
+      localStorage.removeItem('labyrinth_lockout_until');
+    }
 
     // Calculate session expiry
     const sessionDurationMs = rememberDevice ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000;
@@ -112,7 +119,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     
     setUser(userData);
-    localStorage.setItem('labyrinth_admin_session', JSON.stringify(userData));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('labyrinth_admin_session', JSON.stringify(userData));
+    }
     setIsLoading(false);
     return { success: true };
   };
@@ -121,12 +130,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const newAttempts = currentAttempts + 1;
     if (newAttempts >= MAX_FAILED_ATTEMPTS) {
       const lockoutTime = Date.now() + LOCKOUT_DURATION_MS;
-      localStorage.setItem('labyrinth_lockout_until', lockoutTime.toString());
-      localStorage.setItem('labyrinth_login_attempts', '0');
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('labyrinth_lockout_until', lockoutTime.toString());
+        localStorage.setItem('labyrinth_login_attempts', '0');
+      }
       setIsLoading(false);
       return { success: false, error: 'Too many failed login attempts. Account locked for 15 minutes.' };
     } else {
-      localStorage.setItem('labyrinth_login_attempts', newAttempts.toString());
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('labyrinth_login_attempts', newAttempts.toString());
+      }
       setIsLoading(false);
       return { success: false, error: 'Invalid email or password.' };
     }
@@ -134,7 +147,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('labyrinth_admin_session');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('labyrinth_admin_session');
+    }
   };
 
   const can = (action: Permission): boolean => {

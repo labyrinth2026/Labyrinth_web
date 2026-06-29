@@ -1,7 +1,8 @@
+"use client";
+
 import React from 'react';
 import { motion } from 'framer-motion';
-
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'ghost' | 'outline';
@@ -24,7 +25,7 @@ const Button: React.FC<ButtonProps> = ({
   type = 'button',
   disabled = false
 }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const baseClasses = "relative inline-flex items-center justify-center rounded-full font-semibold transition-all duration-200 overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#005BAC]/30 focus:ring-offset-2";
 
@@ -53,7 +54,7 @@ const Button: React.FC<ButtonProps> = ({
     }
     if (href && !isExternal) {
       e.preventDefault();
-      navigate(href);
+      router.push(href);
     } else if (onClick) {
       onClick();
     }

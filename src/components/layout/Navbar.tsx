@@ -1,5 +1,8 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { NAV_LINKS } from '../../utils/constants';
@@ -7,7 +10,7 @@ import { NAV_LINKS } from '../../utils/constants';
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const location = useLocation();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -17,7 +20,7 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     setMobileMenuOpen(false);
-  }, [location.pathname]);
+  }, [pathname]);
 
   // Handle body scroll locking and Escape key
   useEffect(() => {
@@ -49,37 +52,38 @@ const Navbar: React.FC = () => {
       >
         <div className="container mx-auto px-6 max-w-7xl flex items-center justify-between">
           {/* Left: Labyrinth Logo */}
-          <NavLink to="/" className="flex items-center group relative z-50">
+          <Link href="/" className="flex items-center group relative z-50">
             <img src="/labyrinth-logo.png" alt="Labyrinth Logo" className="h-12 object-contain" />
-          </NavLink>
+          </Link>
 
           {/* Center: Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1 absolute left-1/2 transform -translate-x-1/2">
-            {NAV_LINKS.map((link) => (
-              <NavLink
-                key={link.path}
-                to={link.path}
-                className={({ isActive }) =>
-                  `text-sm font-semibold transition-all px-4 py-2 rounded-full relative ${
+            {NAV_LINKS.map((link) => {
+              const isActive = pathname === link.path;
+              return (
+                <Link
+                  key={link.path}
+                  href={link.path}
+                  className={`text-sm font-semibold transition-all px-4 py-2 rounded-full relative ${
                     isActive
                       ? 'text-[#005BAC] bg-[#EAF4FF]'
                       : 'text-[#4b6080] hover:text-[#005BAC] hover:bg-[#EAF4FF]'
-                  }`
-                }
-              >
-                {link.label}
-              </NavLink>
-            ))}
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Right: CTA Button & Christ Logo */}
           <div className="hidden md:flex items-center gap-4 relative z-50">
-            <NavLink
-              to="/contact"
+            <Link
+              href="/contact"
               className="px-5 py-2 bg-[#005BAC] text-white text-sm font-semibold rounded-full hover:bg-[#004a8f] transition-colors shadow-sm"
             >
               Join Us
-            </NavLink>
+            </Link>
             <div className="h-8 w-px bg-blue-100 hidden sm:block"></div>
             <img src="/christ-logo.png" alt="Christ University Logo" className="h-12 object-contain" />
           </div>
@@ -143,37 +147,38 @@ const Navbar: React.FC = () => {
 
             {/* Drawer Navigation Links */}
             <nav className="flex flex-col gap-1 p-4 shrink-0">
-              {NAV_LINKS.map((link, i) => (
-                <motion.div
-                  key={link.path}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  <NavLink
-                    to={link.path}
-                    className={({ isActive }) =>
-                      `block text-[15px] font-bold px-4 py-3.5 rounded-xl transition-all ${
+              {NAV_LINKS.map((link, i) => {
+                const isActive = pathname === link.path;
+                return (
+                  <motion.div
+                    key={link.path}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                  >
+                    <Link
+                      href={link.path}
+                      className={`block text-[15px] font-bold px-4 py-3.5 rounded-xl transition-all ${
                         isActive
                           ? 'text-[#005BAC] bg-[#EAF4FF] border border-[#005BAC]/10'
                           : 'text-[#4b6080] hover:text-[#005BAC] hover:bg-[#EAF4FF] border border-transparent'
-                      }`
-                    }
-                  >
-                    {link.label}
-                  </NavLink>
-                </motion.div>
-              ))}
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                );
+              })}
             </nav>
 
             {/* Drawer Bottom CTA and Footer */}
             <div className="mt-auto p-6 shrink-0">
-              <NavLink
-                to="/contact"
+              <Link
+                href="/contact"
                 className="flex items-center justify-center w-full px-6 py-3.5 bg-[#005BAC] text-white font-bold rounded-xl hover:bg-[#004a8f] transition-colors shadow-md shadow-blue-900/10 mb-6"
               >
                 Join Community
-              </NavLink>
+              </Link>
               
               <div className="text-center pt-5 border-t border-blue-50">
                 <p className="text-[11px] font-semibold text-[#7a90aa] uppercase tracking-wider mb-1">

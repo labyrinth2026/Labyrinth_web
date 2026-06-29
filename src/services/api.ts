@@ -9,6 +9,7 @@ export interface ApiResponse<T> {
 
 // Hydrate data from JSON files into localStorage if they don't exist
 const initLocalStorage = async (key: string, dataResolver: () => Promise<any>) => {
+  if (typeof window === 'undefined') return null;
   const existing = localStorage.getItem(`labyrinth_${key}`);
   if (!existing) {
     try {
@@ -50,8 +51,11 @@ const fetchLocalData = async (action: string, payload?: any) => {
   const getStored = async (key: string, jsonModule: () => Promise<any>) => 
     initLocalStorage(key, async () => (await jsonModule()).default);
 
-  const saveStored = (key: string, data: any) => 
-    localStorage.setItem(`labyrinth_${key}`, JSON.stringify(data));
+  const saveStored = (key: string, data: any) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(`labyrinth_${key}`, JSON.stringify(data));
+    }
+  };
 
   // Data Loading Mapping
   const dataLoaders: Record<string, () => Promise<any>> = {

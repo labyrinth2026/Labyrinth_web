@@ -4,12 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.3.2",
     "@types/bcryptjs": "^2.4.6",
     "bcryptjs": "^3.0.3",
     "docx": "^9.7.1",
@@ -19,21 +20,19 @@
     "jspdf-autotable": "^5.0.8",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^1.21.0",
+    "next": "^16.2.9",
+    "postcss": "^8.5.16",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-router-dom": "^7.18.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.3.1",
     "@types/file-saver": "^2.0.7",
     "@types/node": "^24.13.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.2",
     "oxlint": "^1.69.0",
     "tailwindcss": "^4.3.1",
-    "typescript": "~6.0.2",
-    "vite": "^8.1.0"
+    "typescript": "~6.0.2"
   }
 }
