@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Activity, Users, Calendar, FileText, BookOpen, Shield, ArrowRight, Download } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import Link from 'next/link';
 
 const Dashboard: React.FC = () => {
   const { user, can } = useAuth();
@@ -62,17 +62,17 @@ const Dashboard: React.FC = () => {
           <h2 className="text-sm font-bold text-[#7a90aa] uppercase tracking-wider mb-4">Quick Actions</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {quickActions.map(action => (
-              <NavLink
+              <Link
                 key={action.path + action.label}
-                to={action.path}
+                href={action.path}
                 className="flex items-center justify-between gap-3 px-4 py-3.5 rounded-xl bg-[#EAF4FF] hover:bg-[#D6EBFF] text-[#005BAC] transition-colors group"
               >
                 <div className="flex items-center gap-3">
-                  <action.icon size={17} />
+                   <action.icon size={17} />
                   <span className="text-sm font-semibold">{action.label}</span>
                 </div>
                 <ArrowRight size={15} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-              </NavLink>
+              </Link>
             ))}
           </div>
         </div>

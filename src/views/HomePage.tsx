@@ -7,7 +7,7 @@ import SectionHeading from '../components/ui/SectionHeading';
 import StatCounter from '../components/ui/StatCounter';
 import EventCard from '../components/ui/EventCard';
 import TeamCard from '../components/ui/TeamCard';
-import { NavLink } from 'react-router-dom';
+import Link from 'next/link';
 
 import { fetchFromSheet } from '../services/api';
 
@@ -180,7 +180,7 @@ const HomePage: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
               >
-                <NavLink to="/verticals" className="block group">
+                <Link href="/verticals" className="block group">
                   <div className="bg-white border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-lg hover:shadow-[#005BAC]/10 hover:-translate-y-1 transition-all duration-200">
                     <div className="w-12 h-12 rounded-xl bg-[#EAF4FF] flex items-center justify-center text-[#005BAC] mb-4 group-hover:bg-[#005BAC] group-hover:text-white transition-all duration-200">
                       <Icon size={24} />
@@ -188,7 +188,7 @@ const HomePage: React.FC = () => {
                     <h3 className="font-grotesk font-bold text-[#1a2c4a] mb-1 group-hover:text-[#005BAC] transition-colors">{name}</h3>
                     <p className="text-sm text-[#7a90aa]">{desc}</p>
                   </div>
-                </NavLink>
+                </Link>
               </motion.div>
             ))}
           </div>
