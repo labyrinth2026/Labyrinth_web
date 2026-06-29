@@ -1,0 +1,26 @@
+{
+  "join_community": {
+    "id": "join_community",
+    "title": "Join Community",
+    "url": "https://forms.gle/placeholder",
+    "active": true
+  },
+  "event_registration": {
+    "id": "event_registration",
+    "title": "Event Registration",
+    "url": "https://forms.gle/placeholder",
+    "active": true
+  },
+  "volunteer_registration": {
+    "id": "volunteer_registration",
+    "title": "Volunteer Registration",
+    "url": "https://forms.gle/placeholder",
+    "active": false
+  },
+  "project_proposal": {
+    "id": "project_proposal",
+    "title": "Project Proposal",
+    "url": "https://forms.gle/placeholder",
+    "active": false
+  }
+}

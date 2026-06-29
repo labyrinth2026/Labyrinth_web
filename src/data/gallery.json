@@ -1,0 +1,18 @@
+[
+  { "id": "g1", "title": "HackMatrix Opening Ceremony", "category": "hackathons", "description": "The grand inauguration of our flagship hackathon.", "image": null, "date": "2024-08-15" },
+  { "id": "g2", "title": "AI Model Training Session", "category": "workshops", "description": "Students learning to train neural networks.", "image": null, "date": "2024-09-10" },
+  { "id": "g3", "title": "Football Finals", "category": "sports", "description": "The winning goal moment at the inter-department sports meet.", "image": null, "date": "2024-04-05" },
+  { "id": "g4", "title": "Tech Talk Q&A", "category": "cultural", "description": "Engaging discussion after the keynote speech.", "image": null, "date": "2024-10-20" },
+  { "id": "g5", "title": "Late Night Debugging", "category": "hackathons", "description": "Teams working tirelessly through the night.", "image": null, "date": "2024-08-16" },
+  { "id": "g6", "title": "UI/UX Design Sprint", "category": "workshops", "description": "Brainstorming and wireframing session.", "image": null, "date": "2024-03-10" },
+  { "id": "g7", "title": "Tug of War", "category": "sports", "description": "Intense competition during sports day.", "image": null, "date": "2024-04-05" },
+  { "id": "g8", "title": "Cultural Night Performances", "category": "cultural", "description": "Dance and music to wrap up the tech fest.", "image": null, "date": "2024-11-12" },
+  { "id": "g9", "title": "GameDev Showcase", "category": "hackathons", "description": "Presenting the games built during GameJam.", "image": null, "date": "2024-08-29" },
+  { "id": "g10", "title": "Cloud Architecture Lab", "category": "workshops", "description": "Deploying apps to AWS.", "image": null, "date": "2024-09-20" },
+  { "id": "g11", "title": "Cricket Match Winners", "category": "sports", "description": "The winning team posing with the trophy.", "image": null, "date": "2024-04-06" },
+  { "id": "g12", "title": "Open Mic Session", "category": "cultural", "description": "Students sharing poetry and stories.", "image": null, "date": "2024-11-11" },
+  { "id": "g13", "title": "CTF Leaderboard", "category": "hackathons", "description": "The final moments of the cybersecurity challenge.", "image": null, "date": "2024-09-05" },
+  { "id": "g14", "title": "Hardware Integration", "category": "workshops", "description": "Working with Raspberry Pi and IoT devices.", "image": null, "date": "2024-02-15" },
+  { "id": "g15", "title": "Relay Race", "category": "sports", "description": "Passing the baton at the track and field event.", "image": null, "date": "2024-04-05" },
+  { "id": "g16", "title": "Valedictory Function", "category": "cultural", "description": "Award distribution and closing ceremony.", "image": null, "date": "2024-11-12" }
+]
