@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import PageWrapper from '../components/layout/PageWrapper';
 import { AlertCircle } from 'lucide-react';
 
@@ -32,7 +32,7 @@ const NotFoundPage: React.FC = () => {
             </p>
             
             <Link 
-              to="/"
+              href="/"
               className="inline-flex items-center justify-center px-8 py-3.5 bg-[#005BAC] text-white font-semibold rounded-full hover:bg-[#004a8f] transition-all shadow-md hover:shadow-lg active:scale-95"
             >
               Return Home
