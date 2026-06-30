@@ -7,7 +7,7 @@ import { NAV_LINKS, SOCIAL_LINKS, CLUB_INFO, FACULTY_CONTACT } from '../../utils
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#0B1F63] pt-16 pb-8 mt-20">
+    <footer className="bg-[#121212] border-t border-[#B8B8B8]/15 pt-16 pb-8 mt-20">
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
 
@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
             <div className="flex items-center gap-4 mb-4 md:mb-6">
               <img src="/labyrinth-logo.png" alt="Labyrinth & Christ University" className="h-10 object-contain" />
             </div>
-            <p className="text-slate-200 text-sm leading-relaxed">
+            <p className="text-[#B8B8B8] text-sm leading-relaxed">
               {CLUB_INFO.description}
             </p>
             <div className="flex gap-3 pt-2">
@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
                 href={SOCIAL_LINKS.instagram}
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-[#F4B400] hover:text-[#0B1F63] transition-all"
+                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-[#EFEDE6] hover:bg-[#CD0000] hover:text-white transition-all"
                 aria-label="Instagram"
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
                 href={SOCIAL_LINKS.linkedin}
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-[#F4B400] hover:text-[#0B1F63] transition-all"
+                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-[#EFEDE6] hover:bg-[#CD0000] hover:text-white transition-all"
                 aria-label="LinkedIn"
               >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
@@ -50,7 +50,7 @@ const Footer: React.FC = () => {
                 href={SOCIAL_LINKS.github}
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-[#F4B400] hover:text-[#0B1F63] transition-all"
+                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-[#EFEDE6] hover:bg-[#CD0000] hover:text-white transition-all"
                 aria-label="GitHub"
               >
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
@@ -59,7 +59,7 @@ const Footer: React.FC = () => {
               </a>
               <a
                 href={SOCIAL_LINKS.email}
-                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-[#F4B400] hover:text-[#0B1F63] transition-all"
+                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-[#EFEDE6] hover:bg-[#CD0000] hover:text-white transition-all"
                 aria-label="Email"
               >
                 <Mail size={16} />
@@ -69,13 +69,13 @@ const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-bold mb-5 text-sm uppercase tracking-wider">Quick Links</h4>
+            <h4 className="text-[#EFEDE6] font-bold mb-5 text-sm uppercase tracking-wider">Quick Links</h4>
             <ul className="space-y-2.5">
               {NAV_LINKS.map((link) => (
                 <li key={link.path}>
                   <Link
                     href={link.path}
-                    className="text-slate-200 hover:text-[#F4B400] text-sm transition-colors hover:translate-x-0.5 inline-block"
+                    className="text-[#B8B8B8] hover:text-[#CD0000] text-sm transition-colors hover:translate-x-0.5 inline-block"
                   >
                     {link.label}
                   </Link>
@@ -86,11 +86,11 @@ const Footer: React.FC = () => {
 
           {/* Verticals */}
           <div>
-            <h4 className="text-white font-bold mb-5 text-sm uppercase tracking-wider">Explore</h4>
+            <h4 className="text-[#EFEDE6] font-bold mb-5 text-sm uppercase tracking-wider">Explore</h4>
             <ul className="space-y-2.5">
               {['AI Creator\'s Lab', 'CodeCraft', 'CipherGuard', 'GameNova', 'BitOps', 'Startovate'].map(v => (
                 <li key={v}>
-                  <Link href="/verticals" className="text-slate-200 hover:text-[#F4B400] text-sm transition-colors inline-block">
+                  <Link href="/verticals" className="text-[#B8B8B8] hover:text-[#CD0000] text-sm transition-colors inline-block">
                     {v}
                   </Link>
                 </li>
@@ -100,18 +100,18 @@ const Footer: React.FC = () => {
 
           {/* Connect */}
           <div>
-            <h4 className="text-white font-bold mb-5 text-sm uppercase tracking-wider">Connect</h4>
+            <h4 className="text-[#EFEDE6] font-bold mb-5 text-sm uppercase tracking-wider">Connect</h4>
             <div className="space-y-3">
-              <div className="flex items-start gap-2 text-slate-200 text-sm">
-                <MapPin size={14} className="shrink-0 mt-0.5 text-white/70" />
+              <div className="flex items-start gap-2 text-[#B8B8B8] text-sm">
+                <MapPin size={14} className="shrink-0 mt-0.5 text-[#B8B8B8]/70" />
                 <span>{FACULTY_CONTACT.location}</span>
               </div>
-              <a href={SOCIAL_LINKS.email} className="flex items-center gap-2 text-slate-200 hover:text-[#F4B400] text-sm transition-colors">
-                <Mail size={14} className="shrink-0 text-white/70" />
+              <a href={SOCIAL_LINKS.email} className="flex items-center gap-2 text-[#B8B8B8] hover:text-[#CD0000] text-sm transition-colors">
+                <Mail size={14} className="shrink-0 text-[#B8B8B8]/70" />
                 labyrinth@cs.christuniversity.in
               </a>
-              <div className="flex items-center gap-2 text-slate-200 text-sm">
-                <Mail size={14} className="shrink-0 text-white/70" />
+              <div className="flex items-center gap-2 text-[#B8B8B8] text-sm">
+                <Mail size={14} className="shrink-0 text-[#B8B8B8]/70" />
                 dept.cs@christuniversity.in
               </div>
             </div>
@@ -120,11 +120,11 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/20 flex flex-col items-center gap-3">
-          <p className="text-slate-200 text-sm">
+        <div className="pt-8 border-t border-[#B8B8B8]/20 flex flex-col items-center gap-3">
+          <p className="text-[#B8B8B8] text-sm text-center">
             © {new Date().getFullYear()} {CLUB_INFO.name} · {CLUB_INFO.university}. All rights reserved.
           </p>
-          <p className="text-slate-200/70 text-sm mt-1">
+          <p className="text-[#B8B8B8]/60 text-xs mt-1 text-center">
             Made with ❤️ by Krupa M | 5 BSc Computer Science
           </p>
         </div>

@@ -38,20 +38,20 @@ const StatCounter: React.FC<StatCounterProps> = ({ value, label, suffix = '', ic
   return (
     <div
       ref={ref}
-      className="bg-white border border-[#E5E7EB] rounded-2xl shadow-sm p-6 flex flex-col items-center justify-center text-center relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:shadow-[#0B1F63]/10 hover:-translate-y-1"
+      className="bg-white border border-[#B8B8B8]/30 rounded-3xl shadow-sm p-6 flex flex-col items-center justify-center text-center relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:shadow-[#121212]/5 hover:-translate-y-1"
     >
-      {/* Blue accent top bar on hover */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-[#0B1F63] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+      {/* Red accent top bar on hover */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-[#CD0000] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
 
-      <div className="w-14 h-14 rounded-2xl bg-[rgba(11,31,99,0.03)] flex items-center justify-center mb-4 text-[#0B1F63] group-hover:bg-[#0B1F63] group-hover:text-white transition-all duration-300">
+      <div className="w-14 h-14 rounded-2xl bg-[#EFEDE6] flex items-center justify-center mb-4 text-[#CD0000] group-hover:bg-[#CD0000] group-hover:text-white transition-all duration-300">
         <Icon size={28} />
       </div>
 
-      <div className="font-grotesk text-4xl font-bold text-[#0B1F63] mb-1 tracking-tight">
+      <div className="font-grotesk text-4xl font-black text-[#121212] mb-1 tracking-tight">
         {count}{suffix}
       </div>
 
-      <div className="text-[#667085] font-medium text-sm tracking-wide">
+      <div className="text-[#121212]/70 font-semibold text-sm tracking-wide">
         {label}
       </div>
     </div>

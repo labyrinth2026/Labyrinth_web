@@ -53,8 +53,8 @@ const VerticalsPage: React.FC = () => {
   if (isLoading) {
     return (
       <PageWrapper>
-        <div className="min-h-[60vh] flex items-center justify-center">
-          <div className="w-8 h-8 border-3 border-[#0B1F63] border-t-transparent rounded-full animate-spin"></div>
+        <div className="min-h-[60vh] flex items-center justify-center bg-[#121212]">
+          <div className="w-8 h-8 border-3 border-[#CD0000] border-t-transparent rounded-full animate-spin"></div>
         </div>
       </PageWrapper>
     );
@@ -62,17 +62,17 @@ const VerticalsPage: React.FC = () => {
 
   return (
     <PageWrapper>
-      {/* Header */}
-      <section className="py-16 bg-gradient-to-br from-[rgba(11,31,99,0.03)] to-white">
+      {/* Header (Section 1: Warm White #EFEDE6) */}
+      <section className="py-24 bg-[#EFEDE6] border-b border-[#B8B8B8]/20">
         <div className="container mx-auto px-6 max-w-7xl text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="inline-block px-4 py-1 rounded-full bg-[rgba(11,31,99,0.03)] border border-[rgba(11,31,99,0.07)] text-[#0B1F63] text-xs font-bold uppercase tracking-widest mb-4">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className="inline-block px-4 py-1.5 rounded-full bg-[#CD0000]/5 border border-[#CD0000]/20 text-[#CD0000] text-xs font-bold uppercase tracking-widest mb-6">
               Our Domains
             </span>
-            <h1 className="font-grotesk text-5xl md:text-6xl font-bold mb-5 text-[#0B1F63]">
-              Our <span className="text-[#0B1F63]">Verticals</span>
+            <h1 className="font-grotesk text-5xl md:text-7xl font-black mb-6 text-[#121212] tracking-tighter leading-none">
+              OUR <span className="text-[#CD0000]">VERTICALS</span>
             </h1>
-            <p className="text-lg text-[#667085] max-w-2xl mx-auto mb-10">
+            <p className="text-lg text-[#121212]/70 max-w-2xl mx-auto mb-10 leading-relaxed">
               Ten specialized domains. Endless possibilities. Find your niche and start building.
             </p>
 
@@ -94,14 +94,14 @@ const VerticalsPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Content */}
-      <section className="py-16 bg-white">
+      {/* Content (Section 2: Charcoal Black #121212) */}
+      <section className="py-24 bg-[#121212]">
         <div className="container mx-auto px-6 max-w-7xl">
           <AnimatePresence mode="wait">
             {/* Tech Verticals */}
             {(filter === 'all' || filter === 'tech') && filteredTech.length > 0 && (
-              <motion.div id="technical-verticals" key="tech" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mb-16 scroll-mt-24">
-                <SectionHeading title="Technical Domains" align="left" />
+              <motion.div id="technical-verticals" key="tech" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mb-20 scroll-mt-24">
+                <SectionHeading title="Technical Domains" align="left" light={true} />
                 <motion.div
                   variants={containerVariants}
                   initial="hidden"
@@ -121,7 +121,7 @@ const VerticalsPage: React.FC = () => {
             {/* Non-Tech Verticals */}
             {(filter === 'all' || filter === 'non-tech') && filteredNonTech.length > 0 && (
               <motion.div id="non-technical-verticals" key="non-tech" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="scroll-mt-24">
-                <SectionHeading title="Management & Creative" align="left" />
+                <SectionHeading title="Management & Creative" align="left" light={true} />
                 <motion.div
                   variants={containerVariants}
                   initial="hidden"
@@ -140,10 +140,10 @@ const VerticalsPage: React.FC = () => {
 
             {filteredTech.length === 0 && filteredNonTech.length === 0 && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-                <div className="text-[#8c97a8] mb-4 text-lg">No verticals found matching your search.</div>
+                <div className="text-[#B8B8B8] mb-4 text-lg">No verticals found matching your search.</div>
                 <button
                   onClick={() => { setSearch(''); setFilter('all'); }}
-                  className="text-[#0B1F63] font-semibold hover:underline"
+                  className="text-[#CD0000] font-bold hover:underline uppercase tracking-wider text-xs"
                 >
                   Clear filters
                 </button>

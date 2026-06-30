@@ -20,15 +20,15 @@ interface EventCardProps {
 }
 
 const categoryConfig: Record<string, { bg: string; text: string; label: string }> = {
-  hackathon: { bg: '#FEF2F2', text: '#dc2626', label: 'Hackathon' },
-  workshop:  { bg: '#EFF6FF', text: '#2563eb', label: 'Workshop' },
-  talk:      { bg: '#F5F3FF', text: '#7c3aed', label: 'Talk' },
-  competition: { bg: '#FFFBEB', text: '#d97706', label: 'Competition' },
-  social:    { bg: '#F0FDFA', text: '#0d9488', label: 'Social' },
+  hackathon: { bg: '#121212', text: '#B8B8B8', label: 'Hackathon' },
+  workshop:  { bg: '#121212', text: '#CD0000', label: 'Workshop' },
+  talk:      { bg: '#121212', text: '#EFEDE6', label: 'Talk' },
+  competition: { bg: '#CD0000', text: '#EFEDE6', label: 'Competition' },
+  social:    { bg: '#B8B8B8', text: '#121212', label: 'Social' },
 };
 
 const EventCard: React.FC<EventCardProps> = ({ event }) => {
-  const catConfig = categoryConfig[event.category] || { bg: 'rgba(11,31,99,0.03)', text: '#0B1F63', label: event.category };
+  const catConfig = categoryConfig[event.category] || { bg: '#EFEDE6', text: '#CD0000', label: event.category };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -40,22 +40,22 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
 
   return (
     <motion.div
-      whileHover={{ y: -4, boxShadow: '0 16px 48px rgba(0, 91, 172, 0.12)' }}
+      whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(18, 18, 18, 0.08)' }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="bg-white border border-[#E5E7EB] rounded-2xl shadow-sm h-full flex flex-col relative overflow-hidden group"
+      className="bg-white border border-[#B8B8B8]/30 rounded-3xl shadow-sm h-full flex flex-col relative overflow-hidden group"
     >
       {/* Category color top bar */}
-      <div className="h-1 w-full" style={{ backgroundColor: catConfig.text }} />
+      <div className="h-1 w-full" style={{ backgroundColor: '#CD0000' }} />
 
       <div className="p-6 flex flex-col h-full flex-grow">
         {/* Header */}
         <div className="flex justify-between items-start mb-4">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[rgba(11,31,99,0.03)] border border-[rgba(11,31,99,0.07)]">
-            <span className={`w-1.5 h-1.5 rounded-full ${event.status === 'upcoming' ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400'}`} />
-            <span className="text-xs font-semibold text-[#667085] capitalize">{event.status}</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EFEDE6] border border-[#B8B8B8]/20">
+            <span className={`w-1.5 h-1.5 rounded-full ${event.status === 'upcoming' ? 'bg-[#CD0000] animate-pulse' : 'bg-[#B8B8B8]'}`} />
+            <span className="text-xs font-bold text-[#121212] capitalize tracking-wide">{event.status}</span>
           </div>
           <span
-            className="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider"
+            className="text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-[#B8B8B8]/20"
             style={{ backgroundColor: catConfig.bg, color: catConfig.text }}
           >
             {catConfig.label}
@@ -63,21 +63,21 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
         </div>
 
         {/* Content */}
-        <h3 className="font-grotesk text-lg font-bold text-[#0B1F63] mb-2 group-hover:text-[#0B1F63] transition-colors">
+        <h3 className="font-grotesk text-lg font-black text-[#121212] mb-2 group-hover:text-[#CD0000] transition-colors">
           {event.title}
         </h3>
-        <p className="text-[#667085] text-sm mb-4 line-clamp-2 flex-grow leading-relaxed">
+        <p className="text-[#121212]/70 text-sm mb-4 line-clamp-2 flex-grow leading-relaxed">
           {event.description}
         </p>
 
         {/* Footer */}
-        <div className="space-y-2 mt-auto pt-4 border-t border-[#E5E7EB]">
-          <div className="flex items-center gap-2 text-sm text-[#667085]">
-            <Calendar size={14} className="text-[#0B1F63] shrink-0" />
+        <div className="space-y-2 mt-auto pt-4 border-t border-[#B8B8B8]/30">
+          <div className="flex items-center gap-2 text-xs font-semibold text-[#121212]/70 uppercase tracking-wide">
+            <Calendar size={14} className="text-[#CD0000] shrink-0" />
             <span>{formatDate(event.date)}</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-[#667085]">
-            <MapPin size={14} className="text-[#0B1F63] shrink-0" />
+          <div className="flex items-center gap-2 text-xs font-semibold text-[#121212]/70 uppercase tracking-wide">
+            <MapPin size={14} className="text-[#CD0000] shrink-0" />
             <span className="truncate">{event.location}</span>
           </div>
         </div>

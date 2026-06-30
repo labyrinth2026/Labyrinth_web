@@ -80,21 +80,21 @@ const FacultyDashboard: React.FC = () => {
       {/* Header */}
       <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-sm p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-xl font-bold font-grotesk text-[#0B1F63]">Registration Management</h1>
+          <h1 className="text-xl font-bold font-grotesk text-[#CD0000]">Registration Management</h1>
           <p className="text-[#667085] text-sm mt-0.5">View and manage community applications.</p>
         </div>
         <div className="flex gap-2 shrink-0 flex-wrap">
           <button
             onClick={handleExportCSV}
             disabled={registrations.length === 0}
-            className="flex items-center gap-2 px-4 py-2 bg-[rgba(11,31,99,0.03)] text-[#0B1F63] text-sm font-semibold rounded-xl hover:bg-[rgba(11,31,99,0.07)] transition-colors disabled:opacity-40"
+            className="flex items-center gap-2 px-4 py-2 bg-[rgba(205, 0, 0, 0.03)] text-[#CD0000] text-sm font-semibold rounded-xl hover:bg-[rgba(205, 0, 0, 0.07)] transition-colors disabled:opacity-40"
           >
             <Download size={15} /> Export CSV
           </button>
           <button
             onClick={handleExportExcel}
             disabled={registrations.length === 0}
-            className="flex items-center gap-2 px-4 py-2 bg-[#0B1F63] text-white text-sm font-semibold rounded-xl hover:bg-[#071545] transition-colors disabled:opacity-40"
+            className="flex items-center gap-2 px-4 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000] transition-colors disabled:opacity-40"
           >
             <Download size={15} /> Export Excel
           </button>
@@ -104,12 +104,12 @@ const FacultyDashboard: React.FC = () => {
       {/* Summary Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white border border-[#E5E7EB] rounded-2xl p-5 flex items-center gap-4">
-          <div className="w-10 h-10 rounded-xl bg-[rgba(11,31,99,0.03)] flex items-center justify-center text-[#0B1F63]">
+          <div className="w-10 h-10 rounded-xl bg-[rgba(205, 0, 0, 0.03)] flex items-center justify-center text-[#CD0000]">
             <Users size={20} />
           </div>
           <div>
             <p className="text-xs text-[#8c97a8]">Total Applications</p>
-            <h3 className="text-2xl font-bold text-[#0B1F63]">{registrations.length}</h3>
+            <h3 className="text-2xl font-bold text-[#CD0000]">{registrations.length}</h3>
           </div>
         </div>
         <div className="bg-white border border-[#E5E7EB] rounded-2xl p-5 flex items-center gap-4">
@@ -118,7 +118,7 @@ const FacultyDashboard: React.FC = () => {
           </div>
           <div>
             <p className="text-xs text-[#8c97a8]">Unique Verticals</p>
-            <h3 className="text-2xl font-bold text-[#0B1F63]">{Object.keys(statsByVertical).length}</h3>
+            <h3 className="text-2xl font-bold text-[#CD0000]">{Object.keys(statsByVertical).length}</h3>
           </div>
         </div>
         <div className="bg-white border border-[#E5E7EB] rounded-2xl p-5 flex items-center gap-4">
@@ -127,7 +127,7 @@ const FacultyDashboard: React.FC = () => {
           </div>
           <div>
             <p className="text-xs text-[#8c97a8]">Year Groups</p>
-            <h3 className="text-2xl font-bold text-[#0B1F63]">{Object.keys(statsByYear).length}</h3>
+            <h3 className="text-2xl font-bold text-[#CD0000]">{Object.keys(statsByYear).length}</h3>
           </div>
         </div>
       </div>
@@ -141,8 +141,8 @@ const FacultyDashboard: React.FC = () => {
               onClick={() => setActiveTab(tab.id as any)}
               className={`px-6 py-4 text-sm font-semibold transition-colors border-b-2 ${
                 activeTab === tab.id
-                  ? 'border-[#0B1F63] text-[#0B1F63] bg-[rgba(11,31,99,0.03)]/50'
-                  : 'border-transparent text-[#667085] hover:text-[#0B1F63]'
+                  ? 'border-[#CD0000] text-[#CD0000] bg-[rgba(205, 0, 0, 0.03)]/50'
+                  : 'border-transparent text-[#667085] hover:text-[#CD0000]'
               }`}
             >
               {tab.label}
@@ -155,7 +155,7 @@ const FacultyDashboard: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="bg-[rgba(11,31,99,0.03)] border-b border-[rgba(11,31,99,0.07)] text-xs font-bold text-[#8c97a8] uppercase tracking-wider">
+                <tr className="bg-[rgba(205, 0, 0, 0.03)] border-b border-[rgba(205, 0, 0, 0.07)] text-xs font-bold text-[#8c97a8] uppercase tracking-wider">
                   <th className="p-4">Date</th>
                   <th className="p-4">Name</th>
                   <th className="p-4">Email</th>
@@ -168,20 +168,20 @@ const FacultyDashboard: React.FC = () => {
               <tbody className="divide-y divide-[#E5E7EB]">
                 {isLoading ? (
                   <tr><td colSpan={7} className="p-8 text-center text-[#8c97a8]">
-                    <RefreshCw size={20} className="animate-spin mx-auto mb-2 text-[#0B1F63]" />
+                    <RefreshCw size={20} className="animate-spin mx-auto mb-2 text-[#CD0000]" />
                     Loading registrations...
                   </td></tr>
                 ) : registrations.length > 0 ? registrations.map((reg, i) => (
-                  <tr key={i} className="hover:bg-[rgba(11,31,99,0.03)]/30 transition-colors text-sm">
+                  <tr key={i} className="hover:bg-[rgba(205, 0, 0, 0.03)]/30 transition-colors text-sm">
                     <td className="p-4 text-[#8c97a8] whitespace-nowrap">
                       {reg.timestamp ? new Date(reg.timestamp).toLocaleDateString() : 'N/A'}
                     </td>
-                    <td className="p-4 text-[#0B1F63] font-semibold">{reg.name}</td>
+                    <td className="p-4 text-[#CD0000] font-semibold">{reg.name}</td>
                     <td className="p-4 text-[#667085]">{reg.email}</td>
                     <td className="p-4 text-[#667085]">{reg.phone}</td>
                     <td className="p-4 text-[#667085]">{reg.course}</td>
                     <td className="p-4">
-                      <span className="px-2 py-0.5 rounded-full bg-[rgba(11,31,99,0.03)] text-[#0B1F63] text-xs font-semibold">
+                      <span className="px-2 py-0.5 rounded-full bg-[rgba(205, 0, 0, 0.03)] text-[#CD0000] text-xs font-semibold">
                         Year {reg.year}
                       </span>
                     </td>
@@ -205,7 +205,7 @@ const FacultyDashboard: React.FC = () => {
         {activeTab === 'stats' && (
           <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h3 className="text-sm font-bold text-[#0B1F63] mb-3">By Vertical</h3>
+              <h3 className="text-sm font-bold text-[#CD0000] mb-3">By Vertical</h3>
               <div className="space-y-2">
                 {Object.entries(statsByVertical).sort((a, b) => b[1] - a[1]).map(([v, count]) => {
                   const pct = Math.round((count / registrations.length) * 100);
@@ -215,8 +215,8 @@ const FacultyDashboard: React.FC = () => {
                         <span className="font-medium">{v}</span>
                         <span>{count} ({pct}%)</span>
                       </div>
-                      <div className="h-2 bg-[rgba(11,31,99,0.03)] rounded-full overflow-hidden">
-                        <div className="h-full bg-[#0B1F63] rounded-full" style={{ width: `${pct}%` }} />
+                      <div className="h-2 bg-[rgba(205, 0, 0, 0.03)] rounded-full overflow-hidden">
+                        <div className="h-full bg-[#CD0000] rounded-full" style={{ width: `${pct}%` }} />
                       </div>
                     </div>
                   );
@@ -225,7 +225,7 @@ const FacultyDashboard: React.FC = () => {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-[#0B1F63] mb-3">By Year</h3>
+              <h3 className="text-sm font-bold text-[#CD0000] mb-3">By Year</h3>
               <div className="space-y-2">
                 {Object.entries(statsByYear).sort().map(([y, count]) => {
                   const pct = Math.round((count / registrations.length) * 100);
@@ -235,7 +235,7 @@ const FacultyDashboard: React.FC = () => {
                         <span className="font-medium">{y}</span>
                         <span>{count} ({pct}%)</span>
                       </div>
-                      <div className="h-2 bg-[rgba(11,31,99,0.03)] rounded-full overflow-hidden">
+                      <div className="h-2 bg-[rgba(205, 0, 0, 0.03)] rounded-full overflow-hidden">
                         <div className="h-full bg-[#7c3aed] rounded-full" style={{ width: `${pct}%` }} />
                       </div>
                     </div>

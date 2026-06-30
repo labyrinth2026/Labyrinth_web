@@ -99,13 +99,13 @@ const FormsManager: React.FC = () => {
     <div className="max-w-4xl">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold font-grotesk text-[#0B1F63] mb-2">Forms Management</h1>
+          <h1 className="text-3xl font-bold font-grotesk text-[#CD0000] mb-2">Forms Management</h1>
           <p className="text-[#667085]">Manage active Google Form links across the website. Update URLs anytime without code changes.</p>
         </div>
         <button
           onClick={handleSaveAll}
           disabled={isSaving}
-          className="px-5 py-2.5 bg-[#0B1F63] text-white font-semibold rounded-xl hover:bg-[#071545] transition-colors flex items-center gap-2 shadow-sm disabled:opacity-70"
+          className="px-5 py-2.5 bg-[#CD0000] text-white font-semibold rounded-xl hover:bg-[#A30000] transition-colors flex items-center gap-2 shadow-sm disabled:opacity-70"
         >
           {isSaving ? 'Saving...' : <><Save size={18} /> Save Changes</>}
         </button>
@@ -126,11 +126,11 @@ const FormsManager: React.FC = () => {
       </AnimatePresence>
 
       <div className="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] overflow-hidden">
-        <div className="p-5 border-b border-[#E5E7EB] bg-[rgba(11,31,99,0.03)]/30 flex justify-between items-center">
-          <h2 className="font-semibold text-[#0B1F63]">Active Registration Forms</h2>
+        <div className="p-5 border-b border-[#E5E7EB] bg-[rgba(205, 0, 0, 0.03)]/30 flex justify-between items-center">
+          <h2 className="font-semibold text-[#CD0000]">Active Registration Forms</h2>
           <button 
             onClick={addNewForm}
-            className="flex items-center gap-1.5 text-sm font-semibold text-[#0B1F63] hover:text-[#071545] bg-[rgba(11,31,99,0.03)] px-3 py-1.5 rounded-lg border border-[rgba(11,31,99,0.07)] transition-colors"
+            className="flex items-center gap-1.5 text-sm font-semibold text-[#CD0000] hover:text-[#A30000] bg-[rgba(205, 0, 0, 0.03)] px-3 py-1.5 rounded-lg border border-[rgba(205, 0, 0, 0.07)] transition-colors"
           >
             <Plus size={16} /> Add Custom Form
           </button>
@@ -141,7 +141,7 @@ const FormsManager: React.FC = () => {
             <div key={form.id} className={`p-6 transition-colors ${form.active ? 'bg-white' : 'bg-gray-50/50'}`}>
               <div className="flex items-start gap-4">
                 <div className="mt-1">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm ${form.active ? 'bg-[rgba(11,31,99,0.03)] text-[#0B1F63]' : 'bg-gray-100 text-gray-400'}`}>
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm ${form.active ? 'bg-[rgba(205, 0, 0, 0.03)] text-[#CD0000]' : 'bg-gray-100 text-gray-400'}`}>
                     <LinkIcon size={20} />
                   </div>
                 </div>
@@ -153,7 +153,7 @@ const FormsManager: React.FC = () => {
                         type="text"
                         value={form.title}
                         onChange={(e) => handleUpdate(form.id, 'title', e.target.value)}
-                        className={`text-lg font-bold font-grotesk bg-transparent border-b border-transparent hover:border-[#E5E7EB] focus:border-[#0B1F63] focus:outline-none transition-colors px-1 -ml-1 ${form.active ? 'text-[#0B1F63]' : 'text-gray-500'}`}
+                        className={`text-lg font-bold font-grotesk bg-transparent border-b border-transparent hover:border-[#E5E7EB] focus:border-[#CD0000] focus:outline-none transition-colors px-1 -ml-1 ${form.active ? 'text-[#CD0000]' : 'text-gray-500'}`}
                       />
                       <div className="text-xs text-gray-400 mt-1 uppercase tracking-wider font-semibold px-1">Internal ID: {form.id}</div>
                     </div>
@@ -163,7 +163,7 @@ const FormsManager: React.FC = () => {
                       <label className="flex items-center cursor-pointer">
                         <div className="relative">
                           <input type="checkbox" className="sr-only" checked={form.active} onChange={() => toggleActive(form.id)} />
-                          <div className={`block w-12 h-6 rounded-full transition-colors ${form.active ? 'bg-[#0B1F63]' : 'bg-gray-300'}`}></div>
+                          <div className={`block w-12 h-6 rounded-full transition-colors ${form.active ? 'bg-[#CD0000]' : 'bg-gray-300'}`}></div>
                           <div className={`dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${form.active ? 'transform translate-x-6' : ''}`}></div>
                         </div>
                         <div className="ml-3 font-semibold text-sm text-[#667085]">
@@ -184,7 +184,7 @@ const FormsManager: React.FC = () => {
                       value={form.url}
                       onChange={(e) => handleUpdate(form.id, 'url', e.target.value)}
                       placeholder="https://forms.gle/..."
-                      className="w-full px-4 py-2.5 bg-white border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B1F63]/20 text-sm"
+                      className="w-full px-4 py-2.5 bg-white border border-[#E5E7EB] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CD0000]/20 text-sm"
                     />
                   </div>
                 </div>

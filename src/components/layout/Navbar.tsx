@@ -46,8 +46,8 @@ const Navbar: React.FC = () => {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md border-b border-[#E5E7EB] shadow-sm py-3'
-            : 'bg-white py-4 border-b border-[#E5E7EB]'
+            ? 'bg-[#121212]/95 backdrop-blur-md border-b border-[#B8B8B8]/20 shadow-lg py-3'
+            : 'bg-[#121212] py-4 border-b border-[#B8B8B8]/10'
         }`}
       >
         <div className="container mx-auto px-6 max-w-7xl flex items-center justify-between">
@@ -66,8 +66,8 @@ const Navbar: React.FC = () => {
                   href={link.path}
                   className={`text-sm font-semibold transition-all px-4 py-2 rounded-full relative ${
                     isActive
-                      ? 'text-[#0B1F63] bg-[rgba(11,31,99,0.03)]'
-                      : 'text-[#667085] hover:text-[#0B1F63] hover:bg-[rgba(11,31,99,0.03)]'
+                      ? 'text-[#EFEDE6] bg-[#CD0000]'
+                      : 'text-[#B8B8B8] hover:text-[#EFEDE6] hover:bg-white/5'
                   }`}
                 >
                   {link.label}
@@ -80,23 +80,23 @@ const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center gap-4 relative z-50">
             <Link
               href="/contact"
-              className="px-5 py-2 bg-[#0B1F63] text-white text-sm font-semibold rounded-full hover:bg-[#071545] transition-colors shadow-sm"
+              className="px-5 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-full hover:bg-[#A30000] transition-colors shadow-md"
             >
               Join Us
             </Link>
-            <div className="h-8 w-px bg-[rgba(11,31,99,0.05)] hidden sm:block"></div>
-            <img src="/christ-logo.png" alt="Christ University Logo" className="h-12 object-contain" />
+            <div className="h-8 w-px bg-[#B8B8B8]/20 hidden sm:block"></div>
+            <img src="/christ-logo.png" alt="Christ University Logo" className="h-12 object-contain brightness-0 invert" />
           </div>
 
           {/* Mobile Menu Toggle & Right Logo (Mobile) */}
           <div className="md:hidden flex items-center gap-3 relative z-50">
-            <img src="/christ-logo.png" alt="Christ University Logo" className="h-10 object-contain" />
+            <img src="/christ-logo.png" alt="Christ University Logo" className="h-10 object-contain brightness-0 invert" />
             <button
-              className="text-[#0B1F63] p-2 rounded-lg hover:bg-[rgba(11,31,99,0.03)] transition-colors"
+              className="text-[#EFEDE6] p-2 rounded-lg hover:bg-white/5 transition-colors"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open menu"
             >
-              <Menu size={24} />
+              <Menu size={24} className="text-[#EFEDE6]" />
             </button>
           </div>
         </div>
@@ -110,7 +110,7 @@ const Navbar: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[100] bg-[#0B1F63]/50 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm md:hidden"
             onClick={() => setMobileMenuOpen(false)}
             aria-hidden="true"
           />
@@ -125,20 +125,20 @@ const Navbar: React.FC = () => {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'tween', duration: 0.3, ease: 'easeInOut' }}
-            className="fixed top-0 left-0 bottom-0 w-[280px] sm:w-[320px] bg-white z-[110] shadow-2xl md:hidden flex flex-col overflow-y-auto"
+            className="fixed top-0 left-0 bottom-0 w-[280px] sm:w-[320px] bg-[#121212] border-r border-[#B8B8B8]/10 z-[110] shadow-2xl md:hidden flex flex-col overflow-y-auto"
             role="dialog"
             aria-modal="true"
           >
             {/* Drawer Header */}
-            <div className="flex justify-between items-center px-6 py-5 border-b border-[#E5E7EB] shrink-0">
+            <div className="flex justify-between items-center px-6 py-5 border-b border-[#B8B8B8]/10 shrink-0">
               <div className="flex items-center gap-3">
-                <img src="/christ-logo.png" alt="Christ University Logo" className="h-8 object-contain" />
-                <div className="w-px h-6 bg-[rgba(11,31,99,0.05)]"></div>
+                <img src="/christ-logo.png" alt="Christ University Logo" className="h-8 object-contain brightness-0 invert" />
+                <div className="w-px h-6 bg-[#B8B8B8]/20"></div>
                 <img src="/labyrinth-logo.png" alt="Labyrinth Logo" className="h-8 object-contain" />
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-[#667085] p-1.5 -mr-1.5 rounded-lg hover:bg-[rgba(11,31,99,0.03)] hover:text-[#0B1F63] transition-colors"
+                className="text-[#B8B8B8] p-1.5 -mr-1.5 rounded-lg hover:bg-white/5 hover:text-[#EFEDE6] transition-colors"
                 aria-label="Close menu"
               >
                 <X size={24} />
@@ -160,8 +160,8 @@ const Navbar: React.FC = () => {
                       href={link.path}
                       className={`block text-[15px] font-bold px-4 py-3.5 rounded-xl transition-all ${
                         isActive
-                          ? 'text-[#0B1F63] bg-[rgba(11,31,99,0.03)] border border-[#0B1F63]/10'
-                          : 'text-[#667085] hover:text-[#0B1F63] hover:bg-[rgba(11,31,99,0.03)] border border-transparent'
+                          ? 'text-[#EFEDE6] bg-[#CD0000] border border-[#CD0000]/10'
+                          : 'text-[#B8B8B8] hover:text-[#EFEDE6] hover:bg-white/5 border border-transparent'
                       }`}
                     >
                       {link.label}
@@ -175,16 +175,16 @@ const Navbar: React.FC = () => {
             <div className="mt-auto p-6 shrink-0">
               <Link
                 href="/contact"
-                className="flex items-center justify-center w-full px-6 py-3.5 bg-[#0B1F63] text-white font-bold rounded-xl hover:bg-[#071545] transition-colors shadow-md shadow-blue-900/10 mb-6"
+                className="flex items-center justify-center w-full px-6 py-3.5 bg-[#CD0000] text-white font-bold rounded-xl hover:bg-[#A30000] transition-colors shadow-md mb-6"
               >
                 Join Community
               </Link>
               
-              <div className="text-center pt-5 border-t border-[#E5E7EB]">
-                <p className="text-[11px] font-semibold text-[#8c97a8] uppercase tracking-wider mb-1">
+              <div className="text-center pt-5 border-t border-[#B8B8B8]/10">
+                <p className="text-[11px] font-semibold text-[#EFEDE6] uppercase tracking-wider mb-1">
                   Labyrinth
                 </p>
-                <p className="text-[11px] text-[#8c97a8]">
+                <p className="text-[11px] text-[#B8B8B8]">
                   The Computer Science Club of
                   <br />Christ University
                 </p>

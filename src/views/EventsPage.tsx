@@ -59,8 +59,8 @@ const EventsPage: React.FC = () => {
   if (isLoading) {
     return (
       <PageWrapper>
-        <div className="min-h-[60vh] flex items-center justify-center">
-          <div className="w-8 h-8 border-3 border-[#0B1F63] border-t-transparent rounded-full animate-spin"></div>
+        <div className="min-h-[60vh] flex items-center justify-center bg-[#121212]">
+          <div className="w-8 h-8 border-3 border-[#CD0000] border-t-transparent rounded-full animate-spin"></div>
         </div>
       </PageWrapper>
     );
@@ -68,17 +68,17 @@ const EventsPage: React.FC = () => {
 
   return (
     <PageWrapper>
-      {/* Header */}
-      <section className="py-16 bg-gradient-to-br from-[rgba(11,31,99,0.03)] to-white">
+      {/* Header (Section 1: Warm White #EFEDE6) */}
+      <section className="py-24 bg-[#EFEDE6] border-b border-[#B8B8B8]/20">
         <div className="container mx-auto px-6 max-w-7xl">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-center mb-12">
-            <span className="inline-block px-4 py-1 rounded-full bg-[rgba(11,31,99,0.03)] border border-[rgba(11,31,99,0.07)] text-[#0B1F63] text-xs font-bold uppercase tracking-widest mb-4">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center mb-16">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-[#CD0000]/5 border border-[#CD0000]/20 text-[#CD0000] text-xs font-bold uppercase tracking-widest mb-6">
               Calendar
             </span>
-            <h1 className="font-grotesk text-5xl md:text-6xl font-bold mb-4 text-[#0B1F63]">
-              Events &amp; <span className="text-[#0B1F63]">Hackathons</span>
+            <h1 className="font-grotesk text-5xl md:text-7xl font-black mb-6 text-[#121212] tracking-tighter leading-none">
+              EVENTS &amp; <span className="text-[#CD0000]">HACKATHONS</span>
             </h1>
-            <p className="text-lg text-[#667085] max-w-2xl mx-auto">
+            <p className="text-lg text-[#121212]/70 max-w-2xl mx-auto leading-relaxed">
               Discover workshops, hackathons, and tech talks to level up your skills.
             </p>
           </motion.div>
@@ -86,7 +86,7 @@ const EventsPage: React.FC = () => {
           {/* Featured Carousel */}
           {carouselEvents.length > 0 && (
             <div
-              className="relative w-full h-[380px] md:h-[460px] rounded-3xl overflow-hidden shadow-xl border border-[#E5E7EB]"
+              className="relative w-full h-[380px] md:h-[460px] rounded-3xl overflow-hidden shadow-xl border border-[#B8B8B8]/30 bg-[#121212]"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
@@ -99,43 +99,43 @@ const EventsPage: React.FC = () => {
                   transition={{ duration: 0.5 }}
                   className="absolute inset-0"
                 >
-                  <div className="w-full h-full relative flex items-end bg-gradient-to-br from-[#003b73] to-[#0B1F63]">
+                  <div className="w-full h-full relative flex items-end bg-gradient-to-br from-[#121212] to-[#181818]">
                     {/* Subtle grid */}
-                    <div className="absolute inset-0 animated-grid opacity-20" />
+                    <div className="absolute inset-0 animated-grid opacity-25" />
                     {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#003b73]/95 via-[#0B1F63]/60 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-[#121212]/80 to-transparent" />
 
                     {/* Content */}
                     <div className="relative z-10 p-8 md:p-12 w-full max-w-4xl">
                       <div className="flex flex-wrap gap-3 mb-4">
-                        <span className="px-3 py-1 rounded-full bg-white text-[#0B1F63] text-xs font-bold uppercase tracking-wider">
+                        <span className="px-3 py-1 rounded-full bg-[#CD0000] text-[#EFEDE6] text-[10px] font-bold uppercase tracking-wider">
                           {carouselEvents[currentSlide].category}
                         </span>
-                        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
                           carouselEvents[currentSlide].status === 'upcoming'
                             ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
-                            : 'bg-white/10 text-white/70 border-white/20'
+                            : 'bg-white/10 text-[#B8B8B8] border-white/10'
                         }`}>
                           {carouselEvents[currentSlide].status}
                         </span>
                       </div>
-                      <h2 className="font-grotesk text-3xl md:text-4xl font-bold text-white mb-3 leading-tight">
+                      <h2 className="font-grotesk text-3xl md:text-5xl font-black text-white mb-4 leading-tight tracking-tight">
                         {carouselEvents[currentSlide].title}
                       </h2>
-                      <p className="text-slate-200 md:text-base mb-5 line-clamp-2 max-w-3xl">
+                      <p className="text-[#B8B8B8] md:text-base mb-6 line-clamp-2 max-w-3xl leading-relaxed">
                         {carouselEvents[currentSlide].description}
                       </p>
-                      <div className="flex flex-wrap gap-3 mb-6">
-                        <div className="flex items-center gap-2 text-sm text-slate-200 bg-white/10 px-4 py-1.5 rounded-lg">
-                          <Calendar size={14} className="text-white/70" />
+                      <div className="flex flex-wrap gap-3 mb-8">
+                        <div className="flex items-center gap-2 text-xs font-semibold text-[#EFEDE6]/90 bg-white/5 border border-white/10 px-4 py-1.5 rounded-xl">
+                          <Calendar size={14} className="text-[#CD0000]" />
                           <span>{new Date(carouselEvents[currentSlide].date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-slate-200 bg-white/10 px-4 py-1.5 rounded-lg">
-                          <MapPin size={14} className="text-white/70" />
+                        <div className="flex items-center gap-2 text-xs font-semibold text-[#EFEDE6]/90 bg-white/5 border border-white/10 px-4 py-1.5 rounded-xl">
+                          <MapPin size={14} className="text-[#CD0000]" />
                           <span>{carouselEvents[currentSlide].location}</span>
                         </div>
                       </div>
-                      <Button variant="secondary" size="sm">
+                      <Button variant="secondary" size="sm" href="/contact">
                         {carouselEvents[currentSlide].status === 'upcoming' ? 'Register Now' : 'View Details'}
                       </Button>
                     </div>
@@ -145,10 +145,10 @@ const EventsPage: React.FC = () => {
 
               {/* Controls */}
               <div className="absolute right-4 md:right-6 bottom-6 flex gap-2 z-20">
-                <button onClick={prevSlide} className="w-9 h-9 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center text-white hover:bg-white hover:text-[#0B1F63] transition-all">
+                <button onClick={prevSlide} className="w-9 h-9 rounded-full bg-white/10 backdrop-blur border border-white/10 flex items-center justify-center text-white hover:bg-[#CD0000] hover:text-[#EFEDE6] hover:border-[#CD0000] transition-all">
                   <ChevronLeft size={18} />
                 </button>
-                <button onClick={nextSlide} className="w-9 h-9 rounded-full bg-white/20 backdrop-blur border border-white/30 flex items-center justify-center text-white hover:bg-white hover:text-[#0B1F63] transition-all">
+                <button onClick={nextSlide} className="w-9 h-9 rounded-full bg-white/10 backdrop-blur border border-white/10 flex items-center justify-center text-white hover:bg-[#CD0000] hover:text-[#EFEDE6] hover:border-[#CD0000] transition-all">
                   <ChevronRight size={18} />
                 </button>
               </div>
@@ -157,7 +157,7 @@ const EventsPage: React.FC = () => {
               <div className="absolute top-6 right-6 flex gap-1.5 z-20">
                 {carouselEvents.map((_, idx) => (
                   <button key={idx} onClick={() => setCurrentSlide(idx)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${currentSlide === idx ? 'w-6 bg-white' : 'w-1.5 bg-white/30 hover:bg-white/50'}`}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${currentSlide === idx ? 'w-6 bg-[#CD0000]' : 'w-1.5 bg-white/30 hover:bg-[#CD0000]/60'}`}
                   />
                 ))}
               </div>
@@ -166,14 +166,14 @@ const EventsPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Events Grid */}
-      <section className="py-16 bg-white">
+      {/* Events Grid (Section 2: Charcoal Black #121212) */}
+      <section className="py-24 bg-[#121212]">
         <div className="container mx-auto px-6 max-w-7xl">
           {/* Filters */}
-          <div className="bg-[rgba(11,31,99,0.03)] border border-[rgba(11,31,99,0.07)] rounded-2xl p-6 mb-10">
+          <div className="bg-[#181818] border border-[#B8B8B8]/10 rounded-3xl p-6 mb-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-xs font-bold text-[#8c97a8] uppercase tracking-wider mb-3">Status & Search</h3>
+                <h3 className="text-xs font-bold text-[#B8B8B8] uppercase tracking-widest mb-3">Status & Search</h3>
                 <SearchFilter
                   searchValue={search}
                   onSearchChange={setSearch}
@@ -187,8 +187,8 @@ const EventsPage: React.FC = () => {
                 />
               </div>
               <div>
-                <h3 className="text-xs font-bold text-[#8c97a8] uppercase tracking-wider mb-3">Category</h3>
-                <div className="flex flex-wrap gap-2">
+                <h3 className="text-xs font-bold text-[#B8B8B8] uppercase tracking-widest mb-3">Category</h3>
+                <div className="flex flex-wrap gap-2 pt-2">
                   {[
                     { label: 'All', value: 'all' },
                     { label: 'Hackathons', value: 'hackathon' },
@@ -200,10 +200,10 @@ const EventsPage: React.FC = () => {
                     <button
                       key={cat.value}
                       onClick={() => setCategoryFilter(cat.value)}
-                      className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all border ${
+                      className={`px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-all border ${
                         categoryFilter === cat.value
-                          ? 'bg-[#0B1F63] text-white border-[#0B1F63]'
-                          : 'bg-white text-[#667085] border-[#E5E7EB] hover:border-[#0B1F63] hover:text-[#0B1F63]'
+                          ? 'bg-[#CD0000] text-[#EFEDE6] border-[#CD0000]'
+                          : 'bg-[#121212] text-[#B8B8B8] border-[#B8B8B8]/20 hover:border-[#CD0000] hover:text-[#CD0000]'
                       }`}
                     >
                       {cat.label}
@@ -228,10 +228,10 @@ const EventsPage: React.FC = () => {
               </motion.div>
             ) : (
               <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-                <div className="text-[#8c97a8] mb-4 text-lg">No events found matching your criteria.</div>
+                <div className="text-[#B8B8B8] mb-6 text-lg">No events found matching your criteria.</div>
                 <button
                   onClick={() => { setSearch(''); setFilter('all'); setCategoryFilter('all'); }}
-                  className="text-[#0B1F63] font-semibold hover:underline"
+                  className="text-[#CD0000] font-bold hover:underline uppercase tracking-wider text-xs"
                 >
                   Clear all filters
                 </button>

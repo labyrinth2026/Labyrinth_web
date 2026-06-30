@@ -111,18 +111,18 @@ const TeamManager: React.FC = () => {
     setDeleteConfirm(null);
   };
 
-  const inputClass = "w-full border border-[#E5E7EB] rounded-xl px-3 py-2 text-sm text-[#0B1F63] placeholder:text-[#8c97a8] focus:outline-none focus:ring-2 focus:ring-[#0B1F63]/15 focus:border-[#0B1F63] transition-all";
+  const inputClass = "w-full border border-[#E5E7EB] rounded-xl px-3 py-2 text-sm text-[#CD0000] placeholder:text-[#8c97a8] focus:outline-none focus:ring-2 focus:ring-[#CD0000]/15 focus:border-[#CD0000] transition-all";
 
   return (
     <div className="space-y-5">
       {/* Header */}
       <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-sm p-6 flex justify-between items-center gap-4">
         <div>
-          <h1 className="text-xl font-bold font-grotesk text-[#0B1F63]">Team Management</h1>
+          <h1 className="text-xl font-bold font-grotesk text-[#CD0000]">Team Management</h1>
           <p className="text-[#667085] text-sm mt-0.5">Add, edit, and remove team members.</p>
         </div>
         <button onClick={openAddModal}
-          className="flex items-center gap-2 px-4 py-2 bg-[#0B1F63] text-white text-sm font-semibold rounded-xl hover:bg-[#071545] transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000] transition-colors"
         >
           <Plus size={15} /> Add Member
         </button>
@@ -141,11 +141,11 @@ const TeamManager: React.FC = () => {
             <button key={tab.id} onClick={() => setActiveTab(tab.id as any)}
               className={`px-4 py-4 text-sm font-semibold transition-colors border-b-2 whitespace-nowrap ${
                 activeTab === tab.id
-                  ? 'border-[#0B1F63] text-[#0B1F63] bg-[rgba(11,31,99,0.03)]/50'
-                  : 'border-transparent text-[#667085] hover:text-[#0B1F63]'
+                  ? 'border-[#CD0000] text-[#CD0000] bg-[rgba(205, 0, 0, 0.03)]/50'
+                  : 'border-transparent text-[#667085] hover:text-[#CD0000]'
               }`}
             >
-              {tab.label} <span className="ml-1.5 text-xs bg-[rgba(11,31,99,0.03)] text-[#0B1F63] px-1.5 py-0.5 rounded-full">
+              {tab.label} <span className="ml-1.5 text-xs bg-[rgba(205, 0, 0, 0.03)] text-[#CD0000] px-1.5 py-0.5 rounded-full">
                 {tab.id === 'faculty' ? (teamData.facultyCoordinators?.length || 0) :
                  tab.id === 'mentors' ? (teamData.mentors?.length || 0) :
                  tab.id === 'core' ? (teamData.coreCommittee?.length || 0) :
@@ -154,20 +154,20 @@ const TeamManager: React.FC = () => {
               </span>
             </button>
           ))}
-          <button onClick={loadTeam} className="ml-auto px-4 py-4 text-[#8c97a8] hover:text-[#0B1F63] transition-colors">
+          <button onClick={loadTeam} className="ml-auto px-4 py-4 text-[#8c97a8] hover:text-[#CD0000] transition-colors">
             <RefreshCw size={15} className={isLoading ? 'animate-spin' : ''} />
           </button>
         </div>
 
         {isLoading ? (
           <div className="p-10 flex justify-center">
-            <RefreshCw size={22} className="animate-spin text-[#0B1F63]" />
+            <RefreshCw size={22} className="animate-spin text-[#CD0000]" />
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="bg-[rgba(11,31,99,0.03)] border-b border-[rgba(11,31,99,0.07)] text-xs font-bold text-[#8c97a8] uppercase tracking-wider">
+                <tr className="bg-[rgba(205, 0, 0, 0.03)] border-b border-[rgba(205, 0, 0, 0.07)] text-xs font-bold text-[#8c97a8] uppercase tracking-wider">
                   <th className="p-4">Name</th>
                   <th className="p-4">Role</th>
                   <th className="p-4">Email</th>
@@ -178,16 +178,16 @@ const TeamManager: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-[#E5E7EB]">
                 {currentList.map((member: any) => (
-                  <tr key={member.id} className="hover:bg-[rgba(11,31,99,0.03)]/30 transition-colors text-sm">
-                    <td className="p-4 text-[#0B1F63] font-semibold">{member.name}</td>
+                  <tr key={member.id} className="hover:bg-[rgba(205, 0, 0, 0.03)]/30 transition-colors text-sm">
+                    <td className="p-4 text-[#CD0000] font-semibold">{member.name}</td>
                     <td className="p-4 text-[#667085]">{member.role}</td>
                     <td className="p-4 text-[#667085]">{member.email}</td>
-                    {(activeTab === 'heads' || activeTab === 'subheads') && <td className="p-4"><span className="px-2 py-0.5 rounded-full bg-[rgba(11,31,99,0.03)] text-[#0B1F63] text-xs font-semibold">{member.vertical}</span></td>}
+                    {(activeTab === 'heads' || activeTab === 'subheads') && <td className="p-4"><span className="px-2 py-0.5 rounded-full bg-[rgba(205, 0, 0, 0.03)] text-[#CD0000] text-xs font-semibold">{member.vertical}</span></td>}
                     {activeTab === 'faculty' && <td className="p-4 text-[#667085]">{member.department}</td>}
                     <td className="p-4 text-right">
                       <div className="flex justify-end gap-1.5">
                         <button onClick={() => openEditModal(member)}
-                          className="p-1.5 text-[#8c97a8] hover:text-[#0B1F63] hover:bg-[rgba(11,31,99,0.03)] rounded-lg transition-colors" title="Edit">
+                          className="p-1.5 text-[#8c97a8] hover:text-[#CD0000] hover:bg-[rgba(205, 0, 0, 0.03)] rounded-lg transition-colors" title="Edit">
                           <Edit2 size={14} />
                         </button>
                         <button onClick={() => setDeleteConfirm(member.id)}
@@ -209,11 +209,11 @@ const TeamManager: React.FC = () => {
 
       {/* Add/Edit Modal */}
       {showModal && editingMember && (
-        <div className="fixed inset-0 z-50 bg-[#0B1F63]/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-[#CD0000]/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl border border-[#E5E7EB] w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-[#E5E7EB]">
-              <h2 className="font-bold text-[#0B1F63]">{editingMember.id ? 'Edit Member' : 'Add New Member'}</h2>
-              <button onClick={() => setShowModal(false)} className="text-[#8c97a8] hover:text-[#0B1F63] transition-colors">
+              <h2 className="font-bold text-[#CD0000]">{editingMember.id ? 'Edit Member' : 'Add New Member'}</h2>
+              <button onClick={() => setShowModal(false)} className="text-[#8c97a8] hover:text-[#CD0000] transition-colors">
                 <X size={18} />
               </button>
             </div>
@@ -262,9 +262,9 @@ const TeamManager: React.FC = () => {
               </div>
             </div>
             <div className="flex justify-end gap-3 p-6 border-t border-[#E5E7EB]">
-              <button onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-[#667085] hover:text-[#0B1F63] transition-colors font-medium">Cancel</button>
+              <button onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-[#667085] hover:text-[#CD0000] transition-colors font-medium">Cancel</button>
               <button onClick={handleSave} disabled={isSaving}
-                className="flex items-center gap-2 px-5 py-2 bg-[#0B1F63] text-white text-sm font-semibold rounded-xl hover:bg-[#071545] transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-5 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000] transition-colors disabled:opacity-50"
               >
                 {isSaving ? <RefreshCw size={14} className="animate-spin" /> : <Check size={14} />}
                 {isSaving ? 'Saving...' : 'Save Member'}
@@ -276,16 +276,16 @@ const TeamManager: React.FC = () => {
 
       {/* Delete Confirmation */}
       {deleteConfirm && (
-        <div className="fixed inset-0 z-50 bg-[#0B1F63]/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-[#CD0000]/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl border border-red-100 w-full max-w-sm p-6 text-center">
             <div className="w-14 h-14 mx-auto rounded-full bg-red-50 flex items-center justify-center mb-4">
               <AlertTriangle size={28} className="text-red-500" />
             </div>
-            <h3 className="font-bold text-[#0B1F63] mb-2">Remove Team Member?</h3>
+            <h3 className="font-bold text-[#CD0000] mb-2">Remove Team Member?</h3>
             <p className="text-[#667085] text-sm mb-6">This action cannot be undone.</p>
             <div className="flex gap-3">
               <button onClick={() => setDeleteConfirm(null)}
-                className="flex-1 px-4 py-2 text-sm font-semibold text-[#667085] border border-[#E5E7EB] rounded-xl hover:bg-[rgba(11,31,99,0.03)] transition-colors"
+                className="flex-1 px-4 py-2 text-sm font-semibold text-[#667085] border border-[#E5E7EB] rounded-xl hover:bg-[rgba(205, 0, 0, 0.03)] transition-colors"
               >Cancel</button>
               <button onClick={() => handleDelete(deleteConfirm)}
                 className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-red-500 rounded-xl hover:bg-red-600 transition-colors"

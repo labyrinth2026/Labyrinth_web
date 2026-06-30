@@ -29,57 +29,57 @@ const getInitials = (name: string) => {
 const FacultyCard: React.FC<FacultyCardProps> = ({ faculty }) => {
   return (
     <motion.div
-      whileHover={{ y: -4, boxShadow: '0 16px 48px rgba(0, 91, 172, 0.14)' }}
+      whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(18, 18, 18, 0.08)' }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="bg-white border border-[#E5E7EB] rounded-2xl shadow-sm overflow-hidden flex flex-col h-full"
+      className="bg-white border border-[#B8B8B8]/30 rounded-3xl shadow-sm overflow-hidden flex flex-col h-full"
     >
-      {/* Blue header bar */}
-      <div className="h-2 w-full bg-[#0B1F63]" />
+      {/* Red header bar */}
+      <div className="h-2 w-full bg-[#CD0000]" />
 
       <div className="p-6 flex flex-col items-center text-center flex-grow">
         {/* Avatar */}
         <div className="relative mb-4 mt-2">
-          <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[rgba(11,31,99,0.03)] shadow-lg bg-[#0B1F63] flex items-center justify-center">
+          <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[#EFEDE6] shadow-lg bg-[#121212] flex items-center justify-center">
             {faculty.avatar ? (
               <img src={faculty.avatar} alt={faculty.name} loading="lazy" className="w-full h-full object-cover" />
             ) : (
-              <span className="text-2xl font-bold text-white">{getInitials(faculty.name)}</span>
+              <span className="text-2xl font-bold text-[#EFEDE6]">{getInitials(faculty.name)}</span>
             )}
           </div>
           {/* Faculty Badge */}
           <div className="absolute -bottom-1 left-1/2 -translate-x-1/2">
-            <span className="inline-flex items-center gap-1 bg-[#0B1F63] text-white text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">
+            <span className="inline-flex items-center gap-1 bg-[#CD0000] text-[#EFEDE6] text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">
               <GraduationCap size={9} /> FACULTY
             </span>
           </div>
         </div>
 
         {/* Name */}
-        <h3 className="text-lg font-bold text-[#0B1F63] mt-3 mb-0.5">{faculty.name}</h3>
+        <h3 className="text-lg font-bold text-[#121212] mt-3 mb-0.5">{faculty.name}</h3>
 
         {/* Designation */}
         {faculty.designation && (
-          <p className="text-[#0B1F63] font-semibold text-sm mb-1">{faculty.designation}</p>
+          <p className="text-[#CD0000] font-bold text-sm mb-1">{faculty.designation}</p>
         )}
 
         {/* Role in club */}
-        <span className="inline-block text-xs bg-[rgba(11,31,99,0.03)] text-[#0B1F63] border border-[rgba(11,31,99,0.07)] px-3 py-0.5 rounded-full font-medium mb-2">
+        <span className="inline-block text-xs bg-[#EFEDE6] text-[#CD0000] border border-[#B8B8B8]/30 px-3 py-0.5 rounded-full font-bold mb-2">
           {faculty.role}
         </span>
 
         {/* Department */}
         {faculty.department && (
-          <p className="text-[#8c97a8] text-xs leading-relaxed">{faculty.department}</p>
+          <p className="text-[#121212]/60 text-xs leading-relaxed">{faculty.department}</p>
         )}
 
         {/* Spacer */}
         <div className="flex-grow" />
 
         {/* Contact */}
-        <div className="flex justify-center gap-2 mt-4 pt-4 border-t border-[#E5E7EB] w-full">
+        <div className="flex justify-center gap-2 mt-4 pt-4 border-t border-[#B8B8B8]/30 w-full">
           <a
             href={`mailto:${faculty.email}`}
-            className="flex items-center gap-1.5 text-xs text-[#0B1F63] hover:text-[#071545] font-medium transition-colors"
+            className="flex items-center gap-1.5 text-xs text-[#CD0000] hover:text-[#A30000] font-bold transition-colors"
             title={`Email ${faculty.name}`}
           >
             <Mail size={13} />

@@ -2,29 +2,33 @@
 
 @theme {
   /* Brand Color Palette */
-  --color-primary: #0B1F63; /* Deep Navy */
-  --color-primary-dark: #071545;
-  --color-primary-light: #163294;
+  --color-primary: #CD0000; /* Cherry Red */
+  --color-primary-dark: #A30000;
+  --color-primary-light: #FF3333;
 
-  --color-accent: #F4B400; /* Premium Gold */
+  --color-accent: #CD0000; /* Cherry Red */
 
   /* Background Colors */
-  --color-bg-primary: #FAFAFA; /* Warm White */
-  --color-bg-secondary: rgba(11, 31, 99, 0.03); /* Subtle Navy Tint */
-  --color-bg-tertiary: rgba(11, 31, 99, 0.07);
+  --color-bg-primary: #EFEDE6; /* Warm White */
+  --color-bg-secondary: #F4F2EC; /* Alternate Warm White */
+  --color-bg-tertiary: #121212; /* Charcoal Black */
+  
+  --color-dark: #121212; /* Charcoal Black */
+  --color-dark-alt: #181818; /* Alternate Charcoal Black */
+  --color-platinum: #B8B8B8; /* Soft Platinum */
 
   /* Text Colors */
-  --color-text-primary: #0B1F63;
-  --color-text-secondary: #667085; /* Slate Gray */
-  --color-text-muted: #8c97a8;
+  --color-text-primary: #121212;
+  --color-text-secondary: rgba(18, 18, 18, 0.7);
+  --color-text-muted: rgba(18, 18, 18, 0.5);
 
   /* Borders */
-  --color-border: #E5E7EB; /* Light Gray */
+  --color-border: #B8B8B8; /* Soft Platinum */
 
   /* Backwards compatibility for old names mapping to new colors */
-  --color-christ-blue: #0B1F63;
-  --color-christ-blue-dark: #071545;
-  --color-christ-blue-light: #163294;
+  --color-christ-blue: #CD0000;
+  --color-christ-blue-dark: #A30000;
+  --color-christ-blue-light: #FF3333;
 
   /* Fonts */
   --font-inter: 'Inter', sans-serif;
@@ -33,9 +37,9 @@
 
 @layer base {
   body {
-    @apply bg-bg-primary text-text-secondary font-inter antialiased overflow-x-hidden;
-    background-color: #FAFAFA;
-    color: #667085;
+    @apply bg-bg-primary text-text-primary font-inter antialiased overflow-x-hidden;
+    background-color: #EFEDE6;
+    color: #121212;
   }
 
   html {
@@ -43,90 +47,95 @@
   }
 
   ::selection {
-    background: rgba(11, 31, 99, 0.1);
-    color: #0B1F63;
+    background: rgba(205, 0, 0, 0.1);
+    color: #CD0000;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Space Grotesk', sans-serif;
-    color: #0B1F63;
-    font-weight: 700;
+    color: #121212;
+    font-weight: 800; /* Bold headings */
   }
 
   a {
-    color: #0B1F63;
+    color: #CD0000;
     text-decoration: none;
     transition: color 0.2s ease-in-out;
   }
 
   a:hover {
-    color: #F4B400; /* Gold on hover matches our premium accent guidelines */
+    color: #A30000;
   }
 }
 
 @layer utilities {
-  /* University Card */
+  /* Premium Editorial Card */
   .glass-card {
-    @apply bg-white border border-border rounded-2xl shadow-sm;
-    background-color: #FFFFFF;
-    border-color: #E5E7EB;
+    @apply bg-white/80 backdrop-blur-md border border-platinum/40 rounded-3xl shadow-sm;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(184, 184, 184, 0.4);
   }
 
-  /* Christ Blue Gradient Text */
+  /* Editorial Gradient Text (Cherry Red to Dark) */
   .gradient-text {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #0B1F63 0%, #163294 100%);
+    background-image: linear-gradient(135deg, #CD0000 0%, #121212 100%);
   }
 
   /* Section Background Variants */
   .section-light {
-    background-color: #FAFAFA;
+    background-color: #EFEDE6; /* Warm White */
   }
 
   .section-alt {
-    background-color: rgba(11, 31, 99, 0.03);
+    background-color: #121212; /* Charcoal Black */
   }
 
   .section-deep {
-    background-color: rgba(11, 31, 99, 0.07);
+    background-color: #F4F2EC; /* Alternate Warm White */
   }
 
-  /* Subtle grid pattern */
+  .section-dark-alt {
+    background-color: #181818; /* Alternate Charcoal Black */
+  }
+
+  /* Subtle editorial line pattern */
   .animated-grid {
-    background-size: 40px 40px;
+    background-size: 60px 60px;
     background-image:
-      linear-gradient(to right, rgba(11, 31, 99, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(11, 31, 99, 0.03) 1px, transparent 1px);
+      linear-gradient(to right, rgba(184, 184, 184, 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(184, 184, 184, 0.1) 1px, transparent 1px);
     mask-image: linear-gradient(to bottom, transparent, black, transparent);
   }
 
-  /* Deep Navy button */
+  /* Premium Cherry Red button */
   .btn-primary {
-    background-color: #0B1F63;
-    color: white;
-    transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    background-color: #CD0000;
+    color: #EFEDE6;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .btn-primary:hover {
-    background-color: #071545;
-    box-shadow: 0 4px 16px rgba(11, 31, 99, 0.2);
+    background-color: #A30000;
+    box-shadow: 0 10px 30px rgba(205, 0, 0, 0.2);
+    transform: translateY(-1px);
   }
 
-  /* Subtle blue glow for cards */
+  /* Card Hover Elevation */
   .card-hover {
-    transition: box-shadow 0.2s, transform 0.2s;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .card-hover:hover {
-    box-shadow: 0 8px 32px rgba(11, 31, 99, 0.08);
-    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(18, 18, 18, 0.05);
+    transform: translateY(-4px);
   }
 
-  /* Blue badge */
+  /* Editorial Badge */
   .badge-blue {
-    background-color: rgba(11, 31, 99, 0.03);
-    color: #0B1F63;
-    border: 1px solid #E5E7EB;
+    background-color: rgba(205, 0, 0, 0.05);
+    color: #CD0000;
+    border: 1px solid rgba(205, 0, 0, 0.2);
     border-radius: 9999px;
     padding: 2px 12px;
     font-size: 0.75rem;
@@ -135,46 +144,45 @@
 
   /* Divider */
   .divider-blue {
-    height: 3px;
-    background: linear-gradient(90deg, #0B1F63, #F4B400); /* Navy to Gold gradient */
-    border-radius: 9999px;
+    height: 1px;
+    background: #B8B8B8;
+    opacity: 0.4;
   }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #FAFAFA;
+  background: #EFEDE6;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(11, 31, 99, 0.15);
+  background: rgba(18, 18, 18, 0.2);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(11, 31, 99, 0.3);
+  background: rgba(18, 18, 18, 0.4);
 }
 
-/* Smooth pulse animation for hero elements */
+/* Animations */
 @keyframes pulse-slow {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.03); }
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.02); }
 }
 
 .animate-pulse-slow {
-  animation: pulse-slow 4s ease-in-out infinite;
+  animation: pulse-slow 6s ease-in-out infinite;
 }
 
-/* Fade-in-up utility */
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(24px); }
+  from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out forwards;
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

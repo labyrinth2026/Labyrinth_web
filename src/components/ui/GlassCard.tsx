@@ -16,11 +16,11 @@ const GlassCard: React.FC<GlassCardProps> = ({
   return (
     <motion.div
       whileHover={hover ? {
-        y: -3,
-        boxShadow: '0 12px 40px rgba(0, 91, 172, 0.12)'
+        y: -4,
+        boxShadow: '0 20px 40px rgba(18, 18, 18, 0.08)'
       } : {}}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className={`bg-white border border-[#E5E7EB] rounded-2xl shadow-sm overflow-hidden ${className}`}
+      className={`bg-white border border-[#B8B8B8]/30 rounded-3xl shadow-sm overflow-hidden ${className}`}
     >
       {children}
     </motion.div>

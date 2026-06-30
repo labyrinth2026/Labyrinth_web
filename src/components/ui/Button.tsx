@@ -27,19 +27,19 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const router = useRouter();
 
-  const baseClasses = "relative inline-flex items-center justify-center rounded-full font-semibold transition-all duration-200 overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#0B1F63]/30 focus:ring-offset-2";
+  const baseClasses = "relative inline-flex items-center justify-center rounded-full font-bold transition-all duration-300 overflow-hidden focus:outline-none focus:ring-2 focus:ring-[#CD0000]/30 focus:ring-offset-2";
 
   const sizeClasses = {
-    sm: "px-5 py-2 text-sm",
-    md: "px-7 py-3 text-base",
-    lg: "px-9 py-4 text-lg"
+    sm: "px-5 py-2 text-xs uppercase tracking-wider",
+    md: "px-7 py-3 text-sm uppercase tracking-wider",
+    lg: "px-9 py-4 text-base uppercase tracking-wider"
   };
 
   const variantClasses = {
-    primary: "bg-[#0B1F63] text-white shadow-md hover:bg-[#071545] hover:shadow-lg hover:shadow-[#0B1F63]/20 active:scale-95",
-    secondary: "bg-white text-[#0B1F63] border-2 border-[#0B1F63] hover:bg-[rgba(11,31,99,0.03)] active:scale-95",
-    ghost: "bg-transparent text-[#0B1F63] hover:bg-[rgba(11,31,99,0.03)] active:scale-95",
-    outline: "bg-transparent text-[#0B1F63] border border-[#0B1F63]/40 hover:border-[#0B1F63] hover:bg-[rgba(11,31,99,0.03)] active:scale-95"
+    primary: "bg-[#CD0000] text-[#EFEDE6] shadow-md hover:bg-[#A30000] hover:shadow-lg hover:shadow-[#CD0000]/25 active:scale-95",
+    secondary: "bg-[#EFEDE6] text-[#121212] border border-[#B8B8B8] hover:bg-[#F4F2EC] hover:border-[#121212] active:scale-95",
+    ghost: "bg-transparent text-[#CD0000] hover:bg-[#CD0000]/5 active:scale-95",
+    outline: "bg-transparent text-[#CD0000] border border-[#CD0000] hover:bg-[#CD0000] hover:text-[#EFEDE6] active:scale-95"
   };
 
   const disabledClasses = disabled ? "opacity-50 cursor-not-allowed pointer-events-none" : "";

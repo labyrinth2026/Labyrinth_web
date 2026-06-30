@@ -29,7 +29,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
       
       {/* Search Input */}
       <div className="relative w-full md:max-w-md group">
-        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#8c97a8] group-focus-within:text-[#0B1F63] transition-colors">
+        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#B8B8B8] group-focus-within:text-[#CD0000] transition-colors">
           <Search size={18} />
         </div>
         <input
@@ -37,7 +37,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
           value={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full bg-white border border-[#E5E7EB] text-[#0B1F63] rounded-full py-3 pl-11 pr-4 focus:outline-none focus:ring-2 focus:ring-[#0B1F63]/20 focus:border-[#0B1F63] transition-all shadow-sm placeholder:text-[#8c97a8]"
+          className="w-full bg-white border border-[#B8B8B8]/40 text-[#121212] rounded-full py-3 pl-11 pr-4 focus:outline-none focus:ring-2 focus:ring-[#CD0000]/20 focus:border-[#CD0000] transition-all shadow-sm placeholder:text-[#B8B8B8] font-medium"
         />
       </div>
 
@@ -51,16 +51,16 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
                 <button
                   key={filter.value}
                   onClick={() => onFilterChange(filter.value)}
-                  className={`relative px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all duration-200 ${
+                  className={`relative px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-200 ${
                     isActive
-                      ? 'text-white'
-                      : 'text-[#667085] bg-white border border-[#E5E7EB] hover:border-[#0B1F63] hover:text-[#0B1F63]'
+                      ? 'text-[#EFEDE6]'
+                      : 'text-[#121212]/70 bg-white border border-[#B8B8B8]/40 hover:border-[#CD0000] hover:text-[#CD0000]'
                   }`}
                 >
                   {isActive && (
                     <motion.div
                       layoutId="activeFilterBg"
-                      className="absolute inset-0 bg-[#0B1F63] rounded-full -z-10"
+                      className="absolute inset-0 bg-[#CD0000] rounded-full -z-10"
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
                   )}
