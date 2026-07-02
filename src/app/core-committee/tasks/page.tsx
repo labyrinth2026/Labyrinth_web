@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../../context/AuthContext';
-import { fetchFromSheet } from '../../../services/api';
+import { useAuth } from '@/context/AuthContext';
+import { fetchFromSheet } from '@/services/api';
 import { Plus, Check, Edit2, Trash2, X, AlertTriangle, RefreshCw } from 'lucide-react';
 
 interface Task {

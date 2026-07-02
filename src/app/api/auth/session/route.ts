@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyJWT } from '../../../../utils/jwt';
+import { verifyJWT } from '@/utils/jwt';
 
 export async function GET(req: NextRequest) {
   const cookie = req.cookies.get('labyrinth_session');

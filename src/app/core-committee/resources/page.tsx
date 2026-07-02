@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../../context/AuthContext';
-import { fetchFromSheet } from '../../../services/api';
+import { useAuth } from '@/context/AuthContext';
+import { fetchFromSheet } from '@/services/api';
 import { Plus, Trash2, X, RefreshCw, FolderOpen, ExternalLink } from 'lucide-react';
 
 interface Resource {

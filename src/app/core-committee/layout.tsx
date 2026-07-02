@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuth } from '../../context/AuthContext';
-import { fetchFromSheet } from '../../services/api';
+import { useAuth } from '@/context/AuthContext';
+import { fetchFromSheet } from '@/services/api';
 import {
   LayoutDashboard, LogOut, CheckSquare, Users,
   Calendar, Megaphone, FolderOpen

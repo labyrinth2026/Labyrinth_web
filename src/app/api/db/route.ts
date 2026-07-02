@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { getDb, saveDb, logActivity, User } from '../../../utils/db';
-import { verifyJWT } from '../../../utils/jwt';
+import { getDb, saveDb, logActivity, User } from '@/utils/db';
+import { verifyJWT } from '@/utils/jwt';
 
 export async function POST(req: NextRequest) {
   try {

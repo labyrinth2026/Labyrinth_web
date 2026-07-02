@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import {
   LayoutDashboard, LogOut, BookOpen, Link as LinkIcon,
   Download, Users, Shield, CheckSquare

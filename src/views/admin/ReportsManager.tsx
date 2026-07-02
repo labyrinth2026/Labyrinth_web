@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchFromSheet } from '../../services/api';
+import { fetchFromSheet } from '@/services/api';
 import { FileText, Download, FileDown, RefreshCw } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { fetchFromSheet } from '../../services/api';
+import { useAuth } from '@/context/AuthContext';
+import { fetchFromSheet } from '@/services/api';
 import { Download, Users, BarChart2, RefreshCw, PieChart, Check, X } from 'lucide-react';
 
 const FacultyDashboard: React.FC = () => {

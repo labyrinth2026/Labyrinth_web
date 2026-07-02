@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { Activity, Users, Calendar, FileText, BookOpen, Shield, ArrowRight, Download } from 'lucide-react';
 import Link from 'next/link';
 

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../../context/AuthContext';
-import { fetchFromSheet } from '../../../services/api';
+import { useAuth } from '@/context/AuthContext';
+import { fetchFromSheet } from '@/services/api';
 import { Shield, CheckSquare, Calendar, Megaphone, FolderOpen, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { getDb } from '../../../../utils/db';
-import { signJWT } from '../../../../utils/jwt';
+import { getDb } from '@/utils/db';
+import { signJWT } from '@/utils/jwt';
 
 export async function POST(req: NextRequest) {
   try {

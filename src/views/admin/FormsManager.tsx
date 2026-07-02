@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchFromSheet } from '../../services/api';
+import { fetchFromSheet } from '@/services/api';
 import { CheckCircle2, Link as LinkIcon, Plus, Save, Trash2, Edit2, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

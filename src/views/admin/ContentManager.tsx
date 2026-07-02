@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { fetchFromSheet } from '../../services/api';
-import { useAuth } from '../../context/AuthContext';
+import { fetchFromSheet } from '@/services/api';
+import { useAuth } from '@/context/AuthContext';
 import { Edit2, Trash2, Plus, RefreshCw, Calendar, BookOpen, X, Check, AlertTriangle } from 'lucide-react';
 
 const ContentManager: React.FC = () => {
