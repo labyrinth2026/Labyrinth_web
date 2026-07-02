@@ -12,7 +12,11 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     email TEXT UNIQUE NOT NULL,
     name TEXT,
     role TEXT NOT NULL DEFAULT 'USER' CHECK (role IN ('HOD', 'COORDINATOR', 'ASSOCIATE', 'CORE_HEAD', 'VERTICAL_HEAD', 'MEMBER', 'USER')),
-    status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'active', 'rejected')),
+    status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
+    first_login BOOLEAN NOT NULL DEFAULT true,
+    password_changed_at TIMESTAMP WITH TIME ZONE,
+    created_by UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
+    last_login TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -354,13 +358,15 @@ CREATE POLICY "Allow anyone to create activity logs" ON public.activity_logs
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.profiles (id, email, name, role, status)
+  INSERT INTO public.profiles (id, email, name, role, status, first_login, created_by)
   VALUES (
     new.id,
     new.email,
     COALESCE(new.raw_user_meta_data->>'name', split_part(new.email, '@', 1)),
-    'USER',
-    'pending'
+    COALESCE(new.raw_user_meta_data->>'role', 'USER'),
+    'active',
+    COALESCE((new.raw_user_meta_data->>'first_login')::boolean, true),
+    (new.raw_user_meta_data->>'created_by')::uuid
   );
   RETURN new;
 END;

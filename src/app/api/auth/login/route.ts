@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { supabase, isSupabaseConfigured } from '@/utils/supabase';
-import { dbGetUserByEmail, getLocalDb } from '@/utils/db';
+import { dbGetUserByEmail, getLocalDb, dbUpdateLastLogin } from '@/utils/db';
 import { signJWT } from '@/utils/jwt';
 
 export async function POST(req: NextRequest) {
@@ -46,9 +46,9 @@ export async function POST(req: NextRequest) {
       userDetails = await dbGetUserByEmail(email);
     }
 
-    // Check approval status
+    // Check approval/activation status
     if (userDetails.status !== 'active') {
-      return NextResponse.json({ success: false, error: 'Your account is pending registration approval.' }, { status: 403 });
+      return NextResponse.json({ success: false, error: 'Your account is deactivated or inactive.' }, { status: 403 });
     }
 
     // Build session token
@@ -58,14 +58,21 @@ export async function POST(req: NextRequest) {
       name: userDetails.name,
       role: userDetails.role,
       committeeId: userDetails.committeeId,
-      verticalId: userDetails.verticalId
+      verticalId: userDetails.verticalId,
+      firstLogin: userDetails.firstLogin === true
     };
 
     const token = await signJWT(sessionPayload);
 
+    // Update last login timestamp if not first time login
+    if (!userDetails.firstLogin) {
+      await dbUpdateLastLogin(userDetails.id);
+    }
+
     // Build response and set HttpOnly session cookie
     const response = NextResponse.json({
       success: true,
+      mustReset: userDetails.firstLogin === true,
       user: sessionPayload
     });
 

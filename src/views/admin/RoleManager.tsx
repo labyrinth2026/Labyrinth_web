@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { fetchFromSheet } from '@/services/api';
-import { Plus, Trash2, Shield, Users, RefreshCw, X } from 'lucide-react';
+import { Plus, Trash2, Shield, Users, RefreshCw, X, Search, ToggleLeft, ToggleRight, Check, Ban, Edit2 } from 'lucide-react';
 
 export default function RoleManager() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'admins' | 'committees' | 'verticals'>('admins');
+  const [activeTab, setActiveTab] = useState<'users_dir' | 'admins' | 'committees' | 'verticals'>('users_dir');
   const [loading, setLoading] = useState(true);
   
   // Data lists
@@ -14,7 +14,26 @@ export default function RoleManager() {
   const [verticals, setVerticals] = useState<any[]>([]);
   const [assignments, setAssignments] = useState<any>({ committee: [], vertical: [] });
 
-  // Creation forms state
+  // Search filter
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Creation modal/forms state
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newUserName, setNewUserName] = useState('');
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserRole, setNewUserRole] = useState('USER');
+  const [newUserCommittee, setNewUserCommittee] = useState('');
+  const [newUserVertical, setNewUserVertical] = useState('');
+
+  // Edit details modal/forms state
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingUserId, setEditingUserId] = useState('');
+  const [editingUserName, setEditingUserName] = useState('');
+  const [editingUserRole, setEditingUserRole] = useState('USER');
+  const [editingUserCommittee, setEditingUserCommittee] = useState('');
+  const [editingUserVertical, setEditingUserVertical] = useState('');
+
+  // Admin section state
   const [adminEmail, setAdminEmail] = useState('');
   const [adminName, setAdminName] = useState('');
   const [adminRole, setAdminRole] = useState('COORDINATOR');
@@ -41,11 +60,19 @@ export default function RoleManager() {
 
       const commData: any = await fetchFromSheet('getCoreCommittees');
       setCommittees(commData || []);
-      if (commData && commData.length > 0) setAssignCommId(commData[0].id);
+      if (commData && commData.length > 0) {
+        setAssignCommId(commData[0].id);
+        setNewUserCommittee(commData[0].id);
+        setEditingUserCommittee(commData[0].id);
+      }
 
       const vertData: any = await fetchFromSheet('getVerticals');
       setVerticals(vertData || []);
-      if (vertData && vertData.length > 0) setAssignVertId(vertData[0].id);
+      if (vertData && vertData.length > 0) {
+        setAssignVertId(vertData[0].id);
+        setNewUserVertical(vertData[0].id);
+        setEditingUserVertical(vertData[0].id);
+      }
 
       const assignData: any = await fetchFromSheet('getAssignments');
       setAssignments(assignData || { committee: [], vertical: [] });
@@ -60,6 +87,72 @@ export default function RoleManager() {
     loadAllData();
   }, []);
 
+  // --- USER DIRECTORY CRUD ---
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newUserName || !newUserEmail) return;
+    try {
+      await fetchFromSheet('createUser', {
+        name: newUserName,
+        email: newUserEmail,
+        role: newUserRole,
+        committeeId: newUserRole === 'CORE_HEAD' ? newUserCommittee : undefined,
+        verticalId: newUserRole === 'VERTICAL_HEAD' ? newUserVertical : undefined
+      });
+      setNewUserName('');
+      setNewUserEmail('');
+      setNewUserRole('USER');
+      setShowCreateModal(false);
+      loadAllData();
+      alert('User created successfully. Default temporary password: Labyrinth@123');
+    } catch (err: any) {
+      alert(err.message || 'Failed to create user.');
+    }
+  };
+
+  const handleToggleStatus = async (userId: string, currentStatus: string) => {
+    const nextStatus = currentStatus === 'active' ? 'inactive' : 'active';
+    try {
+      await fetchFromSheet('updateUserStatus', { userId, status: nextStatus });
+      loadAllData();
+    } catch (err: any) {
+      alert(err.message || 'Failed to update user status.');
+    }
+  };
+
+  const openEditUser = (u: any) => {
+    setEditingUserId(u.id);
+    setEditingUserName(u.name || '');
+    setEditingUserRole(u.role || 'USER');
+    
+    // Resolve existing assignments
+    const commAss = assignments.committee.find((a: any) => a.userId === u.id);
+    if (commAss) setEditingUserCommittee(commAss.committeeId);
+    
+    const vertAss = assignments.vertical.find((a: any) => a.userId === u.id);
+    if (vertAss) setEditingUserVertical(vertAss.verticalId);
+
+    setShowEditModal(true);
+  };
+
+  const handleEditUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await fetchFromSheet('updateUserDetails', {
+        userId: editingUserId,
+        name: editingUserName,
+        role: editingUserRole,
+        committeeId: editingUserRole === 'CORE_HEAD' ? editingUserCommittee : undefined,
+        verticalId: editingUserRole === 'VERTICAL_HEAD' ? editingUserVertical : undefined
+      });
+      setShowEditModal(false);
+      loadAllData();
+    } catch (err: any) {
+      alert(err.message || 'Failed to update user.');
+    }
+  };
+
+  // --- ADMIN ROLES MANAGEMENT ---
   const handleAddAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!adminEmail || !adminName) return;
@@ -85,6 +178,7 @@ export default function RoleManager() {
     }
   };
 
+  // --- COMMITTEES ---
   const handleAddCommittee = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!commName) return;
@@ -108,6 +202,7 @@ export default function RoleManager() {
     }
   };
 
+  // --- VERTICALS ---
   const handleAddVertical = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!vertName) return;
@@ -133,51 +228,14 @@ export default function RoleManager() {
     }
   };
 
-  const handleAssignCommitteeHead = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!assignCommEmail || !assignCommId) return;
-    try {
-      await fetchFromSheet('assignCoreHead', { userEmail: assignCommEmail, committeeId: assignCommId });
-      setAssignCommEmail('');
-      loadAllData();
-    } catch (err: any) {
-      alert(err.message || 'Failed to assign committee head.');
-    }
-  };
-
-  const handleRemoveCommitteeAssignment = async (id: string) => {
-    if (!confirm('Remove this committee head assignment?')) return;
-    try {
-      await fetchFromSheet('removeCoreAssignment', { id });
-      loadAllData();
-    } catch (err: any) {
-      alert(err.message || 'Failed to remove assignment.');
-    }
-  };
-
-  const handleAssignVerticalHead = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!assignVertEmail || !assignVertId) return;
-    try {
-      await fetchFromSheet('assignVerticalHead', { userEmail: assignVertEmail, verticalId: assignVertId });
-      setAssignVertEmail('');
-      loadAllData();
-    } catch (err: any) {
-      alert(err.message || 'Failed to assign vertical head.');
-    }
-  };
-
-  const handleRemoveVerticalAssignment = async (id: string) => {
-    if (!confirm('Remove this vertical head assignment?')) return;
-    try {
-      await fetchFromSheet('removeVerticalAssignment', { id });
-      loadAllData();
-    } catch (err: any) {
-      alert(err.message || 'Failed to remove assignment.');
-    }
-  };
-
   const isHod = user?.role === 'HOD';
+
+  // Search filtering logic
+  const filteredUsers = users.filter(u => 
+    u.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    u.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    u.role?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const inputClass = "w-full border border-[#E5E7EB] rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#CD0000]/15 focus:border-[#CD0000] text-slate-800 placeholder:text-slate-400 disabled:opacity-50";
 
@@ -186,7 +244,7 @@ export default function RoleManager() {
       {/* Header */}
       <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 flex justify-between items-center">
         <div>
-          <h1 className="text-xl font-bold font-grotesk text-[#CD0000]">Role &amp; System Configuration</h1>
+          <h1 className="text-xl font-bold font-grotesk text-[#CD0000]">Role &amp; User Configuration</h1>
           <p className="text-[#667085] text-sm mt-0.5">Control administrative permissions and head assignments.</p>
         </div>
         <button onClick={loadAllData} className="p-2 text-slate-500 hover:text-[#CD0000] rounded-lg hover:bg-slate-50 transition-colors">
@@ -197,7 +255,8 @@ export default function RoleManager() {
       {/* Tab Nav */}
       <div className="flex border-b border-slate-200">
         {[
-          { id: 'admins', label: 'Admin Portals & Staff', icon: Shield },
+          { id: 'users_dir', label: 'User Directory', icon: Users },
+          { id: 'admins', label: 'Admin Access Control', icon: Shield },
           { id: 'committees', label: 'Core Committees', icon: Users },
           { id: 'verticals', label: 'Vertical Domains', icon: Users }
         ].map(tab => (
@@ -223,7 +282,103 @@ export default function RoleManager() {
         </div>
       ) : (
         <div className="space-y-6">
-          {/* TAB 1: ADMINS */}
+          
+          {/* TAB 1: USER DIRECTORY */}
+          {activeTab === 'users_dir' && (
+            <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="relative w-full sm:max-w-xs">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                    <Search size={14} />
+                  </div>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    placeholder="Search name, email, or role..."
+                    className="w-full pl-9 pr-4 py-2 border border-[#E5E7EB] rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#CD0000]/15"
+                  />
+                </div>
+
+                <button
+                  disabled={!isHod}
+                  onClick={() => setShowCreateModal(true)}
+                  className="w-full sm:w-auto px-4 py-2 bg-[#CD0000] hover:bg-[#A30000] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
+                >
+                  <Plus size={14} /> Create User
+                </button>
+              </div>
+
+              <div className="overflow-x-auto border border-[#E5E7EB] rounded-xl">
+                <table className="w-full text-left text-sm text-[#667085]">
+                  <thead className="bg-[rgba(205, 0, 0, 0.03)] border-b border-[rgba(205, 0, 0, 0.07)] text-xs font-bold text-[#8c97a8] uppercase tracking-wider">
+                    <tr>
+                      <th className="p-4">Name</th>
+                      <th className="p-4">Email</th>
+                      <th className="p-4">Role</th>
+                      <th className="p-4">Status</th>
+                      <th className="p-4">Onboarded</th>
+                      <th className="p-4">Last Login</th>
+                      <th className="p-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#E5E7EB]">
+                    {filteredUsers.map(u => (
+                      <tr key={u.id} className="hover:bg-slate-50/55 transition-colors">
+                        <td className="p-4 text-slate-800 font-bold">{u.name}</td>
+                        <td className="p-4 text-slate-600">{u.email}</td>
+                        <td className="p-4">
+                          <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full text-[10px] font-bold border border-slate-200">
+                            {u.role}
+                          </span>
+                        </td>
+                        <td className="p-4">
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                            u.status === 'active' ? 'bg-green-50 border-green-100 text-green-600' : 'bg-red-50 border-red-100 text-red-500'
+                          }`}>
+                            {u.status}
+                          </span>
+                        </td>
+                        <td className="p-4 text-slate-700 font-semibold">{u.firstLogin ? 'No (First Login)' : 'Yes'}</td>
+                        <td className="p-4 text-slate-500 text-xs">
+                          {u.lastLogin ? new Date(u.lastLogin).toLocaleString() : 'Never'}
+                        </td>
+                        <td className="p-4 text-right">
+                          <div className="flex justify-end gap-1.5">
+                            <button
+                              disabled={!isHod}
+                              onClick={() => openEditUser(u)}
+                              className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg disabled:opacity-30 transition-colors"
+                              title="Edit User Details"
+                            >
+                              <Edit2 size={14} />
+                            </button>
+                            <button
+                              disabled={!isHod}
+                              onClick={() => handleToggleStatus(u.id, u.status)}
+                              className={`p-1.5 rounded-lg disabled:opacity-30 transition-colors ${
+                                u.status === 'active' 
+                                  ? 'text-slate-400 hover:text-red-500 hover:bg-red-50' 
+                                  : 'text-slate-400 hover:text-green-500 hover:bg-green-50'
+                              }`}
+                              title={u.status === 'active' ? 'Deactivate User' : 'Activate User'}
+                            >
+                              {u.status === 'active' ? <Ban size={14} /> : <Check size={14} />}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                    {filteredUsers.length === 0 && (
+                      <tr><td colSpan={7} className="p-8 text-center text-slate-400">No users found.</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: ADMIN ACCESS CONTROL */}
           {activeTab === 'admins' && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Left Form: Add Admin */}
@@ -249,9 +404,6 @@ export default function RoleManager() {
                   <button type="submit" disabled={!isHod} className="w-full py-2.5 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-[#A30000] transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5">
                     <Plus size={15} /> Grant Access
                   </button>
-                  {!isHod && (
-                    <p className="text-[10px] text-amber-600 font-semibold text-center mt-1">Only the HOD can modify administrative access rights.</p>
-                  )}
                 </form>
               </div>
 
@@ -299,7 +451,7 @@ export default function RoleManager() {
             </div>
           )}
 
-          {/* TAB 2: COMMITTEES */}
+          {/* TAB 3: COMMITTEES */}
           {activeTab === 'committees' && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -356,80 +508,10 @@ export default function RoleManager() {
                   </div>
                 </div>
               </div>
-
-              {/* Assign Committee Head Section */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 border-t border-slate-200 pt-6">
-                {/* Assign Form */}
-                <div className="bg-white border border-[#E5E7EB] p-6 rounded-2xl shadow-xs self-start">
-                  <h3 className="text-sm font-bold text-[#CD0000] mb-4 uppercase tracking-wider">Assign Committee Head</h3>
-                  <form onSubmit={handleAssignCommitteeHead} className="space-y-4">
-                    <div>
-                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Head User Email *</label>
-                      <input type="email" required value={assignCommEmail} onChange={e => setAssignCommEmail(e.target.value)} className={inputClass} placeholder="student@cs.christuniversity.in" />
-                      <p className="text-[9px] text-slate-400 font-semibold mt-1">Note: User account must be pre-registered (pending/active status).</p>
-                    </div>
-                    <div>
-                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Target Committee *</label>
-                      <select value={assignCommId} onChange={e => setAssignCommId(e.target.value)} className={inputClass}>
-                        {committees.map(c => (
-                          <option key={c.id} value={c.id}>{c.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <button type="submit" className="w-full py-2.5 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-[#A30000] transition-colors flex items-center justify-center gap-1.5">
-                      <Plus size={15} /> Assign Head
-                    </button>
-                  </form>
-                </div>
-
-                {/* Assignments List */}
-                <div className="bg-white border border-[#E5E7EB] rounded-2xl overflow-hidden shadow-xs lg:col-span-2">
-                  <div className="p-4 border-b border-[#E5E7EB] bg-slate-50">
-                    <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">Active Committee Head Assignments</h4>
-                  </div>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm">
-                      <thead>
-                        <tr className="bg-slate-100/50 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                          <th className="p-4">Name</th>
-                          <th className="p-4">Email</th>
-                          <th className="p-4">Assigned Committee</th>
-                          <th className="p-4 text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#E5E7EB]">
-                        {(assignments.committee || []).map((a: any) => (
-                          <tr key={a.id} className="hover:bg-slate-50 transition-colors">
-                            <td className="p-4 text-slate-800 font-semibold">{a.userName}</td>
-                            <td className="p-4 text-slate-600">{a.userEmail}</td>
-                            <td className="p-4">
-                              <span className="bg-indigo-50 border border-indigo-150 text-indigo-600 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider">
-                                {a.committeeName}
-                              </span>
-                            </td>
-                            <td className="p-4 text-right">
-                              <button
-                                onClick={() => handleRemoveCommitteeAssignment(a.id)}
-                                className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                title="Remove Assignment"
-                              >
-                                <Trash2 size={15} />
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                        {(!assignments.committee || assignments.committee.length === 0) && (
-                          <tr><td colSpan={4} className="p-6 text-center text-slate-400">No active committee heads assigned.</td></tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
             </div>
           )}
 
-          {/* TAB 3: VERTICALS */}
+          {/* TAB 4: VERTICALS */}
           {activeTab === 'verticals' && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -495,78 +577,136 @@ export default function RoleManager() {
                   </div>
                 </div>
               </div>
-
-              {/* Assign Vertical Head Section */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 border-t border-slate-200 pt-6">
-                {/* Assign Form */}
-                <div className="bg-white border border-[#E5E7EB] p-6 rounded-2xl shadow-xs self-start">
-                  <h3 className="text-sm font-bold text-[#CD0000] mb-4 uppercase tracking-wider">Assign Vertical Head</h3>
-                  <form onSubmit={handleAssignVerticalHead} className="space-y-4">
-                    <div>
-                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Head User Email *</label>
-                      <input type="email" required value={assignVertEmail} onChange={e => setAssignVertEmail(e.target.value)} className={inputClass} placeholder="student@cs.christuniversity.in" />
-                      <p className="text-[9px] text-slate-400 font-semibold mt-1">Note: User account must be pre-registered (pending/active status).</p>
-                    </div>
-                    <div>
-                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Target Vertical *</label>
-                      <select value={assignVertId} onChange={e => setAssignVertId(e.target.value)} className={inputClass}>
-                        {verticals.map(v => (
-                          <option key={v.id} value={v.id}>{v.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <button type="submit" className="w-full py-2.5 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-[#A30000] transition-colors flex items-center justify-center gap-1.5">
-                      <Plus size={15} /> Assign Head
-                    </button>
-                  </form>
-                </div>
-
-                {/* Assignments List */}
-                <div className="bg-white border border-[#E5E7EB] rounded-2xl overflow-hidden shadow-xs lg:col-span-2">
-                  <div className="p-4 border-b border-[#E5E7EB] bg-slate-50">
-                    <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">Active Vertical Head Assignments</h4>
-                  </div>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm">
-                      <thead>
-                        <tr className="bg-slate-100/50 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                          <th className="p-4">Name</th>
-                          <th className="p-4">Email</th>
-                          <th className="p-4">Assigned Vertical</th>
-                          <th className="p-4 text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#E5E7EB]">
-                        {(assignments.vertical || []).map((a: any) => (
-                          <tr key={a.id} className="hover:bg-slate-50 transition-colors">
-                            <td className="p-4 text-slate-800 font-semibold">{a.userName}</td>
-                            <td className="p-4 text-slate-600">{a.userEmail}</td>
-                            <td className="p-4">
-                              <span className="bg-emerald-50 border border-emerald-150 text-emerald-600 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider">
-                                {a.verticalName}
-                              </span>
-                            </td>
-                            <td className="p-4 text-right">
-                              <button
-                                onClick={() => handleRemoveVerticalAssignment(a.id)}
-                                className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                title="Remove Assignment"
-                              >
-                                <Trash2 size={15} />
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                        {(!assignments.vertical || assignments.vertical.length === 0) && (
-                          <tr><td colSpan={4} className="p-6 text-center text-slate-400">No active vertical heads assigned.</td></tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* CREATE USER MODAL */}
+      {showCreateModal && (
+        <div className="fixed inset-0 z-50 bg-[#CD0000]/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl border border-[#E5E7EB] w-full max-w-md">
+            <form onSubmit={handleCreateUser}>
+              <div className="flex items-center justify-between p-5 border-b border-[#E5E7EB]">
+                <h2 className="font-bold text-[#CD0000]">Create New User (Invite)</h2>
+                <button type="button" onClick={() => setShowCreateModal(false)} className="text-[#8c97a8] hover:text-[#CD0000]">
+                  <X size={18} />
+                </button>
+              </div>
+              
+              <div className="p-5 space-y-4 text-left">
+                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Full Name *</label>
+                  <input type="text" required value={newUserName} onChange={e => setNewUserName(e.target.value)} className={inputClass} placeholder="e.g. Rishi Raj" />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">University Email *</label>
+                  <input type="email" required value={newUserEmail} onChange={e => setNewUserEmail(e.target.value)} className={inputClass} placeholder="student@cs.christuniversity.in" />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Role *</label>
+                  <select value={newUserRole} onChange={e => setNewUserRole(e.target.value)} className={inputClass}>
+                    <option value="USER">Standard Club Member</option>
+                    <option value="CORE_HEAD">Core Committee Head</option>
+                    <option value="VERTICAL_HEAD">Vertical Head</option>
+                    <option value="ASSOCIATE">Faculty Associate</option>
+                    <option value="COORDINATOR">Faculty Coordinator</option>
+                  </select>
+                </div>
+
+                {newUserRole === 'CORE_HEAD' && (
+                  <div>
+                    <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Committee *</label>
+                    <select value={newUserCommittee} onChange={e => setNewUserCommittee(e.target.value)} className={inputClass}>
+                      {committees.map(c => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {newUserRole === 'VERTICAL_HEAD' && (
+                  <div>
+                    <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain *</label>
+                    <select value={newUserVertical} onChange={e => setNewUserVertical(e.target.value)} className={inputClass}>
+                      {verticals.map(v => (
+                        <option key={v.id} value={v.id}>{v.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex justify-end gap-3 p-5 border-t border-[#E5E7EB]">
+                <button type="button" onClick={() => setShowCreateModal(false)} className="px-4 py-2 text-sm text-[#667085] hover:text-[#CD0000]">Cancel</button>
+                <button type="submit" className="px-5 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000] transition-colors">
+                  Create User
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* EDIT USER DETAILS MODAL */}
+      {showEditModal && (
+        <div className="fixed inset-0 z-50 bg-[#CD0000]/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl border border-[#E5E7EB] w-full max-w-md">
+            <form onSubmit={handleEditUser}>
+              <div className="flex items-center justify-between p-5 border-b border-[#E5E7EB]">
+                <h2 className="font-bold text-[#CD0000]">Edit User Details</h2>
+                <button type="button" onClick={() => setShowEditModal(false)} className="text-[#8c97a8] hover:text-[#CD0000]">
+                  <X size={18} />
+                </button>
+              </div>
+              
+              <div className="p-5 space-y-4 text-left">
+                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Full Name *</label>
+                  <input type="text" required value={editingUserName} onChange={e => setEditingUserName(e.target.value)} className={inputClass} />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Role *</label>
+                  <select value={editingUserRole} onChange={e => setEditingUserRole(e.target.value)} className={inputClass}>
+                    <option value="USER">Standard Club Member</option>
+                    <option value="CORE_HEAD">Core Committee Head</option>
+                    <option value="VERTICAL_HEAD">Vertical Head</option>
+                    <option value="ASSOCIATE">Faculty Associate</option>
+                    <option value="COORDINATOR">Faculty Coordinator</option>
+                  </select>
+                </div>
+
+                {editingUserRole === 'CORE_HEAD' && (
+                  <div>
+                    <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Committee *</label>
+                    <select value={editingUserCommittee} onChange={e => setEditingUserCommittee(e.target.value)} className={inputClass}>
+                      {committees.map(c => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {editingUserRole === 'VERTICAL_HEAD' && (
+                  <div>
+                    <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain *</label>
+                    <select value={editingUserVertical} onChange={e => setEditingUserVertical(e.target.value)} className={inputClass}>
+                      {verticals.map(v => (
+                        <option key={v.id} value={v.id}>{v.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex justify-end gap-3 p-5 border-t border-[#E5E7EB]">
+                <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 text-sm text-[#667085] hover:text-[#CD0000]">Cancel</button>
+                <button type="submit" className="px-5 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000] transition-colors">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

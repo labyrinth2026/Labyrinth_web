@@ -12,7 +12,11 @@ export interface User {
   name: string;
   passwordHash?: string; // only used in file-fallback mode
   role: 'HOD' | 'COORDINATOR' | 'ASSOCIATE' | 'CORE_HEAD' | 'VERTICAL_HEAD' | 'USER';
-  status: 'pending' | 'active' | 'rejected';
+  status: 'active' | 'inactive';
+  firstLogin: boolean;
+  passwordChangedAt?: string;
+  createdBy?: string;
+  lastLogin?: string;
   createdAt: string;
 }
 
@@ -184,12 +188,12 @@ export function initializeLocalDb(): void {
   const defaultHash = bcrypt.hashSync('admin123', salt);
 
   db.users = [
-    { id: 'u-hod', email: 'hod@labyrinth.club', name: 'Dr. Suresh Kumar', passwordHash: defaultHash, role: 'HOD', status: 'active', createdAt: new Date().toISOString() },
-    { id: 'u-coord', email: 'coordinator@labyrinth.club', name: 'Prof. Anjali Menon', passwordHash: defaultHash, role: 'COORDINATOR', status: 'active', createdAt: new Date().toISOString() },
-    { id: 'u-assoc', email: 'associate@labyrinth.club', name: 'Dr. Rajesh Rajan', passwordHash: defaultHash, role: 'ASSOCIATE', status: 'active', createdAt: new Date().toISOString() },
-    { id: 'u-core-head', email: 'core@labyrinth.club', name: 'Core Member One', passwordHash: defaultHash, role: 'CORE_HEAD', status: 'active', createdAt: new Date().toISOString() },
-    { id: 'u-vert-head1', email: 'rishi@cs.christuniversity.in', name: 'Rishi Raj', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', createdAt: new Date().toISOString() },
-    { id: 'u-vert-head2', email: 'krupa@cs.christuniversity.in', name: 'Krupa', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', createdAt: new Date().toISOString() }
+    { id: 'u-hod', email: 'hod@labyrinth.club', name: 'Dr. Suresh Kumar', passwordHash: defaultHash, role: 'HOD', status: 'active', firstLogin: false, createdAt: new Date().toISOString() },
+    { id: 'u-coord', email: 'coordinator@labyrinth.club', name: 'Prof. Anjali Menon', passwordHash: defaultHash, role: 'COORDINATOR', status: 'active', firstLogin: false, createdAt: new Date().toISOString() },
+    { id: 'u-assoc', email: 'associate@labyrinth.club', name: 'Dr. Rajesh Rajan', passwordHash: defaultHash, role: 'ASSOCIATE', status: 'active', firstLogin: false, createdAt: new Date().toISOString() },
+    { id: 'u-core-head', email: 'core@labyrinth.club', name: 'Core Member One', passwordHash: defaultHash, role: 'CORE_HEAD', status: 'active', firstLogin: false, createdAt: new Date().toISOString() },
+    { id: 'u-vert-head1', email: 'rishi@cs.christuniversity.in', name: 'Rishi Raj', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, createdAt: new Date().toISOString() },
+    { id: 'u-vert-head2', email: 'krupa@cs.christuniversity.in', name: 'Krupa', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, createdAt: new Date().toISOString() }
   ];
 
   // Verticals
@@ -297,6 +301,10 @@ export async function dbGetUserByEmail(email: string): Promise<any | null> {
         name: data.name,
         role: data.role,
         status: data.status,
+        firstLogin: data.first_login,
+        passwordChangedAt: data.password_changed_at,
+        createdBy: data.created_by,
+        lastLogin: data.last_login,
         committeeId: comm?.committee_id,
         verticalId: vert?.vertical_id
       };
@@ -316,9 +324,20 @@ export async function dbGetUserByEmail(email: string): Promise<any | null> {
 
 export async function dbGetRoles(): Promise<any[]> {
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('profiles').select('*').neq('role', 'USER');
+    const { data, error } = await supabase.from('profiles').select('*');
     if (error) throw error;
-    return data || [];
+    return (data || []).map((p: any) => ({
+      id: p.id,
+      email: p.email,
+      name: p.name,
+      role: p.role,
+      status: p.status,
+      firstLogin: p.first_login,
+      passwordChangedAt: p.password_changed_at,
+      createdBy: p.created_by,
+      lastLogin: p.last_login,
+      createdAt: p.created_at
+    }));
   } else {
     const db = getLocalDb();
     return db.users.filter(u => u.role !== 'USER');
@@ -382,6 +401,166 @@ export async function dbDeleteRole(userId: string): Promise<void> {
       user.role = 'USER';
       db.committeeAssignments = db.committeeAssignments.filter(a => a.userId !== userId);
       db.verticalAssignments = db.verticalAssignments.filter(a => a.userId !== userId);
+      saveLocalDb(db);
+    }
+  }
+}
+
+export async function dbCreateUser(name: string, email: string, role: string, committeeId?: string, verticalId?: string, adminUserId?: string): Promise<void> {
+  const cleanEmail = email.toLowerCase().trim();
+  const defaultPassword = process.env.DEFAULT_TEMPORARY_PASSWORD || 'Labyrinth@123';
+
+  if (isSupabaseConfigured()) {
+    const adminClient = getSupabaseAdmin();
+    if (!adminClient) throw new Error('Supabase Service Role credentials not configured.');
+
+    // 1. Create in Supabase Auth
+    const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
+      email: cleanEmail,
+      password: defaultPassword,
+      email_confirm: true,
+      user_metadata: {
+        name,
+        role,
+        created_by: adminUserId,
+        first_login: true
+      }
+    });
+
+    if (authError) throw authError;
+    const userId = authData.user?.id;
+    if (!userId) throw new Error('User creation failed in Supabase Auth.');
+
+    // Wait a brief moment or update the profile record directly to set created_by
+    const { error: profErr } = await supabase.from('profiles').update({
+      created_by: adminUserId,
+      first_login: true,
+      role
+    }).eq('id', userId);
+    if (profErr) console.warn('Could not update profile metadata:', profErr);
+
+    // 2. Insert assignments
+    if (role === 'CORE_HEAD' && committeeId) {
+      await dbAssignCoreHead(cleanEmail, committeeId);
+    } else if (role === 'VERTICAL_HEAD' && verticalId) {
+      await dbAssignVerticalHead(cleanEmail, verticalId);
+    }
+  } else {
+    const db = getLocalDb();
+    const existing = db.users.find(u => u.email.toLowerCase() === cleanEmail);
+    if (existing) throw new Error('User with this email already exists.');
+
+    const userId = `u-${Date.now()}`;
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(defaultPassword, salt);
+
+    db.users.push({
+      id: userId,
+      email: cleanEmail,
+      name,
+      passwordHash: hash,
+      role: role as any,
+      status: 'active',
+      firstLogin: true,
+      createdBy: adminUserId,
+      createdAt: new Date().toISOString()
+    });
+
+    saveLocalDb(db);
+
+    if (role === 'CORE_HEAD' && committeeId) {
+      db.committeeAssignments.push({
+        id: `ca-${Date.now()}`,
+        userId,
+        committeeId,
+        assignedAt: new Date().toISOString()
+      });
+    } else if (role === 'VERTICAL_HEAD' && verticalId) {
+      db.verticalAssignments.push({
+        id: `va-${Date.now()}`,
+        userId,
+        verticalId,
+        assignedAt: new Date().toISOString()
+      });
+    }
+    saveLocalDb(db);
+  }
+}
+
+export async function dbUpdateUserStatus(userId: string, status: 'active' | 'inactive'): Promise<void> {
+  if (isSupabaseConfigured() && supabase) {
+    const { error } = await supabase.from('profiles').update({ status }).eq('id', userId);
+    if (error) throw error;
+  } else {
+    const db = getLocalDb();
+    const user = db.users.find(u => u.id === userId);
+    if (user) {
+      user.status = status;
+      saveLocalDb(db);
+    }
+  }
+}
+
+export async function dbUpdateUserDetails(userId: string, name: string, role: string, committeeId?: string, verticalId?: string): Promise<void> {
+  if (isSupabaseConfigured() && supabase) {
+    // 1. Update profile
+    const { error } = await supabase.from('profiles').update({ name, role }).eq('id', userId);
+    if (error) throw error;
+
+    // Get email to re-assign if role is head
+    const { data: prof } = await supabase.from('profiles').select('email').eq('id', userId).single();
+    if (prof) {
+      if (role === 'CORE_HEAD' && committeeId) {
+        await dbAssignCoreHead(prof.email, committeeId);
+      } else if (role === 'VERTICAL_HEAD' && verticalId) {
+        await dbAssignVerticalHead(prof.email, verticalId);
+      } else {
+        // Clean assignments if not a head anymore
+        await supabase.from('committee_assignments').delete().eq('user_id', userId);
+        await supabase.from('vertical_assignments').delete().eq('user_id', userId);
+      }
+    }
+  } else {
+    const db = getLocalDb();
+    const user = db.users.find(u => u.id === userId);
+    if (user) {
+      user.name = name;
+      user.role = role as any;
+
+      if (role === 'CORE_HEAD' && committeeId) {
+        db.committeeAssignments = db.committeeAssignments.filter(a => a.userId !== userId);
+        db.committeeAssignments.push({
+          id: `ca-${Date.now()}`,
+          userId,
+          committeeId,
+          assignedAt: new Date().toISOString()
+        });
+      } else if (role === 'VERTICAL_HEAD' && verticalId) {
+        db.verticalAssignments = db.verticalAssignments.filter(a => a.userId !== userId);
+        db.verticalAssignments.push({
+          id: `va-${Date.now()}`,
+          userId,
+          verticalId,
+          assignedAt: new Date().toISOString()
+        });
+      } else {
+        db.committeeAssignments = db.committeeAssignments.filter(a => a.userId !== userId);
+        db.verticalAssignments = db.verticalAssignments.filter(a => a.userId !== userId);
+      }
+      saveLocalDb(db);
+    }
+  }
+}
+
+export async function dbUpdateLastLogin(userId: string): Promise<void> {
+  const now = new Date().toISOString();
+  if (isSupabaseConfigured() && supabase) {
+    await supabase.from('profiles').update({ last_login: now }).eq('id', userId);
+  } else {
+    const db = getLocalDb();
+    const user = db.users.find(u => u.id === userId);
+    if (user) {
+      user.lastLogin = now;
       saveLocalDb(db);
     }
   }
@@ -1112,8 +1291,8 @@ export async function dbSaveVerticalAttendance(verticalId: string, date: string,
 // --- REGISTRATIONS ---
 export async function dbGetJoinRegistrations(): Promise<any[]> {
   if (isSupabaseConfigured() && supabase) {
-    // Find profiles with status 'pending'
-    const { data, error } = await supabase.from('profiles').select('*').eq('status', 'pending');
+    // Find profiles with status 'inactive' and role 'USER' (which represents candidates)
+    const { data, error } = await supabase.from('profiles').select('*').eq('status', 'inactive').eq('role', 'USER');
     if (error) throw error;
     return (data || []).map(p => ({
       id: p.id,
@@ -1127,7 +1306,7 @@ export async function dbGetJoinRegistrations(): Promise<any[]> {
     }));
   } else {
     const db = getLocalDb();
-    return db.users.filter(u => u.status === 'pending').map(u => {
+    return db.users.filter(u => u.status === 'inactive' && u.role === 'USER').map(u => {
       const log = db.activityLogs.find(l => l.userId === u.id && l.action === 'registration_submit');
       const vertical = log ? log.details.split('vertical ')[1] || 'Unspecified' : 'Unspecified';
       return {
@@ -1160,13 +1339,13 @@ export async function dbApproveRegistration(userId: string): Promise<void> {
 
 export async function dbRejectRegistration(userId: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('profiles').update({ status: 'rejected' }).eq('id', userId);
+    const { error } = await supabase.from('profiles').update({ status: 'inactive' }).eq('id', userId);
     if (error) throw error;
   } else {
     const db = getLocalDb();
     const u = db.users.find(usr => usr.id === userId);
     if (u) {
-      u.status = 'rejected';
+      u.status = 'inactive';
       saveLocalDb(db);
     }
   }

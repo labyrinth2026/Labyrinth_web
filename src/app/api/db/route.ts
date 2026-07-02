@@ -13,7 +13,7 @@ import {
   dbGetVerticalResources, dbAddVerticalResource, dbDeleteVerticalResource,
   dbGetVerticalAttendance, dbSaveVerticalAttendance,
   dbGetJoinRegistrations, dbApproveRegistration, dbRejectRegistration,
-  dbGetRoles, dbAddRole, dbDeleteRole,
+  dbGetRoles, dbAddRole, dbDeleteRole, dbCreateUser, dbUpdateUserStatus, dbUpdateUserDetails,
   dbGetForms, dbUpdateForms,
   getLocalDb, saveLocalDb, logActivity
 } from '@/utils/db';
@@ -122,7 +122,8 @@ export async function POST(req: NextRequest) {
           email,
           name,
           role: 'USER',
-          status: 'pending',
+          status: 'inactive',
+          firstLogin: true,
           createdAt: new Date().toISOString()
         });
         saveLocalDb(db);
@@ -227,6 +228,27 @@ export async function POST(req: NextRequest) {
       case 'deleteRole': {
         await dbDeleteRole(payload.id);
         await logActivity(sessionUser.id, 'revoke_admin_role', `Revoked permissions for ID ${payload.id}`);
+        return NextResponse.json({ success: true });
+      }
+
+      case 'createUser': {
+        const { name, email, role, committeeId, verticalId } = payload;
+        await dbCreateUser(name, email, role, committeeId, verticalId, sessionUser.id);
+        await logActivity(sessionUser.id, 'create_user', `Created user: ${name} (${email}) as ${role}`);
+        return NextResponse.json({ success: true });
+      }
+
+      case 'updateUserStatus': {
+        const { userId, status } = payload;
+        await dbUpdateUserStatus(userId, status);
+        await logActivity(sessionUser.id, 'update_user_status', `Updated status of user ${userId} to ${status}`);
+        return NextResponse.json({ success: true });
+      }
+
+      case 'updateUserDetails': {
+        const { userId, name, role, committeeId, verticalId } = payload;
+        await dbUpdateUserDetails(userId, name, role, committeeId, verticalId);
+        await logActivity(sessionUser.id, 'update_user_details', `Updated profile of user ${userId}`);
         return NextResponse.json({ success: true });
       }
 

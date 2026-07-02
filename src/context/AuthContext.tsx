@@ -9,6 +9,7 @@ interface User {
   email: string;
   name: string;
   role: Role;
+  firstLogin?: boolean;
   committeeId?: string;
   verticalId?: string;
 }
@@ -25,7 +26,7 @@ export type Permission =
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, pass: string, portalType: 'admin' | 'core' | 'vertical') => Promise<{ success: boolean; error?: string }>;
+  login: (email: string, pass: string, portalType?: 'admin' | 'core' | 'vertical') => Promise<{ success: boolean; user?: User; error?: string }>;
   logout: () => Promise<void>;
   isLoading: boolean;
   can: (action: Permission) => boolean;

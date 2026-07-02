@@ -29,7 +29,11 @@ export default function UnifiedLoginPage() {
 
   useEffect(() => {
     if (user && !isLoading) {
-      handleRedirect(user.role);
+      if (user.firstLogin) {
+        router.push('/auth/reset-password');
+      } else {
+        handleRedirect(user.role);
+      }
     }
   }, [user, isLoading]);
 
@@ -41,7 +45,11 @@ export default function UnifiedLoginPage() {
     try {
       const result = await login(email, password);
       if (result.success && result.user) {
-        handleRedirect(result.user.role);
+        if (result.mustReset) {
+          router.push('/auth/reset-password');
+        } else {
+          handleRedirect(result.user.role);
+        }
       } else {
         setError(result.error || 'Invalid credentials or access denied.');
       }
