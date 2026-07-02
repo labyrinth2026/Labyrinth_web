@@ -376,6 +376,7 @@ export async function dbAddRole(email: string, name: string, role: string): Prom
         passwordHash: bcrypt.hashSync('admin123', 10),
         role: role as any,
         status: 'active',
+        firstLogin: true,
         createdAt: new Date().toISOString()
       };
       db.users.push(user);
@@ -431,8 +432,7 @@ export async function dbCreateUser(name: string, email: string, role: string, co
     const userId = authData.user?.id;
     if (!userId) throw new Error('User creation failed in Supabase Auth.');
 
-    // Wait a brief moment or update the profile record directly to set created_by
-    const { error: profErr } = await supabase.from('profiles').update({
+    const { error: profErr } = await adminClient.from('profiles').update({
       created_by: adminUserId,
       first_login: true,
       role

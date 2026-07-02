@@ -26,7 +26,7 @@ export type Permission =
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, pass: string, portalType?: 'admin' | 'core' | 'vertical') => Promise<{ success: boolean; user?: User; error?: string }>;
+  login: (email: string, pass: string, portalType?: 'admin' | 'core' | 'vertical') => Promise<{ success: boolean; user?: User; mustReset?: boolean; error?: string }>;
   logout: () => Promise<void>;
   isLoading: boolean;
   can: (action: Permission) => boolean;
@@ -95,7 +95,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loadSession();
   }, []);
 
-  const login = async (email: string, pass: string, portalType?: 'admin' | 'core' | 'vertical'): Promise<{ success: boolean; user?: User; error?: string }> => {
+  const login = async (email: string, pass: string, portalType?: 'admin' | 'core' | 'vertical'): Promise<{ success: boolean; user?: User; mustReset?: boolean; error?: string }> => {
     setIsLoading(true);
     try {
       const response = await fetch('/api/auth/login', {
@@ -107,7 +107,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (data.success) {
         setUser(data.user);
         setIsLoading(false);
-        return { success: true, user: data.user };
+        return { success: true, user: data.user, mustReset: data.mustReset };
       } else {
         setIsLoading(false);
         return { success: false, error: data.error || 'Invalid credentials.' };
