@@ -29,39 +29,39 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
       
       {/* Search Input */}
       <div className="relative w-full md:max-w-md group">
-        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#B8B8B8] group-focus-within:text-[#CD0000] transition-colors">
-          <Search size={18} />
+        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#CD0000] transition-colors">
+          <Search size={16} />
         </div>
         <input
           type="text"
           value={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full bg-white border border-[#B8B8B8]/40 text-[#121212] rounded-full py-3 pl-11 pr-4 focus:outline-none focus:ring-2 focus:ring-[#CD0000]/20 focus:border-[#CD0000] transition-all shadow-sm placeholder:text-[#B8B8B8] font-medium"
+          className="w-full bg-white border border-slate-200 text-slate-800 rounded-full py-2.5 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-[#CD0000]/10 focus:border-[#CD0000] transition-all shadow-xs placeholder:text-slate-400 text-xs font-semibold uppercase tracking-wider"
         />
       </div>
 
       {/* Filters */}
       {filters.length > 0 && onFilterChange && (
         <div className="w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
-          <div className="flex gap-2">
+          <div className="flex gap-1.5">
             {filters.map((filter) => {
               const isActive = activeFilter === filter.value;
               return (
                 <button
                   key={filter.value}
                   onClick={() => onFilterChange(filter.value)}
-                  className={`relative px-5 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-200 ${
+                  className={`relative px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider whitespace-nowrap transition-all duration-200 border ${
                     isActive
-                      ? 'text-[#EFEDE6]'
-                      : 'text-[#121212]/70 bg-white border border-[#B8B8B8]/40 hover:border-[#CD0000] hover:text-[#CD0000]'
+                      ? 'text-white border-slate-900'
+                      : 'text-slate-600 bg-white border-slate-200 hover:border-slate-300 hover:text-slate-800'
                   }`}
                 >
                   {isActive && (
                     <motion.div
                       layoutId="activeFilterBg"
-                      className="absolute inset-0 bg-[#CD0000] rounded-full -z-10"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      className="absolute inset-0 bg-slate-900 rounded-full -z-10"
+                      transition={{ type: "spring", stiffness: 400, damping: 35 }}
                     />
                   )}
                   {filter.label}

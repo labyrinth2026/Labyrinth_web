@@ -43,18 +43,17 @@ const getInitials = (name: string) => {
 };
 
 const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
-  const color = getAvatarColor(member.name);
+  const initialsColor = { bg: 'bg-slate-50 border-slate-100', text: 'text-slate-500' };
 
   return (
     <motion.div
-      whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(18, 18, 18, 0.08)' }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="bg-white border border-[#B8B8B8]/30 rounded-3xl shadow-sm p-6 text-center flex flex-col items-center h-full"
+      whileHover={{ y: -3, boxShadow: '0 12px 30px rgba(0, 0, 0, 0.04)' }}
+      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+      className="bg-white border border-slate-200/80 rounded-2xl shadow-xs p-6 text-center flex flex-col items-center h-full"
     >
       {/* Avatar */}
       <div className="relative mb-4">
-        <div className="w-20 h-20 rounded-full flex items-center justify-center text-xl font-bold border-2 border-[#B8B8B8]/30 shadow-md overflow-hidden"
-          style={{ backgroundColor: color.bg, color: color.text }}
+        <div className={`w-16 h-16 rounded-full flex items-center justify-center text-base font-bold border border-slate-200/60 shadow-xs overflow-hidden ${initialsColor.bg} ${initialsColor.text}`}
         >
           {member.avatar ? (
             <img src={member.avatar} alt={member.name} loading="lazy" className="w-full h-full rounded-full object-cover" />
@@ -65,16 +64,16 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
       </div>
 
       {/* Info */}
-      <h3 className="text-lg font-bold text-[#121212] mb-1">{member.name}</h3>
-      <p className="text-[#CD0000] font-bold text-sm mb-1">{member.role}</p>
+      <h3 className="text-sm font-bold text-slate-900 mb-0.5">{member.name}</h3>
+      <p className="text-[#CD0000] font-bold text-xs mb-1 uppercase tracking-wider">{member.role}</p>
       {member.designation && (
-        <p className="text-[#121212]/70 text-xs mb-0.5 font-medium">{member.designation}</p>
+        <p className="text-slate-400 text-[10px] mb-0.5 font-bold uppercase tracking-wider">{member.designation}</p>
       )}
       {member.department && (
-        <p className="text-[#121212]/50 text-xs mb-3">{member.department}</p>
+        <p className="text-slate-400 text-[10px] mb-3">{member.department}</p>
       )}
       {member.vertical && !member.department && (
-        <span className="text-xs bg-[#EFEDE6] text-[#CD0000] border border-[#B8B8B8]/30 px-3 py-0.5 rounded-full font-bold mb-3">
+        <span className="text-[9px] bg-slate-50 text-slate-600 border border-slate-200/60 px-2 py-0.5 rounded-full font-bold mb-3 uppercase tracking-wider">
           {member.vertical}
         </span>
       )}
@@ -83,25 +82,25 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
       <div className="flex-grow" />
 
       {/* Links */}
-      <div className="flex justify-center gap-2 mt-4 pt-4 border-t border-[#B8B8B8]/30 w-full">
+      <div className="flex justify-center gap-1.5 mt-4 pt-4 border-t border-slate-100 w-full">
         <a
           href={`mailto:${member.email}`}
-          className="w-8 h-8 rounded-full bg-[#EFEDE6] flex items-center justify-center text-[#CD0000] hover:bg-[#CD0000] hover:text-white transition-all"
+          className="w-7 h-7 rounded-full bg-slate-50 border border-slate-200/40 flex items-center justify-center text-slate-500 hover:bg-[#CD0000] hover:text-white transition-all"
           aria-label={`Email ${member.name}`}
           title={member.email}
         >
-          <Mail size={14} />
+          <Mail size={12} />
         </a>
         {member.linkedin && member.linkedin !== '#' && (
           <a
             href={member.linkedin}
             target="_blank"
             rel="noreferrer"
-            className="w-8 h-8 rounded-full bg-[#EFEDE6] flex items-center justify-center text-[#CD0000] hover:bg-[#CD0000] hover:text-white transition-all"
+            className="w-7 h-7 rounded-full bg-slate-50 border border-slate-200/40 flex items-center justify-center text-slate-500 hover:bg-[#CD0000] hover:text-white transition-all"
             aria-label={`${member.name}'s LinkedIn`}
           >
             {/* LinkedIn SVG */}
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3 h-3">
               <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
               <rect x="2" y="9" width="4" height="12"/>
               <circle cx="4" cy="4" r="2"/>

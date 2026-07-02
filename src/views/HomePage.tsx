@@ -65,8 +65,8 @@ const HomePage: React.FC = () => {
   if (isLoading) {
     return (
       <PageWrapper className="pt-0 pb-0">
-        <div className="min-h-screen flex items-center justify-center bg-[#121212]">
-          <div className="w-8 h-8 border-3 border-[#CD0000] border-t-transparent rounded-full animate-spin"></div>
+        <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA]">
+          <div className="w-8 h-8 border-2 border-[#CD0000] border-t-transparent rounded-full animate-spin"></div>
         </div>
       </PageWrapper>
     );
@@ -76,76 +76,67 @@ const HomePage: React.FC = () => {
     <PageWrapper className="pt-0 pb-0">
 
       {/* ── Hero Section ── */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#121212]">
-        {/* Subtle grid */}
-        <div className="absolute inset-0 animated-grid opacity-35 pointer-events-none" />
-
-        {/* Red accent blobs */}
-        <div className="absolute top-1/4 left-10 w-96 h-96 bg-[#CD0000]/10 rounded-full blur-[100px] pointer-events-none animate-pulse-slow" />
-        <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-[#CD0000]/10 rounded-full blur-[100px] pointer-events-none animate-pulse-slow" style={{ animationDelay: '3s' }} />
-
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white minimal-grid pt-16">
         <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center pt-24 pb-16">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            className="flex flex-col items-center"
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[#EFEDE6] text-xs font-bold tracking-widest uppercase mb-8">
-              <Sparkles size={12} className="text-[#CD0000]" />
-              Computer Science Club · Christ University
-            </span>
-
-            <h1 className="font-grotesk text-7xl md:text-9xl lg:text-[11rem] font-black tracking-tighter mb-4 text-[#EFEDE6] leading-none">
+            <h1 className="text-6xl md:text-8xl lg:text-[7.5rem] font-extrabold tracking-tighter mb-4 text-slate-900 leading-[1.05]">
               LABY<span className="text-[#CD0000]">RINTH</span>
             </h1>
-            <p className="text-xl md:text-2xl text-[#B8B8B8] font-bold uppercase tracking-wider mb-2">Christ University, Bengaluru</p>
-            <p className="text-base md:text-lg text-[#B8B8B8]/80 max-w-2xl mx-auto mb-12 leading-relaxed">
-              The Computer Science Department's Computer Academy has been active since 1997. Labyrinth was established as the official face of this academy and serves as the only Computer Science Club of Christ University.
+            <p className="text-xs md:text-sm text-slate-500 font-bold uppercase tracking-widest mb-6">Christ University, Bengaluru</p>
+            <p className="text-sm md:text-base text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+              The Computer Science Department's Computer Academy has been active since 1997. Labyrinth serves as the official Computer Science Club of Christ University, fostering research, engineering, and digital excellence.
             </p>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex flex-col sm:flex-row gap-4"
+            transition={{ duration: 0.6, delay: 0.15 }}
           >
-            <Button variant="primary" size="lg" href="/verticals">
-              Explore Verticals <ArrowRight size={18} />
-            </Button>
-            <Button variant="secondary" size="lg" href="/contact">
-              Join Community
-            </Button>
+            {/* Hero CTA glassmorphic panel */}
+            <div 
+              style={{
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                background: 'rgba(255, 255, 255, 0.6)',
+                border: '1px solid rgba(255, 255, 255, 0.18)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)'
+              }}
+              className="p-4 rounded-3xl flex flex-col sm:flex-row gap-3 items-center justify-center"
+            >
+              <Button variant="primary" size="md" href="/verticals">
+                Explore Verticals <ArrowRight size={14} />
+              </Button>
+              <Button variant="secondary" size="md" href="/contact">
+                Join Community
+              </Button>
+            </div>
           </motion.div>
 
           {/* Stats Row */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex flex-wrap justify-center gap-12 mt-20 border-t border-white/10 pt-10 w-full max-w-4xl"
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex flex-wrap justify-center gap-12 mt-20 border-t border-slate-100 pt-10 w-full max-w-4xl"
           >
             {statsData.slice(0, 4).map((stat, i) => (
               <div key={i} className="text-center min-w-[120px]">
-                <div className="font-grotesk text-4xl font-black text-[#CD0000]">{stat.value}{stat.suffix}</div>
-                <div className="text-xs text-[#B8B8B8] uppercase tracking-widest font-bold mt-1">{stat.label}</div>
+                <div className="text-3xl font-extrabold text-slate-900">{stat.value}{stat.suffix}</div>
+                <div className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-1.5">{stat.label}</div>
               </div>
             ))}
           </motion.div>
         </div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[#B8B8B8]"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-        >
-          <ChevronRight size={22} className="rotate-90" />
-        </motion.div>
       </section>
 
       {/* ── Stats Section ── */}
-      <section className="py-24 bg-[#EFEDE6]">
+      <section className="py-24 bg-white border-t border-slate-100">
         <div className="container mx-auto px-6 max-w-7xl">
           <SectionHeading title="By The Numbers" subtitle="Our Impact" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -163,30 +154,30 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* ── Verticals Preview ── */}
-      <section className="py-24 bg-[#121212] border-y border-[#B8B8B8]/10">
+      <section className="py-24 bg-slate-50/50 border-t border-slate-200/60">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
-            <SectionHeading title="Our Verticals" subtitle="What We Do" align="left" light={true} className="mb-0" />
-            <Button variant="outline" size="sm" href="/verticals" className="border-[#B8B8B8]/30 text-[#EFEDE6] hover:bg-white/5">
-              All Verticals <ArrowRight size={14} />
+            <SectionHeading title="Our Verticals" subtitle="What We Do" align="left" className="mb-0" />
+            <Button variant="outline" size="sm" href="/verticals">
+              All Verticals <ArrowRight size={12} />
             </Button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {verticals.map(({ name, icon: Icon, desc }, i) => (
               <motion.div
                 key={name}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
+                transition={{ delay: i * 0.05 }}
               >
                 <Link href="/verticals" className="block group">
-                  <div className="bg-[#181818] border border-[#B8B8B8]/10 rounded-3xl p-6 shadow-sm hover:shadow-xl hover:shadow-black/50 hover:-translate-y-1.5 transition-all duration-300">
-                    <div className="w-12 h-12 rounded-2xl bg-[#CD0000]/10 flex items-center justify-center text-[#CD0000] mb-6 group-hover:bg-[#CD0000] group-hover:text-white transition-all duration-300">
-                      <Icon size={24} />
+                  <div className="bg-white border border-slate-200/80 rounded-2xl p-6 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+                    <div className="w-10 h-10 rounded-xl bg-[#CD0000]/5 flex items-center justify-center text-[#CD0000] mb-5 group-hover:bg-[#CD0000] group-hover:text-white transition-all duration-300">
+                      <Icon size={18} />
                     </div>
-                    <h3 className="font-grotesk font-black text-[#EFEDE6] text-lg mb-2 group-hover:text-[#CD0000] transition-colors">{name}</h3>
-                    <p className="text-sm text-[#B8B8B8] leading-relaxed">{desc}</p>
+                    <h3 className="font-bold text-slate-800 text-sm mb-1.5 group-hover:text-[#CD0000] transition-colors">{name}</h3>
+                    <p className="text-xs text-slate-500 leading-relaxed">{desc}</p>
                   </div>
                 </Link>
               </motion.div>
@@ -197,38 +188,38 @@ const HomePage: React.FC = () => {
 
       {/* ── Featured Events Carousel ── */}
       {featuredEvents.length > 0 && (
-        <section className="py-24 bg-[#F4F2EC]">
+        <section className="py-24 bg-white border-t border-slate-100">
           <div className="container mx-auto px-6 max-w-7xl">
             <SectionHeading title="Featured Events" subtitle="Don't Miss Out" />
 
             <div
-              className="relative bg-white border border-[#B8B8B8]/30 rounded-3xl shadow-sm p-6 md:p-10"
+              className="relative bg-white border border-slate-200/80 rounded-3xl p-4 md:p-6 shadow-xs"
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              <div className="relative h-[400px] overflow-hidden rounded-2xl bg-[#EFEDE6]">
+              <div className="relative h-[380px] overflow-hidden rounded-2xl bg-slate-50">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={currentSlide}
-                    initial={{ opacity: 0, x: 60 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -60 }}
-                    transition={{ duration: 0.45, ease: 'easeInOut' }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
                     className="absolute inset-0"
                   >
-                    <div className="w-full h-full flex flex-col justify-end p-8 md:p-12 bg-gradient-to-t from-black via-[#121212]/80 to-transparent rounded-2xl">
-                      <div className="flex gap-3 mb-4">
-                        <span className="px-3 py-1 rounded-full bg-[#CD0000] text-[#EFEDE6] text-[10px] font-bold uppercase tracking-wider">
+                    <div className="w-full h-full flex flex-col justify-end p-8 md:p-12 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent rounded-2xl">
+                      <div className="flex gap-2.5 mb-3">
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#CD0000] text-white text-[9px] font-bold uppercase tracking-wider">
                           {featuredEvents[currentSlide].category}
                         </span>
-                        <span className="px-3 py-1 rounded-full bg-white/10 backdrop-blur text-white text-[10px] font-bold border border-white/20 uppercase tracking-wider">
+                        <span className="px-2.5 py-0.5 rounded-full bg-white/15 backdrop-blur text-white text-[9px] font-bold border border-white/10 uppercase tracking-wider">
                           {new Date(featuredEvents[currentSlide].date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                         </span>
                       </div>
-                      <h3 className="font-grotesk text-3xl md:text-4xl font-black text-white mb-3 leading-tight tracking-tight">
+                      <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2 leading-tight tracking-tight">
                         {featuredEvents[currentSlide].title}
                       </h3>
-                      <p className="text-[#B8B8B8] md:text-base mb-6 max-w-2xl line-clamp-2 leading-relaxed">
+                      <p className="text-slate-300 text-xs md:text-sm mb-5 max-w-2xl line-clamp-2 leading-relaxed">
                         {featuredEvents[currentSlide].description}
                       </p>
                       <div>
@@ -240,25 +231,25 @@ const HomePage: React.FC = () => {
               </div>
 
               {/* Nav Controls */}
-              <div className="absolute top-1/2 -translate-y-1/2 left-3 md:-left-5">
-                <button onClick={prevSlide} className="w-10 h-10 rounded-full bg-white border border-[#B8B8B8]/30 shadow-md flex items-center justify-center text-[#121212] hover:bg-[#CD0000] hover:text-white hover:border-[#CD0000] transition-all">
-                  <ChevronLeft size={20} />
+              <div className="absolute top-1/2 -translate-y-1/2 left-3 md:-left-4">
+                <button onClick={prevSlide} className="w-8 h-8 rounded-full bg-white border border-slate-200/80 shadow-xs flex items-center justify-center text-slate-700 hover:bg-slate-50 transition-all">
+                  <ChevronLeft size={16} />
                 </button>
               </div>
-              <div className="absolute top-1/2 -translate-y-1/2 right-3 md:-right-5">
-                <button onClick={nextSlide} className="w-10 h-10 rounded-full bg-white border border-[#B8B8B8]/30 shadow-md flex items-center justify-center text-[#121212] hover:bg-[#CD0000] hover:text-white hover:border-[#CD0000] transition-all">
-                  <ChevronRight size={20} />
+              <div className="absolute top-1/2 -translate-y-1/2 right-3 md:-right-4">
+                <button onClick={nextSlide} className="w-8 h-8 rounded-full bg-white border border-slate-200/80 shadow-xs flex items-center justify-center text-slate-700 hover:bg-slate-50 transition-all">
+                  <ChevronRight size={16} />
                 </button>
               </div>
 
               {/* Dots */}
-              <div className="flex justify-center gap-2 mt-5">
+              <div className="flex justify-center gap-1.5 mt-4">
                 {featuredEvents.map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => setCurrentSlide(idx)}
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      currentSlide === idx ? 'w-7 bg-[#CD0000]' : 'w-2 bg-[#B8B8B8]/35 hover:bg-[#CD0000]/50'
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      currentSlide === idx ? 'w-5 bg-[#CD0000]' : 'w-1.5 bg-slate-200 hover:bg-slate-300'
                     }`}
                     aria-label={`Go to slide ${idx + 1}`}
                   />
@@ -271,12 +262,12 @@ const HomePage: React.FC = () => {
 
       {/* ── Upcoming Events ── */}
       {upcomingEvents.length > 0 && (
-        <section className="py-24 bg-[#181818]">
+        <section className="py-24 bg-slate-50/50 border-t border-slate-200/60">
           <div className="container mx-auto px-6 max-w-7xl">
             <div className="flex justify-between items-end mb-16">
-              <SectionHeading title="Upcoming Events" align="left" light={true} className="mb-0" />
-              <Button variant="outline" size="sm" href="/events" className="border-[#B8B8B8]/30 text-[#EFEDE6] hover:bg-white/5">
-                View All <ArrowRight size={14} />
+              <SectionHeading title="Upcoming Events" align="left" className="mb-0" />
+              <Button variant="outline" size="sm" href="/events">
+                View All <ArrowRight size={12} />
               </Button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -289,28 +280,26 @@ const HomePage: React.FC = () => {
       )}
 
       {/* ── SDG Projects Initiative ── */}
-      <section className="py-24 bg-[#121212] border-t border-[#B8B8B8]/10">
+      <section className="py-24 bg-white border-t border-slate-100">
         <div className="container mx-auto px-6 max-w-5xl text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            className="flex flex-col items-center"
           >
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#CD0000]/10 border border-[#CD0000]/30 text-[#CD0000] mb-6">
-              <Sparkles size={32} />
-            </div>
-            <h2 className="font-grotesk text-4xl md:text-5xl font-black text-[#EFEDE6] tracking-tight mb-6">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-5">
               SDG Projects Initiative
             </h2>
-            <p className="text-[#B8B8B8] text-lg md:text-xl mb-4 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-slate-500 text-sm md:text-base mb-3 max-w-3xl mx-auto leading-relaxed">
               Inviting project proposals aligned with the United Nations Sustainable Development Goals (SDGs) and relevant to Christ University.
             </p>
-            <p className="text-[#B8B8B8] text-lg md:text-xl mb-10 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-slate-500 text-sm md:text-base mb-8 max-w-3xl mx-auto leading-relaxed">
               Students are encouraged to submit innovative project ideas that address real-world challenges and create meaningful impact.
             </p>
-            <div className="bg-[#181818] border border-[#B8B8B8]/10 rounded-3xl p-6 inline-block">
-              <p className="text-[#B8B8B8] font-bold mb-2 uppercase tracking-widest text-xs">Proposal Submission Email</p>
-              <a href="mailto:labyrinth@cs.christuniversity.in" className="text-xl md:text-2xl font-black text-[#CD0000] hover:text-[#FF3333] transition-colors tracking-tight">
+            <div className="bg-slate-50 border border-slate-200/80 rounded-2xl px-6 py-4 inline-block">
+              <p className="text-[10px] text-slate-400 font-bold mb-1 uppercase tracking-widest">Proposal Submission Email</p>
+              <a href="mailto:labyrinth@cs.christuniversity.in" className="text-lg md:text-xl font-bold text-[#CD0000] hover:text-[#9E0000] transition-colors tracking-tight">
                 labyrinth@cs.christuniversity.in
               </a>
             </div>
@@ -319,7 +308,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* ── Team Preview ── */}
-      <section className="py-24 bg-[#EFEDE6]">
+      <section className="py-24 bg-slate-50/50 border-t border-slate-200/60">
         <div className="container mx-auto px-6 max-w-7xl">
           <SectionHeading title="Meet The Team" subtitle="Leadership" />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -329,32 +318,33 @@ const HomePage: React.FC = () => {
           </div>
           <div className="mt-12 text-center">
             <Button variant="secondary" href="/team">
-              <Users size={16} className="text-[#CD0000] mr-1 inline" /> Meet Full Team
+              Meet Full Team
             </Button>
           </div>
         </div>
       </section>
 
       {/* ── CTA Banner ── */}
-      <section className="py-24 bg-[#121212] border-t border-[#B8B8B8]/10">
+      <section className="py-24 bg-white border-t border-slate-100">
         <div className="container mx-auto px-6 max-w-4xl text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            className="flex flex-col items-center"
           >
-            <h2 className="font-grotesk text-3xl md:text-5xl font-black text-[#EFEDE6] mb-4 tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
               Ready to be part of something bigger?
             </h2>
-            <p className="text-[#B8B8B8] text-lg mb-8 max-w-xl mx-auto leading-relaxed">
-              Join Labyrinth and collaborate with the brightest minds at Christ University.
+            <p className="text-slate-500 text-sm md:text-base mb-8 max-w-xl mx-auto leading-relaxed">
+              Join Labyrinth and collaborate with the brightest tech minds at Christ University.
             </p>
             <Button
               variant="primary"
               size="lg"
               href="/contact"
             >
-              Apply to Join →
+              Apply to Join
             </Button>
           </motion.div>
         </div>

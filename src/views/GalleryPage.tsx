@@ -30,23 +30,7 @@ const GalleryPage: React.FC = () => {
     : galleryData.filter(img => img.category === filter);
 
   const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'workshops': return { bg: '#EFF6FF', text: '#2563eb' };
-      case 'hackathons': return { bg: '#FEF2F2', text: '#dc2626' };
-      case 'sports': return { bg: '#F0FDF4', text: '#16a34a' };
-      case 'cultural': return { bg: '#F5F3FF', text: '#7c3aed' };
-      default: return { bg: 'rgba(205, 0, 0, 0.03)', text: '#CD0000' };
-    }
-  };
-
-  const getGradientForCategory = (category: string) => {
-    switch (category) {
-      case 'workshops': return 'from-[#CD0000] to-[#FF3333]';
-      case 'hackathons': return 'from-[#dc2626] to-[#f97316]';
-      case 'sports': return 'from-[#16a34a] to-[#0d9488]';
-      case 'cultural': return 'from-[#7c3aed] to-[#db2777]';
-      default: return 'from-[#CD0000] to-[#0369a1]';
-    }
+    return { bg: 'bg-slate-50 border-slate-200/60', text: 'text-slate-600' };
   };
 
   const getRowSpan = (index: number) => {
@@ -58,8 +42,8 @@ const GalleryPage: React.FC = () => {
   if (isLoading) {
     return (
       <PageWrapper>
-        <div className="min-h-[60vh] flex items-center justify-center bg-[#121212]">
-          <div className="w-8 h-8 border-3 border-[#CD0000] border-t-transparent rounded-full animate-spin"></div>
+        <div className="min-h-[60vh] flex items-center justify-center bg-[#FAFAFA]">
+          <div className="w-8 h-8 border-2 border-[#CD0000] border-t-transparent rounded-full animate-spin"></div>
         </div>
       </PageWrapper>
     );
@@ -67,17 +51,17 @@ const GalleryPage: React.FC = () => {
 
   return (
     <PageWrapper>
-      {/* Header (Section 1: Warm White #EFEDE6) */}
-      <section className="py-24 bg-[#EFEDE6] border-b border-[#B8B8B8]/20">
+      {/* Header (Section 1: Off-White) */}
+      <section className="py-24 bg-white border-b border-slate-100">
         <div className="container mx-auto px-6 max-w-7xl text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-block px-4 py-1.5 rounded-full bg-[#CD0000]/5 border border-[#CD0000]/20 text-[#CD0000] text-xs font-bold uppercase tracking-widest mb-6">
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
               Memories
             </span>
-            <h1 className="font-grotesk text-5xl md:text-7xl font-black mb-6 text-[#121212] tracking-tighter leading-none">
+            <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-slate-900 tracking-tight leading-tight">
               OUR <span className="text-[#CD0000]">GALLERY</span>
             </h1>
-            <p className="text-lg text-[#121212]/70 max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-slate-500 text-xs md:text-sm max-w-2xl mx-auto mb-10 leading-relaxed">
               Moments from our events, workshops, and community gatherings.
             </p>
 
@@ -100,8 +84,8 @@ const GalleryPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Masonry Grid (Section 2: Charcoal Black #121212) */}
-      <section className="py-24 bg-[#121212]">
+      {/* Masonry Grid (Section 2: Off-White) */}
+      <section className="py-24 bg-slate-50/50">
         <div className="container mx-auto px-6 max-w-7xl">
           <AnimatePresence mode="wait">
             {filteredImages.length > 0 ? (
@@ -116,26 +100,21 @@ const GalleryPage: React.FC = () => {
                   return (
                     <motion.div
                       key={item.id}
-                      initial={{ opacity: 0, scale: 0.95 }}
+                      initial={{ opacity: 0, scale: 0.98 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.35, delay: i * 0.04 }}
-                      className={`relative group rounded-3xl overflow-hidden cursor-pointer border border-[#B8B8B8]/15 shadow-sm hover:shadow-xl hover:shadow-[#CD0000]/10 ${getRowSpan(i)}`}
+                      transition={{ duration: 0.3, delay: i * 0.03 }}
+                      className={`relative group rounded-2xl overflow-hidden cursor-pointer border border-slate-200 bg-white shadow-xs hover:shadow-md ${getRowSpan(i)}`}
                       onClick={() => setSelectedImage(item)}
                     >
-                      {/* Background */}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${getGradientForCategory(item.category)}`}>
-                        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '20px 20px' }} />
+                      {/* Image Area placeholder */}
+                      <div className="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center p-4">
+                        <span className="text-[9px] font-black uppercase tracking-widest text-[#CD0000] mb-1">{item.category}</span>
+                        <h3 className="text-slate-800 font-bold text-center text-xs px-2 line-clamp-2">{item.title}</h3>
                       </div>
 
                       {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-black/45 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                        <ZoomIn className="text-white w-8 h-8 scale-75 group-hover:scale-100 transition-transform duration-200" />
-                      </div>
-
-                      {/* Content */}
-                      <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/85 to-transparent translate-y-1 group-hover:translate-y-0 transition-transform duration-250">
-                        <span className="text-[9px] font-black uppercase tracking-widest text-[#CD0000] mb-0.5 block">{item.category}</span>
-                        <h3 className="text-[#EFEDE6] font-bold text-sm line-clamp-1">{item.title}</h3>
+                      <div className="absolute inset-0 bg-slate-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                        <ZoomIn className="text-slate-700 w-6 h-6 scale-90 group-hover:scale-100 transition-transform duration-200" />
                       </div>
                     </motion.div>
                   );
@@ -143,8 +122,8 @@ const GalleryPage: React.FC = () => {
               </motion.div>
             ) : (
               <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-                <Images size={48} className="text-[#CD0000] mx-auto mb-4" />
-                <p className="text-[#B8B8B8] text-lg">No images found for this category.</p>
+                <Images size={36} className="text-[#CD0000] mx-auto mb-4" />
+                <p className="text-slate-500 text-xs">No images found for this category.</p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -158,44 +137,49 @@ const GalleryPage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-black/90 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-slate-950/20 backdrop-blur-xs"
             onClick={() => setSelectedImage(null)}
           >
             <button
-              className="absolute top-5 right-5 text-[#EFEDE6]/60 hover:text-white p-2 bg-white/10 rounded-full transition-colors z-50"
+              className="absolute top-5 right-5 text-slate-500 hover:text-slate-800 p-2 bg-white rounded-full transition-colors z-50 shadow-xs border border-slate-200/60"
               onClick={(e) => { e.stopPropagation(); setSelectedImage(null); }}
             >
-              <X size={22} />
+              <X size={18} />
             </button>
 
             <motion.div
-              initial={{ scale: 0.92, y: 16 }}
+              initial={{ scale: 0.97, y: 10 }}
               animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.92, y: 16 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl border border-white/10"
+              exit={{ scale: 0.97, y: 10 }}
+              transition={{ type: 'spring', damping: 30, stiffness: 400 }}
+              style={{
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                background: 'rgba(255, 255, 255, 0.75)',
+                border: '1px solid rgba(255, 255, 255, 0.25)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)'
+              }}
+              className="relative w-full max-w-2xl rounded-3xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Image Area */}
-              <div className={`w-full aspect-video relative bg-gradient-to-br ${getGradientForCategory(selectedImage.category)} flex flex-col items-center justify-center p-8 text-center`}>
-                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-                <h2 className="text-2xl md:text-5xl font-black text-white/70 font-grotesk tracking-tight uppercase leading-none">{selectedImage.title}</h2>
-                <p className="text-white/30 mt-3 text-sm">(Image Placeholder)</p>
+              {/* Image Area placeholder inside Modal */}
+              <div className="w-full aspect-video relative bg-slate-100 flex flex-col items-center justify-center p-8 text-center border-b border-slate-200/60">
+                <h2 className="text-2xl md:text-3xl font-extrabold text-slate-700 tracking-tight uppercase leading-none">{selectedImage.title}</h2>
+                <p className="text-slate-400 mt-2 text-[10px] uppercase tracking-widest font-bold">(Image Placeholder)</p>
               </div>
 
               {/* Info Area */}
-              <div className="bg-[#181818] border-t border-white/10 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h3 className="text-xl font-black text-[#EFEDE6] mb-1 tracking-tight">{selectedImage.title}</h3>
-                  <p className="text-[#B8B8B8] text-sm leading-relaxed">{selectedImage.description}</p>
+                  <h3 className="text-base font-bold text-slate-900 mb-1 tracking-tight">{selectedImage.title}</h3>
+                  <p className="text-slate-500 text-xs leading-relaxed">{selectedImage.description}</p>
                 </div>
-                <div className="flex flex-col items-start md:items-end gap-2 shrink-0">
-                  <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider"
-                    style={{ backgroundColor: getCategoryColor(selectedImage.category).bg, color: getCategoryColor(selectedImage.category).text }}>
+                <div className="flex flex-col items-start sm:items-end gap-2 shrink-0">
+                  <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border ${getCategoryColor(selectedImage.category).bg} ${getCategoryColor(selectedImage.category).text}`}>
                     {selectedImage.category}
                   </span>
-                  <div className="flex items-center text-xs font-semibold text-[#B8B8B8] uppercase tracking-wider">
-                    <Calendar size={13} className="mr-1.5 text-[#CD0000]" />
+                  <div className="flex items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    <Calendar size={12} className="mr-1.5 text-[#CD0000]" />
                     {new Date(selectedImage.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                   </div>
                 </div>

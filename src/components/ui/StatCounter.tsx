@@ -38,20 +38,24 @@ const StatCounter: React.FC<StatCounterProps> = ({ value, label, suffix = '', ic
   return (
     <div
       ref={ref}
-      className="bg-white border border-[#B8B8B8]/30 rounded-3xl shadow-sm p-6 flex flex-col items-center justify-center text-center relative overflow-hidden group transition-all duration-300 hover:shadow-lg hover:shadow-[#121212]/5 hover:-translate-y-1"
+      style={{
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        background: 'rgba(255, 255, 255, 0.6)',
+        border: '1px solid rgba(255, 255, 255, 0.18)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)'
+      }}
+      className="rounded-3xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden group transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
     >
-      {/* Red accent top bar on hover */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-[#CD0000] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-
-      <div className="w-14 h-14 rounded-2xl bg-[#EFEDE6] flex items-center justify-center mb-4 text-[#CD0000] group-hover:bg-[#CD0000] group-hover:text-white transition-all duration-300">
-        <Icon size={28} />
+      <div className="w-11 h-11 rounded-xl bg-slate-100/80 border border-slate-200/40 flex items-center justify-center mb-4 text-[#CD0000] group-hover:bg-[#CD0000] group-hover:text-white transition-all duration-300 shadow-xs">
+        <Icon size={20} />
       </div>
 
-      <div className="font-grotesk text-4xl font-black text-[#121212] mb-1 tracking-tight">
+      <div className="text-3xl font-extrabold text-slate-900 mb-1 tracking-tight">
         {count}{suffix}
       </div>
 
-      <div className="text-[#121212]/70 font-semibold text-sm tracking-wide">
+      <div className="text-slate-500 font-bold text-xs uppercase tracking-widest">
         {label}
       </div>
     </div>

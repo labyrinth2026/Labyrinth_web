@@ -62,17 +62,17 @@ const VerticalsPage: React.FC = () => {
 
   return (
     <PageWrapper>
-      {/* Header (Section 1: Warm White #EFEDE6) */}
-      <section className="py-24 bg-[#EFEDE6] border-b border-[#B8B8B8]/20">
+      {/* Header (Section 1: Off-White) */}
+      <section className="py-24 bg-white border-b border-slate-100">
         <div className="container mx-auto px-6 max-w-7xl text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-block px-4 py-1.5 rounded-full bg-[#CD0000]/5 border border-[#CD0000]/20 text-[#CD0000] text-xs font-bold uppercase tracking-widest mb-6">
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
               Our Domains
             </span>
-            <h1 className="font-grotesk text-5xl md:text-7xl font-black mb-6 text-[#121212] tracking-tighter leading-none">
+            <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-slate-900 tracking-tight leading-tight">
               OUR <span className="text-[#CD0000]">VERTICALS</span>
             </h1>
-            <p className="text-lg text-[#121212]/70 max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-slate-500 text-xs md:text-sm max-w-2xl mx-auto mb-10 leading-relaxed">
               Ten specialized domains. Endless possibilities. Find your niche and start building.
             </p>
 
@@ -94,14 +94,14 @@ const VerticalsPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Content (Section 2: Charcoal Black #121212) */}
-      <section className="py-24 bg-[#121212]">
+      {/* Content (Section 2: Off-White) */}
+      <section className="py-24 bg-slate-50/50">
         <div className="container mx-auto px-6 max-w-7xl">
           <AnimatePresence mode="wait">
             {/* Tech Verticals */}
             {(filter === 'all' || filter === 'tech') && filteredTech.length > 0 && (
               <motion.div id="technical-verticals" key="tech" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mb-20 scroll-mt-24">
-                <SectionHeading title="Technical Domains" align="left" light={true} />
+                <SectionHeading title="Technical Domains" align="left" />
                 <motion.div
                   variants={containerVariants}
                   initial="hidden"
@@ -121,7 +121,7 @@ const VerticalsPage: React.FC = () => {
             {/* Non-Tech Verticals */}
             {(filter === 'all' || filter === 'non-tech') && filteredNonTech.length > 0 && (
               <motion.div id="non-technical-verticals" key="non-tech" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="scroll-mt-24">
-                <SectionHeading title="Management & Creative" align="left" light={true} />
+                <SectionHeading title="Management &amp; Creative" align="left" />
                 <motion.div
                   variants={containerVariants}
                   initial="hidden"
@@ -140,10 +140,10 @@ const VerticalsPage: React.FC = () => {
 
             {filteredTech.length === 0 && filteredNonTech.length === 0 && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-                <div className="text-[#B8B8B8] mb-4 text-lg">No verticals found matching your search.</div>
+                <div className="text-slate-500 mb-4 text-xs font-bold uppercase tracking-wider">No verticals found matching your search.</div>
                 <button
                   onClick={() => { setSearch(''); setFilter('all'); }}
-                  className="text-[#CD0000] font-bold hover:underline uppercase tracking-wider text-xs"
+                  className="text-[#CD0000] font-bold hover:underline uppercase tracking-wider text-[10px]"
                 >
                   Clear filters
                 </button>

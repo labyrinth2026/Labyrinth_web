@@ -3,43 +3,38 @@
 @theme {
   /* Brand Color Palette */
   --color-primary: #CD0000; /* Cherry Red */
-  --color-primary-dark: #A30000;
-  --color-primary-light: #FF3333;
+  --color-primary-dark: #9E0000;
+  --color-primary-light: #F04438;
 
-  --color-accent: #CD0000; /* Cherry Red */
+  --color-accent: #CD0000;
 
   /* Background Colors */
-  --color-bg-primary: #EFEDE6; /* Warm White */
-  --color-bg-secondary: #F4F2EC; /* Alternate Warm White */
-  --color-bg-tertiary: #121212; /* Charcoal Black */
+  --color-bg-primary: #FAFAFA; /* Premium Off-White */
+  --color-bg-secondary: #FFFFFF; /* Pure White */
+  --color-bg-tertiary: #09090B; /* Dark Zinc */
   
-  --color-dark: #121212; /* Charcoal Black */
-  --color-dark-alt: #181818; /* Alternate Charcoal Black */
-  --color-platinum: #B8B8B8; /* Soft Platinum */
+  --color-dark: #09090B;
+  --color-dark-alt: #18181B;
+  --color-platinum: #E4E4E7; /* Light grey border */
 
   /* Text Colors */
-  --color-text-primary: #121212;
-  --color-text-secondary: rgba(18, 18, 18, 0.7);
-  --color-text-muted: rgba(18, 18, 18, 0.5);
+  --color-text-primary: #09090B; /* High-contrast */
+  --color-text-secondary: #3F3F46; /* Slate gray */
+  --color-text-muted: #71717A; /* Muted gray */
 
   /* Borders */
-  --color-border: #B8B8B8; /* Soft Platinum */
-
-  /* Backwards compatibility for old names mapping to new colors */
-  --color-christ-blue: #CD0000;
-  --color-christ-blue-dark: #A30000;
-  --color-christ-blue-light: #FF3333;
+  --color-border: #E4E4E7;
 
   /* Fonts */
   --font-inter: 'Inter', sans-serif;
-  --font-grotesk: 'Space Grotesk', sans-serif;
+  --font-grotesk: 'Inter', sans-serif; /* Standardized to clean Inter for enterprise look */
 }
 
 @layer base {
   body {
     @apply bg-bg-primary text-text-primary font-inter antialiased overflow-x-hidden;
-    background-color: #EFEDE6;
-    color: #121212;
+    background-color: #FAFAFA;
+    color: #09090B;
   }
 
   html {
@@ -47,142 +42,114 @@
   }
 
   ::selection {
-    background: rgba(205, 0, 0, 0.1);
+    background: rgba(205, 0, 0, 0.08);
     color: #CD0000;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', sans-serif;
-    color: #121212;
-    font-weight: 800; /* Bold headings */
+    font-family: 'Inter', sans-serif;
+    color: #09090B;
+    font-weight: 800;
+    letter-spacing: -0.025em;
   }
 
   a {
     color: #CD0000;
     text-decoration: none;
-    transition: color 0.2s ease-in-out;
+    transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   a:hover {
-    color: #A30000;
+    color: #9E0000;
   }
 }
 
 @layer utilities {
-  /* Premium Editorial Card */
+  /* Premium Glassmorphism Card (Exactly to user specs) */
   .glass-card {
-    @apply bg-white/80 backdrop-blur-md border border-platinum/40 rounded-3xl shadow-sm;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-color: rgba(184, 184, 184, 0.4);
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    border-radius: 24px;
   }
 
-  /* Editorial Gradient Text (Cherry Red to Dark) */
-  .gradient-text {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #CD0000 0%, #121212 100%);
+  /* Dark glass version for dark contexts or headers */
+  .glass-card-dark {
+    backdrop-filter: blur(20px);
+    background: rgba(9, 9, 11, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border-radius: 24px;
   }
 
-  /* Section Background Variants */
-  .section-light {
-    background-color: #EFEDE6; /* Warm White */
+  /* Minimal Typography Styles */
+  .title-hero {
+    @apply font-inter text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1];
   }
 
-  .section-alt {
-    background-color: #121212; /* Charcoal Black */
+  .text-premium-body {
+    @apply font-inter text-base md:text-lg text-slate-600 leading-relaxed;
   }
 
-  .section-deep {
-    background-color: #F4F2EC; /* Alternate Warm White */
+  /* Premium Dotted Grid Background */
+  .minimal-grid {
+    background-size: 32px 32px;
+    background-image: radial-gradient(circle, rgba(9, 9, 11, 0.04) 1px, transparent 1px);
+  }
+  
+  .minimal-grid-dark {
+    background-size: 32px 32px;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   }
 
-  .section-dark-alt {
-    background-color: #181818; /* Alternate Charcoal Black */
-  }
-
-  /* Subtle editorial line pattern */
-  .animated-grid {
-    background-size: 60px 60px;
-    background-image:
-      linear-gradient(to right, rgba(184, 184, 184, 0.1) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(184, 184, 184, 0.1) 1px, transparent 1px);
-    mask-image: linear-gradient(to bottom, transparent, black, transparent);
-  }
-
-  /* Premium Cherry Red button */
-  .btn-primary {
+  /* Premium buttons */
+  .btn-primary-new {
     background-color: #CD0000;
-    color: #EFEDE6;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    color: #FFFFFF;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .btn-primary:hover {
-    background-color: #A30000;
-    box-shadow: 0 10px 30px rgba(205, 0, 0, 0.2);
-    transform: translateY(-1px);
+  .btn-primary-new:hover {
+    background-color: #9E0000;
+    transform: translateY(-0.5px);
   }
 
-  /* Card Hover Elevation */
-  .card-hover {
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Card elevation */
+  .card-hover-new {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .card-hover:hover {
-    box-shadow: 0 20px 40px rgba(18, 18, 18, 0.05);
-    transform: translateY(-4px);
-  }
-
-  /* Editorial Badge */
-  .badge-blue {
-    background-color: rgba(205, 0, 0, 0.05);
-    color: #CD0000;
-    border: 1px solid rgba(205, 0, 0, 0.2);
-    border-radius: 9999px;
-    padding: 2px 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
-  }
-
-  /* Divider */
-  .divider-blue {
-    height: 1px;
-    background: #B8B8B8;
-    opacity: 0.4;
+  .card-hover-new:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
   }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #EFEDE6;
+  background: #FAFAFA;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(18, 18, 18, 0.2);
-  border-radius: 4px;
+  background: rgba(9, 9, 11, 0.12);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(18, 18, 18, 0.4);
+  background: rgba(9, 9, 11, 0.24);
 }
 
 /* Animations */
-@keyframes pulse-slow {
-  0%, 100% { opacity: 0.2; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(1.02); }
-}
-
-.animate-pulse-slow {
-  animation: pulse-slow 6s ease-in-out infinite;
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

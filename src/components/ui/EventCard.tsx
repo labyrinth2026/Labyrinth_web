@@ -20,15 +20,15 @@ interface EventCardProps {
 }
 
 const categoryConfig: Record<string, { bg: string; text: string; label: string }> = {
-  hackathon: { bg: '#121212', text: '#B8B8B8', label: 'Hackathon' },
-  workshop:  { bg: '#121212', text: '#CD0000', label: 'Workshop' },
-  talk:      { bg: '#121212', text: '#EFEDE6', label: 'Talk' },
-  competition: { bg: '#CD0000', text: '#EFEDE6', label: 'Competition' },
-  social:    { bg: '#B8B8B8', text: '#121212', label: 'Social' },
+  hackathon: { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: 'Hackathon' },
+  workshop:  { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: 'Workshop' },
+  talk:      { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: 'Talk' },
+  competition: { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: 'Competition' },
+  social:    { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: 'Social' },
 };
 
 const EventCard: React.FC<EventCardProps> = ({ event }) => {
-  const catConfig = categoryConfig[event.category] || { bg: '#EFEDE6', text: '#CD0000', label: event.category };
+  const catConfig = categoryConfig[event.category] || { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: event.category };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -40,44 +40,40 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
 
   return (
     <motion.div
-      whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(18, 18, 18, 0.08)' }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="bg-white border border-[#B8B8B8]/30 rounded-3xl shadow-sm h-full flex flex-col relative overflow-hidden group"
+      whileHover={{ y: -3, boxShadow: '0 12px 30px rgba(0, 0, 0, 0.04)' }}
+      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+      className="bg-white border border-slate-200/80 rounded-2xl shadow-xs h-full flex flex-col relative overflow-hidden group"
     >
-      {/* Category color top bar */}
-      <div className="h-1 w-full" style={{ backgroundColor: '#CD0000' }} />
-
       <div className="p-6 flex flex-col h-full flex-grow">
         {/* Header */}
         <div className="flex justify-between items-start mb-4">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EFEDE6] border border-[#B8B8B8]/20">
-            <span className={`w-1.5 h-1.5 rounded-full ${event.status === 'upcoming' ? 'bg-[#CD0000] animate-pulse' : 'bg-[#B8B8B8]'}`} />
-            <span className="text-xs font-bold text-[#121212] capitalize tracking-wide">{event.status}</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-50 border border-slate-200/80">
+            <span className={`w-1.5 h-1.5 rounded-full ${event.status === 'upcoming' ? 'bg-[#CD0000] animate-pulse' : 'bg-slate-300'}`} />
+            <span className="text-[10px] font-bold text-slate-700 uppercase tracking-wider">{event.status}</span>
           </div>
           <span
-            className="text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-[#B8B8B8]/20"
-            style={{ backgroundColor: catConfig.bg, color: catConfig.text }}
+            className={`text-[9px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider border ${catConfig.bg} ${catConfig.text}`}
           >
             {catConfig.label}
           </span>
         </div>
 
         {/* Content */}
-        <h3 className="font-grotesk text-lg font-black text-[#121212] mb-2 group-hover:text-[#CD0000] transition-colors">
+        <h3 className="text-base font-bold text-slate-900 mb-2 group-hover:text-[#CD0000] transition-colors leading-tight">
           {event.title}
         </h3>
-        <p className="text-[#121212]/70 text-sm mb-4 line-clamp-2 flex-grow leading-relaxed">
+        <p className="text-slate-500 text-xs mb-5 line-clamp-2 flex-grow leading-relaxed">
           {event.description}
         </p>
 
         {/* Footer */}
-        <div className="space-y-2 mt-auto pt-4 border-t border-[#B8B8B8]/30">
-          <div className="flex items-center gap-2 text-xs font-semibold text-[#121212]/70 uppercase tracking-wide">
-            <Calendar size={14} className="text-[#CD0000] shrink-0" />
+        <div className="space-y-1.5 mt-auto pt-4 border-t border-slate-100">
+          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+            <Calendar size={13} className="text-slate-400 shrink-0" />
             <span>{formatDate(event.date)}</span>
           </div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-[#121212]/70 uppercase tracking-wide">
-            <MapPin size={14} className="text-[#CD0000] shrink-0" />
+          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+            <MapPin size={13} className="text-slate-400 shrink-0" />
             <span className="truncate">{event.location}</span>
           </div>
         </div>

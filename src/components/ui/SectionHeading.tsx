@@ -32,31 +32,17 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({
         transition={{ duration: 0.5, ease: 'easeOut' }}
       >
         {subtitle && (
-          <span className={`font-bold tracking-widest uppercase text-xs mb-3 block ${
-            light ? 'text-[#B8B8B8]' : 'text-[#CD0000]'
+          <span className={`font-bold tracking-widest uppercase text-[10px] mb-2.5 block ${
+            light ? 'text-slate-400' : 'text-[#CD0000]'
           }`}>
             {subtitle}
           </span>
         )}
-        <h2 className={`font-grotesk text-3xl md:text-5xl font-black mb-5 tracking-tighter leading-none ${
-          gradient
-            ? 'gradient-text'
-            : light
-            ? 'text-[#EFEDE6]'
-            : 'text-[#121212]'
+        <h2 className={`text-2xl md:text-4xl font-extrabold mb-0 tracking-tight leading-tight ${
+          light ? 'text-white' : 'text-slate-900'
         }`}>
           {title}
         </h2>
-
-        {/* Accent Line */}
-        <motion.div
-          className={`h-1 rounded-full ${
-            align === 'center' ? 'mx-auto' : ''
-          } ${light ? 'bg-[#EFEDE6]/40' : 'bg-[#CD0000]'}`}
-          initial={{ width: 0 }}
-          animate={isVisible ? { width: 56 } : { width: 0 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: "circOut" }}
-        />
       </motion.div>
     </div>
   );

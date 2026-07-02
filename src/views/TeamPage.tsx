@@ -122,17 +122,17 @@ const TeamPage: React.FC = () => {
 
   return (
     <PageWrapper>
-      {/* Header (Section 1: Warm White #EFEDE6) */}
-      <section className="py-24 bg-[#EFEDE6] border-b border-[#B8B8B8]/20">
+      {/* Header (Section 1: Off-White) */}
+      <section className="py-24 bg-white border-b border-slate-100">
         <div className="container mx-auto px-6 max-w-7xl text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-block px-4 py-1.5 rounded-full bg-[#CD0000]/5 border border-[#CD0000]/20 text-[#CD0000] text-xs font-bold uppercase tracking-widest mb-6">
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
               People
             </span>
-            <h1 className="font-grotesk text-5xl md:text-7xl font-black mb-6 text-[#121212] tracking-tighter leading-none">
+            <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-slate-900 tracking-tight leading-tight">
               OUR <span className="text-[#CD0000]">TEAM</span>
             </h1>
-            <p className="text-lg text-[#121212]/70 max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-slate-500 text-xs md:text-sm max-w-2xl mx-auto mb-10 leading-relaxed">
               Meet the faculty coordinators, mentors, and passionate student leaders driving Labyrinth forward.
             </p>
 
@@ -156,8 +156,8 @@ const TeamPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Content (Section 2: Charcoal Black #121212) */}
-      <section className="py-24 bg-[#121212]">
+      {/* Content (Section 2: Off-White) */}
+      <section className="py-24 bg-slate-50/50">
         <div className="container mx-auto px-6 max-w-7xl">
           <AnimatePresence mode="wait">
             {hasResults ? (
@@ -165,13 +165,13 @@ const TeamPage: React.FC = () => {
                 {/* ── FACULTY COORDINATORS ── */}
                 {(filter === 'all' || filter === 'faculty') && faculty.length > 0 && (
                   <motion.div key="faculty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mb-20">
-                    <div className="bg-[#CD0000] rounded-3xl px-8 py-6 mb-8 flex items-center gap-4 shadow-lg">
-                      <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                        <GraduationCap size={26} className="text-[#EFEDE6]" />
+                    <div className="bg-slate-900 border border-slate-950 rounded-2xl px-6 py-5 mb-8 flex items-center gap-4 shadow-sm">
+                      <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                        <GraduationCap size={22} className="text-white" />
                       </div>
                       <div>
-                        <h2 className="font-grotesk text-2xl font-black text-white tracking-tight">Faculty Coordinators</h2>
-                        <p className="text-white/80 text-sm">Christ University Department of Computer Science</p>
+                        <h2 className="text-lg font-bold text-white tracking-tight">Faculty Coordinators</h2>
+                        <p className="text-slate-400 text-xs font-medium">Christ University Department of Computer Science</p>
                       </div>
                     </div>
                     <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -187,11 +187,7 @@ const TeamPage: React.FC = () => {
                 {/* ── MENTORS ── */}
                 {(filter === 'all' || filter === 'mentors') && mentors.length > 0 && (
                   <motion.div key="mentors" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mb-20">
-                    <div className="flex items-center gap-3 mb-2">
-                      <BookOpen size={20} className="text-[#CD0000]" />
-                      <h3 className="font-grotesk text-xs font-black uppercase tracking-widest text-[#EFEDE6]">Guidance</h3>
-                    </div>
-                    <SectionHeading title="Mentors" align="left" light={true} />
+                    <SectionHeading title="Mentors" subtitle="Guidance" align="left" />
                     <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                       {mentors.map(member => (
                         <motion.div key={member.id} variants={itemVariants}>
@@ -205,11 +201,7 @@ const TeamPage: React.FC = () => {
                 {/* ── CORE COMMITTEE ── */}
                 {(filter === 'all' || filter === 'core') && core.length > 0 && (
                   <motion.div key="core" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mb-20">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Users size={20} className="text-[#CD0000]" />
-                      <h3 className="font-grotesk text-xs font-black uppercase tracking-widest text-[#EFEDE6]">Leadership</h3>
-                    </div>
-                    <SectionHeading title="Core Committee" align="left" light={true} />
+                    <SectionHeading title="Core Committee" subtitle="Leadership" align="left" />
                     <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                       {core.map(member => (
                         <motion.div key={member.id} variants={itemVariants}>
@@ -223,16 +215,12 @@ const TeamPage: React.FC = () => {
                 {/* ── VERTICALS ── */}
                 {(filter === 'all' || filter === 'verticals') && (heads.length > 0 || subHeads.length > 0) && (
                   <motion.div key="verticals" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                    <div className="flex items-center gap-3 mb-2">
-                      <Users size={20} className="text-[#CD0000]" />
-                      <h3 className="font-grotesk text-xs font-black uppercase tracking-widest text-[#EFEDE6]">Domain Teams</h3>
-                    </div>
-                    <SectionHeading title="Technical Verticals" align="left" light={true} />
+                    <SectionHeading title="Technical Verticals" subtitle="Domain Teams" align="left" />
                     <div className="mb-20">
                       {renderVerticalSection(techVerticals)}
                     </div>
                     
-                    <SectionHeading title="Non-Technical Verticals" align="left" light={true} />
+                    <SectionHeading title="Non-Technical Verticals" subtitle="Domain Teams" align="left" />
                     <div className="mb-20">
                       {renderVerticalSection(nonTechVerticals)}
                     </div>
@@ -241,8 +229,8 @@ const TeamPage: React.FC = () => {
               </>
             ) : (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-                <div className="text-[#B8B8B8] mb-4 text-lg">No team members found matching "{search}".</div>
-                <button onClick={() => { setSearch(''); setFilter('all'); }} className="text-[#CD0000] font-bold hover:underline uppercase tracking-wider text-xs">
+                <div className="text-slate-500 mb-4 text-xs font-bold uppercase tracking-wider">No team members found matching "{search}".</div>
+                <button onClick={() => { setSearch(''); setFilter('all'); }} className="text-[#CD0000] font-bold hover:underline uppercase tracking-wider text-[10px]">
                   Clear search
                 </button>
               </motion.div>
