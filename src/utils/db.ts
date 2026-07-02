@@ -11,13 +11,23 @@ export interface User {
   email: string;
   name: string;
   passwordHash?: string; // only used in file-fallback mode
-  role: 'HOD' | 'COORDINATOR' | 'ASSOCIATE' | 'CORE_HEAD' | 'VERTICAL_HEAD' | 'USER';
+  role: 'HOD' | 'COORDINATOR' | 'ASSOCIATE' | 'CORE_HEAD' | 'VERTICAL_HEAD' | 'SUB_HEAD' | 'USER';
   status: 'active' | 'inactive';
   firstLogin: boolean;
   passwordChangedAt?: string;
   createdBy?: string;
   lastLogin?: string;
   createdAt: string;
+
+  // Simplified additions
+  phone?: string;
+  profilePhoto?: string;
+  department?: string;
+  yearOfStudy?: string;
+  registerNumber?: string;
+  committeeId?: string;
+  verticalId?: string;
+  isHead?: boolean;
 }
 
 export interface CoreCommittee {
@@ -72,42 +82,35 @@ export interface Announcement {
   timestamp: string;
 }
 
-export interface CommitteeTask {
+export interface Task {
   id: string;
-  committeeId: string;
   title: string;
   description: string;
-  status: 'pending' | 'in-progress' | 'completed';
-  assignedTo: string;
-  dueDate: string;
+  taskType: 'committee' | 'vertical' | 'project';
+  status: 'pending' | 'in-progress' | 'completed' | 'planning';
+  dueDate?: string;
+  assignedTo?: string;
+  committeeId?: string;
+  verticalId?: string;
+  createdBy?: string;
+  url?: string; // for backwards compatibility with verticalProjects
 }
 
-export interface CommitteeResource {
+export interface Resource {
   id: string;
-  committeeId: string;
   title: string;
   description: string;
   url: string;
-  type: string;
+  type: 'document' | 'link' | 'video';
+  committeeId?: string;
+  verticalId?: string;
+  uploadedBy?: string;
 }
 
-export interface VerticalProject {
-  id: string;
-  verticalId: string;
-  title: string;
-  description: string;
-  status: 'planning' | 'in-progress' | 'completed';
-  url?: string;
-}
-
-export interface VerticalResource {
-  id: string;
-  verticalId: string;
-  title: string;
-  description: string;
-  url: string;
-  type: string;
-}
+export type CommitteeTask = Task;
+export type CommitteeResource = Resource;
+export type VerticalProject = Task;
+export type VerticalResource = Resource;
 
 export interface VerticalAttendance {
   id: string;
@@ -122,15 +125,11 @@ export interface DatabaseSchema {
   users: User[];
   coreCommittees: CoreCommittee[];
   verticals: Vertical[];
-  committeeAssignments: CommitteeAssignment[];
-  verticalAssignments: VerticalAssignment[];
   activityLogs: any[];
   events: Event[];
   announcements: Announcement[];
-  committeeTasks: CommitteeTask[];
-  committeeResources: CommitteeResource[];
-  verticalProjects: VerticalProject[];
-  verticalResources: VerticalResource[];
+  tasks: Task[];
+  resources: Resource[];
   verticalAttendance: VerticalAttendance[];
   forms: any[];
   gallery: any[];
@@ -140,15 +139,11 @@ const initialSchema: DatabaseSchema = {
   users: [],
   coreCommittees: [],
   verticals: [],
-  committeeAssignments: [],
-  verticalAssignments: [],
   activityLogs: [],
   events: [],
   announcements: [],
-  committeeTasks: [],
-  committeeResources: [],
-  verticalProjects: [],
-  verticalResources: [],
+  tasks: [],
+  resources: [],
   verticalAttendance: [],
   forms: [],
   gallery: []
@@ -188,12 +183,58 @@ export function initializeLocalDb(): void {
   const defaultHash = bcrypt.hashSync('admin123', salt);
 
   db.users = [
-    { id: 'u-hod', email: 'hod@labyrinth.club', name: 'Dr. Suresh Kumar', passwordHash: defaultHash, role: 'HOD', status: 'active', firstLogin: false, createdAt: new Date().toISOString() },
-    { id: 'u-coord', email: 'coordinator@labyrinth.club', name: 'Prof. Anjali Menon', passwordHash: defaultHash, role: 'COORDINATOR', status: 'active', firstLogin: false, createdAt: new Date().toISOString() },
-    { id: 'u-assoc', email: 'associate@labyrinth.club', name: 'Dr. Rajesh Rajan', passwordHash: defaultHash, role: 'ASSOCIATE', status: 'active', firstLogin: false, createdAt: new Date().toISOString() },
-    { id: 'u-core-head', email: 'core@labyrinth.club', name: 'Core Member One', passwordHash: defaultHash, role: 'CORE_HEAD', status: 'active', firstLogin: false, createdAt: new Date().toISOString() },
-    { id: 'u-vert-head1', email: 'rishi@cs.christuniversity.in', name: 'Rishi Raj', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, createdAt: new Date().toISOString() },
-    { id: 'u-vert-head2', email: 'krupa@cs.christuniversity.in', name: 'Krupa', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, createdAt: new Date().toISOString() }
+    { id: 'u-hod', email: 'hod@labyrinth.club', name: 'Dr. Suresh Kumar', passwordHash: defaultHash, role: 'HOD', status: 'active', firstLogin: false, isHead: false, createdAt: new Date().toISOString() },
+    { id: 'u-coord', email: 'coordinator@labyrinth.club', name: 'Prof. Anjali Menon', passwordHash: defaultHash, role: 'COORDINATOR', status: 'active', firstLogin: false, isHead: false, createdAt: new Date().toISOString() },
+    { id: 'u-assoc', email: 'associate@labyrinth.club', name: 'Dr. Rajesh Rajan', passwordHash: defaultHash, role: 'ASSOCIATE', status: 'active', firstLogin: false, isHead: false, createdAt: new Date().toISOString() },
+    { id: 'u-core-head', email: 'core@labyrinth.club', name: 'Core Member One', passwordHash: defaultHash, role: 'CORE_HEAD', status: 'active', firstLogin: false, committeeId: 'cc-pub', isHead: true, createdAt: new Date().toISOString() },
+    
+    // AI Creator's Lab (ab000000-0000-0000-0000-000000000000)
+    { id: 'u-vh1', email: 'rishi.raj@mca.christuniversity.in', name: 'Rishi Raj (1 MCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000000', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-vh2', email: 'krupa.m@bsccsh.christuniversity.in', name: 'Krupa (3 BSc CS)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000000', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-sh1', email: 'kapil.maheshwari@bcah.christuniversity.in', name: 'Kapil Maheswari (5 BCA A)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000000', isHead: false, createdAt: new Date().toISOString() },
+
+    // GameNova (ab000000-0000-0000-0000-000000000002)
+    { id: 'u-vh3', email: 'ruchak.khatri@bcah.christuniversity.in', name: 'Ruchak Khatri (5BCA A)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000002', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-vh4', email: 'joel.benedict@bcah.christuniversity.in', name: 'Joel Benedict (5BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000002', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-sh2', email: 'rahul.t@bsccsh.christuniversity.in', name: 'Rahul T (5 BSc CS)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000002', isHead: false, createdAt: new Date().toISOString() },
+
+    // CodeCraft (ab000000-0000-0000-0000-000000000003)
+    { id: 'u-vh5', email: 'kanika.jain@mca.christuniversity.in', name: 'Kanika Jain (1 MCA)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000003', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-vh6', email: 'vvedika.m@bsccmh.christuniversity.in', name: 'Vvedika (5 BSc CM)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000003', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-sh3', email: 'himanshi.kansal@bcah.christuniversity.in', name: 'Himanshi Kansal (3 BCA B)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000003', isHead: false, createdAt: new Date().toISOString() },
+
+    // CipherGuard (ab000000-0000-0000-0000-000000000004)
+    { id: 'u-vh7', email: 'daksh.chandiramani@bcah.christuniversity.in', name: 'Daksh Sunil (5BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000004', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-sh4', email: 'meet.garg@bcah.christuniversity.in', name: 'Meet Garg (3BCA B)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000004', isHead: false, createdAt: new Date().toISOString() },
+
+    // BitOps (ab000000-0000-0000-0000-000000000005)
+    { id: 'u-vh8', email: 'rida.zafar@bsccsh.christuniversity.in', name: 'Rida Zafar (5 BSc CS)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000005', isHead: true, createdAt: new Date().toISOString() },
+
+    // FieldOps (ab000000-0000-0000-0000-000000000006)
+    { id: 'u-vh9', email: 'gautham.s@bsccsh.christuniversity.in', name: 'Gautham S (3BSc CS)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000006', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-vh10', email: 'supal.porwal@bcah.christuniversity.in', name: 'Supal Porwal (5BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000006', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-sh5', email: 'shreyas.v@bsccsh.christuniversity.in', name: 'Shreyas V (3 BSc CS)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000006', isHead: false, createdAt: new Date().toISOString() },
+
+    // CrossCode (ab000000-0000-0000-0000-000000000007)
+    { id: 'u-vh11', email: 'sandhya.m@christuniversity.in', name: 'Sandhya M (5BCA A)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000007', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-vh12', email: 'sreeshma.yetukuri@bcah.christuniversity.in', name: 'Sreeshma Chowdary Yetukuri (3BCA A)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000007', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-sh6', email: 'u.prathikshakini@bcah.christuniversity.in', name: 'U Prathiksha Kini (3BCA A)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000007', isHead: false, createdAt: new Date().toISOString() },
+
+    // The RoundTable (ab000000-0000-0000-0000-000000000008)
+    { id: 'u-vh13', email: 'arush.chandra@bcah.christuniversity.in', name: 'Arush (3BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000008', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-vh14', email: 'purvi.chakarvarti@bcah.christuniversity.in', name: 'Purvi (3BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000008', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-sh7', email: 'maanya.singh@bsccmh.christuniversity.in', name: 'Maanya (5 BSc CM)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000008', isHead: false, createdAt: new Date().toISOString() },
+
+    // The Aesthetic Lab (ab000000-0000-0000-0000-000000000009)
+    { id: 'u-vh15', email: 'nidhi.anil@bsccsh.christuniversity.in', name: 'Nidhi Anil (3 BSc CS)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000009', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-vh16', email: 'alisha.sajeev@bcah.christuniversity.in', name: 'Alisha Sajeev (5BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000009', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-sh8', email: 'tejas.sujith@bcah.christuniversity.in', name: 'Tejas Sujith (3BCA B)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000009', isHead: false, createdAt: new Date().toISOString() },
+
+    // Startovate (ab000000-0000-0000-0000-000000000010)
+    { id: 'u-vh17', email: 'ceyanne.dsouza@bcah.christuniversity.in', name: 'Ceyanne Dsouza (5BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000010', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-vh18', email: 's.khushal@bcah.christuniversity.in', name: 'Khushal S (3BCA)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000010', isHead: true, createdAt: new Date().toISOString() },
+    { id: 'u-sh9', email: 'prasanth.k@bcah.christuniversity.in', name: 'Prashanth (3BCA)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000010', isHead: false, createdAt: new Date().toISOString() },
+    { id: 'u-sh10', email: 'adit.madan@bsccsh.christuniversity.in', name: 'Adit (5 BSc CS)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000010', isHead: false, createdAt: new Date().toISOString() }
   ];
 
   // Verticals
@@ -220,10 +261,14 @@ export function initializeLocalDb(): void {
     { id: 'cc-spn', name: 'Sponsorship Committee', description: 'Finds and interacts with corporate sponsors.' }
   ];
 
-  db.committeeAssignments = [{ id: 'ca1', userId: 'u-core-head', committeeId: 'cc-pub', assignedAt: new Date().toISOString() }];
-  db.verticalAssignments = [
-    { id: 'va1', userId: 'u-vert-head1', verticalId: 'v1', assignedAt: new Date().toISOString() },
-    { id: 'va2', userId: 'u-vert-head2', verticalId: 'v1', assignedAt: new Date().toISOString() }
+  db.tasks = [
+    { id: 'ct1', committeeId: 'cc-pub', title: 'Design Teaser Poster', description: 'Create teaser graphics for the upcoming CS fest.', status: 'pending', assignedTo: 'Core Member One', dueDate: '2026-07-20', taskType: 'committee' },
+    { id: 'vp1', verticalId: 'ab000000-0000-0000-0000-000000000000', title: 'Labyrinth Web Portal', description: 'React application for student workspace coordination.', status: 'in-progress', taskType: 'project', url: 'https://github.com/labyrinth/portal' }
+  ];
+
+  db.resources = [
+    { id: 'cr1', committeeId: 'cc-pub', title: 'Club Branding Kit', description: 'Official logos and color rules.', url: 'https://example.com/branding.pdf', type: 'document' },
+    { id: 'vr1', verticalId: 'ab000000-0000-0000-0000-000000000000', title: 'Deep Learning Lecture 1', description: 'Introduction to neural networks.', url: 'https://youtube.com', type: 'video' }
   ];
 
   try {
@@ -240,24 +285,8 @@ export function initializeLocalDb(): void {
     }
   } catch {}
 
-  db.committeeTasks = [
-    { id: 'ct1', committeeId: 'cc-pub', title: 'Design Teaser Poster', description: 'Create teaser graphics for the upcoming CS fest.', status: 'pending', assignedTo: 'Core Member One', dueDate: '2026-07-20' }
-  ];
-
-  db.committeeResources = [
-    { id: 'cr1', committeeId: 'cc-pub', title: 'Club Branding Kit', description: 'Official logos and color rules.', url: 'https://example.com/branding.pdf', type: 'document' }
-  ];
-
-  db.verticalProjects = [
-    { id: 'vp1', verticalId: 'v1', title: 'Labyrinth Web Portal', description: 'React application for student workspace coordination.', status: 'in-progress', url: 'https://github.com/labyrinth/portal' }
-  ];
-
-  db.verticalResources = [
-    { id: 'vr1', verticalId: 'v1', title: 'Deep Learning Lecture 1', description: 'Introduction to neural networks.', url: 'https://youtube.com', type: 'video' }
-  ];
-
   db.verticalAttendance = [
-    { id: 'at1', verticalId: 'v1', date: '2026-07-01', memberId: 'u-vert-head1', memberName: 'Rishi Raj', status: 'present' }
+    { id: 'at1', verticalId: 'ab000000-0000-0000-0000-000000000000', date: '2026-07-01', memberId: 'u-vert-head1', memberName: 'Rishi Raj', status: 'present' }
   ];
 
   saveLocalDb(db);
@@ -292,9 +321,6 @@ export async function dbGetUserByEmail(email: string): Promise<any | null> {
     const { data, error } = await supabase.from('profiles').select('*').eq('email', cleanEmail).maybeSingle();
     if (error) throw error;
     if (data) {
-      // Fetch assignments
-      const { data: comm } = await supabase.from('committee_assignments').select('committee_id').eq('user_id', data.id).maybeSingle();
-      const { data: vert } = await supabase.from('vertical_assignments').select('vertical_id').eq('user_id', data.id).maybeSingle();
       return {
         id: data.id,
         email: data.email,
@@ -305,20 +331,16 @@ export async function dbGetUserByEmail(email: string): Promise<any | null> {
         passwordChangedAt: data.password_changed_at,
         createdBy: data.created_by,
         lastLogin: data.last_login,
-        committeeId: comm?.committee_id,
-        verticalId: vert?.vertical_id
+        committeeId: data.committee_id,
+        verticalId: data.vertical_id,
+        isHead: data.is_head
       };
     }
     return null;
   } else {
     const db = getLocalDb();
     const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
-    if (user) {
-      const comm = db.committeeAssignments.find(a => a.userId === user.id);
-      const vert = db.verticalAssignments.find(a => a.userId === user.id);
-      return { ...user, committeeId: comm?.committeeId, verticalId: vert?.verticalId };
-    }
-    return null;
+    return user || null;
   }
 }
 
@@ -336,11 +358,14 @@ export async function dbGetRoles(): Promise<any[]> {
       passwordChangedAt: p.password_changed_at,
       createdBy: p.created_by,
       lastLogin: p.last_login,
+      committeeId: p.committee_id,
+      verticalId: p.vertical_id,
+      isHead: p.is_head,
       createdAt: p.created_at
     }));
   } else {
     const db = getLocalDb();
-    return db.users.filter(u => u.role !== 'USER');
+    return db.users;
   }
 }
 
@@ -390,18 +415,21 @@ export async function dbAddRole(email: string, name: string, role: string): Prom
 
 export async function dbDeleteRole(userId: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('profiles').update({ role: 'USER' }).eq('id', userId);
+    const { error } = await supabase.from('profiles').update({
+      role: 'USER',
+      committee_id: null,
+      vertical_id: null,
+      is_head: false
+    }).eq('id', userId);
     if (error) throw error;
-    // Clean up assignments
-    await supabase.from('committee_assignments').delete().eq('user_id', userId);
-    await supabase.from('vertical_assignments').delete().eq('user_id', userId);
   } else {
     const db = getLocalDb();
     const user = db.users.find(u => u.id === userId);
     if (user) {
       user.role = 'USER';
-      db.committeeAssignments = db.committeeAssignments.filter(a => a.userId !== userId);
-      db.verticalAssignments = db.verticalAssignments.filter(a => a.userId !== userId);
+      user.committeeId = undefined;
+      user.verticalId = undefined;
+      user.isHead = false;
       saveLocalDb(db);
     }
   }
@@ -424,7 +452,10 @@ export async function dbCreateUser(name: string, email: string, role: string, co
         name,
         role,
         created_by: adminUserId,
-        first_login: true
+        first_login: true,
+        committee_id: committeeId || null,
+        vertical_id: verticalId || null,
+        is_head: ['CORE_HEAD', 'VERTICAL_HEAD'].includes(role)
       }
     });
 
@@ -435,16 +466,12 @@ export async function dbCreateUser(name: string, email: string, role: string, co
     const { error: profErr } = await adminClient.from('profiles').update({
       created_by: adminUserId,
       first_login: true,
-      role
+      role,
+      committee_id: committeeId || null,
+      vertical_id: verticalId || null,
+      is_head: ['CORE_HEAD', 'VERTICAL_HEAD'].includes(role)
     }).eq('id', userId);
     if (profErr) console.warn('Could not update profile metadata:', profErr);
-
-    // 2. Insert assignments
-    if (role === 'CORE_HEAD' && committeeId) {
-      await dbAssignCoreHead(cleanEmail, committeeId);
-    } else if (role === 'VERTICAL_HEAD' && verticalId) {
-      await dbAssignVerticalHead(cleanEmail, verticalId);
-    }
   } else {
     const db = getLocalDb();
     const existing = db.users.find(u => u.email.toLowerCase() === cleanEmail);
@@ -463,26 +490,12 @@ export async function dbCreateUser(name: string, email: string, role: string, co
       status: 'active',
       firstLogin: true,
       createdBy: adminUserId,
+      committeeId,
+      verticalId,
+      isHead: ['CORE_HEAD', 'VERTICAL_HEAD'].includes(role),
       createdAt: new Date().toISOString()
     });
 
-    saveLocalDb(db);
-
-    if (role === 'CORE_HEAD' && committeeId) {
-      db.committeeAssignments.push({
-        id: `ca-${Date.now()}`,
-        userId,
-        committeeId,
-        assignedAt: new Date().toISOString()
-      });
-    } else if (role === 'VERTICAL_HEAD' && verticalId) {
-      db.verticalAssignments.push({
-        id: `va-${Date.now()}`,
-        userId,
-        verticalId,
-        assignedAt: new Date().toISOString()
-      });
-    }
     saveLocalDb(db);
   }
 }
@@ -502,51 +515,25 @@ export async function dbUpdateUserStatus(userId: string, status: 'active' | 'ina
 }
 
 export async function dbUpdateUserDetails(userId: string, name: string, role: string, committeeId?: string, verticalId?: string): Promise<void> {
+  const isHead = ['CORE_HEAD', 'VERTICAL_HEAD'].includes(role);
   if (isSupabaseConfigured() && supabase) {
-    // 1. Update profile
-    const { error } = await supabase.from('profiles').update({ name, role }).eq('id', userId);
+    const { error } = await supabase.from('profiles').update({
+      name,
+      role,
+      committee_id: committeeId || null,
+      vertical_id: verticalId || null,
+      is_head: isHead
+    }).eq('id', userId);
     if (error) throw error;
-
-    // Get email to re-assign if role is head
-    const { data: prof } = await supabase.from('profiles').select('email').eq('id', userId).single();
-    if (prof) {
-      if (role === 'CORE_HEAD' && committeeId) {
-        await dbAssignCoreHead(prof.email, committeeId);
-      } else if (role === 'VERTICAL_HEAD' && verticalId) {
-        await dbAssignVerticalHead(prof.email, verticalId);
-      } else {
-        // Clean assignments if not a head anymore
-        await supabase.from('committee_assignments').delete().eq('user_id', userId);
-        await supabase.from('vertical_assignments').delete().eq('user_id', userId);
-      }
-    }
   } else {
     const db = getLocalDb();
     const user = db.users.find(u => u.id === userId);
     if (user) {
       user.name = name;
       user.role = role as any;
-
-      if (role === 'CORE_HEAD' && committeeId) {
-        db.committeeAssignments = db.committeeAssignments.filter(a => a.userId !== userId);
-        db.committeeAssignments.push({
-          id: `ca-${Date.now()}`,
-          userId,
-          committeeId,
-          assignedAt: new Date().toISOString()
-        });
-      } else if (role === 'VERTICAL_HEAD' && verticalId) {
-        db.verticalAssignments = db.verticalAssignments.filter(a => a.userId !== userId);
-        db.verticalAssignments.push({
-          id: `va-${Date.now()}`,
-          userId,
-          verticalId,
-          assignedAt: new Date().toISOString()
-        });
-      } else {
-        db.committeeAssignments = db.committeeAssignments.filter(a => a.userId !== userId);
-        db.verticalAssignments = db.verticalAssignments.filter(a => a.userId !== userId);
-      }
+      user.committeeId = committeeId;
+      user.verticalId = verticalId;
+      user.isHead = isHead;
       saveLocalDb(db);
     }
   }
@@ -616,7 +603,13 @@ export async function dbDeleteVertical(id: string): Promise<void> {
   } else {
     const db = getLocalDb();
     db.verticals = db.verticals.filter(v => v.id !== id);
-    db.verticalAssignments = db.verticalAssignments.filter(a => a.verticalId !== id);
+    db.users.forEach(u => {
+      if (u.verticalId === id) {
+        u.verticalId = undefined;
+        u.isHead = false;
+        if (u.role === 'VERTICAL_HEAD') u.role = 'USER';
+      }
+    });
     saveLocalDb(db);
   }
 }
@@ -654,7 +647,13 @@ export async function dbDeleteCoreCommittee(id: string): Promise<void> {
   } else {
     const db = getLocalDb();
     db.coreCommittees = db.coreCommittees.filter(c => c.id !== id);
-    db.committeeAssignments = db.committeeAssignments.filter(a => a.committeeId !== id);
+    db.users.forEach(u => {
+      if (u.committeeId === id) {
+        u.committeeId = undefined;
+        u.isHead = false;
+        if (u.role === 'CORE_HEAD') u.role = 'USER';
+      }
+    });
     saveLocalDb(db);
   }
 }
@@ -662,55 +661,61 @@ export async function dbDeleteCoreCommittee(id: string): Promise<void> {
 // --- ASSIGNMENTS ---
 export async function dbGetAssignments(): Promise<any> {
   if (isSupabaseConfigured() && supabase) {
-    const { data: comm } = await supabase.from('committee_assignments').select(`
-      id,
-      user_id,
-      committee_id,
-      assigned_at,
-      profiles (name, email),
-      core_committees (name)
-    `);
-    const { data: vert } = await supabase.from('vertical_assignments').select(`
-      id,
-      user_id,
-      vertical_id,
-      assigned_at,
-      profiles (name, email),
-      verticals (name)
-    `);
+    const { data: profiles, error } = await supabase.from('profiles').select('id, name, email, committee_id, vertical_id, is_head, created_at, core_committees (name), verticals (name)');
+    if (error) throw error;
     
+    const committeeHeads = (profiles || []).filter(p => p.committee_id && p.is_head);
+    const verticalHeads = (profiles || []).filter(p => p.vertical_id && p.is_head);
+
     return {
-      committee: (comm || []).map((c: any) => ({
-        id: c.id,
-        userId: c.user_id,
-        committeeId: c.committee_id,
-        assignedAt: c.assigned_at,
-        userName: c.profiles?.name || 'Unknown',
-        userEmail: c.profiles?.email || 'N/A',
-        committeeName: c.core_committees?.name || 'Unknown'
+      committee: committeeHeads.map((p: any) => ({
+        id: p.id,
+        userId: p.id,
+        committeeId: p.committee_id,
+        assignedAt: p.created_at,
+        userName: p.name || 'Unknown',
+        userEmail: p.email,
+        committeeName: p.core_committees?.name || 'Unknown'
       })),
-      vertical: (vert || []).map((v: any) => ({
-        id: v.id,
-        userId: v.user_id,
-        verticalId: v.vertical_id,
-        assignedAt: v.assigned_at,
-        userName: v.profiles?.name || 'Unknown',
-        userEmail: v.profiles?.email || 'N/A',
-        verticalName: v.verticals?.name || 'Unknown'
+      vertical: verticalHeads.map((p: any) => ({
+        id: p.id,
+        userId: p.id,
+        verticalId: p.vertical_id,
+        assignedAt: p.created_at,
+        userName: p.name || 'Unknown',
+        userEmail: p.email,
+        verticalName: p.verticals?.name || 'Unknown'
       }))
     };
   } else {
     const db = getLocalDb();
+    const committeeHeads = db.users.filter(u => u.committeeId && u.isHead);
+    const verticalHeads = db.users.filter(u => u.verticalId && u.isHead);
+
     return {
-      committee: db.committeeAssignments.map(a => {
-        const u = db.users.find(usr => usr.id === a.userId);
-        const c = db.coreCommittees.find(com => com.id === a.committeeId);
-        return { ...a, userName: u?.name || 'Unknown', userEmail: u?.email || 'N/A', committeeName: c?.name || 'Unknown' };
+      committee: committeeHeads.map(u => {
+        const c = db.coreCommittees.find(com => com.id === u.committeeId);
+        return {
+          id: u.id,
+          userId: u.id,
+          committeeId: u.committeeId,
+          assignedAt: u.createdAt,
+          userName: u.name,
+          userEmail: u.email,
+          committeeName: c?.name || 'Unknown'
+        };
       }),
-      vertical: db.verticalAssignments.map(a => {
-        const u = db.users.find(usr => usr.id === a.userId);
-        const v = db.verticals.find(ver => ver.id === a.verticalId);
-        return { ...a, userName: u?.name || 'Unknown', userEmail: u?.email || 'N/A', verticalName: v?.name || 'Unknown' };
+      vertical: verticalHeads.map(u => {
+        const v = db.verticals.find(ver => ver.id === u.verticalId);
+        return {
+          id: u.id,
+          userId: u.id,
+          verticalId: u.verticalId,
+          assignedAt: u.createdAt,
+          userName: u.name,
+          userEmail: u.email,
+          verticalName: v?.name || 'Unknown'
+        };
       })
     };
   }
@@ -719,63 +724,40 @@ export async function dbGetAssignments(): Promise<any> {
 export async function dbAssignCoreHead(email: string, committeeId: string): Promise<void> {
   const cleanEmail = email.toLowerCase().trim();
   if (isSupabaseConfigured() && supabase) {
-    const { data: user, error: uErr } = await supabase.from('profiles').select('id').eq('email', cleanEmail).maybeSingle();
-    if (uErr) throw uErr;
-    if (!user) throw new Error('User not found. Head must register first.');
-
-    // Remove existing assignments for this user
-    await supabase.from('committee_assignments').delete().eq('user_id', user.id);
-    
-    // Insert new assignment
-    const { error: insErr } = await supabase.from('committee_assignments').insert({
-      user_id: user.id,
-      committee_id: committeeId
-    });
-    if (insErr) throw insErr;
-
-    // Update role
-    await supabase.from('profiles').update({ role: 'CORE_HEAD', status: 'active' }).eq('id', user.id);
+    const { error } = await supabase.from('profiles').update({
+      committee_id: committeeId,
+      is_head: true,
+      role: 'CORE_HEAD',
+      status: 'active'
+    }).eq('email', cleanEmail);
+    if (error) throw error;
   } else {
     const db = getLocalDb();
     const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
     if (!user) throw new Error('User not found. Head must register first.');
-
+    user.committeeId = committeeId;
+    user.isHead = true;
     user.role = 'CORE_HEAD';
     user.status = 'active';
-
-    db.committeeAssignments = db.committeeAssignments.filter(a => a.userId !== user.id);
-    db.committeeAssignments.push({
-      id: `ca-${Date.now()}`,
-      userId: user.id,
-      committeeId,
-      assignedAt: new Date().toISOString()
-    });
     saveLocalDb(db);
   }
 }
 
-export async function dbRemoveCoreAssignment(id: string): Promise<void> {
+export async function dbRemoveCoreAssignment(userId: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    // Get assignment first to find user
-    const { data: assign } = await supabase.from('committee_assignments').select('user_id').eq('id', id).maybeSingle();
-    if (assign) {
-      await supabase.from('committee_assignments').delete().eq('id', id);
-      // Revert user role if no other assignments remain
-      const { data: other } = await supabase.from('committee_assignments').select('id').eq('user_id', assign.user_id);
-      if (!other || other.length === 0) {
-        await supabase.from('profiles').update({ role: 'USER' }).eq('id', assign.user_id);
-      }
-    }
+    const { error } = await supabase.from('profiles').update({
+      committee_id: null,
+      is_head: false,
+      role: 'USER'
+    }).eq('id', userId);
+    if (error) throw error;
   } else {
     const db = getLocalDb();
-    const assign = db.committeeAssignments.find(a => a.id === id);
-    if (assign) {
-      db.committeeAssignments = db.committeeAssignments.filter(a => a.id !== id);
-      const hasOther = db.committeeAssignments.some(a => a.userId === assign.userId);
-      if (!hasOther) {
-        const u = db.users.find(usr => usr.id === assign.userId);
-        if (u && u.role === 'CORE_HEAD') u.role = 'USER';
-      }
+    const user = db.users.find(u => u.id === userId);
+    if (user) {
+      user.committeeId = undefined;
+      user.isHead = false;
+      user.role = 'USER';
       saveLocalDb(db);
     }
   }
@@ -784,58 +766,40 @@ export async function dbRemoveCoreAssignment(id: string): Promise<void> {
 export async function dbAssignVerticalHead(email: string, verticalId: string): Promise<void> {
   const cleanEmail = email.toLowerCase().trim();
   if (isSupabaseConfigured() && supabase) {
-    const { data: user, error: uErr } = await supabase.from('profiles').select('id').eq('email', cleanEmail).maybeSingle();
-    if (uErr) throw uErr;
-    if (!user) throw new Error('User not found. Head must register first.');
-
-    await supabase.from('vertical_assignments').delete().eq('user_id', user.id);
-
-    const { error: insErr } = await supabase.from('vertical_assignments').insert({
-      user_id: user.id,
-      vertical_id: verticalId
-    });
-    if (insErr) throw insErr;
-
-    await supabase.from('profiles').update({ role: 'VERTICAL_HEAD', status: 'active' }).eq('id', user.id);
+    const { error } = await supabase.from('profiles').update({
+      vertical_id: verticalId,
+      is_head: true,
+      role: 'VERTICAL_HEAD',
+      status: 'active'
+    }).eq('email', cleanEmail);
+    if (error) throw error;
   } else {
     const db = getLocalDb();
     const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
     if (!user) throw new Error('User not found. Head must register first.');
-
+    user.verticalId = verticalId;
+    user.isHead = true;
     user.role = 'VERTICAL_HEAD';
     user.status = 'active';
-
-    db.verticalAssignments = db.verticalAssignments.filter(a => a.userId !== user.id);
-    db.verticalAssignments.push({
-      id: `va-${Date.now()}`,
-      userId: user.id,
-      verticalId,
-      assignedAt: new Date().toISOString()
-    });
     saveLocalDb(db);
   }
 }
 
-export async function dbRemoveVerticalAssignment(id: string): Promise<void> {
+export async function dbRemoveVerticalAssignment(userId: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { data: assign } = await supabase.from('vertical_assignments').select('user_id').eq('id', id).maybeSingle();
-    if (assign) {
-      await supabase.from('vertical_assignments').delete().eq('id', id);
-      const { data: other } = await supabase.from('vertical_assignments').select('id').eq('user_id', assign.user_id);
-      if (!other || other.length === 0) {
-        await supabase.from('profiles').update({ role: 'USER' }).eq('id', assign.user_id);
-      }
-    }
+    const { error } = await supabase.from('profiles').update({
+      vertical_id: null,
+      is_head: false,
+      role: 'USER'
+    }).eq('id', userId);
+    if (error) throw error;
   } else {
     const db = getLocalDb();
-    const assign = db.verticalAssignments.find(a => a.id === id);
-    if (assign) {
-      db.verticalAssignments = db.verticalAssignments.filter(a => a.id !== id);
-      const hasOther = db.verticalAssignments.some(a => a.userId === assign.userId);
-      if (!hasOther) {
-        const u = db.users.find(usr => usr.id === assign.userId);
-        if (u && u.role === 'VERTICAL_HEAD') u.role = 'USER';
-      }
+    const user = db.users.find(u => u.id === userId);
+    if (user) {
+      user.verticalId = undefined;
+      user.isHead = false;
+      user.role = 'USER';
       saveLocalDb(db);
     }
   }
@@ -984,7 +948,7 @@ export async function dbDeleteAnnouncement(id: string): Promise<void> {
 // --- COMMITTEE TASKS ---
 export async function dbGetCommitteeTasks(committeeId: string): Promise<CommitteeTask[]> {
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('committee_tasks').select('*').eq('committee_id', committeeId);
+    const { data, error } = await supabase.from('tasks').select('*').eq('committee_id', committeeId).eq('task_type', 'committee');
     if (error) throw error;
     return (data || []).map((t: any) => ({
       id: t.id,
@@ -993,34 +957,37 @@ export async function dbGetCommitteeTasks(committeeId: string): Promise<Committe
       description: t.description,
       status: t.status,
       assignedTo: t.assigned_to,
-      dueDate: t.due_date
+      dueDate: t.due_date,
+      taskType: t.task_type
     }));
   } else {
-    return getLocalDb().committeeTasks.filter(t => t.committeeId === committeeId);
+    return getLocalDb().tasks.filter(t => t.committeeId === committeeId && t.taskType === 'committee');
   }
 }
 
 export async function dbAddCommitteeTask(committeeId: string, data: any): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('committee_tasks').insert({
+    const { error } = await supabase.from('tasks').insert({
       committee_id: committeeId,
       title: data.title,
       description: data.description,
       status: data.status || 'pending',
       assigned_to: data.assignedTo,
-      due_date: data.dueDate || null
+      due_date: data.dueDate || null,
+      task_type: 'committee'
     });
     if (error) throw error;
   } else {
     const db = getLocalDb();
-    db.committeeTasks.push({
+    db.tasks.push({
       id: `ct-${Date.now()}`,
       committeeId,
       title: data.title,
       description: data.description,
       status: data.status || 'pending',
       assignedTo: data.assignedTo,
-      dueDate: data.dueDate
+      dueDate: data.dueDate,
+      taskType: 'committee'
     });
     saveLocalDb(db);
   }
@@ -1035,13 +1002,13 @@ export async function dbUpdateCommitteeTask(id: string, data: any): Promise<void
     if (data.assignedTo !== undefined) mapped.assigned_to = data.assignedTo;
     if (data.dueDate !== undefined) mapped.due_date = data.dueDate || null;
 
-    const { error } = await supabase.from('committee_tasks').update(mapped).eq('id', id);
+    const { error } = await supabase.from('tasks').update(mapped).eq('id', id);
     if (error) throw error;
   } else {
     const db = getLocalDb();
-    const idx = db.committeeTasks.findIndex(t => t.id === id);
+    const idx = db.tasks.findIndex(t => t.id === id);
     if (idx !== -1) {
-      db.committeeTasks[idx] = { ...db.committeeTasks[idx], ...data };
+      db.tasks[idx] = { ...db.tasks[idx], ...data };
       saveLocalDb(db);
     }
   }
@@ -1049,11 +1016,11 @@ export async function dbUpdateCommitteeTask(id: string, data: any): Promise<void
 
 export async function dbDeleteCommitteeTask(id: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('committee_tasks').delete().eq('id', id);
+    const { error } = await supabase.from('tasks').delete().eq('id', id);
     if (error) throw error;
   } else {
     const db = getLocalDb();
-    db.committeeTasks = db.committeeTasks.filter(t => t.id !== id);
+    db.tasks = db.tasks.filter(t => t.id !== id);
     saveLocalDb(db);
   }
 }
@@ -1061,7 +1028,7 @@ export async function dbDeleteCommitteeTask(id: string): Promise<void> {
 // --- COMMITTEE RESOURCES ---
 export async function dbGetCommitteeResources(committeeId: string): Promise<CommitteeResource[]> {
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('committee_resources').select('*').eq('committee_id', committeeId);
+    const { data, error } = await supabase.from('resources').select('*').eq('committee_id', committeeId);
     if (error) throw error;
     return (data || []).map((r: any) => ({
       id: r.id,
@@ -1072,13 +1039,13 @@ export async function dbGetCommitteeResources(committeeId: string): Promise<Comm
       type: r.type
     }));
   } else {
-    return getLocalDb().committeeResources.filter(r => r.committeeId === committeeId);
+    return getLocalDb().resources.filter(r => r.committeeId === committeeId);
   }
 }
 
 export async function dbAddCommitteeResource(committeeId: string, data: any): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('committee_resources').insert({
+    const { error } = await supabase.from('resources').insert({
       committee_id: committeeId,
       title: data.title,
       description: data.description,
@@ -1088,7 +1055,7 @@ export async function dbAddCommitteeResource(committeeId: string, data: any): Pr
     if (error) throw error;
   } else {
     const db = getLocalDb();
-    db.committeeResources.push({
+    db.resources.push({
       id: `cr-${Date.now()}`,
       committeeId,
       title: data.title,
@@ -1102,11 +1069,11 @@ export async function dbAddCommitteeResource(committeeId: string, data: any): Pr
 
 export async function dbDeleteCommitteeResource(id: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('committee_resources').delete().eq('id', id);
+    const { error } = await supabase.from('resources').delete().eq('id', id);
     if (error) throw error;
   } else {
     const db = getLocalDb();
-    db.committeeResources = db.committeeResources.filter(r => r.id !== id);
+    db.resources = db.resources.filter(r => r.id !== id);
     saveLocalDb(db);
   }
 }
@@ -1114,7 +1081,7 @@ export async function dbDeleteCommitteeResource(id: string): Promise<void> {
 // --- VERTICAL PROJECTS ---
 export async function dbGetVerticalProjects(verticalId: string): Promise<VerticalProject[]> {
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('vertical_projects').select('*').eq('vertical_id', verticalId);
+    const { data, error } = await supabase.from('tasks').select('*').eq('vertical_id', verticalId).eq('task_type', 'project');
     if (error) throw error;
     return (data || []).map((p: any) => ({
       id: p.id,
@@ -1122,32 +1089,35 @@ export async function dbGetVerticalProjects(verticalId: string): Promise<Vertica
       title: p.title,
       description: p.description,
       status: p.status,
-      url: p.url
+      url: p.url,
+      taskType: p.task_type
     }));
   } else {
-    return getLocalDb().verticalProjects.filter(p => p.verticalId === verticalId);
+    return getLocalDb().tasks.filter(p => p.verticalId === verticalId && p.taskType === 'project');
   }
 }
 
 export async function dbAddVerticalProject(verticalId: string, data: any): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('vertical_projects').insert({
+    const { error } = await supabase.from('tasks').insert({
       vertical_id: verticalId,
       title: data.title,
       description: data.description,
       status: data.status || 'planning',
-      url: data.url
+      url: data.url,
+      task_type: 'project'
     });
     if (error) throw error;
   } else {
     const db = getLocalDb();
-    db.verticalProjects.push({
+    db.tasks.push({
       id: `vp-${Date.now()}`,
       verticalId,
       title: data.title,
       description: data.description,
       status: data.status || 'planning',
-      url: data.url
+      url: data.url,
+      taskType: 'project'
     });
     saveLocalDb(db);
   }
@@ -1161,13 +1131,13 @@ export async function dbUpdateVerticalProject(id: string, data: any): Promise<vo
     if (data.status !== undefined) mapped.status = data.status;
     if (data.url !== undefined) mapped.url = data.url;
 
-    const { error } = await supabase.from('vertical_projects').update(mapped).eq('id', id);
+    const { error } = await supabase.from('tasks').update(mapped).eq('id', id);
     if (error) throw error;
   } else {
     const db = getLocalDb();
-    const idx = db.verticalProjects.findIndex(p => p.id === id);
+    const idx = db.tasks.findIndex(p => p.id === id);
     if (idx !== -1) {
-      db.verticalProjects[idx] = { ...db.verticalProjects[idx], ...data };
+      db.tasks[idx] = { ...db.tasks[idx], ...data };
       saveLocalDb(db);
     }
   }
@@ -1175,11 +1145,11 @@ export async function dbUpdateVerticalProject(id: string, data: any): Promise<vo
 
 export async function dbDeleteVerticalProject(id: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('vertical_projects').delete().eq('id', id);
+    const { error } = await supabase.from('tasks').delete().eq('id', id);
     if (error) throw error;
   } else {
     const db = getLocalDb();
-    db.verticalProjects = db.verticalProjects.filter(p => p.id !== id);
+    db.tasks = db.tasks.filter(p => p.id !== id);
     saveLocalDb(db);
   }
 }
@@ -1187,7 +1157,7 @@ export async function dbDeleteVerticalProject(id: string): Promise<void> {
 // --- VERTICAL RESOURCES ---
 export async function dbGetVerticalResources(verticalId: string): Promise<VerticalResource[]> {
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('vertical_resources').select('*').eq('vertical_id', verticalId);
+    const { data, error } = await supabase.from('resources').select('*').eq('vertical_id', verticalId);
     if (error) throw error;
     return (data || []).map((r: any) => ({
       id: r.id,
@@ -1198,13 +1168,13 @@ export async function dbGetVerticalResources(verticalId: string): Promise<Vertic
       type: r.type
     }));
   } else {
-    return getLocalDb().verticalResources.filter(r => r.verticalId === verticalId);
+    return getLocalDb().resources.filter(r => r.verticalId === verticalId);
   }
 }
 
 export async function dbAddVerticalResource(verticalId: string, data: any): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('vertical_resources').insert({
+    const { error } = await supabase.from('resources').insert({
       vertical_id: verticalId,
       title: data.title,
       description: data.description,
@@ -1214,7 +1184,7 @@ export async function dbAddVerticalResource(verticalId: string, data: any): Prom
     if (error) throw error;
   } else {
     const db = getLocalDb();
-    db.verticalResources.push({
+    db.resources.push({
       id: `vr-${Date.now()}`,
       verticalId,
       title: data.title,
@@ -1228,11 +1198,11 @@ export async function dbAddVerticalResource(verticalId: string, data: any): Prom
 
 export async function dbDeleteVerticalResource(id: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('vertical_resources').delete().eq('id', id);
+    const { error } = await supabase.from('resources').delete().eq('id', id);
     if (error) throw error;
   } else {
     const db = getLocalDb();
-    db.verticalResources = db.verticalResources.filter(r => r.id !== id);
+    db.resources = db.resources.filter(r => r.id !== id);
     saveLocalDb(db);
   }
 }

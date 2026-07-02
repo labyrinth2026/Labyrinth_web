@@ -12,7 +12,8 @@ export const fetchFromSheet = async <T>(action: string, payload: any = {}): Prom
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ action, payload })
+      body: JSON.stringify({ action, payload }),
+      cache: 'no-store'
     });
     
     const result: ApiResponse<T> = await response.json();

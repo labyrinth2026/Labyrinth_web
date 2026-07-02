@@ -97,7 +97,7 @@ export default function RoleManager() {
         email: newUserEmail,
         role: newUserRole,
         committeeId: newUserRole === 'CORE_HEAD' ? newUserCommittee : undefined,
-        verticalId: newUserRole === 'VERTICAL_HEAD' ? newUserVertical : undefined
+        verticalId: ['VERTICAL_HEAD', 'SUB_HEAD'].includes(newUserRole) ? newUserVertical : undefined
       });
       setNewUserName('');
       setNewUserEmail('');
@@ -143,7 +143,7 @@ export default function RoleManager() {
         name: editingUserName,
         role: editingUserRole,
         committeeId: editingUserRole === 'CORE_HEAD' ? editingUserCommittee : undefined,
-        verticalId: editingUserRole === 'VERTICAL_HEAD' ? editingUserVertical : undefined
+        verticalId: ['VERTICAL_HEAD', 'SUB_HEAD'].includes(editingUserRole) ? editingUserVertical : undefined
       });
       setShowEditModal(false);
       loadAllData();
@@ -609,6 +609,7 @@ export default function RoleManager() {
                     <option value="USER">Standard Club Member</option>
                     <option value="CORE_HEAD">Core Committee Head</option>
                     <option value="VERTICAL_HEAD">Vertical Head</option>
+                    <option value="SUB_HEAD">Vertical Sub-Head</option>
                     <option value="ASSOCIATE">Faculty Associate</option>
                     <option value="COORDINATOR">Faculty Coordinator</option>
                   </select>
@@ -625,7 +626,7 @@ export default function RoleManager() {
                   </div>
                 )}
 
-                {newUserRole === 'VERTICAL_HEAD' && (
+                {['VERTICAL_HEAD', 'SUB_HEAD'].includes(newUserRole) && (
                   <div>
                     <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain *</label>
                     <select value={newUserVertical} onChange={e => setNewUserVertical(e.target.value)} className={inputClass}>
@@ -671,6 +672,7 @@ export default function RoleManager() {
                     <option value="USER">Standard Club Member</option>
                     <option value="CORE_HEAD">Core Committee Head</option>
                     <option value="VERTICAL_HEAD">Vertical Head</option>
+                    <option value="SUB_HEAD">Vertical Sub-Head</option>
                     <option value="ASSOCIATE">Faculty Associate</option>
                     <option value="COORDINATOR">Faculty Coordinator</option>
                   </select>
@@ -687,7 +689,7 @@ export default function RoleManager() {
                   </div>
                 )}
 
-                {editingUserRole === 'VERTICAL_HEAD' && (
+                {['VERTICAL_HEAD', 'SUB_HEAD'].includes(editingUserRole) && (
                   <div>
                     <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain *</label>
                     <select value={editingUserVertical} onChange={e => setEditingUserVertical(e.target.value)} className={inputClass}>

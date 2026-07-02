@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
 import { verifyJWT } from '@/utils/jwt';
 import {
   dbGetEvents, dbAddEvent, dbUpdateEvent, dbDeleteEvent,
@@ -47,6 +48,7 @@ export async function POST(req: NextRequest) {
       case 'getTeam': {
         const roles = await dbGetRoles();
         const assignments = await dbGetAssignments();
+        const verticals = await dbGetVerticals();
 
         const facultyCoordinators = roles.filter(u => ['HOD', 'COORDINATOR', 'ASSOCIATE'].includes(u.role)).map(u => ({
           id: u.id, name: u.name, role: u.role === 'HOD' ? 'Head of Department' : u.role === 'COORDINATOR' ? 'Faculty Coordinator' : 'Faculty Associate',
@@ -65,6 +67,17 @@ export async function POST(req: NextRequest) {
           id: v.userId, name: v.userName, role: `${v.verticalName} Head`, email: v.userEmail
         }));
 
+        const subHeads = roles.filter(u => u.role === 'SUB_HEAD').map(u => {
+          const v = verticals.find(ver => ver.id === u.verticalId);
+          return {
+            id: u.id,
+            name: u.name,
+            role: 'Sub-Head',
+            email: u.email,
+            vertical: v?.name || 'Unknown'
+          };
+        });
+
         return NextResponse.json({
           success: true,
           data: {
@@ -72,7 +85,7 @@ export async function POST(req: NextRequest) {
             mentors,
             coreCommittee,
             verticalHeads,
-            subHeads: []
+            subHeads
           }
         });
       }

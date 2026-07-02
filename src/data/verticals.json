@@ -1,6 +1,6 @@
 [
   {
-    "id": "v1",
+    "id": "ab000000-0000-0000-0000-000000000000",
     "name": "AI Creator's Lab",
     "description": "Where creativity meets intelligence! From building smart chatbots to designing websites, posters, and storytelling tools, this lab is your space to experiment with the magic of generative AI.",
     "category": "tech",
@@ -8,7 +8,7 @@
     "color": "#3b82f6"
   },
   {
-    "id": "v2",
+    "id": "ab000000-0000-0000-0000-000000000002",
     "name": "GameNova",
     "description": "For those who live to play and dream to create! GameNova is all about building games, hosting e-sports tournaments, and turning gaming passion into real experiences.",
     "category": "tech",
@@ -16,7 +16,7 @@
     "color": "#ef4444"
   },
   {
-    "id": "v3",
+    "id": "ab000000-0000-0000-0000-000000000003",
     "name": "CodeCraft",
     "description": "Think. Code. Conquer. CODECRAFT is the arena for competitive programming, hackathons, and problem-solving challenges that sharpen your coding skills.",
     "category": "tech",
@@ -24,7 +24,7 @@
     "color": "#10b981"
   },
   {
-    "id": "v4",
+    "id": "ab000000-0000-0000-0000-000000000004",
     "name": "CipherGuard",
     "description": "Step into the digital battlefield! CIPHERGUARD trains you in ethical hacking, system security, and CTFs to defend and outsmart cyber threats.",
     "category": "tech",
@@ -32,7 +32,7 @@
     "color": "#f59e0b"
   },
   {
-    "id": "v5",
+    "id": "ab000000-0000-0000-0000-000000000005",
     "name": "BitOps",
     "description": "From terminals to cloud, BITOPS is where code comes alive. Explore Linux, scripting, deployment tools, and CI/CD—taking projects from local to live.",
     "category": "tech",
@@ -40,7 +40,7 @@
     "color": "#8b5cf6"
   },
   {
-    "id": "v6",
+    "id": "ab000000-0000-0000-0000-000000000006",
     "name": "FieldOps",
     "description": "The energy hub of Labyrinth! FIELDOPS organizes matches, leads teams, and represents the department in sports, building team spirit both on and off the ground.",
     "category": "non-tech",
@@ -48,7 +48,7 @@
     "color": "#06b6d4"
   },
   {
-    "id": "v7",
+    "id": "ab000000-0000-0000-0000-000000000007",
     "name": "CrossCode",
     "description": "Breaking barriers between branches! CROSSCODE helps non-CS students dive into tech through events, mentorship, and collaborations—because innovation has no boundaries.",
     "category": "non-tech",
@@ -56,7 +56,7 @@
     "color": "#ec4899"
   },
   {
-    "id": "v8",
+    "id": "ab000000-0000-0000-0000-000000000008",
     "name": "The RoundTable",
     "description": "Speak smart, think sharp! THE ROUNDTABLE is for debates, discussions, and idea battles where logic, voice, and confidence take center stage.",
     "category": "non-tech",
@@ -64,7 +64,7 @@
     "color": "#f97316"
   },
   {
-    "id": "v9",
+    "id": "ab000000-0000-0000-0000-000000000009",
     "name": "The Aesthetic Lab",
     "description": "The vibe-makers of Labyrinth! From media, design, and content to event branding and coordination, this vertical ensures creativity powers every move.",
     "category": "non-tech",
@@ -72,7 +72,7 @@
     "color": "#a855f7"
   },
   {
-    "id": "v10",
+    "id": "ab000000-0000-0000-0000-000000000010",
     "name": "Startovate",
     "description": "Dream. Build. Lead. STARTOVATE inspires startup culture, innovation talks, and trend-spotting sessions—where business ideas meet tech minds.",
     "category": "non-tech",

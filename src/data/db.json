@@ -4,61 +4,382 @@
       "id": "u-hod",
       "email": "hod@labyrinth.club",
       "name": "Dr. Suresh Kumar",
-      "passwordHash": "$2b$10$i521Q/lohOBMVBWTB9gdH.Tw.JcED3GG8piqf3vMe9oBftGD.j/wm",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
       "role": "HOD",
       "status": "active",
       "firstLogin": false,
-      "createdAt": "2026-07-02T03:02:04.706Z"
+      "isHead": false,
+      "createdAt": "2026-07-02T05:05:49.964Z"
     },
     {
       "id": "u-coord",
       "email": "coordinator@labyrinth.club",
       "name": "Prof. Anjali Menon",
-      "passwordHash": "$2b$10$i521Q/lohOBMVBWTB9gdH.Tw.JcED3GG8piqf3vMe9oBftGD.j/wm",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
       "role": "COORDINATOR",
       "status": "active",
       "firstLogin": false,
-      "createdAt": "2026-07-02T03:02:04.706Z"
+      "isHead": false,
+      "createdAt": "2026-07-02T05:05:49.964Z"
     },
     {
       "id": "u-assoc",
       "email": "associate@labyrinth.club",
       "name": "Dr. Rajesh Rajan",
-      "passwordHash": "$2b$10$i521Q/lohOBMVBWTB9gdH.Tw.JcED3GG8piqf3vMe9oBftGD.j/wm",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
       "role": "ASSOCIATE",
       "status": "active",
       "firstLogin": false,
-      "createdAt": "2026-07-02T03:02:04.706Z"
+      "isHead": false,
+      "createdAt": "2026-07-02T05:05:49.964Z"
     },
     {
       "id": "u-core-head",
       "email": "core@labyrinth.club",
       "name": "Core Member One",
-      "passwordHash": "$2b$10$i521Q/lohOBMVBWTB9gdH.Tw.JcED3GG8piqf3vMe9oBftGD.j/wm",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
       "role": "CORE_HEAD",
       "status": "active",
       "firstLogin": false,
-      "createdAt": "2026-07-02T03:02:04.706Z"
+      "committeeId": "cc-pub",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
     },
     {
-      "id": "u-vert-head1",
-      "email": "rishi@cs.christuniversity.in",
-      "name": "Rishi Raj",
-      "passwordHash": "$2b$10$i521Q/lohOBMVBWTB9gdH.Tw.JcED3GG8piqf3vMe9oBftGD.j/wm",
+      "id": "u-vh1",
+      "email": "rishi.raj@mca.christuniversity.in",
+      "name": "Rishi Raj (1 MCA B)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
       "role": "VERTICAL_HEAD",
       "status": "active",
       "firstLogin": false,
-      "createdAt": "2026-07-02T03:02:04.706Z"
+      "verticalId": "ab000000-0000-0000-0000-000000000000",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
     },
     {
-      "id": "u-vert-head2",
-      "email": "krupa@cs.christuniversity.in",
-      "name": "Krupa",
-      "passwordHash": "$2b$10$i521Q/lohOBMVBWTB9gdH.Tw.JcED3GG8piqf3vMe9oBftGD.j/wm",
+      "id": "u-vh2",
+      "email": "krupa.m@bsccsh.christuniversity.in",
+      "name": "Krupa (3 BSc CS)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
       "role": "VERTICAL_HEAD",
       "status": "active",
       "firstLogin": false,
-      "createdAt": "2026-07-02T03:02:04.706Z"
+      "verticalId": "ab000000-0000-0000-0000-000000000000",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-sh1",
+      "email": "kapil.maheshwari@bcah.christuniversity.in",
+      "name": "Kapil Maheswari (5 BCA A)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "SUB_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000000",
+      "isHead": false,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh3",
+      "email": "ruchak.khatri@bcah.christuniversity.in",
+      "name": "Ruchak Khatri (5BCA A)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000002",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh4",
+      "email": "joel.benedict@bcah.christuniversity.in",
+      "name": "Joel Benedict (5BCA B)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000002",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-sh2",
+      "email": "rahul.t@bsccsh.christuniversity.in",
+      "name": "Rahul T (5 BSc CS)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "SUB_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000002",
+      "isHead": false,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh5",
+      "email": "kanika.jain@mca.christuniversity.in",
+      "name": "Kanika Jain (1 MCA)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000003",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh6",
+      "email": "vvedika.m@bsccmh.christuniversity.in",
+      "name": "Vvedika (5 BSc CM)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000003",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-sh3",
+      "email": "himanshi.kansal@bcah.christuniversity.in",
+      "name": "Himanshi Kansal (3 BCA B)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "SUB_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000003",
+      "isHead": false,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh7",
+      "email": "daksh.chandiramani@bcah.christuniversity.in",
+      "name": "Daksh Sunil (5BCA B)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000004",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-sh4",
+      "email": "meet.garg@bcah.christuniversity.in",
+      "name": "Meet Garg (3BCA B)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "SUB_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000004",
+      "isHead": false,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh8",
+      "email": "rida.zafar@bsccsh.christuniversity.in",
+      "name": "Rida Zafar (5 BSc CS)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000005",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh9",
+      "email": "gautham.s@bsccsh.christuniversity.in",
+      "name": "Gautham S (3BSc CS)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000006",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh10",
+      "email": "supal.porwal@bcah.christuniversity.in",
+      "name": "Supal Porwal (5BCA B)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000006",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-sh5",
+      "email": "shreyas.v@bsccsh.christuniversity.in",
+      "name": "Shreyas V (3 BSc CS)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "SUB_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000006",
+      "isHead": false,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh11",
+      "email": "sandhya.m@christuniversity.in",
+      "name": "Sandhya M (5BCA A)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000007",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh12",
+      "email": "sreeshma.yetukuri@bcah.christuniversity.in",
+      "name": "Sreeshma Chowdary Yetukuri (3BCA A)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000007",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-sh6",
+      "email": "u.prathikshakini@bcah.christuniversity.in",
+      "name": "U Prathiksha Kini (3BCA A)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "SUB_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000007",
+      "isHead": false,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh13",
+      "email": "arush.chandra@bcah.christuniversity.in",
+      "name": "Arush (3BCA B)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000008",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh14",
+      "email": "purvi.chakarvarti@bcah.christuniversity.in",
+      "name": "Purvi (3BCA B)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000008",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-sh7",
+      "email": "maanya.singh@bsccmh.christuniversity.in",
+      "name": "Maanya (5 BSc CM)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "SUB_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000008",
+      "isHead": false,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh15",
+      "email": "nidhi.anil@bsccsh.christuniversity.in",
+      "name": "Nidhi Anil (3 BSc CS)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000009",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh16",
+      "email": "alisha.sajeev@bcah.christuniversity.in",
+      "name": "Alisha Sajeev (5BCA B)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000009",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-sh8",
+      "email": "tejas.sujith@bcah.christuniversity.in",
+      "name": "Tejas Sujith (3BCA B)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "SUB_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000009",
+      "isHead": false,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh17",
+      "email": "ceyanne.dsouza@bcah.christuniversity.in",
+      "name": "Ceyanne Dsouza (5BCA B)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000010",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-vh18",
+      "email": "s.khushal@bcah.christuniversity.in",
+      "name": "Khushal S (3BCA)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "VERTICAL_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000010",
+      "isHead": true,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-sh9",
+      "email": "prasanth.k@bcah.christuniversity.in",
+      "name": "Prashanth (3BCA)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "SUB_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000010",
+      "isHead": false,
+      "createdAt": "2026-07-02T05:05:49.964Z"
+    },
+    {
+      "id": "u-sh10",
+      "email": "adit.madan@bsccsh.christuniversity.in",
+      "name": "Adit (5 BSc CS)",
+      "passwordHash": "$2b$10$Ny16RmlPjQS38/AUpEMEjOln/jjIJ4KSM.h87qCjujFPuS7LdXdMm",
+      "role": "SUB_HEAD",
+      "status": "active",
+      "firstLogin": false,
+      "verticalId": "ab000000-0000-0000-0000-000000000010",
+      "isHead": false,
+      "createdAt": "2026-07-02T05:05:49.964Z"
     }
   ],
   "coreCommittees": [
@@ -85,7 +406,7 @@
   ],
   "verticals": [
     {
-      "id": "v1",
+      "id": "ab000000-0000-0000-0000-000000000000",
       "name": "AI Creator's Lab",
       "description": "Where creativity meets intelligence! From building smart chatbots to designing websites, posters, and storytelling tools, this lab is your space to experiment with the magic of generative AI.",
       "category": "tech",
@@ -93,7 +414,7 @@
       "color": "#3b82f6"
     },
     {
-      "id": "v2",
+      "id": "ab000000-0000-0000-0000-000000000002",
       "name": "GameNova",
       "description": "For those who live to play and dream to create! GameNova is all about building games, hosting e-sports tournaments, and turning gaming passion into real experiences.",
       "category": "tech",
@@ -101,7 +422,7 @@
       "color": "#ef4444"
     },
     {
-      "id": "v3",
+      "id": "ab000000-0000-0000-0000-000000000003",
       "name": "CodeCraft",
       "description": "Think. Code. Conquer. CODECRAFT is the arena for competitive programming, hackathons, and problem-solving challenges that sharpen your coding skills.",
       "category": "tech",
@@ -109,7 +430,7 @@
       "color": "#10b981"
     },
     {
-      "id": "v4",
+      "id": "ab000000-0000-0000-0000-000000000004",
       "name": "CipherGuard",
       "description": "Step into the digital battlefield! CIPHERGUARD trains you in ethical hacking, system security, and CTFs to defend and outsmart cyber threats.",
       "category": "tech",
@@ -117,7 +438,7 @@
       "color": "#f59e0b"
     },
     {
-      "id": "v5",
+      "id": "ab000000-0000-0000-0000-000000000005",
       "name": "BitOps",
       "description": "From terminals to cloud, BITOPS is where code comes alive. Explore Linux, scripting, deployment tools, and CI/CD—taking projects from local to live.",
       "category": "tech",
@@ -125,7 +446,7 @@
       "color": "#8b5cf6"
     },
     {
-      "id": "v6",
+      "id": "ab000000-0000-0000-0000-000000000006",
       "name": "FieldOps",
       "description": "The energy hub of Labyrinth! FIELDOPS organizes matches, leads teams, and represents the department in sports, building team spirit both on and off the ground.",
       "category": "non-tech",
@@ -133,7 +454,7 @@
       "color": "#06b6d4"
     },
     {
-      "id": "v7",
+      "id": "ab000000-0000-0000-0000-000000000007",
       "name": "CrossCode",
       "description": "Breaking barriers between branches! CROSSCODE helps non-CS students dive into tech through events, mentorship, and collaborations—because innovation has no boundaries.",
       "category": "non-tech",
@@ -141,7 +462,7 @@
       "color": "#ec4899"
     },
     {
-      "id": "v8",
+      "id": "ab000000-0000-0000-0000-000000000008",
       "name": "The RoundTable",
       "description": "Speak smart, think sharp! THE ROUNDTABLE is for debates, discussions, and idea battles where logic, voice, and confidence take center stage.",
       "category": "non-tech",
@@ -149,7 +470,7 @@
       "color": "#f97316"
     },
     {
-      "id": "v9",
+      "id": "ab000000-0000-0000-0000-000000000009",
       "name": "The Aesthetic Lab",
       "description": "The vibe-makers of Labyrinth! From media, design, and content to event branding and coordination, this vertical ensures creativity powers every move.",
       "category": "non-tech",
@@ -157,34 +478,12 @@
       "color": "#a855f7"
     },
     {
-      "id": "v10",
+      "id": "ab000000-0000-0000-0000-000000000010",
       "name": "Startovate",
       "description": "Dream. Build. Lead. STARTOVATE inspires startup culture, innovation talks, and trend-spotting sessions—where business ideas meet tech minds.",
       "category": "non-tech",
       "icon": "Rocket",
       "color": "#14b8a6"
-    }
-  ],
-  "committeeAssignments": [
-    {
-      "id": "ca1",
-      "userId": "u-core-head",
-      "committeeId": "cc-pub",
-      "assignedAt": "2026-07-02T03:02:04.706Z"
-    }
-  ],
-  "verticalAssignments": [
-    {
-      "id": "va1",
-      "userId": "u-vert-head1",
-      "verticalId": "v1",
-      "assignedAt": "2026-07-02T03:02:04.706Z"
-    },
-    {
-      "id": "va2",
-      "userId": "u-vert-head2",
-      "verticalId": "v1",
-      "assignedAt": "2026-07-02T03:02:04.706Z"
     }
   ],
   "activityLogs": [],
@@ -332,10 +631,202 @@
       "image": null,
       "vertical": "FieldOps",
       "featured": false
+    },
+    {
+      "id": "e13",
+      "title": "THWS- Labyrinth Media Team Colab",
+      "description": "Resource Person Details / Collaboration: Dr Pronab Mohanti, IPS, Dr Manoj Kashyap (Chief Guests)",
+      "date": "2025-07-28",
+      "category": "social",
+      "status": "past",
+      "location": "Christ University Campus",
+      "image": null,
+      "vertical": "The Aesthetic Lab",
+      "featured": false
+    },
+    {
+      "id": "e14",
+      "title": "Peer Session Series-1",
+      "description": "Resource Person Details / Collaboration: Ruchak Khatri, 5BCA A",
+      "date": "2025-09-10",
+      "category": "talk",
+      "status": "past",
+      "location": "Christ University Campus",
+      "image": null,
+      "vertical": "GameNova",
+      "featured": false
+    },
+    {
+      "id": "e15",
+      "title": "InnoPitch",
+      "description": "Resource Person Details / Collaboration: CHRIST incubation Centre and Labyrinth",
+      "date": "2025-11-11",
+      "category": "competition",
+      "status": "past",
+      "location": "CHRIST Incubation Centre",
+      "image": null,
+      "vertical": "Startovate",
+      "featured": false
+    },
+    {
+      "id": "e16",
+      "title": "Peer Session Series-2",
+      "description": "Resource Person Details / Collaboration:\n- Chandresh Bishit, 4BScCM\n- Krupa M, 4BScCM",
+      "date": "2025-11-19",
+      "category": "talk",
+      "status": "past",
+      "location": "Christ University Campus",
+      "image": null,
+      "vertical": "AI Creator's Lab",
+      "featured": false
+    },
+    {
+      "id": "e17",
+      "title": "Peer Session Series-3",
+      "description": "Resource Person Details / Collaboration: - Nejiya K S, 2MSc AIML",
+      "date": "2025-11-22",
+      "category": "talk",
+      "status": "past",
+      "location": "Christ University Campus",
+      "image": null,
+      "vertical": "AI Creator's Lab",
+      "featured": false
+    },
+    {
+      "id": "e18",
+      "title": "Outreach program",
+      "description": "Resource Person Details / Collaboration: Franciscan Institute High School Thavarakare",
+      "date": "2025-11-17",
+      "category": "social",
+      "status": "past",
+      "location": "Franciscan Institute High School",
+      "image": null,
+      "vertical": null,
+      "featured": false
+    },
+    {
+      "id": "e19",
+      "title": "THWS- Labyrinth Media Team Colab",
+      "description": "Resource Person Details / Collaboration: THWS media students and Labyrinth media team",
+      "date": "2025-11-25",
+      "category": "social",
+      "status": "past",
+      "location": "Christ University Campus",
+      "image": null,
+      "vertical": "The Aesthetic Lab",
+      "featured": false
+    },
+    {
+      "id": "e20",
+      "title": "Constitution day",
+      "description": "Resource Person Details / Collaboration:\n- Spoorthi Gowda 4BscCS\n- Balavalikar Shubha Shankar Sanidhya 4BScCM\n- Vidhi Shah 4 BscCM\n- Krupa M 4BScCS\n- S Keerthana 4BScCS",
+      "date": "2025-11-26",
+      "category": "social",
+      "status": "past",
+      "location": "Christ University Campus",
+      "image": null,
+      "vertical": null,
+      "featured": false
+    },
+    {
+      "id": "e21",
+      "title": "Resume Building- 1",
+      "description": "Resource Person Details / Collaboration:\n- Md Kamran S Rashisd, 6BScCS\n- Praygya Jain, 6BScCS\n- Utkarsh Thakur, 6BScCS",
+      "date": "2025-11-26",
+      "category": "workshop",
+      "status": "past",
+      "location": "Christ University Campus",
+      "image": null,
+      "vertical": null,
+      "featured": false
+    },
+    {
+      "id": "e22",
+      "title": "Resume Building- 2",
+      "description": "Resource Person Details / Collaboration:\n- KS Shreya, 6BScCM\n- Anoop Rajesh, 6BScCM",
+      "date": "2025-11-26",
+      "category": "workshop",
+      "status": "past",
+      "location": "Christ University Campus",
+      "image": null,
+      "vertical": null,
+      "featured": false
+    },
+    {
+      "id": "e23",
+      "title": "World Computer Literacy Day",
+      "description": "Resource Person Details / Collaboration:\n- Krupa M, 4BScCS\n- Spoorthi S Gowda, 4BScCS\n- Sreeshma Chowdary, 4BCA A\n- Praveena Vyas, 4BCA A\n- Balavalikar Shubha Shankar Sanidhya, 4BScCM\n- Vidhi Shah, 4BScCM",
+      "date": "2025-12-03",
+      "category": "social",
+      "status": "past",
+      "location": "Christ University Campus",
+      "image": null,
+      "vertical": null,
+      "featured": false
+    },
+    {
+      "id": "e24",
+      "title": "Peer Session series- 4",
+      "description": "Resource Person Details / Collaboration: Utkarsh Thakur, 6BScCS",
+      "date": "2026-01-25",
+      "category": "talk",
+      "status": "past",
+      "location": "Christ University Campus",
+      "image": null,
+      "vertical": "CodeCraft",
+      "featured": false
+    },
+    {
+      "id": "e25",
+      "title": "Peer Session series- 4",
+      "description": "Resource Person Details / Collaboration: Sherly Lance H, 4BScCM",
+      "date": "2026-01-28",
+      "category": "talk",
+      "status": "past",
+      "location": "Christ University Campus",
+      "image": null,
+      "vertical": "CrossCode",
+      "featured": false
+    },
+    {
+      "id": "e26",
+      "title": "Peer Session series- 5",
+      "description": "Resource Person Details / Collaboration: S Keerthana, 4BScCS",
+      "date": "2026-01-31",
+      "category": "talk",
+      "status": "past",
+      "location": "Christ University Campus",
+      "image": null,
+      "vertical": "CodeCraft",
+      "featured": false
+    },
+    {
+      "id": "e27",
+      "title": "Labyrinth - Fieldops(Sport tournament)",
+      "description": "Resource Person Details / Collaboration:\n- Shreyas S, 4 BScCS\n- Gautham, 4BScCS\nHeld from 08-02-2026 to 15-02-2026.",
+      "date": "2026-02-08",
+      "category": "social",
+      "status": "past",
+      "location": "University Grounds",
+      "image": null,
+      "vertical": "FieldOps",
+      "featured": false
+    },
+    {
+      "id": "e28",
+      "title": "Peer Session series- 5",
+      "description": "Resource Person Details / Collaboration:\n- M Ashica, 4BScCM\n- Pavitra M, 4BScCM",
+      "date": "2026-02-20",
+      "category": "talk",
+      "status": "past",
+      "location": "Christ University Campus",
+      "image": null,
+      "vertical": "CrossCode",
+      "featured": false
     }
   ],
   "announcements": [],
-  "committeeTasks": [
+  "tasks": [
     {
       "id": "ct1",
       "committeeId": "cc-pub",
@@ -343,10 +834,20 @@
       "description": "Create teaser graphics for the upcoming CS fest.",
       "status": "pending",
       "assignedTo": "Core Member One",
-      "dueDate": "2026-07-20"
+      "dueDate": "2026-07-20",
+      "taskType": "committee"
+    },
+    {
+      "id": "vp1",
+      "verticalId": "ab000000-0000-0000-0000-000000000000",
+      "title": "Labyrinth Web Portal",
+      "description": "React application for student workspace coordination.",
+      "status": "in-progress",
+      "taskType": "project",
+      "url": "https://github.com/labyrinth/portal"
     }
   ],
-  "committeeResources": [
+  "resources": [
     {
       "id": "cr1",
       "committeeId": "cc-pub",
@@ -354,22 +855,10 @@
       "description": "Official logos and color rules.",
       "url": "https://example.com/branding.pdf",
       "type": "document"
-    }
-  ],
-  "verticalProjects": [
-    {
-      "id": "vp1",
-      "verticalId": "v1",
-      "title": "Labyrinth Web Portal",
-      "description": "React application for student workspace coordination.",
-      "status": "in-progress",
-      "url": "https://github.com/labyrinth/portal"
-    }
-  ],
-  "verticalResources": [
+    },
     {
       "id": "vr1",
-      "verticalId": "v1",
+      "verticalId": "ab000000-0000-0000-0000-000000000000",
       "title": "Deep Learning Lecture 1",
       "description": "Introduction to neural networks.",
       "url": "https://youtube.com",
@@ -379,7 +868,7 @@
   "verticalAttendance": [
     {
       "id": "at1",
-      "verticalId": "v1",
+      "verticalId": "ab000000-0000-0000-0000-000000000000",
       "date": "2026-07-01",
       "memberId": "u-vert-head1",
       "memberName": "Rishi Raj",
@@ -540,6 +1029,166 @@
       "description": "Award distribution and closing ceremony.",
       "image": null,
       "date": "2024-11-12"
+    },
+    {
+      "id": "g17",
+      "title": "Field Ops Football Match",
+      "category": "sports",
+      "description": "Intense action during the inter-department football tournament.",
+      "image": "/gallery/20260211_165511.webp",
+      "date": "2026-02-11"
+    },
+    {
+      "id": "g18",
+      "title": "Warm-up Session",
+      "category": "sports",
+      "description": "Teams getting ready before the start of the tournament.",
+      "image": "/gallery/20260211_165520.webp",
+      "date": "2026-02-11"
+    },
+    {
+      "id": "g19",
+      "title": "Athletics Event",
+      "category": "sports",
+      "description": "100m sprint finals at the track and field track.",
+      "image": "/gallery/20260212_115102.webp",
+      "date": "2026-02-12"
+    },
+    {
+      "id": "g20",
+      "title": "Track Activities",
+      "category": "sports",
+      "description": "Coordination of athletic trials and qualifying heats.",
+      "image": "/gallery/20260212_115103.webp",
+      "date": "2026-02-12"
+    },
+    {
+      "id": "g21",
+      "title": "Basketball Finals",
+      "category": "sports",
+      "description": "The final basketball match for the Labyrinth cup.",
+      "image": "/gallery/20260212_181051.webp",
+      "date": "2026-02-12"
+    },
+    {
+      "id": "g22",
+      "title": "Basketball Team Presentation",
+      "category": "sports",
+      "description": "Teams aligning before the tip-off.",
+      "image": "/gallery/20260212_181054.webp",
+      "date": "2026-02-12"
+    },
+    {
+      "id": "g23",
+      "title": "Cricket Practice",
+      "category": "sports",
+      "description": "Players warming up in the nets before their league match.",
+      "image": "/gallery/20260213_084731.webp",
+      "date": "2026-02-13"
+    },
+    {
+      "id": "g24",
+      "title": "Field Coordination",
+      "category": "sports",
+      "description": "Organizers managing tournament schedules on the ground.",
+      "image": "/gallery/20260213_084732.webp",
+      "date": "2026-02-13"
+    },
+    {
+      "id": "g25",
+      "title": "Field Ops Group Photo",
+      "category": "sports",
+      "description": "The organizing committee of the sports vertical.",
+      "image": "/gallery/20260215_133007.webp",
+      "date": "2026-02-15"
+    },
+    {
+      "id": "g26",
+      "title": "Team Captains Meet",
+      "category": "sports",
+      "description": "Briefing the team representatives on tournament rules.",
+      "image": "/gallery/IMG-20260209-WA0011.webp",
+      "date": "2026-02-09"
+    },
+    {
+      "id": "g27",
+      "title": "Opening Ceremony",
+      "category": "sports",
+      "description": "Lighting the torch to begin the sports meet.",
+      "image": "/gallery/IMG-20260210-WA0001.webp",
+      "date": "2026-02-10"
+    },
+    {
+      "id": "g28",
+      "title": "Tug of War Challenge",
+      "category": "sports",
+      "description": "Epic strength clash between departmental houses.",
+      "image": "/gallery/IMG-20260213-WA0002(1).webp",
+      "date": "2026-02-13"
+    },
+    {
+      "id": "g29",
+      "title": "Field Ops Coordination Desk",
+      "category": "sports",
+      "description": "The scoring and records registry desk during the event.",
+      "image": "/gallery/IMG-20260213-WA0017.webp",
+      "date": "2026-02-13"
+    },
+    {
+      "id": "g30",
+      "title": "Volleyball Tournament",
+      "category": "sports",
+      "description": "Intense rally during the volleyball semi-finals.",
+      "image": "/gallery/IMG-20260214-WA0005.webp",
+      "date": "2026-02-14"
+    },
+    {
+      "id": "g31",
+      "title": "Runner Up Celebrations",
+      "category": "sports",
+      "description": "Teams cheering after a hard-fought tournament.",
+      "image": "/gallery/IMG-20260214-WA0023.webp",
+      "date": "2026-02-14"
+    },
+    {
+      "id": "g32",
+      "title": "Sports Tournament Highlights",
+      "category": "sports",
+      "description": "Video compilation of key game moments and student cheering.",
+      "image": "/gallery/Screen_Recording_20260220_090135_Photos.mp4",
+      "date": "2026-02-20"
+    },
+    {
+      "id": "g33",
+      "title": "Field Ops Badminton Finals",
+      "category": "sports",
+      "description": "Singles badminton finals in the indoor arena.",
+      "image": "/gallery/_MG_1303.webp",
+      "date": "2026-02-13"
+    },
+    {
+      "id": "g34",
+      "title": "Match Point Moment",
+      "category": "sports",
+      "description": "High energy play in the indoor sports complex.",
+      "image": "/gallery/_MG_1342.webp",
+      "date": "2026-02-13"
+    },
+    {
+      "id": "g35",
+      "title": "Table Tennis Champions",
+      "category": "sports",
+      "description": "Smash action shot from the table tennis event.",
+      "image": "/gallery/_MG_1853.webp",
+      "date": "2026-02-13"
+    },
+    {
+      "id": "g36",
+      "title": "Sports Award Ceremony",
+      "category": "sports",
+      "description": "Medal distribution for the winners and overall house trophy.",
+      "image": "/gallery/_MG_1854.webp",
+      "date": "2026-02-13"
     }
   ]
 }
