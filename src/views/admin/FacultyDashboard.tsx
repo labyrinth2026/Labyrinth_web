@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { fetchFromSheet } from '../../services/api';
-import { Download, Users, BarChart2, RefreshCw, PieChart } from 'lucide-react';
+import { Download, Users, BarChart2, RefreshCw, PieChart, Check, X } from 'lucide-react';
 
 const FacultyDashboard: React.FC = () => {
   const { user, can } = useAuth();
@@ -27,6 +27,26 @@ const FacultyDashboard: React.FC = () => {
       setIsLoading(false);
     }
   }, [user]);
+
+  const handleApprove = async (id: string) => {
+    try {
+      await fetchFromSheet('approveRegistration', { id });
+      setRegistrations(prev => prev.filter(r => r.id !== id));
+    } catch (e) {
+      console.error(e);
+      alert('Failed to approve registration.');
+    }
+  };
+
+  const handleReject = async (id: string) => {
+    try {
+      await fetchFromSheet('rejectRegistration', { id });
+      setRegistrations(prev => prev.filter(r => r.id !== id));
+    } catch (e) {
+      console.error(e);
+      alert('Failed to reject registration.');
+    }
+  };
 
   if (!can('view_registrations')) {
     return (
@@ -163,11 +183,12 @@ const FacultyDashboard: React.FC = () => {
                   <th className="p-4">Course</th>
                   <th className="p-4">Year</th>
                   <th className="p-4">Vertical</th>
+                  <th className="p-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#E5E7EB]">
                 {isLoading ? (
-                  <tr><td colSpan={7} className="p-8 text-center text-[#8c97a8]">
+                  <tr><td colSpan={8} className="p-8 text-center text-[#8c97a8]">
                     <RefreshCw size={20} className="animate-spin mx-auto mb-2 text-[#CD0000]" />
                     Loading registrations...
                   </td></tr>
@@ -190,10 +211,28 @@ const FacultyDashboard: React.FC = () => {
                         {reg.preferredVertical}
                       </span>
                     </td>
+                    <td className="p-4 text-right">
+                      <div className="flex justify-end gap-1.5">
+                        <button
+                          onClick={() => handleApprove(reg.id)}
+                          className="p-1.5 bg-green-50 text-green-600 hover:bg-green-100 rounded-lg transition-colors border border-green-150"
+                          title="Approve Member"
+                        >
+                          <Check size={14} />
+                        </button>
+                        <button
+                          onClick={() => handleReject(reg.id)}
+                          className="p-1.5 bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors border border-red-150"
+                          title="Reject Registration"
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 )) : (
-                  <tr><td colSpan={7} className="p-10 text-center text-[#8c97a8]">
-                    No registrations found. (Ensure Google Apps Script is configured.)
+                  <tr><td colSpan={8} className="p-10 text-center text-[#8c97a8]">
+                    No registrations found.
                   </td></tr>
                 )}
               </tbody>

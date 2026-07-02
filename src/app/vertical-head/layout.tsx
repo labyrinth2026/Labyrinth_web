@@ -1,12 +1,13 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
+import { fetchFromSheet } from '../../services/api';
 import {
-  LayoutDashboard, LogOut, BookOpen, Link as LinkIcon,
-  Download, Users, Shield, CheckSquare
+  LayoutDashboard, LogOut, Code2, Users,
+  Calendar, Megaphone, FolderOpen, ClipboardList
 } from 'lucide-react';
 
 interface NavItem {
@@ -15,10 +16,33 @@ interface NavItem {
   icon: React.ComponentType<{ size?: number; className?: string }>;
 }
 
-const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const VerticalHeadLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, logout, isLoading } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
+  const [verticalName, setVerticalName] = useState('Loading Vertical...');
+
+  useEffect(() => {
+    const loadVerticalInfo = async () => {
+      if (user?.verticalId) {
+        try {
+          const list: any = await fetchFromSheet('getVerticals');
+          const myVert = list.find((v: any) => v.id === user.verticalId);
+          if (myVert) {
+            setVerticalName(myVert.name);
+          } else {
+            setVerticalName('Unassigned Vertical');
+          }
+        } catch (e) {
+          console.error(e);
+          setVerticalName('Vertical Domain');
+        }
+      }
+    };
+    if (user) {
+      loadVerticalInfo();
+    }
+  }, [user]);
 
   if (isLoading) {
     return (
@@ -28,52 +52,24 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     );
   }
 
-  // If user is not logged in or is not an admin, don't render layout (middleware handles redirect)
-  const allowedRoles = ['HOD', 'COORDINATOR', 'ASSOCIATE'];
-  if (!user || !allowedRoles.includes(user.role)) {
+  // If user is not logged in or role is wrong, middleware redirects, but prevent flash of content
+  if (!user || user.role !== 'VERTICAL_HEAD') {
     return null;
   }
 
-  const roleLabel: Record<string, string> = {
-    HOD: 'Head of Department',
-    COORDINATOR: 'Faculty Coordinator',
-    ASSOCIATE: 'Faculty Associate',
-  };
-
-  const roleBadge: Record<string, { bg: string; text: string }> = {
-    HOD: { bg: 'bg-[#CD0000]/5 border-[#CD0000]/10', text: 'text-[#CD0000]' },
-    COORDINATOR: { bg: 'bg-indigo-50 border-indigo-100', text: 'text-indigo-600' },
-    ASSOCIATE: { bg: 'bg-emerald-50 border-emerald-100', text: 'text-emerald-600' },
-  };
-
-  const badge = roleBadge[user.role] || { bg: 'bg-slate-50 border-slate-100', text: 'text-slate-600' };
-
-  // Define ALL possible navigation links
-  const allNavItems: Record<string, NavItem> = {
-    dashboard: { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
-    content: { label: 'Content Management', path: '/admin/content', icon: BookOpen },
-    forms: { label: 'Forms Management', path: '/admin/forms', icon: LinkIcon },
-    reports: { label: 'Reports & Exports', path: '/admin/reports', icon: Download },
-    team: { label: 'Team Management', path: '/admin/team', icon: Users },
-    roles: { label: 'Role & System Config', path: '/admin/roles', icon: Shield },
-    registrations: { label: 'Registrations', path: '/admin/registrations', icon: CheckSquare }
-  };
-
-  // Determine dynamic list of visible links based on roles
-  let visibleItemKeys: string[] = [];
-  if (user.role === 'HOD') {
-    visibleItemKeys = ['dashboard', 'content', 'forms', 'reports', 'team', 'roles', 'registrations'];
-  } else if (user.role === 'COORDINATOR') {
-    visibleItemKeys = ['dashboard', 'content', 'forms', 'reports', 'team', 'registrations'];
-  } else if (user.role === 'ASSOCIATE') {
-    visibleItemKeys = ['dashboard', 'team', 'registrations'];
-  }
-
-  const visibleItems = visibleItemKeys.map(key => allNavItems[key]).filter(Boolean);
+  const navItems: NavItem[] = [
+    { label: 'Dashboard', path: '/vertical-head/dashboard', icon: LayoutDashboard },
+    { label: 'Members', path: '/vertical-head/members', icon: Users },
+    { label: 'Projects', path: '/vertical-head/projects', icon: Code2 },
+    { label: 'Events', path: '/vertical-head/events', icon: Calendar },
+    { label: 'Learning Resources', path: '/vertical-head/resources', icon: FolderOpen },
+    { label: 'Attendance', path: '/vertical-head/attendance', icon: ClipboardList },
+    { label: 'Announcements', path: '/vertical-head/announcements', icon: Megaphone }
+  ];
 
   const handleLogout = async () => {
     await logout();
-    router.push('/admin/login');
+    router.push('/vertical-head/login');
   };
 
   return (
@@ -94,16 +90,17 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <div className="overflow-hidden">
                   <h3 className="text-xs font-bold text-slate-800 truncate">{user.name}</h3>
                   <span
-                    className={`text-[8px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full inline-block mt-1 border ${badge.bg} ${badge.text}`}
+                    className="text-[8px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full inline-block mt-1 border bg-indigo-50 border-indigo-100 text-indigo-600 truncate max-w-full"
+                    title={verticalName}
                   >
-                    {roleLabel[user.role] || user.role}
+                    {verticalName}
                   </span>
                 </div>
               </div>
 
               {/* Navigation */}
               <nav className="space-y-1">
-                {visibleItems.map((item) => {
+                {navItems.map((item) => {
                   const isActive = pathname === item.path;
                   return (
                     <Link
@@ -144,4 +141,4 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
-export default AdminLayout;
+export default VerticalHeadLayout;

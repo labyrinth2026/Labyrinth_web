@@ -1,12 +1,13 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
+import { fetchFromSheet } from '../../services/api';
 import {
-  LayoutDashboard, LogOut, BookOpen, Link as LinkIcon,
-  Download, Users, Shield, CheckSquare
+  LayoutDashboard, LogOut, CheckSquare, Users,
+  Calendar, Megaphone, FolderOpen
 } from 'lucide-react';
 
 interface NavItem {
@@ -15,10 +16,33 @@ interface NavItem {
   icon: React.ComponentType<{ size?: number; className?: string }>;
 }
 
-const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const CoreCommitteeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, logout, isLoading } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
+  const [committeeName, setCommitteeName] = useState('Loading Committee...');
+
+  useEffect(() => {
+    const loadCommitteeInfo = async () => {
+      if (user?.committeeId) {
+        try {
+          const list: any = await fetchFromSheet('getCoreCommittees');
+          const myComm = list.find((c: any) => c.id === user.committeeId);
+          if (myComm) {
+            setCommitteeName(myComm.name);
+          } else {
+            setCommitteeName('Unassigned Committee');
+          }
+        } catch (e) {
+          console.error(e);
+          setCommitteeName('Core Committee');
+        }
+      }
+    };
+    if (user) {
+      loadCommitteeInfo();
+    }
+  }, [user]);
 
   if (isLoading) {
     return (
@@ -28,52 +52,23 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     );
   }
 
-  // If user is not logged in or is not an admin, don't render layout (middleware handles redirect)
-  const allowedRoles = ['HOD', 'COORDINATOR', 'ASSOCIATE'];
-  if (!user || !allowedRoles.includes(user.role)) {
+  // If user is not logged in or role is wrong, middleware redirects, but prevent flash of content
+  if (!user || user.role !== 'CORE_HEAD') {
     return null;
   }
 
-  const roleLabel: Record<string, string> = {
-    HOD: 'Head of Department',
-    COORDINATOR: 'Faculty Coordinator',
-    ASSOCIATE: 'Faculty Associate',
-  };
-
-  const roleBadge: Record<string, { bg: string; text: string }> = {
-    HOD: { bg: 'bg-[#CD0000]/5 border-[#CD0000]/10', text: 'text-[#CD0000]' },
-    COORDINATOR: { bg: 'bg-indigo-50 border-indigo-100', text: 'text-indigo-600' },
-    ASSOCIATE: { bg: 'bg-emerald-50 border-emerald-100', text: 'text-emerald-600' },
-  };
-
-  const badge = roleBadge[user.role] || { bg: 'bg-slate-50 border-slate-100', text: 'text-slate-600' };
-
-  // Define ALL possible navigation links
-  const allNavItems: Record<string, NavItem> = {
-    dashboard: { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
-    content: { label: 'Content Management', path: '/admin/content', icon: BookOpen },
-    forms: { label: 'Forms Management', path: '/admin/forms', icon: LinkIcon },
-    reports: { label: 'Reports & Exports', path: '/admin/reports', icon: Download },
-    team: { label: 'Team Management', path: '/admin/team', icon: Users },
-    roles: { label: 'Role & System Config', path: '/admin/roles', icon: Shield },
-    registrations: { label: 'Registrations', path: '/admin/registrations', icon: CheckSquare }
-  };
-
-  // Determine dynamic list of visible links based on roles
-  let visibleItemKeys: string[] = [];
-  if (user.role === 'HOD') {
-    visibleItemKeys = ['dashboard', 'content', 'forms', 'reports', 'team', 'roles', 'registrations'];
-  } else if (user.role === 'COORDINATOR') {
-    visibleItemKeys = ['dashboard', 'content', 'forms', 'reports', 'team', 'registrations'];
-  } else if (user.role === 'ASSOCIATE') {
-    visibleItemKeys = ['dashboard', 'team', 'registrations'];
-  }
-
-  const visibleItems = visibleItemKeys.map(key => allNavItems[key]).filter(Boolean);
+  const navItems: NavItem[] = [
+    { label: 'Dashboard', path: '/core-committee/dashboard', icon: LayoutDashboard },
+    { label: 'Members', path: '/core-committee/members', icon: Users },
+    { label: 'Tasks', path: '/core-committee/tasks', icon: CheckSquare },
+    { label: 'Events', path: '/core-committee/events', icon: Calendar },
+    { label: 'Announcements', path: '/core-committee/announcements', icon: Megaphone },
+    { label: 'Resources', path: '/core-committee/resources', icon: FolderOpen }
+  ];
 
   const handleLogout = async () => {
     await logout();
-    router.push('/admin/login');
+    router.push('/core-committee/login');
   };
 
   return (
@@ -94,16 +89,17 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <div className="overflow-hidden">
                   <h3 className="text-xs font-bold text-slate-800 truncate">{user.name}</h3>
                   <span
-                    className={`text-[8px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full inline-block mt-1 border ${badge.bg} ${badge.text}`}
+                    className="text-[8px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full inline-block mt-1 border bg-indigo-50 border-indigo-100 text-indigo-600 truncate max-w-full"
+                    title={committeeName}
                   >
-                    {roleLabel[user.role] || user.role}
+                    {committeeName}
                   </span>
                 </div>
               </div>
 
               {/* Navigation */}
               <nav className="space-y-1">
-                {visibleItems.map((item) => {
+                {navItems.map((item) => {
                   const isActive = pathname === item.path;
                   return (
                     <Link
@@ -144,4 +140,4 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
-export default AdminLayout;
+export default CoreCommitteeLayout;
