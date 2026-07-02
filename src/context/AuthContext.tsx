@@ -94,7 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loadSession();
   }, []);
 
-  const login = async (email: string, pass: string, portalType: 'admin' | 'core' | 'vertical'): Promise<{ success: boolean; error?: string }> => {
+  const login = async (email: string, pass: string, portalType?: 'admin' | 'core' | 'vertical'): Promise<{ success: boolean; user?: User; error?: string }> => {
     setIsLoading(true);
     try {
       const response = await fetch('/api/auth/login', {
@@ -106,7 +106,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (data.success) {
         setUser(data.user);
         setIsLoading(false);
-        return { success: true };
+        return { success: true, user: data.user };
       } else {
         setIsLoading(false);
         return { success: false, error: data.error || 'Invalid credentials.' };

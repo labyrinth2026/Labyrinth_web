@@ -56,10 +56,10 @@ export default function CoreDashboardPage() {
   ];
 
   const quickActions = [
-    { label: 'Manage Tasks', path: '/core-committee/tasks', icon: CheckSquare },
-    { label: 'Manage Resources', path: '/core-committee/resources', icon: FolderOpen },
-    { label: 'Add Committee Event', path: '/core-committee/events', icon: Calendar },
-    { label: 'Post Announcement', path: '/core-committee/announcements', icon: Megaphone }
+    { label: 'Manage Tasks', path: '/committee/tasks', icon: CheckSquare },
+    { label: 'Manage Resources', path: '/committee/resources', icon: FolderOpen },
+    { label: 'Add Committee Event', path: '/committee/events', icon: Calendar },
+    { label: 'Post Announcement', path: '/committee/announcements', icon: Megaphone }
   ];
 
   return (

@@ -73,7 +73,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const handleLogout = async () => {
     await logout();
-    router.push('/admin/login');
+    router.push('/login');
   };
 
   return (

@@ -56,10 +56,10 @@ export default function VerticalDashboardPage() {
   ];
 
   const quickActions = [
-    { label: 'Track Projects', path: '/vertical-head/projects', icon: Code2 },
-    { label: 'Manage Resources', path: '/vertical-head/resources', icon: FolderOpen },
-    { label: 'Register Attendance', path: '/vertical-head/attendance', icon: ClipboardList },
-    { label: 'Create Event Notice', path: '/vertical-head/events', icon: Calendar }
+    { label: 'Track Projects', path: '/vertical/projects', icon: Code2 },
+    { label: 'Manage Resources', path: '/vertical/resources', icon: FolderOpen },
+    { label: 'Register Attendance', path: '/vertical/attendance', icon: ClipboardList },
+    { label: 'Create Event Notice', path: '/vertical/events', icon: Calendar }
   ];
 
   return (

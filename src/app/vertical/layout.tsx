@@ -6,8 +6,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { fetchFromSheet } from '@/services/api';
 import {
-  LayoutDashboard, LogOut, CheckSquare, Users,
-  Calendar, Megaphone, FolderOpen
+  LayoutDashboard, LogOut, Code2, Users,
+  Calendar, Megaphone, FolderOpen, ClipboardList
 } from 'lucide-react';
 
 interface NavItem {
@@ -16,31 +16,31 @@ interface NavItem {
   icon: React.ComponentType<{ size?: number; className?: string }>;
 }
 
-const CoreCommitteeLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const VerticalLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, logout, isLoading } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
-  const [committeeName, setCommitteeName] = useState('Loading Committee...');
+  const [verticalName, setVerticalName] = useState('Loading Vertical...');
 
   useEffect(() => {
-    const loadCommitteeInfo = async () => {
-      if (user?.committeeId) {
+    const loadVerticalInfo = async () => {
+      if (user?.verticalId) {
         try {
-          const list: any = await fetchFromSheet('getCoreCommittees');
-          const myComm = list.find((c: any) => c.id === user.committeeId);
-          if (myComm) {
-            setCommitteeName(myComm.name);
+          const list: any = await fetchFromSheet('getVerticals');
+          const myVert = list.find((v: any) => v.id === user.verticalId);
+          if (myVert) {
+            setVerticalName(myVert.name);
           } else {
-            setCommitteeName('Unassigned Committee');
+            setVerticalName('Unassigned Domain');
           }
         } catch (e) {
           console.error(e);
-          setCommitteeName('Core Committee');
+          setVerticalName('Vertical Domain');
         }
       }
     };
     if (user) {
-      loadCommitteeInfo();
+      loadVerticalInfo();
     }
   }, [user]);
 
@@ -52,23 +52,23 @@ const CoreCommitteeLayout: React.FC<{ children: React.ReactNode }> = ({ children
     );
   }
 
-  // If user is not logged in or role is wrong, middleware redirects, but prevent flash of content
-  if (!user || user.role !== 'CORE_HEAD') {
+  if (!user || user.role !== 'VERTICAL_HEAD') {
     return null;
   }
 
   const navItems: NavItem[] = [
-    { label: 'Dashboard', path: '/core-committee/dashboard', icon: LayoutDashboard },
-    { label: 'Members', path: '/core-committee/members', icon: Users },
-    { label: 'Tasks', path: '/core-committee/tasks', icon: CheckSquare },
-    { label: 'Events', path: '/core-committee/events', icon: Calendar },
-    { label: 'Announcements', path: '/core-committee/announcements', icon: Megaphone },
-    { label: 'Resources', path: '/core-committee/resources', icon: FolderOpen }
+    { label: 'Dashboard', path: '/vertical/dashboard', icon: LayoutDashboard },
+    { label: 'Members', path: '/vertical/members', icon: Users },
+    { label: 'Projects', path: '/vertical/projects', icon: Code2 },
+    { label: 'Events', path: '/vertical/events', icon: Calendar },
+    { label: 'Resources', path: '/vertical/resources', icon: FolderOpen },
+    { label: 'Attendance', path: '/vertical/attendance', icon: ClipboardList },
+    { label: 'Announcements', path: '/vertical/announcements', icon: Megaphone }
   ];
 
   const handleLogout = async () => {
     await logout();
-    router.push('/core-committee/login');
+    router.push('/login');
   };
 
   return (
@@ -89,10 +89,10 @@ const CoreCommitteeLayout: React.FC<{ children: React.ReactNode }> = ({ children
                 <div className="overflow-hidden">
                   <h3 className="text-xs font-bold text-slate-800 truncate">{user.name}</h3>
                   <span
-                    className="text-[8px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full inline-block mt-1 border bg-indigo-50 border-indigo-100 text-indigo-600 truncate max-w-full"
-                    title={committeeName}
+                    className="text-[8px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full inline-block mt-1 border bg-emerald-50 border-emerald-100 text-emerald-600 truncate max-w-full"
+                    title={verticalName}
                   >
-                    {committeeName}
+                    {verticalName}
                   </span>
                 </div>
               </div>
@@ -140,4 +140,4 @@ const CoreCommitteeLayout: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-export default CoreCommitteeLayout;
+export default VerticalLayout;
