@@ -31,3 +31,14 @@ export const getSupabaseAdmin = () => {
   }
   return null;
 };
+
+// Resilient fallback logic when Supabase project is unreachable
+let isSupabaseOffline = false;
+
+export const setSupabaseOffline = (val: boolean) => {
+  isSupabaseOffline = val;
+};
+
+export const getSupabaseOffline = (): boolean => {
+  return isSupabaseOffline;
+};

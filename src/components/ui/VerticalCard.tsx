@@ -22,7 +22,11 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ vertical }) => {
 
   return (
     <motion.div
-      whileHover={{ y: -3, boxShadow: '0 12px 30px rgba(0, 0, 0, 0.04)' }}
+      whileHover={{ 
+        y: -5, 
+        scale: 1.015,
+        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.06), 0 0 25px rgba(205, 0, 0, 0.02)' 
+      }}
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       className="bg-white border border-slate-200/80 rounded-2xl shadow-xs p-6 h-full flex flex-col group relative overflow-hidden"
     >

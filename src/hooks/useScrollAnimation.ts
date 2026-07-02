@@ -1,35 +1,36 @@
 import { useEffect, useState, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-export function useScrollAnimation(threshold = 0.1) {
+export function useScrollAnimation() {
   const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<any>(null);
 
   useEffect(() => {
-    const currentRef = ref.current;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          // Optional: Disconnect after becoming visible for one-time animation
-          if (currentRef) observer.unobserve(currentRef);
-        }
-      },
-      {
-        threshold,
-        rootMargin: '0px 0px -50px 0px',
-      }
-    );
+    gsap.registerPlugin(ScrollTrigger);
 
-    if (currentRef) {
-      observer.observe(currentRef);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      setIsVisible(true);
+      return;
     }
 
+    const el = ref.current;
+    if (!el) return;
+
+    const trigger = ScrollTrigger.create({
+      trigger: el,
+      start: 'top 80%',
+      onEnter: () => {
+        setIsVisible(true);
+      },
+      once: true,
+    });
+
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
+      trigger.kill();
     };
-  }, [threshold]);
+  }, []);
 
   return { ref, isVisible };
 }
