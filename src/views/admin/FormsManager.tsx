@@ -50,6 +50,15 @@ export default function FormsManager() {
   // Views: 'list' | 'build' | 'responses'
   const [view, setView] = useState<'list' | 'build' | 'responses'>('list');
   const [loading, setLoading] = useState(true);
+
+  const [origin, setOrigin] = useState('');
+  const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setOrigin(window.location.origin);
+    }
+  }, []);
   
   // Lists
   const [forms, setForms] = useState<CustomForm[]>([]);
@@ -244,9 +253,10 @@ export default function FormsManager() {
   };
 
   const handleCopyLink = (slug: string) => {
-    const url = `${window.location.origin}/forms/${slug}`;
+    const url = `${window.location.origin || ''}/forms/${slug}`;
     navigator.clipboard.writeText(url);
-    alert('Public form link copied to clipboard!');
+    setCopiedSlug(slug);
+    setTimeout(() => setCopiedSlug(null), 1500);
   };
 
   const handleOpenResponseDetails = (resp: CustomResponse) => {
@@ -400,22 +410,26 @@ export default function FormsManager() {
                       </span>
                     </div>
                     <p className="text-xs text-slate-500 line-clamp-2 mt-1.5 leading-relaxed">{form.description}</p>
-                    <div className="flex items-center gap-2 mt-3 text-[10px] text-slate-400 font-medium">
-                      <LinkIcon size={12} />
+                    <div className="flex items-center gap-2 mt-3 text-[10px] text-slate-400 font-medium w-full">
+                      <LinkIcon size={12} className="shrink-0" />
                       <a 
                         href={`/forms/${form.slug}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="truncate hover:underline text-[#CD0000] font-bold"
+                        className="truncate hover:underline text-[#CD0000] font-bold max-w-[80%]"
                       >
-                        /forms/{form.slug}
+                        {origin ? `${origin}/forms/${form.slug}` : `/forms/${form.slug}`}
                       </a>
                       <button 
                         onClick={(e) => { e.preventDefault(); handleCopyLink(form.slug); }} 
-                        className="p-1 hover:text-[#CD0000] transition-colors rounded-md"
+                        className="p-1 hover:text-[#CD0000] transition-colors rounded-md flex items-center justify-center shrink-0"
                         title="Copy Link"
                       >
-                        <Copy size={10} />
+                        {copiedSlug === form.slug ? (
+                          <Check size={11} className="text-emerald-600" />
+                        ) : (
+                          <Copy size={11} />
+                        )}
                       </button>
                     </div>
                   </div>
