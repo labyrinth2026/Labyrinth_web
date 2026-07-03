@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import bcrypt from 'bcryptjs';
-import { supabase, isSupabaseConfigured, getSupabaseAdmin } from './supabase';
+import { supabase, isSupabaseConfigured, getSupabaseAdmin, getSupabaseOffline, setSupabaseOffline } from './supabase';
 
 const DB_FILE = path.join(process.cwd(), 'src/data/db.json');
 
@@ -27,6 +27,8 @@ export interface User {
   verticalId?: string;
   committee_id?: string;
   vertical_id?: string;
+  isHead?: boolean;
+  is_head?: boolean;
 }
 
 export interface CoreCommittee {
@@ -245,24 +247,36 @@ export async function dbGetUserByEmail(email: string): Promise<any | null> {
 }
 
 export async function dbGetRoles(): Promise<any[]> {
-  if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('profiles').select('*');
-    if (error) throw error;
-    return (data || []).map((p: any) => ({
-      id: p.id,
-      email: p.email,
-      name: p.name,
-      role: p.role,
-      status: p.status,
-      firstLogin: p.first_login,
-      passwordChangedAt: p.password_changed_at,
-      createdBy: p.created_by,
-      lastLogin: p.last_login,
-      committeeId: p.committee_id,
-      verticalId: p.vertical_id,
-      isHead: p.is_head,
-      createdAt: p.created_at
-    }));
+  if (isSupabaseConfigured() && !getSupabaseOffline() && supabase) {
+    try {
+      const { data, error } = await supabase.from('profiles').select('*');
+      if (error) throw error;
+      return (data || []).map((p: any) => ({
+        id: p.id,
+        email: p.email,
+        name: p.full_name || p.name || p.email.split('@')[0],
+        full_name: p.full_name || p.name || p.email.split('@')[0],
+        role: p.role,
+        status: p.status,
+        firstLogin: p.first_login,
+        passwordChangedAt: p.password_changed_at,
+        createdBy: p.created_by,
+        lastLogin: p.last_login,
+        committeeId: p.committee_id,
+        verticalId: p.vertical_id,
+        isHead: p.is_head,
+        phone: p.phone,
+        profilePhoto: p.profile_photo,
+        designation: p.designation,
+        department: p.department,
+        createdAt: p.created_at
+      }));
+    } catch (err) {
+      console.warn('Supabase dbGetRoles failed, falling back to local database. Setting Supabase to offline.', err);
+      setSupabaseOffline(true);
+      const db = getLocalDb();
+      return db.users.map(u => ({ ...u, name: u.full_name || u.name }));
+    }
   } else {
     const db = getLocalDb();
     return db.users.map(u => ({ ...u, name: u.full_name || u.name }));
@@ -447,16 +461,31 @@ export async function dbUpdateLastLogin(userId: string): Promise<void> {
 }
 
 // --- VERTICALS ---
-export async function dbGetVerticals(): Promise<Vertical[]> {
-  if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('verticals').select('*');
-    if (error) throw error;
-    return data || [];
-  }
+export async function dbGetVerticals(): Promise<any[]> {
+  let verticals: any[] = [];
+  let users: any[] = [];
 
-  const db = getLocalDb();
-  const verticals = db.verticals || [];
-  const users = db.users || [];
+  if (isSupabaseConfigured() && !getSupabaseOffline() && supabase) {
+    try {
+      const { data: vData, error: vErr } = await supabase.from('verticals').select('*');
+      if (vErr) throw vErr;
+      verticals = vData || [];
+
+      const { data: uData, error: uErr } = await supabase.from('profiles').select('*');
+      if (uErr) throw uErr;
+      users = uData || [];
+    } catch (err) {
+      console.warn('Supabase dbGetVerticals failed, falling back to local database. Setting Supabase to offline.', err);
+      setSupabaseOffline(true);
+      const db = getLocalDb();
+      verticals = db.verticals || [];
+      users = db.users || [];
+    }
+  } else {
+    const db = getLocalDb();
+    verticals = db.verticals || [];
+    users = db.users || [];
+  }
 
   return verticals.map(v => {
     const verticalUsers = users.filter(u => u.verticalId === v.id || u.vertical_id === v.id);
@@ -572,38 +601,48 @@ export async function dbDeleteCoreCommittee(id: string): Promise<void> {
 
 // --- ASSIGNMENTS ---
 export async function dbGetAssignments(): Promise<any> {
-  if (isSupabaseConfigured() && supabase) {
-    const { data: profiles, error } = await supabase.from('profiles').select('id, name, email, committee_id, vertical_id, is_head, created_at, core_committees (name), verticals (name)');
-    if (error) throw error;
+  if (isSupabaseConfigured() && !getSupabaseOffline() && supabase) {
+    try {
+      const { data: comms, error: commError } = await supabase
+        .from('core_committees')
+        .select('id, name, head_id, profiles!core_committees_head_id_fkey(full_name, email)');
+      if (commError) throw commError;
 
-    const committeeHeads = (profiles || []).filter(p => p.committee_id && p.is_head);
-    const verticalHeads = (profiles || []).filter(p => p.vertical_id && p.is_head);
+      const { data: verts, error: vertError } = await supabase
+        .from('verticals')
+        .select('id, name, head_id, profiles!verticals_head_id_fkey(full_name, email)');
+      if (vertError) throw vertError;
 
-    return {
-      committee: committeeHeads.map((p: any) => ({
-        id: p.id,
-        userId: p.id,
-        committeeId: p.committee_id,
-        assignedAt: p.created_at,
-        userName: p.name || 'Unknown',
-        userEmail: p.email,
-        committeeName: p.core_committees?.name || 'Unknown'
-      })),
-      vertical: verticalHeads.map((p: any) => ({
-        id: p.id,
-        userId: p.id,
-        verticalId: p.vertical_id,
-        assignedAt: p.created_at,
-        userName: p.name || 'Unknown',
-        userEmail: p.email,
-        verticalName: p.verticals?.name || 'Unknown'
-      }))
-    };
+      return {
+        committee: (comms || []).filter(c => c.head_id).map((c: any) => ({
+          id: c.id,
+          userId: c.head_id,
+          committeeId: c.id,
+          userName: c.profiles?.full_name || 'Unknown',
+          userEmail: c.profiles?.email || '',
+          committeeName: c.name
+        })),
+        vertical: (verts || []).filter(v => v.head_id).map((v: any) => ({
+          id: v.id,
+          userId: v.head_id,
+          verticalId: v.id,
+          userName: v.profiles?.full_name || 'Unknown',
+          userEmail: v.profiles?.email || '',
+          verticalName: v.name
+        }))
+      };
+    } catch (err) {
+      console.warn('Supabase dbGetAssignments failed, falling back to local database. Setting Supabase to offline.', err);
+      setSupabaseOffline(true);
+      const db = getLocalDb();
+      return getLocalAssignments(db);
+    }
   } else {
     const db = getLocalDb();
     return getLocalAssignments(db);
   }
 }
+
 
 function getLocalAssignments(db: DatabaseSchema) {
   const comms = db.coreCommittees || [];
@@ -737,24 +776,43 @@ export async function dbRemoveVerticalAssignment(userId: string, verticalId?: st
 
 // --- EVENTS ---
 export async function dbGetEvents(): Promise<Event[]> {
-  if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('events').select('*');
-    if (error) throw error;
-    return (data || []).map((e: any) => ({
+  let rawEvents: any[] = [];
+  if (isSupabaseConfigured() && !getSupabaseOffline() && supabase) {
+    try {
+      const { data, error } = await supabase.from('events').select('*');
+      if (error) throw error;
+      rawEvents = data || [];
+    } catch (err) {
+      console.warn('Supabase dbGetEvents failed, falling back to local database. Setting Supabase to offline.', err);
+      setSupabaseOffline(true);
+      rawEvents = getLocalDb().events;
+    }
+  } else {
+    rawEvents = getLocalDb().events;
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return rawEvents.map((e: any) => {
+    const eventDate = new Date(e.date);
+    const status = eventDate >= today ? 'upcoming' : 'past';
+    return {
       id: e.id,
       title: e.title,
       description: e.description,
       date: e.date,
       category: e.category,
-      status: e.status,
-      featured: e.featured,
-      committeeId: e.committee_id,
-      verticalId: e.vertical_id,
-      createdBy: e.created_by
-    }));
-  } else {
-    return getLocalDb().events;
-  }
+      time: e.time,
+      location: e.location,
+      bannerUrl: e.banner_url || e.bannerUrl,
+      committeeId: e.committee_id || e.committeeId,
+      verticalId: e.vertical_id || e.verticalId,
+      createdBy: e.created_by || e.createdBy,
+      status,
+      featured: e.featured === true
+    };
+  });
 }
 
 export async function dbAddEvent(data: any, createdBy?: string): Promise<void> {

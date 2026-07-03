@@ -6,11 +6,20 @@ const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 // A mutable flag to bypass Supabase queries once a connection attempt fails/times out
 let isSupabaseOnline = true;
+let isSupabaseOfflineFlag = false;
 
-export const setSupabaseOffline = () => {
-  isSupabaseOnline = false;
-  if (typeof global !== 'undefined') {
-    (global as any).isSupabaseOffline = true;
+export const setSupabaseOffline = (val: boolean = true) => {
+  isSupabaseOfflineFlag = val;
+  if (val) {
+    isSupabaseOnline = false;
+    if (typeof global !== 'undefined') {
+      (global as any).isSupabaseOffline = true;
+    }
+  } else {
+    isSupabaseOnline = true;
+    if (typeof global !== 'undefined') {
+      (global as any).isSupabaseOffline = false;
+    }
   }
 };
 
@@ -19,6 +28,11 @@ export const getSupabaseStatus = () => {
     return false;
   }
   return isSupabaseOnline;
+};
+
+export const getSupabaseOffline = (): boolean => {
+  const isGlobalOffline = typeof global !== 'undefined' && (global as any).isSupabaseOffline;
+  return isSupabaseOfflineFlag || !isSupabaseOnline || !!isGlobalOffline;
 };
 
 // Check if credentials are valid (non-placeholder) and Supabase is online
@@ -83,5 +97,3 @@ export const getSupabaseAdmin = () => {
   }
   return null;
 };
-
-
