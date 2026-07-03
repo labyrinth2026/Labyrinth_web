@@ -455,19 +455,45 @@ export async function dbUpdateLastLogin(userId: string): Promise<void> {
 }
 
 // --- VERTICALS ---
-export async function dbGetVerticals(): Promise<Vertical[]> {
+export async function dbGetVerticals(): Promise<any[]> {
+  let verticals: any[] = [];
+  let users: any[] = [];
+
   if (isSupabaseConfigured() && supabase) {
     try {
-      const { data, error } = await supabase.from('verticals').select('*');
-      if (error) throw error;
-      return data || [];
+      const { data: vData, error: vErr } = await supabase.from('verticals').select('*');
+      if (vErr) throw vErr;
+      verticals = vData || [];
+
+      const { data: uData, error: uErr } = await supabase.from('profiles').select('*');
+      if (uErr) throw uErr;
+      users = uData || [];
     } catch (err) {
       console.warn("Supabase dbGetVerticals failed, using local database fallback:", err);
-      return getLocalDb().verticals;
+      const db = getLocalDb();
+      verticals = db.verticals || [];
+      users = db.users || [];
     }
   } else {
-    return getLocalDb().verticals;
+    const db = getLocalDb();
+    verticals = db.verticals || [];
+    users = db.users || [];
   }
+
+  return verticals.map(v => {
+    const verticalUsers = users.filter(u => u.verticalId === v.id || u.vertical_id === v.id);
+    const heads = verticalUsers.filter(u => u.designation === 'Vertical Head');
+    const subHeads = verticalUsers.filter(u => u.designation === 'Vertical Sub-Head');
+
+    const headName = heads.map(h => h.full_name || h.name).join(' & ');
+    const subHeadName = subHeads.map(s => s.full_name || s.name).join(' & ');
+
+    return {
+      ...v,
+      head: headName ? { name: headName, email: heads[0]?.email || '' } : null,
+      subHead: subHeadName ? { name: subHeadName, email: subHeads[0]?.email || '' } : null
+    };
+  });
 }
 
 export async function dbAddVertical(name: string, description: string, category: 'tech' | 'non-tech'): Promise<void> {
