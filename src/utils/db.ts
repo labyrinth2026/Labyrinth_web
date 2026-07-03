@@ -1473,14 +1473,13 @@ export async function dbAddCustomForm(data: Partial<CustomForm>, fields: Partial
           const { error: fieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
           if (fieldsErr) throw fieldsErr;
         }
-        return formId;
       } catch (err) {
         console.warn("Supabase dbAddCustomForm failed, using local database fallback:", err);
       }
     }
   }
 
-  // Local fallback
+  // Local fallback (always sync!)
   const db = getLocalDb();
   if (!db.forms) db.forms = [];
   if (!db.formFields) db.formFields = [];
@@ -1563,14 +1562,13 @@ export async function dbUpdateCustomForm(id: string, data: Partial<CustomForm>, 
           const { error: fieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
           if (fieldsErr) throw fieldsErr;
         }
-        return;
       } catch (err) {
         console.warn("Supabase dbUpdateCustomForm failed, using local database fallback:", err);
       }
     }
   }
 
-  // Local fallback
+  // Local fallback (always sync!)
   const db = getLocalDb();
   const idx = (db.forms || []).findIndex((f: any) => f.id === id);
   if (idx !== -1) {
@@ -1680,14 +1678,13 @@ export async function dbDuplicateCustomForm(id: string): Promise<string> {
           const { error: insFieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
           if (insFieldsErr) throw insFieldsErr;
         }
-        return newFormId;
       } catch (err) {
         console.warn("Supabase dbDuplicateCustomForm failed, using local database fallback:", err);
       }
     }
   }
 
-  // Local fallback
+  // Local fallback (always sync!)
   const db = getLocalDb();
   const form = (db.forms || []).find((f: any) => f.id === id);
   if (!form) throw new Error("Source form not found.");
@@ -1749,13 +1746,12 @@ export async function dbSubmitFormResponse(
         const { error: ansErr } = await supabase.from('response_answers').insert(answerRecords);
         if (ansErr) throw ansErr;
       }
-      return responseId;
     } catch (err) {
       console.warn("Supabase dbSubmitFormResponse failed, using local database fallback:", err);
     }
   }
 
-  // Local fallback
+  // Local fallback (always sync!)
   const db = getLocalDb();
   if (!db.formResponses) db.formResponses = [];
   if (!db.responseAnswers) db.responseAnswers = [];
@@ -1852,17 +1848,16 @@ export async function dbUpdateResponseStatus(responseId: string, status: string,
         .update({ status, notes: notes !== undefined ? notes : null })
         .eq('id', responseId);
       if (error) throw error;
-      return;
     } catch (err) {
       console.warn("Supabase dbUpdateResponseStatus failed, using local database fallback:", err);
     }
   }
 
-  // Local fallback
+  // Local fallback (always sync!)
   const db = getLocalDb();
   const idx = (db.formResponses || []).findIndex((r: any) => r.id === responseId);
   if (idx !== -1) {
-    db.formResponses[idx].status = status;
+    db.formResponses[idx].status = status as any;
     if (notes !== undefined) {
       db.formResponses[idx].notes = notes;
     }
