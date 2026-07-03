@@ -244,33 +244,23 @@ export async function dbGetUserByEmail(email: string): Promise<any | null> {
 
 export async function dbGetRoles(): Promise<any[]> {
   if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data, error } = await supabase.from('profiles').select('*');
-      if (error) throw error;
-      return (data || []).map((p: any) => ({
-        id: p.id,
-        email: p.email,
-        name: p.full_name || p.email.split('@')[0],
-        full_name: p.full_name,
-        role: p.role,
-        status: p.status,
-        firstLogin: p.first_login,
-        passwordChangedAt: p.password_changed_at,
-        createdBy: p.created_by,
-        lastLogin: p.last_login,
-        committeeId: p.committee_id,
-        verticalId: p.vertical_id,
-        phone: p.phone,
-        profilePhoto: p.profile_photo,
-        designation: p.designation,
-        department: p.department,
-        createdAt: p.created_at
-      }));
-    } catch (err) {
-      console.warn("Supabase dbGetRoles failed, using local database fallback:", err);
-      const db = getLocalDb();
-      return db.users.map(u => ({ ...u, name: u.full_name || u.name }));
-    }
+    const { data, error } = await supabase.from('profiles').select('*');
+    if (error) throw error;
+    return (data || []).map((p: any) => ({
+      id: p.id,
+      email: p.email,
+      name: p.name,
+      role: p.role,
+      status: p.status,
+      firstLogin: p.first_login,
+      passwordChangedAt: p.password_changed_at,
+      createdBy: p.created_by,
+      lastLogin: p.last_login,
+      committeeId: p.committee_id,
+      verticalId: p.vertical_id,
+      isHead: p.is_head,
+      createdAt: p.created_at
+    }));
   } else {
     const db = getLocalDb();
     return db.users.map(u => ({ ...u, name: u.full_name || u.name }));
@@ -455,25 +445,11 @@ export async function dbUpdateLastLogin(userId: string): Promise<void> {
 }
 
 // --- VERTICALS ---
-export async function dbGetVerticals(): Promise<any[]> {
-  let verticals: any[] = [];
-  let users: any[] = [];
-
+export async function dbGetVerticals(): Promise<Vertical[]> {
   if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data: vData, error: vErr } = await supabase.from('verticals').select('*');
-      if (vErr) throw vErr;
-      verticals = vData || [];
-
-      const { data: uData, error: uErr } = await supabase.from('profiles').select('*');
-      if (uErr) throw uErr;
-      users = uData || [];
-    } catch (err) {
-      console.warn("Supabase dbGetVerticals failed, using local database fallback:", err);
-      const db = getLocalDb();
-      verticals = db.verticals || [];
-      users = db.users || [];
-    }
+    const { data, error } = await supabase.from('verticals').select('*');
+    if (error) throw error;
+    return data || [];
   } else {
     const db = getLocalDb();
     verticals = db.verticals || [];
@@ -595,40 +571,32 @@ export async function dbDeleteCoreCommittee(id: string): Promise<void> {
 // --- ASSIGNMENTS ---
 export async function dbGetAssignments(): Promise<any> {
   if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data: comms, error: commError } = await supabase
-        .from('core_committees')
-        .select('id, name, head_id, profiles!core_committees_head_id_fkey(full_name, email)');
-      if (commError) throw commError;
+    const { data: profiles, error } = await supabase.from('profiles').select('id, name, email, committee_id, vertical_id, is_head, created_at, core_committees (name), verticals (name)');
+    if (error) throw error;
 
-      const { data: verts, error: vertError } = await supabase
-        .from('verticals')
-        .select('id, name, head_id, profiles!verticals_head_id_fkey(full_name, email)');
-      if (vertError) throw vertError;
+    const committeeHeads = (profiles || []).filter(p => p.committee_id && p.is_head);
+    const verticalHeads = (profiles || []).filter(p => p.vertical_id && p.is_head);
 
-      return {
-        committee: (comms || []).filter(c => c.head_id).map((c: any) => ({
-          id: c.id,
-          userId: c.head_id,
-          committeeId: c.id,
-          userName: c.profiles?.full_name || 'Unknown',
-          userEmail: c.profiles?.email || '',
-          committeeName: c.name
-        })),
-        vertical: (verts || []).filter(v => v.head_id).map((v: any) => ({
-          id: v.id,
-          userId: v.head_id,
-          verticalId: v.id,
-          userName: v.profiles?.full_name || 'Unknown',
-          userEmail: v.profiles?.email || '',
-          verticalName: v.name
-        }))
-      };
-    } catch (err) {
-      console.warn("Supabase dbGetAssignments failed, using local database fallback:", err);
-      const db = getLocalDb();
-      return getLocalAssignments(db);
-    }
+    return {
+      committee: committeeHeads.map((p: any) => ({
+        id: p.id,
+        userId: p.id,
+        committeeId: p.committee_id,
+        assignedAt: p.created_at,
+        userName: p.name || 'Unknown',
+        userEmail: p.email,
+        committeeName: p.core_committees?.name || 'Unknown'
+      })),
+      vertical: verticalHeads.map((p: any) => ({
+        id: p.id,
+        userId: p.id,
+        verticalId: p.vertical_id,
+        assignedAt: p.created_at,
+        userName: p.name || 'Unknown',
+        userEmail: p.email,
+        verticalName: p.verticals?.name || 'Unknown'
+      }))
+    };
   } else {
     const db = getLocalDb();
     return getLocalAssignments(db);
@@ -638,7 +606,7 @@ export async function dbGetAssignments(): Promise<any> {
 function getLocalAssignments(db: DatabaseSchema) {
   const comms = db.coreCommittees || [];
   const verts = db.verticals || [];
-  
+
   return {
     committee: comms.filter((c: any) => c.head_id).map((c: any) => {
       const head = db.users.find((u: any) => u.id === c.head_id);
@@ -687,7 +655,7 @@ export async function dbAssignCoreHead(email: string, committeeId: string): Prom
     const db = getLocalDb();
     const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
     if (!user) throw new Error('User not found. Head must register first.');
-    
+
     const comm = db.coreCommittees.find(c => c.id === committeeId);
     if (comm) comm.head_id = user.id;
     user.committeeId = committeeId;
@@ -705,8 +673,8 @@ export async function dbRemoveCoreAssignment(userId: string, committeeId?: strin
     if (commErr) throw commErr;
   } else {
     const db = getLocalDb();
-    const comm = committeeId 
-      ? db.coreCommittees.find(c => c.id === committeeId) 
+    const comm = committeeId
+      ? db.coreCommittees.find(c => c.id === committeeId)
       : db.coreCommittees.find(c => c.head_id === userId);
     if (comm && comm.head_id === userId) {
       comm.head_id = undefined;
@@ -737,7 +705,7 @@ export async function dbAssignVerticalHead(email: string, verticalId: string): P
     const db = getLocalDb();
     const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
     if (!user) throw new Error('User not found. Head must register first.');
-    
+
     const vert = db.verticals.find(v => v.id === verticalId);
     if (vert) vert.head_id = user.id;
     user.verticalId = verticalId;
@@ -755,8 +723,8 @@ export async function dbRemoveVerticalAssignment(userId: string, verticalId?: st
     if (vertErr) throw vertErr;
   } else {
     const db = getLocalDb();
-    const vert = verticalId 
-      ? db.verticals.find(v => v.id === verticalId) 
+    const vert = verticalId
+      ? db.verticals.find(v => v.id === verticalId)
       : db.verticals.find(v => v.head_id === userId);
     if (vert && vert.head_id === userId) {
       vert.head_id = undefined;
@@ -767,41 +735,24 @@ export async function dbRemoveVerticalAssignment(userId: string, verticalId?: st
 
 // --- EVENTS ---
 export async function dbGetEvents(): Promise<Event[]> {
-  let rawEvents: any[] = [];
   if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data, error } = await supabase.from('events').select('*');
-      if (error) throw error;
-      rawEvents = data || [];
-    } catch (err) {
-      console.warn("Supabase dbGetEvents failed, using local database fallback:", err);
-      rawEvents = getLocalDb().events;
-    }
-  } else {
-    rawEvents = getLocalDb().events;
-  }
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  return rawEvents.map((e: any) => {
-    const eventDate = new Date(e.date);
-    const status = eventDate >= today ? 'upcoming' : 'past';
-    return {
+    const { data, error } = await supabase.from('events').select('*');
+    if (error) throw error;
+    return (data || []).map((e: any) => ({
       id: e.id,
       title: e.title,
       description: e.description,
       date: e.date,
-      time: e.time,
-      location: e.location,
-      bannerUrl: e.banner_url || e.bannerUrl,
-      committeeId: e.committee_id || e.committeeId,
-      verticalId: e.vertical_id || e.verticalId,
-      createdBy: e.created_by || e.createdBy,
-      status,
-      featured: e.featured === true
-    };
-  });
+      category: e.category,
+      status: e.status,
+      featured: e.featured,
+      committeeId: e.committee_id,
+      verticalId: e.vertical_id,
+      createdBy: e.created_by
+    }));
+  } else {
+    return getLocalDb().events;
+  }
 }
 
 export async function dbAddEvent(data: any, createdBy?: string): Promise<void> {
@@ -1800,7 +1751,7 @@ export async function dbGetFormResponses(formId: string): Promise<CustomFormResp
   // Local fallback
   const db = getLocalDb();
   const responses = (db.formResponses || []).filter((r: any) => r.formId === formId);
-  
+
   return responses.map((r: any) => {
     const respAnswers: Record<string, any> = {};
     (db.responseAnswers || [])
@@ -1846,7 +1797,7 @@ export async function dbUpdateResponseStatus(responseId: string, status: string,
 // UTILS
 // =====================================================================
 function genRandomUuid(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });

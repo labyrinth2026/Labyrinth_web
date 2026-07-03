@@ -6,10 +6,13 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { NAV_LINKS } from '../../utils/constants';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('');
   const pathname = usePathname();
 
   useEffect(() => {
@@ -41,10 +44,73 @@ const Navbar: React.FC = () => {
     };
   }, [mobileMenuOpen]);
 
+  // Track active section on the homepage for highlighting
+  useEffect(() => {
+    if (pathname !== '/') {
+      setActiveSection('');
+      return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const sections = [
+      { id: 'hero', path: '/' },
+      { id: 'verticals', path: '/verticals' },
+      { id: 'events', path: '/events' },
+      { id: 'team', path: '/team' },
+      { id: 'contact', path: '/contact' }
+    ];
+
+    const triggers: ScrollTrigger[] = [];
+
+    // Ensure we trigger highlights on homepage scroll
+    sections.forEach(({ id, path }) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      const trigger = ScrollTrigger.create({
+        trigger: el,
+        start: 'top 40%',
+        end: 'bottom 40%',
+        onToggle: (self) => {
+          if (self.isActive) {
+            setActiveSection(path);
+          }
+        }
+      });
+      triggers.push(trigger);
+    });
+
+    return () => {
+      triggers.forEach(t => t.kill());
+    };
+  }, [pathname]);
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
+    if (pathname === '/') {
+      let targetId = '';
+      if (path === '/') targetId = '#hero';
+      else if (path === '/verticals') targetId = '#verticals';
+      else if (path === '/events') targetId = '#events';
+      else if (path === '/team') targetId = '#team';
+      else if (path === '/contact') targetId = '#contact';
+
+      if (targetId) {
+        const el = document.querySelector(targetId) as HTMLElement;
+        const lenis = (window as any).lenisInstance;
+        if (el && lenis) {
+          e.preventDefault();
+          lenis.scrollTo(el, { offset: -80 });
+          setMobileMenuOpen(false);
+        }
+      }
+    }
+  };
+
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`main-navbar fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
             ? 'backdrop-blur-md border-b border-slate-900/5 shadow-sm py-2.5 bg-white/70'
             : 'bg-transparent py-4 border-b border-transparent'
@@ -52,18 +118,19 @@ const Navbar: React.FC = () => {
       >
         <div className="container mx-auto px-6 max-w-7xl flex items-center justify-between">
           {/* Left: Labyrinth Logo */}
-          <Link href="/" className="flex items-center group relative z-50">
+          <Link href="/" className="flex items-center group relative z-50" onClick={(e) => handleLinkClick(e, '/')}>
             <img src="/labyrinth-logo.png" alt="Labyrinth Logo" className="h-10 object-contain" />
           </Link>
 
           {/* Center: Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1 absolute left-1/2 transform -translate-x-1/2">
             {NAV_LINKS.map((link) => {
-              const isActive = pathname === link.path;
+              const isActive = pathname === link.path || (pathname === '/' && activeSection === link.path);
               return (
                 <Link
                   key={link.path}
                   href={link.path}
+                  onClick={(e) => handleLinkClick(e, link.path)}
                   className={`text-xs font-bold uppercase tracking-wider transition-all px-4 py-2 rounded-full border ${
                     isActive
                       ? 'text-[#CD0000] bg-[#CD0000]/5 border-[#CD0000]/15'
@@ -80,6 +147,7 @@ const Navbar: React.FC = () => {
           <div className="hidden md:flex items-center gap-4 relative z-50">
             <Link
               href="/contact"
+              onClick={(e) => handleLinkClick(e, '/contact')}
               className="px-5 py-2 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-full hover:bg-[#9E0000] transition-colors shadow-sm"
             >
               Join Us
@@ -148,7 +216,7 @@ const Navbar: React.FC = () => {
             {/* Drawer Navigation Links */}
             <nav className="flex flex-col gap-1 p-4 shrink-0">
               {NAV_LINKS.map((link, i) => {
-                const isActive = pathname === link.path;
+                const isActive = pathname === link.path || (pathname === '/' && activeSection === link.path);
                 return (
                   <motion.div
                     key={link.path}
@@ -158,6 +226,7 @@ const Navbar: React.FC = () => {
                   >
                     <Link
                       href={link.path}
+                      onClick={(e) => handleLinkClick(e, link.path)}
                       className={`block text-xs font-bold uppercase tracking-wider px-4 py-3 rounded-lg border transition-all ${
                         isActive
                           ? 'text-[#CD0000] bg-[#CD0000]/5 border-[#CD0000]/10'
@@ -175,6 +244,7 @@ const Navbar: React.FC = () => {
             <div className="mt-auto p-6 shrink-0 border-t border-slate-100 bg-slate-50/50">
               <Link
                 href="/contact"
+                onClick={(e) => handleLinkClick(e, '/contact')}
                 className="flex items-center justify-center w-full px-6 py-3 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-[#9E0000] transition-colors shadow-sm mb-4"
               >
                 Join Community
@@ -198,3 +268,4 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
+

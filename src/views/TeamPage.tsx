@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import PageWrapper from '../components/layout/PageWrapper';
 import SectionHeading from '../components/ui/SectionHeading';
 import TeamCard from '../components/ui/TeamCard';
 import FacultyCard from '../components/ui/FacultyCard';
 import SearchFilter from '../components/ui/SearchFilter';
-import { GraduationCap, Users, BookOpen } from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
+import ScrollReveal from '../components/ui/ScrollReveal';
 
 import { fetchFromSheet } from '../services/api';
 
@@ -65,15 +66,6 @@ const TeamPage: React.FC = () => {
   const heads = filterMembers(teamData.verticalHeads);
   const subHeads = filterMembers(teamData.subHeads);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.06 } }
-  };
-  const itemVariants = {
-    hidden: { opacity: 0, scale: 0.95, y: 16 },
-    show: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.35 } }
-  };
-
   const hasResults = faculty.length > 0 || mentors.length > 0 || core.length > 0 || heads.length > 0 || subHeads.length > 0;
 
   const techVerticals = verticalsData.filter(v => v.category === 'tech');
@@ -88,31 +80,31 @@ const TeamPage: React.FC = () => {
 
       return (
         <div key={vertical.id} className="mb-16">
-          <h4 className="text-xl font-black text-[#EFEDE6] mb-6 border-b border-[#B8B8B8]/10 pb-2">{vertical.name}</h4>
+          <h4 className="text-xl font-black text-slate-800 mb-6 border-b border-[#B8B8B8]/10 pb-2">{vertical.name}</h4>
           
           {vHeads.length > 0 && (
             <div className="mb-6">
               <h5 className="text-xs font-bold text-[#CD0000] mb-4 uppercase tracking-widest">Vertical Heads</h5>
-              <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {vHeads.map(member => (
-                  <motion.div key={member.id} variants={itemVariants}>
-                    <TeamCard member={member} />
-                  </motion.div>
-                ))}
-              </motion.div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <ScrollReveal key={`${filter}-${vertical.id}-heads`} stagger={0.06}>
+                  {vHeads.map(member => (
+                    <TeamCard key={member.id} member={member} />
+                  ))}
+                </ScrollReveal>
+              </div>
             </div>
           )}
 
           {vSubHeads.length > 0 && (
             <div>
-              <h5 className="text-xs font-bold text-[#B8B8B8] mb-4 uppercase tracking-widest">Sub-Heads</h5>
-              <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {vSubHeads.map(member => (
-                  <motion.div key={member.id} variants={itemVariants}>
-                    <TeamCard member={member} />
-                  </motion.div>
-                ))}
-              </motion.div>
+              <h5 className="text-xs font-bold text-slate-500 mb-4 uppercase tracking-widest">Sub-Heads</h5>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <ScrollReveal key={`${filter}-${vertical.id}-subheads`} stagger={0.06}>
+                  {vSubHeads.map(member => (
+                    <TeamCard key={member.id} member={member} />
+                  ))}
+                </ScrollReveal>
+              </div>
             </div>
           )}
         </div>
@@ -123,9 +115,9 @@ const TeamPage: React.FC = () => {
   return (
     <PageWrapper>
       {/* Header (Section 1: Off-White) */}
-      <section className="py-24 bg-white border-b border-slate-100">
+      <section className="pt-24 pb-8 bg-white border-b border-slate-100">
         <div className="container mx-auto px-6 max-w-7xl text-center">
-          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          <ScrollReveal animation="fade">
             <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
               People
             </span>
@@ -152,19 +144,19 @@ const TeamPage: React.FC = () => {
                 ]}
               />
             </div>
-          </motion.div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* Content (Section 2: Off-White) */}
-      <section className="py-24 bg-slate-50/50">
+      <section className="pt-8 pb-24 bg-slate-50/50">
         <div className="container mx-auto px-6 max-w-7xl">
           <AnimatePresence mode="wait">
             {hasResults ? (
-              <>
+              <div key={filter + search}>
                 {/* ── FACULTY COORDINATORS ── */}
                 {(filter === 'all' || filter === 'faculty') && faculty.length > 0 && (
-                  <motion.div key="faculty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mb-20">
+                  <div className="mb-20">
                     <div className="bg-slate-900 border border-slate-950 rounded-2xl px-6 py-5 mb-8 flex items-center gap-4 shadow-sm">
                       <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
                         <GraduationCap size={22} className="text-white" />
@@ -174,47 +166,47 @@ const TeamPage: React.FC = () => {
                         <p className="text-slate-400 text-xs font-medium">Christ University Department of Computer Science</p>
                       </div>
                     </div>
-                    <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {faculty.map(member => (
-                        <motion.div key={member.id} variants={itemVariants}>
-                          <FacultyCard faculty={member} />
-                        </motion.div>
-                      ))}
-                    </motion.div>
-                  </motion.div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <ScrollReveal key={`${filter}-faculty`} stagger={0.06}>
+                        {faculty.map(member => (
+                          <FacultyCard key={member.id} faculty={member} />
+                        ))}
+                      </ScrollReveal>
+                    </div>
+                  </div>
                 )}
 
                 {/* ── MENTORS ── */}
                 {(filter === 'all' || filter === 'mentors') && mentors.length > 0 && (
-                  <motion.div key="mentors" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mb-20">
+                  <div className="mb-20">
                     <SectionHeading title="Mentors" subtitle="Guidance" align="left" />
-                    <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                      {mentors.map(member => (
-                        <motion.div key={member.id} variants={itemVariants}>
-                          <TeamCard member={member} />
-                        </motion.div>
-                      ))}
-                    </motion.div>
-                  </motion.div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                      <ScrollReveal key={`${filter}-mentors`} stagger={0.06}>
+                        {mentors.map(member => (
+                          <TeamCard key={member.id} member={member} />
+                        ))}
+                      </ScrollReveal>
+                    </div>
+                  </div>
                 )}
 
                 {/* ── CORE COMMITTEE ── */}
                 {(filter === 'all' || filter === 'core') && core.length > 0 && (
-                  <motion.div key="core" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mb-20">
+                  <div className="mb-20">
                     <SectionHeading title="Core Committee" subtitle="Leadership" align="left" />
-                    <motion.div variants={containerVariants} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                      {core.map(member => (
-                        <motion.div key={member.id} variants={itemVariants}>
-                          <TeamCard member={member} />
-                        </motion.div>
-                      ))}
-                    </motion.div>
-                  </motion.div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                      <ScrollReveal key={`${filter}-core`} stagger={0.06}>
+                        {core.map(member => (
+                          <TeamCard key={member.id} member={member} />
+                        ))}
+                      </ScrollReveal>
+                    </div>
+                  </div>
                 )}
 
                 {/* ── VERTICALS ── */}
                 {(filter === 'all' || filter === 'verticals') && (heads.length > 0 || subHeads.length > 0) && (
-                  <motion.div key="verticals" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                  <div>
                     <SectionHeading title="Technical Verticals" subtitle="Domain Teams" align="left" />
                     <div className="mb-20">
                       {renderVerticalSection(techVerticals)}
@@ -224,16 +216,16 @@ const TeamPage: React.FC = () => {
                     <div className="mb-20">
                       {renderVerticalSection(nonTechVerticals)}
                     </div>
-                  </motion.div>
+                  </div>
                 )}
-              </>
+              </div>
             ) : (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
+              <div key="no-results" className="text-center py-20">
                 <div className="text-slate-500 mb-4 text-xs font-bold uppercase tracking-wider">No team members found matching "{search}".</div>
                 <button onClick={() => { setSearch(''); setFilter('all'); }} className="text-[#CD0000] font-bold hover:underline uppercase tracking-wider text-[10px]">
                   Clear search
                 </button>
-              </motion.div>
+              </div>
             )}
           </AnimatePresence>
         </div>

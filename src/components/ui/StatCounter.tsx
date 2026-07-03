@@ -45,7 +45,7 @@ const StatCounter: React.FC<StatCounterProps> = ({ value, label, suffix = '', ic
         border: '1px solid rgba(255, 255, 255, 0.18)',
         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)'
       }}
-      className="rounded-3xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden group transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
+      className="rounded-3xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden group transition-all duration-300 hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md hover:shadow-[#CD0000]/[0.02]"
     >
       <div className="w-11 h-11 rounded-xl bg-slate-100/80 border border-slate-200/40 flex items-center justify-center mb-4 text-[#CD0000] group-hover:bg-[#CD0000] group-hover:text-white transition-all duration-300 shadow-xs">
         <Icon size={20} />

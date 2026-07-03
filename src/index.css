@@ -37,10 +37,6 @@
     color: #09090B;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
-
   ::selection {
     background: rgba(205, 0, 0, 0.08);
     color: #CD0000;

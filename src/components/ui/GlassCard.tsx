@@ -16,8 +16,9 @@ const GlassCard: React.FC<GlassCardProps> = ({
   return (
     <motion.div
       whileHover={hover ? {
-        y: -2,
-        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.06)'
+        y: -5,
+        scale: 1.015,
+        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.06), 0 0 25px rgba(205, 0, 0, 0.02)'
       } : {}}
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       style={{

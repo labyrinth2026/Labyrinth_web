@@ -1,9 +1,8 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Target, Lightbulb, Users, BookOpen, Briefcase, Zap } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 import SectionHeading from '../components/ui/SectionHeading';
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import ScrollReveal from '../components/ui/ScrollReveal';
 
 const AboutPage: React.FC = () => {
   const milestones = [
@@ -22,21 +21,16 @@ const AboutPage: React.FC = () => {
   ];
 
   const TimelineItem = ({ milestone, index }: { milestone: any; index: number }) => {
-    const { ref, isVisible } = useScrollAnimation();
     const isEven = index % 2 === 0;
 
     return (
-      <div ref={ref} className={`relative flex items-center justify-between md:justify-normal w-full mb-12 ${isEven ? 'md:flex-row-reverse' : ''}`}>
+      <div className={`relative flex items-center justify-between md:justify-normal w-full mb-12 ${isEven ? 'md:flex-row-reverse' : ''}`}>
         {/* Center Dot */}
         <div className="hidden md:block absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#CD0000] border-4 border-[#121212] z-10 shadow-md" />
 
         {/* Content Card */}
         <div className="w-full md:w-5/12">
-          <motion.div
-            initial={{ opacity: 0, x: isEven ? 40 : -40 }}
-            animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: isEven ? 40 : -40 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-          >
+          <ScrollReveal animation={isEven ? 'slide-left' : 'slide-right'}>
             <div className="bg-[#121212] border border-[#B8B8B8]/10 rounded-3xl shadow-sm p-6 relative">
               {/* Year Badge */}
               <span className="absolute -top-3 left-6 bg-[#CD0000] text-[#EFEDE6] px-4 py-0.5 rounded-full text-xs font-black uppercase tracking-wider shadow">
@@ -45,7 +39,7 @@ const AboutPage: React.FC = () => {
               <h3 className="text-lg font-black text-[#EFEDE6] mb-2 mt-2">{milestone.title}</h3>
               <p className="text-[#B8B8B8] text-sm leading-relaxed">{milestone.desc}</p>
             </div>
-          </motion.div>
+          </ScrollReveal>
         </div>
       </div>
     );
@@ -56,7 +50,7 @@ const AboutPage: React.FC = () => {
       {/* Hero Banner (Section 1: Off-White) */}
       <section className="relative py-24 bg-white overflow-hidden border-b border-slate-100">
         <div className="container mx-auto px-6 max-w-5xl text-center relative z-10">
-          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          <ScrollReveal animation="fade">
             <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
               About Us
             </span>
@@ -75,7 +69,7 @@ const AboutPage: React.FC = () => {
             <p className="text-lg font-bold text-[#CD0000] max-w-3xl mx-auto leading-relaxed mt-10 uppercase tracking-wider text-xs">
               Labyrinth is for the students, by the students.
             </p>
-          </motion.div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -83,8 +77,8 @@ const AboutPage: React.FC = () => {
       <section className="py-24 bg-slate-50/50 border-b border-slate-200/60">
         <div className="container mx-auto px-6 max-w-6xl">
           <div className="grid md:grid-cols-2 gap-8">
-            <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-              <div className="bg-white border border-slate-200/80 rounded-2xl shadow-xs p-8 h-full hover:shadow-sm transition-all duration-300">
+            <ScrollReveal stagger={0.15}>
+              <div className="bg-white border border-slate-200/80 rounded-2xl shadow-xs p-8 h-full hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md hover:shadow-[#CD0000]/[0.02] transition-all duration-300">
                 <div className="w-12 h-12 rounded-xl bg-[#CD0000]/5 border border-[#CD0000]/10 flex items-center justify-center text-[#CD0000] mb-6">
                   <Target size={22} />
                 </div>
@@ -93,10 +87,8 @@ const AboutPage: React.FC = () => {
                   To create a vibrant student community that promotes innovation, technical excellence, creativity, leadership, collaboration, and holistic development among students.
                 </p>
               </div>
-            </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
-              <div className="bg-slate-900 border border-slate-900 rounded-2xl shadow-sm p-8 h-full hover:shadow-md transition-all duration-300">
+              <div className="bg-slate-900 border border-slate-900 rounded-2xl shadow-sm p-8 h-full hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md hover:shadow-white/[0.01] transition-all duration-300">
                 <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-white mb-6">
                   <Lightbulb size={22} />
                 </div>
@@ -105,7 +97,7 @@ const AboutPage: React.FC = () => {
                   To become a platform where students discover opportunities, build skills, showcase talents, and contribute meaningfully to the technology ecosystem and society.
                 </p>
               </div>
-            </motion.div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
@@ -115,23 +107,17 @@ const AboutPage: React.FC = () => {
         <div className="container mx-auto px-6 max-w-6xl">
           <SectionHeading title="Why LABYRINTH?" subtitle="Benefits" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.05 }}
-              >
-                <div className="bg-white border border-slate-200/80 rounded-2xl p-6 h-full text-center group hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+            <ScrollReveal stagger={0.08}>
+              {features.map((feature, i) => (
+                <div key={i} className="bg-white border border-slate-200/80 rounded-2xl p-6 h-full text-center group hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md hover:shadow-[#CD0000]/[0.02] transition-all duration-300">
                   <div className="w-10 h-10 mx-auto rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center text-slate-500 mb-6 group-hover:bg-[#CD0000] group-hover:text-white transition-all duration-300">
                     <feature.icon size={18} />
                   </div>
                   <h3 className="text-sm font-bold text-slate-800 mb-2">{feature.title}</h3>
                   <p className="text-xs text-slate-500 leading-relaxed">{feature.desc}</p>
                 </div>
-              </motion.div>
-            ))}
+              ))}
+            </ScrollReveal>
           </div>
         </div>
       </section>

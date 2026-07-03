@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 interface PageWrapperProps {
   children: React.ReactNode;
@@ -7,20 +7,26 @@ interface PageWrapperProps {
 }
 
 const PageWrapper: React.FC<PageWrapperProps> = ({ children, className = '' }) => {
+  const mainRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    gsap.to(mainRef.current, {
+      opacity: 1,
+      duration: 0.5,
+      ease: 'power3.out'
+    });
   }, []);
 
   return (
-    <motion.main
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12 }}
-      transition={{ duration: 0.35, ease: 'easeInOut' }}
+    <main
+      ref={mainRef}
+      style={{ opacity: 0 }}
       className={`min-h-screen pt-20 pb-16 bg-white ${className}`}
     >
       {children}
-    </motion.main>
+    </main>
   );
 };
 

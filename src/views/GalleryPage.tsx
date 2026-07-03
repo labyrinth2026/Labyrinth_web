@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ZoomIn, Calendar, Images, ChevronLeft, ChevronRight } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 import SearchFilter from '../components/ui/SearchFilter';
+import ScrollReveal from '../components/ui/ScrollReveal';
 
 import { fetchFromSheet } from '../services/api';
 
@@ -12,6 +13,7 @@ const GalleryPage: React.FC = () => {
   const [galleryData, setGalleryData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const featuredVideos = [
     { src: "/gallery/AVOLODHAA.mp4", label: "Fest Highlights Video" },
@@ -25,7 +27,7 @@ const GalleryPage: React.FC = () => {
     setCurrentVideoIdx((prev) => (prev - 1 + featuredVideos.length) % featuredVideos.length);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const loadData = async () => {
       try {
         const data: any = await fetchFromSheet('getGallery');
@@ -38,6 +40,33 @@ const GalleryPage: React.FC = () => {
     loadData();
   }, []);
 
+  useEffect(() => {
+    // Viewport-aware playback observer
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch((err) => {
+            console.log('Video autoplay blocked or interrupted:', err);
+          });
+        } else {
+          video.pause();
+        }
+      },
+      {
+        threshold: 0.55, // Trigger play when at least 55% is visible
+      }
+    );
+
+    observer.observe(video);
+
+    return () => {
+      observer.unobserve(video);
+    };
+  }, [isLoading, currentVideoIdx]);
+
   const filteredImages = galleryData
     .filter(img => img.image) // Only show items with actual images
     .filter(img => img.image !== '/gallery/AVOLODHAA.mp4' && img.image !== '/gallery/Screen_Recording_20260220_090135_Photos.mp4') // Exclude the featured videos from the grid
@@ -47,10 +76,10 @@ const GalleryPage: React.FC = () => {
     return { bg: 'bg-slate-50 border-slate-200/60', text: 'text-slate-600' };
   };
 
-  const getRowSpan = (index: number) => {
+  const getHeightClass = (index: number) => {
     const pattern = [2, 1, 2, 1, 1, 2];
     const span = pattern[index % pattern.length];
-    return span === 2 ? 'row-span-2 h-72 md:h-80' : 'row-span-1 h-44 md:h-56';
+    return span === 2 ? 'h-72 md:h-80 w-full' : 'h-44 md:h-56 w-full';
   };
 
   if (isLoading) {
@@ -66,18 +95,21 @@ const GalleryPage: React.FC = () => {
   return (
     <PageWrapper>
       {/* Header with Featured Video Section */}
-      <section className="pt-24 pb-12 bg-white">
+      <section className="pt-6 md:pt-12 pb-0 bg-white">
         <div className="container mx-auto px-6 max-w-7xl text-center">
-          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          <ScrollReveal animation="fade">
             <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
               Highlights
             </span>
-            <h1 className="text-4xl md:text-6xl font-black mb-8 text-slate-900 tracking-tight leading-tight uppercase">
+            <h1 className="text-4xl md:text-6xl font-black mb-12 md:mb-16 text-slate-900 tracking-tight leading-tight uppercase">
               fieldops<span className="text-[#CD0000]">2026</span>
             </h1>
-            
+          </ScrollReveal>
+          
+          <ScrollReveal animation="zoom-up" duration={0.7} triggerOnce={true}>
             <div className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-slate-200/60 aspect-video mb-12 bg-slate-950 group">
               <video 
+                ref={videoRef}
                 key={currentVideoIdx}
                 src={featuredVideos[currentVideoIdx].src} 
                 autoPlay 
@@ -113,63 +145,54 @@ const GalleryPage: React.FC = () => {
                 ))}
               </div>
             </div>
-
-
-          </motion.div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* Masonry Grid (Section 2: Off-White) */}
-      <section className="py-24 bg-slate-50/50">
+      <section className="pt-10 pb-24 md:pt-14 bg-slate-50/50">
         <div className="container mx-auto px-6 max-w-7xl">
           <AnimatePresence mode="wait">
             {filteredImages.length > 0 ? (
-              <motion.div
-                key={filter}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-auto"
-              >
-                {filteredImages.map((item, i) => {
-                  return (
-                    <motion.div
-                      key={item.id}
-                      initial={{ opacity: 0, scale: 0.98 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.3, delay: i * 0.03 }}
-                      className={`relative group rounded-2xl overflow-hidden cursor-pointer border border-slate-200 bg-white shadow-xs hover:shadow-md ${getRowSpan(i)}`}
-                      onClick={() => setSelectedImage(item)}
-                    >
-                      {item.image ? (
-                        item.image.endsWith('.mp4') ? (
-                          <div className="absolute inset-0 w-full h-full bg-slate-900">
-                            <video src={item.image} muted loop playsInline className="w-full h-full object-cover" onMouseEnter={e => e.currentTarget.play()} onMouseLeave={e => e.currentTarget.pause()} />
-                            <div className="absolute top-2 left-2 bg-slate-950/60 text-white text-[8px] font-black uppercase px-1.5 py-0.5 rounded-sm tracking-wider">Video</div>
-                          </div>
+              <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
+                <ScrollReveal key={filter} stagger={0.05}>
+                  {filteredImages.map((item, i) => {
+                    return (
+                      <div
+                        key={item.id}
+                        className={`relative group rounded-2xl overflow-hidden cursor-pointer border border-slate-200 bg-white shadow-xs hover:shadow-md hover:scale-[1.025] transition-all duration-300 ease-out break-inside-avoid mb-4 ${getHeightClass(i)}`}
+                        onClick={() => setSelectedImage(item)}
+                      >
+                        {item.image ? (
+                          item.image.endsWith('.mp4') ? (
+                            <div className="absolute inset-0 w-full h-full bg-slate-900">
+                              <video src={item.image} muted loop playsInline className="w-full h-full object-cover" onMouseEnter={e => e.currentTarget.play()} onMouseLeave={e => e.currentTarget.pause()} />
+                              <div className="absolute top-2 left-2 bg-slate-950/60 text-white text-[8px] font-black uppercase px-1.5 py-0.5 rounded-sm tracking-wider">Video</div>
+                            </div>
+                          ) : (
+                            <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          )
                         ) : (
-                          <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                        )
-                      ) : (
-                        <div className="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center p-4">
-                          <span className="text-[9px] font-black uppercase tracking-widest text-[#CD0000] mb-1">{item.category}</span>
-                          <h3 className="text-slate-800 font-bold text-center text-xs px-2 line-clamp-2">{item.title}</h3>
-                        </div>
-                      )}
+                          <div className="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center p-4">
+                            <span className="text-[9px] font-black uppercase tracking-widest text-[#CD0000] mb-1">{item.category}</span>
+                            <h3 className="text-slate-800 font-bold text-center text-xs px-2 line-clamp-2">{item.title}</h3>
+                          </div>
+                        )}
 
-                      {/* Hover Overlay */}
-                      <div className="absolute inset-0 bg-slate-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                        <ZoomIn className="text-white w-6 h-6 scale-90 group-hover:scale-100 transition-transform duration-200" />
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-slate-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                          <ZoomIn className="text-white w-6 h-6 scale-90 group-hover:scale-100 transition-transform duration-200" />
+                        </div>
                       </div>
-                    </motion.div>
-                  );
-                })}
-              </motion.div>
+                    );
+                  })}
+                </ScrollReveal>
+              </div>
             ) : (
-              <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
+              <div className="text-center py-20">
                 <Images size={36} className="text-[#CD0000] mx-auto mb-4" />
                 <p className="text-slate-500 text-xs">No images found for this category.</p>
-              </motion.div>
+              </div>
             )}
           </AnimatePresence>
         </div>
