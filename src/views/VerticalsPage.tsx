@@ -55,7 +55,7 @@ const VerticalsPage: React.FC = () => {
   return (
     <PageWrapper>
       {/* Header (Section 1: Off-White) */}
-      <section className="py-24 bg-white border-b border-slate-100">
+      <section className="pt-24 pb-8 bg-white border-b border-slate-100">
         <div className="container mx-auto px-6 max-w-7xl text-center">
           <ScrollReveal animation="fade">
             <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
@@ -87,7 +87,7 @@ const VerticalsPage: React.FC = () => {
       </section>
 
       {/* Content (Section 2: Off-White) */}
-      <section className="py-24 bg-slate-50/50">
+      <section className="pt-8 pb-24 bg-slate-50/50">
         <div className="container mx-auto px-6 max-w-7xl">
 
             {/* Tech Verticals */}

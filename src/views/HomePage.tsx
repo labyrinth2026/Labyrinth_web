@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronRight, ChevronLeft, ArrowRight, Brain, Gamepad2, Code2, Shield, Users, Sparkles } from 'lucide-react';
+import Image from 'next/image';
 import PageWrapper from '../components/layout/PageWrapper';
 import Button from '../components/ui/Button';
 import SectionHeading from '../components/ui/SectionHeading';
@@ -14,6 +15,14 @@ import ScrollReveal from '../components/ui/ScrollReveal';
 
 import { fetchFromSheet } from '../services/api';
 import statsData from '../data/stats.json';
+
+const HERO_IMAGES = [
+  '/gallery/20260212_181054.webp',
+  '/gallery/_MG_1303.webp',
+  '/gallery/20260212_115103.webp',
+  '/gallery/20260215_133007.webp',
+  '/gallery/_MG_1854.webp'
+];
 
 const HomePage: React.FC = () => {
   const [eventsData, setEventsData] = useState<any[]>([]);
@@ -30,6 +39,44 @@ const HomePage: React.FC = () => {
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+
+  // Hero carousel state
+  const [heroIndex, setHeroIndex] = useState(0);
+  const [heroHovered, setHeroHovered] = useState(false);
+
+  const touchStartX = useRef<number | null>(null);
+
+  const nextHeroSlide = () => {
+    setHeroIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+  };
+  const prevHeroSlide = () => {
+    setHeroIndex((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - touchEndX;
+    
+    if (diff > 50) {
+      nextHeroSlide();
+    } else if (diff < -50) {
+      prevHeroSlide();
+    }
+    touchStartX.current = null;
+  };
+
+  useEffect(() => {
+    if (heroHovered) return;
+    const interval = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [heroHovered]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -99,24 +146,6 @@ const HomePage: React.FC = () => {
     .fromTo('.hero-cta', { opacity: 0, scale: 0.93 }, { opacity: 1, scale: 1, duration: 0.6 }, '-=0.4')
     .fromTo('.hero-stat-item', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.08 }, '-=0.3');
 
-    // Float loops for background decorative blobs
-    gsap.to('.hero-blob-1', {
-      x: '+=50',
-      y: '+=30',
-      duration: 10,
-      repeat: -1,
-      yoyo: true,
-      ease: 'sine.inOut'
-    });
-
-    gsap.to('.hero-blob-2', {
-      x: '-=40',
-      y: '+=60',
-      duration: 12,
-      repeat: -1,
-      yoyo: true,
-      ease: 'sine.inOut'
-    });
   }, { scope: containerRef, dependencies: [isLoading] });
 
   if (isLoading) {
@@ -134,19 +163,75 @@ const HomePage: React.FC = () => {
       <div ref={containerRef} className="home-page-container opacity-0">
 
         {/* ── Hero Section ── */}
-        <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white minimal-grid pt-16">
-          {/* Floating decorative blobs */}
-          <div className="absolute top-1/4 left-[10%] w-72 h-72 rounded-full bg-[#CD0000]/3 blur-[120px] pointer-events-none hero-blob-1 z-0" />
-          <div className="absolute bottom-1/4 right-[10%] w-96 h-96 rounded-full bg-slate-300/10 blur-[150px] pointer-events-none hero-blob-2 z-0" />
+        <section 
+          id="hero" 
+          className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950 pt-16 z-0"
+          onMouseEnter={() => setHeroHovered(true)}
+          onMouseLeave={() => setHeroHovered(false)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Full Width Image Carousel Background */}
+          <div className="absolute inset-0 w-full h-full z-0 overflow-hidden select-none">
+            <AnimatePresence initial={false}>
+              <motion.div
+                key={heroIndex}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1.0, ease: 'easeInOut' }}
+                className="absolute inset-0 w-full h-full"
+              >
+                <Image
+                  src={HERO_IMAGES[heroIndex]}
+                  alt="Labyrinth Activity"
+                  fill
+                  priority={heroIndex === 0}
+                  className="object-cover"
+                  sizes="100vw"
+                />
+              </motion.div>
+            </AnimatePresence>
+            {/* Subtle Dark Overlay */}
+            <div className="absolute inset-0 bg-slate-950/60 z-10 pointer-events-none" />
+          </div>
+
+          {/* Preload next image */}
+          <div className="hidden">
+            <Image
+              src={HERO_IMAGES[(heroIndex + 1) % HERO_IMAGES.length]}
+              alt="Preload next slide"
+              width={100}
+              height={100}
+            />
+          </div>
+
+          {/* Carousel Navigation Arrows */}
+          <div className="absolute inset-x-6 top-1/2 -translate-y-1/2 hidden md:flex justify-between items-center z-20 pointer-events-none">
+            <button
+              onClick={prevHeroSlide}
+              className="w-12 h-12 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30 text-white flex items-center justify-center transition-all hover:scale-105 pointer-events-auto backdrop-blur-xs cursor-pointer shadow-md"
+              aria-label="Previous Slide"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            <button
+              onClick={nextHeroSlide}
+              className="w-12 h-12 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30 text-white flex items-center justify-center transition-all hover:scale-105 pointer-events-auto backdrop-blur-xs cursor-pointer shadow-md"
+              aria-label="Next Slide"
+            >
+              <ChevronRight size={24} />
+            </button>
+          </div>
 
           <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center pt-24 pb-16">
             <div className="flex flex-col items-center">
-              <h1 className="text-6xl md:text-8xl lg:text-[7.5rem] font-extrabold tracking-tighter mb-4 text-slate-900 leading-[1.05]">
+              <h1 className="text-6xl md:text-8xl lg:text-[7.5rem] font-extrabold tracking-tighter mb-4 text-white leading-[1.05]">
                 <span className="hero-title-word inline-block">LABY</span>
                 <span className="hero-title-word text-[#CD0000] inline-block">RINTH</span>
               </h1>
-              <p className="hero-subtitle text-xs md:text-sm text-slate-500 font-bold uppercase tracking-widest mb-6">Christ University, Bengaluru</p>
-              <p className="hero-desc text-sm md:text-base text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+              <p className="hero-subtitle text-xs md:text-sm text-slate-300 font-bold uppercase tracking-widest mb-6">Christ University, Bengaluru</p>
+              <p className="hero-desc text-sm md:text-base text-slate-200 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
                 The Computer Science Department's Computer Academy has been active since 1997. Labyrinth serves as the official Computer Science Club of Christ University, fostering research, engineering, and digital excellence.
               </p>
             </div>
@@ -157,9 +242,9 @@ const HomePage: React.FC = () => {
                 style={{
                   backdropFilter: 'blur(20px)',
                   WebkitBackdropFilter: 'blur(20px)',
-                  background: 'rgba(255, 255, 255, 0.6)',
-                  border: '1px solid rgba(255, 255, 255, 0.18)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)'
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)'
                 }}
                 className="p-4 rounded-3xl flex flex-col sm:flex-row gap-3 items-center justify-center"
               >
@@ -172,12 +257,30 @@ const HomePage: React.FC = () => {
               </div>
             </div>
 
-            {/* Stats Row */}
-            <div className="flex flex-wrap justify-center gap-12 mt-20 border-t border-slate-100 pt-10 w-full max-w-4xl">
+            {/* Pagination Dots */}
+            <div className="flex justify-center gap-2 mt-12 z-20 relative">
+              {HERO_IMAGES.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setHeroIndex(idx)}
+                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                    heroIndex === idx ? 'w-6 bg-[#CD0000]' : 'w-2 bg-white/40 hover:bg-white/60'
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Stats Summary Row ── */}
+        <section className="py-12 bg-white border-b border-slate-100 z-10 relative">
+          <div className="container mx-auto px-6 max-w-4xl">
+            <div className="flex flex-wrap justify-center gap-12 md:gap-20">
               {statsData.slice(0, 4).map((stat, i) => (
-                <div key={i} className="hero-stat-item text-center min-w-[120px]">
-                  <div className="text-3xl font-extrabold text-slate-900">{stat.value}{stat.suffix}</div>
-                  <div className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-1.5">{stat.label}</div>
+                <div key={i} className="hero-stat-item text-center min-w-[140px]">
+                  <div className="text-4xl font-extrabold text-slate-900">{stat.value}{stat.suffix}</div>
+                  <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-2">{stat.label}</div>
                 </div>
               ))}
             </div>
