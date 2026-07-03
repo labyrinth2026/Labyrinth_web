@@ -1340,80 +1340,85 @@ export interface CustomFormResponse {
 }
 
 export async function dbGetCustomForms(): Promise<CustomForm[]> {
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data, error } = await supabase.from('forms').select('*').order('created_at', { ascending: false });
-      if (error) throw error;
-      return (data || []).map((f: any) => ({
-        id: f.id,
-        title: f.title,
-        description: f.description || '',
-        slug: f.slug,
-        status: f.status,
-        coverImage: f.cover_image || undefined,
-        startDate: f.start_date || undefined,
-        endDate: f.end_date || undefined,
-        createdBy: f.created_by || undefined,
-        createdAt: f.created_at,
-        updatedAt: f.updated_at
-      }));
-    } catch (err) {
-      console.warn("Supabase dbGetCustomForms failed, using local database fallback:", err);
-      return (getLocalDb().forms || []) as CustomForm[];
+  if (isSupabaseConfigured()) {
+    const adminClient = getSupabaseAdmin();
+    if (adminClient) {
+      try {
+        const { data, error } = await adminClient.from('forms').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        return (data || []).map((f: any) => ({
+          id: f.id,
+          title: f.title,
+          description: f.description || '',
+          slug: f.slug,
+          status: f.status,
+          coverImage: f.cover_image || undefined,
+          startDate: f.start_date || undefined,
+          endDate: f.end_date || undefined,
+          createdBy: f.created_by || undefined,
+          createdAt: f.created_at,
+          updatedAt: f.updated_at
+        }));
+      } catch (err) {
+        console.warn("Supabase dbGetCustomForms failed, using local database fallback:", err);
+        return (getLocalDb().forms || []) as CustomForm[];
+      }
     }
-  } else {
-    return (getLocalDb().forms || []) as CustomForm[];
   }
+  return (getLocalDb().forms || []) as CustomForm[];
 }
 
 export async function dbGetCustomFormBySlug(slug: string): Promise<{ form: CustomForm; fields: CustomFormField[] } | null> {
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data: form, error: formErr } = await supabase
-        .from('forms')
-        .select('*')
-        .eq('slug', slug)
-        .maybeSingle();
-      if (formErr) throw formErr;
-      if (!form) return null;
+  if (isSupabaseConfigured()) {
+    const adminClient = getSupabaseAdmin();
+    if (adminClient) {
+      try {
+        const { data: form, error: formErr } = await adminClient
+          .from('forms')
+          .select('*')
+          .eq('slug', slug)
+          .maybeSingle();
+        if (formErr) throw formErr;
+        if (!form) return null;
 
-      const { data: fields, error: fieldsErr } = await supabase
-        .from('form_fields')
-        .select('*')
-        .eq('form_id', form.id)
-        .order('order_num', { ascending: true });
-      if (fieldsErr) throw fieldsErr;
+        const { data: fields, error: fieldsErr } = await adminClient
+          .from('form_fields')
+          .select('*')
+          .eq('form_id', form.id)
+          .order('order_num', { ascending: true });
+        if (fieldsErr) throw fieldsErr;
 
-      return {
-        form: {
-          id: form.id,
-          title: form.title,
-          description: form.description || '',
-          slug: form.slug,
-          status: form.status,
-          coverImage: form.cover_image || undefined,
-          startDate: form.start_date || undefined,
-          endDate: form.end_date || undefined,
-          createdBy: form.created_by || undefined,
-          createdAt: form.created_at,
-          updatedAt: form.updated_at
-        },
-        fields: (fields || []).map((f: any) => ({
-          id: f.id,
-          formId: f.form_id,
-          fieldType: f.field_type,
-          label: f.label,
-          description: f.description || undefined,
-          placeholder: f.placeholder || undefined,
-          required: f.required,
-          options: f.options || undefined,
-          order: f.order_num,
-          defaultValue: f.default_value || undefined,
-          validation: f.validation || undefined
-        }))
-      };
-    } catch (err) {
-      console.warn("Supabase dbGetCustomFormBySlug failed, using local database fallback:", err);
+        return {
+          form: {
+            id: form.id,
+            title: form.title,
+            description: form.description || '',
+            slug: form.slug,
+            status: form.status,
+            coverImage: form.cover_image || undefined,
+            startDate: form.start_date || undefined,
+            endDate: form.end_date || undefined,
+            createdBy: form.created_by || undefined,
+            createdAt: form.created_at,
+            updatedAt: form.updated_at
+          },
+          fields: (fields || []).map((f: any) => ({
+            id: f.id,
+            formId: f.form_id,
+            fieldType: f.field_type,
+            label: f.label,
+            description: f.description || undefined,
+            placeholder: f.placeholder || undefined,
+            required: f.required,
+            options: f.options || undefined,
+            order: f.order_num,
+            defaultValue: f.default_value || undefined,
+            validation: f.validation || undefined
+          }))
+        };
+      } catch (err) {
+        console.warn("Supabase dbGetCustomFormBySlug failed, using local database fallback:", err);
+      }
     }
   }
 
@@ -1432,43 +1437,46 @@ export async function dbAddCustomForm(data: Partial<CustomForm>, fields: Partial
   const formId = genRandomUuid();
   const timestamp = new Date().toISOString();
 
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { error: formErr } = await supabase.from('forms').insert({
-        id: formId,
-        title: data.title,
-        description: data.description || null,
-        slug: data.slug,
-        status: data.status || 'draft',
-        cover_image: data.coverImage || null,
-        start_date: data.startDate || null,
-        end_date: data.endDate || null,
-        created_by: data.createdBy || null,
-        created_at: timestamp,
-        updated_at: timestamp
-      });
-      if (formErr) throw formErr;
+  if (isSupabaseConfigured()) {
+    const adminClient = getSupabaseAdmin();
+    if (adminClient) {
+      try {
+        const { error: formErr } = await adminClient.from('forms').insert({
+          id: formId,
+          title: data.title,
+          description: data.description || null,
+          slug: data.slug,
+          status: data.status || 'draft',
+          cover_image: data.coverImage || null,
+          start_date: data.startDate || null,
+          end_date: data.endDate || null,
+          created_by: data.createdBy || null,
+          created_at: timestamp,
+          updated_at: timestamp
+        });
+        if (formErr) throw formErr;
 
-      if (fields && fields.length > 0) {
-        const mappedFields = fields.map((f, i) => ({
-          id: f.id || genRandomUuid(),
-          form_id: formId,
-          field_type: f.fieldType,
-          label: f.label,
-          description: f.description || null,
-          placeholder: f.placeholder || null,
-          required: f.required || false,
-          options: f.options ? f.options : null,
-          order_num: i,
-          default_value: f.defaultValue || null,
-          validation: f.validation || null
-        }));
-        const { error: fieldsErr } = await supabase.from('form_fields').insert(mappedFields);
-        if (fieldsErr) throw fieldsErr;
+        if (fields && fields.length > 0) {
+          const mappedFields = fields.map((f, i) => ({
+            id: f.id || genRandomUuid(),
+            form_id: formId,
+            field_type: f.fieldType,
+            label: f.label,
+            description: f.description || null,
+            placeholder: f.placeholder || null,
+            required: f.required || false,
+            options: f.options ? f.options : null,
+            order_num: i,
+            default_value: f.defaultValue || null,
+            validation: f.validation || null
+          }));
+          const { error: fieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
+          if (fieldsErr) throw fieldsErr;
+        }
+        return formId;
+      } catch (err) {
+        console.warn("Supabase dbAddCustomForm failed, using local database fallback:", err);
       }
-      return formId;
-    } catch (err) {
-      console.warn("Supabase dbAddCustomForm failed, using local database fallback:", err);
     }
   }
 
@@ -1518,44 +1526,47 @@ export async function dbAddCustomForm(data: Partial<CustomForm>, fields: Partial
 export async function dbUpdateCustomForm(id: string, data: Partial<CustomForm>, fields: Partial<CustomFormField>[]): Promise<void> {
   const timestamp = new Date().toISOString();
 
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { error: formErr } = await supabase.from('forms').update({
-        title: data.title,
-        description: data.description || null,
-        slug: data.slug,
-        status: data.status,
-        cover_image: data.coverImage || null,
-        start_date: data.startDate || null,
-        end_date: data.endDate || null,
-        updated_at: timestamp
-      }).eq('id', id);
-      if (formErr) throw formErr;
+  if (isSupabaseConfigured()) {
+    const adminClient = getSupabaseAdmin();
+    if (adminClient) {
+      try {
+        const { error: formErr } = await adminClient.from('forms').update({
+          title: data.title,
+          description: data.description || null,
+          slug: data.slug,
+          status: data.status,
+          cover_image: data.coverImage || null,
+          start_date: data.startDate || null,
+          end_date: data.endDate || null,
+          updated_at: timestamp
+        }).eq('id', id);
+        if (formErr) throw formErr;
 
-      // Replace fields
-      const { error: delErr } = await supabase.from('form_fields').delete().eq('form_id', id);
-      if (delErr) throw delErr;
+        // Replace fields
+        const { error: delErr } = await adminClient.from('form_fields').delete().eq('form_id', id);
+        if (delErr) throw delErr;
 
-      if (fields && fields.length > 0) {
-        const mappedFields = fields.map((f, i) => ({
-          id: f.id || genRandomUuid(),
-          form_id: id,
-          field_type: f.fieldType,
-          label: f.label,
-          description: f.description || null,
-          placeholder: f.placeholder || null,
-          required: f.required || false,
-          options: f.options ? f.options : null,
-          order_num: i,
-          default_value: f.defaultValue || null,
-          validation: f.validation || null
-        }));
-        const { error: fieldsErr } = await supabase.from('form_fields').insert(mappedFields);
-        if (fieldsErr) throw fieldsErr;
+        if (fields && fields.length > 0) {
+          const mappedFields = fields.map((f, i) => ({
+            id: f.id || genRandomUuid(),
+            form_id: id,
+            field_type: f.fieldType,
+            label: f.label,
+            description: f.description || null,
+            placeholder: f.placeholder || null,
+            required: f.required || false,
+            options: f.options ? f.options : null,
+            order_num: i,
+            default_value: f.defaultValue || null,
+            validation: f.validation || null
+          }));
+          const { error: fieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
+          if (fieldsErr) throw fieldsErr;
+        }
+        return;
+      } catch (err) {
+        console.warn("Supabase dbUpdateCustomForm failed, using local database fallback:", err);
       }
-      return;
-    } catch (err) {
-      console.warn("Supabase dbUpdateCustomForm failed, using local database fallback:", err);
     }
   }
 
@@ -1594,14 +1605,17 @@ export async function dbUpdateCustomForm(id: string, data: Partial<CustomForm>, 
 }
 
 export async function dbDeleteCustomForm(id: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { error } = await supabase.from('forms').delete().eq('id', id);
-      if (error) {
-        console.warn("Supabase delete returned error:", error);
+  if (isSupabaseConfigured()) {
+    const adminClient = getSupabaseAdmin();
+    if (adminClient) {
+      try {
+        const { error } = await adminClient.from('forms').delete().eq('id', id);
+        if (error) {
+          console.warn("Supabase delete returned error:", error);
+        }
+      } catch (err) {
+        console.warn("Supabase dbDeleteCustomForm failed:", err);
       }
-    } catch (err) {
-      console.warn("Supabase dbDeleteCustomForm failed:", err);
     }
   }
 
@@ -1623,50 +1637,53 @@ export async function dbDuplicateCustomForm(id: string): Promise<string> {
   const timestamp = new Date().toISOString();
   const newFormId = genRandomUuid();
 
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data: form, error: formErr } = await supabase.from('forms').select('*').eq('id', id).single();
-      if (formErr) throw formErr;
+  if (isSupabaseConfigured()) {
+    const adminClient = getSupabaseAdmin();
+    if (adminClient) {
+      try {
+        const { data: form, error: formErr } = await adminClient.from('forms').select('*').eq('id', id).single();
+        if (formErr) throw formErr;
 
-      const newSlug = `${form.slug}_copy_${Date.now()}`;
-      const { error: insErr } = await supabase.from('forms').insert({
-        id: newFormId,
-        title: `${form.title} (Copy)`,
-        description: form.description,
-        slug: newSlug,
-        status: 'draft',
-        cover_image: form.cover_image,
-        start_date: form.start_date,
-        end_date: form.end_date,
-        created_by: form.created_by,
-        created_at: timestamp,
-        updated_at: timestamp
-      });
-      if (insErr) throw insErr;
+        const newSlug = `${form.slug}_copy_${Date.now()}`;
+        const { error: insErr } = await adminClient.from('forms').insert({
+          id: newFormId,
+          title: `${form.title} (Copy)`,
+          description: form.description,
+          slug: newSlug,
+          status: 'draft',
+          cover_image: form.cover_image,
+          start_date: form.start_date,
+          end_date: form.end_date,
+          created_by: form.created_by,
+          created_at: timestamp,
+          updated_at: timestamp
+        });
+        if (insErr) throw insErr;
 
-      const { data: fields, error: fieldsErr } = await supabase.from('form_fields').select('*').eq('form_id', id).order('order_num', { ascending: true });
-      if (fieldsErr) throw fieldsErr;
+        const { data: fields, error: fieldsErr } = await adminClient.from('form_fields').select('*').eq('form_id', id).order('order_num', { ascending: true });
+        if (fieldsErr) throw fieldsErr;
 
-      if (fields && fields.length > 0) {
-        const mappedFields = fields.map((f: any) => ({
-          id: genRandomUuid(),
-          form_id: newFormId,
-          field_type: f.field_type,
-          label: f.label,
-          description: f.description,
-          placeholder: f.placeholder,
-          required: f.required,
-          options: f.options,
-          order_num: f.order_num,
-          default_value: f.default_value,
-          validation: f.validation
-        }));
-        const { error: insFieldsErr } = await supabase.from('form_fields').insert(mappedFields);
-        if (insFieldsErr) throw insFieldsErr;
+        if (fields && fields.length > 0) {
+          const mappedFields = fields.map((f: any) => ({
+            id: genRandomUuid(),
+            form_id: newFormId,
+            field_type: f.field_type,
+            label: f.label,
+            description: f.description,
+            placeholder: f.placeholder,
+            required: f.required,
+            options: f.options,
+            order_num: f.order_num,
+            default_value: f.default_value,
+            validation: f.validation
+          }));
+          const { error: insFieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
+          if (insFieldsErr) throw insFieldsErr;
+        }
+        return newFormId;
+      } catch (err) {
+        console.warn("Supabase dbDuplicateCustomForm failed, using local database fallback:", err);
       }
-      return newFormId;
-    } catch (err) {
-      console.warn("Supabase dbDuplicateCustomForm failed, using local database fallback:", err);
     }
   }
 
