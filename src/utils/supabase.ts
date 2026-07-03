@@ -9,16 +9,30 @@ let isSupabaseOnline = true;
 
 export const setSupabaseOffline = () => {
   isSupabaseOnline = false;
+  if (typeof global !== 'undefined') {
+    (global as any).isSupabaseOffline = true;
+  }
 };
 
 export const getSupabaseStatus = () => {
+  if (typeof global !== 'undefined' && (global as any).isSupabaseOffline) {
+    return false;
+  }
   return isSupabaseOnline;
 };
 
 // Check if credentials are valid (non-placeholder) and Supabase is online
 export const isSupabaseConfigured = (): boolean => {
+  if (
+    process.env.FORCE_LOCAL_DB === 'true' || 
+    process.env.NEXT_PUBLIC_FORCE_LOCAL_DB === 'true'
+  ) {
+    return false;
+  }
+
+  const online = getSupabaseStatus();
   return (
-    isSupabaseOnline &&
+    online &&
     supabaseUrl.length > 0 &&
     !supabaseUrl.includes('YOUR_') &&
     supabaseAnonKey.length > 0 &&
@@ -39,7 +53,7 @@ const fetchWithTimeout = async (url: string | URL | Request, options?: RequestIn
     return response;
   } catch (error) {
     clearTimeout(id);
-    isSupabaseOnline = false;
+    setSupabaseOffline();
     console.warn("[Supabase Client] Network error or timeout. Falling back to local db.json.", error);
     throw error;
   }

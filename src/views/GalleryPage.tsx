@@ -16,7 +16,7 @@ const GalleryPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const featuredVideos = [
-    { src: "/gallery/AVOLODHAA.mp4", label: "Fest Highlights Video" },
+    { src: "/gallery/AVOLODHAA.webm", label: "Fest Highlights Video" },
     { src: "/gallery/Screen_Recording_20260220_090135_Photos.mp4", label: "Sports Tournament Highlights" }
   ];
 
