@@ -52,13 +52,12 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     content: { label: 'Content Management', path: '/admin/content', icon: BookOpen },
     forms: { label: 'Forms Management', path: '/admin/forms', icon: LinkIcon },
     reports: { label: 'Reports & Exports', path: '/admin/reports', icon: Download },
-    team: { label: 'Team Management', path: '/admin/team', icon: Users },
-    roles: { label: 'Role & System Config', path: '/admin/roles', icon: Shield },
+    team: { label: 'Team & Roles', path: '/admin/team', icon: Users },
     registrations: { label: 'Registrations', path: '/admin/registrations', icon: CheckSquare }
   };
 
   // Admin has access to all panels
-  const visibleItemKeys = ['dashboard', 'content', 'forms', 'reports', 'team', 'roles', 'registrations'];
+  const visibleItemKeys = ['dashboard', 'content', 'forms', 'reports', 'team', 'registrations'];
   const visibleItems = visibleItemKeys.map(key => allNavItems[key]).filter(Boolean);
 
   const handleLogout = async () => {
