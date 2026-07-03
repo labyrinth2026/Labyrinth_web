@@ -651,7 +651,7 @@
       "date": "2026-08-15",
       "time": "09:00:00",
       "location": "Audi Block, Central Campus",
-      "bannerUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
+      "bannerUrl": "/gallery/peer_edu_presentation.webp",
       "committee_id": null,
       "vertical_id": "ab000000-0000-0000-0000-000000000000",
       "createdAt": "2026-07-02T06:52:31.548Z"
@@ -663,7 +663,7 @@
       "date": "2026-07-20",
       "time": "14:00:00",
       "location": "Main Auditorium, Central Campus",
-      "bannerUrl": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=800&auto=format&fit=crop",
+      "bannerUrl": "/gallery/inauguration_audience.webp",
       "committee_id": null,
       "vertical_id": null,
       "createdAt": "2026-07-02T06:52:31.548Z"
@@ -1082,6 +1082,86 @@
       "description": "Medal distribution for the winners and overall house trophy.",
       "image": "/gallery/_MG_1854.webp",
       "date": "2026-02-13"
+    },
+    {
+      "id": "g37",
+      "title": "Labyrinth Inauguration Welcome Address",
+      "category": "inauguration",
+      "description": "Welcome speech delivered during the Labyrinth computer science club opening.",
+      "image": "/gallery/inauguration_welcome.webp",
+      "date": "2025-07-28"
+    },
+    {
+      "id": "g38",
+      "title": "Inauguration Presidential Address",
+      "category": "inauguration",
+      "description": "Presidential keynote address during the club inauguration.",
+      "image": "/gallery/inauguration_presidential.webp",
+      "date": "2025-07-28"
+    },
+    {
+      "id": "g39",
+      "title": "Inauguration Panel Discussion",
+      "category": "inauguration",
+      "description": "Expert panel discussion on modern computer science trends.",
+      "image": "/gallery/inauguration_panel.webp",
+      "date": "2025-07-28"
+    },
+    {
+      "id": "g40",
+      "title": "Guest of Honor Dr. Pranab Mohanty",
+      "category": "inauguration",
+      "description": "Guest of Honor addressing the faculty and student members.",
+      "image": "/gallery/inauguration_guest.webp",
+      "date": "2025-07-28"
+    },
+    {
+      "id": "g41",
+      "title": "Inauguration Audience Group",
+      "category": "inauguration",
+      "description": "Students and faculty attending the club opening ceremony.",
+      "image": "/gallery/inauguration_audience.webp",
+      "date": "2025-07-28"
+    },
+    {
+      "id": "g42",
+      "title": "Peer Education Session Intro",
+      "category": "peer_education",
+      "description": "Interactive peer learning session led by senior core members.",
+      "image": "/gallery/peer_edu_1.webp",
+      "date": "2026-06-29"
+    },
+    {
+      "id": "g43",
+      "title": "Peer Education Group Discussions",
+      "category": "peer_education",
+      "description": "Students discussing programming paradigms in focus groups.",
+      "image": "/gallery/peer_edu_2.webp",
+      "date": "2026-06-29"
+    },
+    {
+      "id": "g44",
+      "title": "Peer Education Student Presentation",
+      "category": "peer_education",
+      "description": "Student presenting key solutions during the code review session.",
+      "image": "/gallery/peer_edu_presentation.webp",
+      "date": "2026-06-29"
+    },
+    {
+      "id": "g45",
+      "title": "Peer Education Interactive Q&A",
+      "category": "peer_education",
+      "description": "Answering questions on software development workflows.",
+      "image": "/gallery/peer_edu_qa.webp",
+      "date": "2026-06-29"
+    },
+    {
+      "id": "g46",
+      "title": "Peer Education Group Photo",
+      "category": "peer_education",
+      "description": "Organizers and participants of the Peer Education workshop.",
+      "image": "/gallery/peer_edu_group.webp",
+      "date": "2026-06-29"
     }
   ]
 }
