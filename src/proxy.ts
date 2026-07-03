@@ -20,12 +20,10 @@ export async function proxy(req: NextRequest) {
 
   // If user is logged in, but not firstLogin, block reset-password access
   if (user && user.firstLogin === false && pathname === '/auth/reset-password') {
-    if (['HOD', 'COORDINATOR', 'ASSOCIATE'].includes(user.role)) {
+    if (user.role === 'ADMIN') {
       return NextResponse.redirect(new URL('/admin', req.url));
-    } else if (user.role === 'CORE_HEAD') {
-      return NextResponse.redirect(new URL('/committee', req.url));
-    } else if (user.role === 'VERTICAL_HEAD') {
-      return NextResponse.redirect(new URL('/vertical', req.url));
+    } else {
+      return NextResponse.redirect(new URL('/access-denied', req.url));
     }
   }
 
@@ -39,39 +37,8 @@ export async function proxy(req: NextRequest) {
     if (!user) {
       return NextResponse.redirect(new URL('/login', req.url));
     }
-    const allowedAdminRoles = ['HOD', 'COORDINATOR', 'ASSOCIATE'];
-    if (!allowedAdminRoles.includes(user.role)) {
-      const response = NextResponse.redirect(new URL('/login', req.url));
-      response.cookies.delete('labyrinth_session');
-      return response;
-    }
-  }
-
-  // 3. Core Committee Portal Route Checks
-  if (pathname.startsWith('/committee')) {
-    if (!user) {
-      return NextResponse.redirect(new URL('/login', req.url));
-    }
-    if (user.role !== 'CORE_HEAD' || !user.committeeId) {
-      const response = NextResponse.redirect(new URL('/login', req.url));
-      response.cookies.delete('labyrinth_session');
-      return response;
-    }
-  }
-
-  // 4. Vertical Head Portal Route Checks
-  if (pathname.startsWith('/vertical')) {
-    if (pathname === '/verticals') {
-      return NextResponse.next();
-    }
-    
-    if (!user) {
-      return NextResponse.redirect(new URL('/login', req.url));
-    }
-    if (user.role !== 'VERTICAL_HEAD' || !user.verticalId) {
-      const response = NextResponse.redirect(new URL('/login', req.url));
-      response.cookies.delete('labyrinth_session');
-      return response;
+    if (user.role !== 'ADMIN') {
+      return NextResponse.redirect(new URL('/access-denied', req.url));
     }
   }
 
@@ -81,8 +48,6 @@ export async function proxy(req: NextRequest) {
 export const config = {
   matcher: [
     '/admin/:path*',
-    '/committee/:path*',
-    '/vertical/:path*',
     '/auth/reset-password'
   ]
 };

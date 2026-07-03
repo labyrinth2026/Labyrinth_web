@@ -13,24 +13,41 @@ export async function POST(req: NextRequest) {
     }
 
     let userDetails: any = null;
+    let localMode = false;
 
     if (isSupabaseConfigured() && supabase) {
-      // 1. Authenticate with Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-        email: email.toLowerCase().trim(),
-        password
-      });
+      try {
+        // 1. Authenticate with Supabase Auth
+        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+          email: email.toLowerCase().trim(),
+          password
+        });
 
-      if (authError || !authData.user) {
-        return NextResponse.json({ success: false, error: authError?.message || 'Invalid email or password.' }, { status: 401 });
-      }
+        if (authError) {
+          if (authError.message === 'fetch failed' || authError.message.includes('fetch') || !authError.status) {
+            throw authError;
+          }
+          return NextResponse.json({ success: false, error: authError.message || 'Invalid email or password.' }, { status: 401 });
+        }
 
-      // 2. Fetch profile role & status details
-      userDetails = await dbGetUserByEmail(email);
-      if (!userDetails) {
-        return NextResponse.json({ success: false, error: 'User profile not found in database.' }, { status: 401 });
+        if (!authData.user) {
+          return NextResponse.json({ success: false, error: 'Invalid email or password.' }, { status: 401 });
+        }
+
+        // 2. Fetch profile role & status details
+        userDetails = await dbGetUserByEmail(email);
+        if (!userDetails) {
+          return NextResponse.json({ success: false, error: 'User profile not found in database.' }, { status: 401 });
+        }
+      } catch (err: any) {
+        console.warn("[Login API] Supabase auth connection failed, falling back to local auth:", err);
+        localMode = true;
       }
     } else {
+      localMode = true;
+    }
+
+    if (localMode) {
       // Fallback local mode
       const db = getLocalDb();
       const localUser = db.users.find(u => u.email.toLowerCase() === email.toLowerCase().trim());

@@ -12,11 +12,13 @@ import {
   dbGetCommitteeResources, dbAddCommitteeResource, dbDeleteCommitteeResource,
   dbGetVerticalProjects, dbAddVerticalProject, dbUpdateVerticalProject, dbDeleteVerticalProject,
   dbGetVerticalResources, dbAddVerticalResource, dbDeleteVerticalResource,
-  dbGetVerticalAttendance, dbSaveVerticalAttendance,
   dbGetJoinRegistrations, dbApproveRegistration, dbRejectRegistration,
   dbGetRoles, dbAddRole, dbDeleteRole, dbCreateUser, dbUpdateUserStatus, dbUpdateUserDetails,
   dbGetForms, dbUpdateForms,
-  getLocalDb, saveLocalDb, logActivity
+  getLocalDb, saveLocalDb, logActivity,
+  dbGetCustomForms, dbGetCustomFormBySlug, dbAddCustomForm, dbUpdateCustomForm,
+  dbDeleteCustomForm, dbDuplicateCustomForm, dbSubmitFormResponse, dbGetFormResponses,
+  dbUpdateResponseStatus
 } from '@/utils/db';
 
 export async function POST(req: NextRequest) {
@@ -31,8 +33,7 @@ export async function POST(req: NextRequest) {
 
     const { action, payload } = await req.json();
 
-    // Map public read operations that do not require login
-    const publicActions = ['getEvents', 'getTeam', 'getGallery', 'getVerticals', 'getStats', 'submitJoinForm'];
+    const publicActions = ['getEvents', 'getTeam', 'getGallery', 'getVerticals', 'getStats', 'submitJoinForm', 'getFormBySlug', 'submitFormResponse'];
     if (!publicActions.includes(action) && !sessionUser) {
       return NextResponse.json({ success: false, error: 'Unauthorized. Please sign in.' }, { status: 401 });
     }
@@ -50,33 +51,37 @@ export async function POST(req: NextRequest) {
         const assignments = await dbGetAssignments();
         const verticals = await dbGetVerticals();
 
-        const facultyCoordinators = roles.filter(u => ['HOD', 'COORDINATOR', 'ASSOCIATE'].includes(u.role)).map(u => ({
-          id: u.id, name: u.name, role: u.role === 'HOD' ? 'Head of Department' : u.role === 'COORDINATOR' ? 'Faculty Coordinator' : 'Faculty Associate',
-          designation: u.role === 'HOD' ? 'Professor & HOD' : 'Faculty Advisor', department: 'Department of Computer Science', email: u.email
+        const facultyCoordinators = roles.filter(u => u.role === 'ADMIN').map(u => ({
+          id: u.id, 
+          name: u.name, 
+          role: u.designation || 'Club Administrator',
+          designation: u.designation || 'Faculty Advisor', 
+          department: u.department || 'Department of Computer Science', 
+          email: u.email
         }));
 
-        const mentors = roles.filter(u => u.role === 'ASSOCIATE').map(u => ({
-          id: u.id, name: u.name, role: 'Mentor', email: u.email
+        const mentors = roles.filter(u => u.role === 'ADMIN' && u.email !== 'suryachalam.vm@bsccmh.christuniversity.in').map(u => ({
+          id: u.id, 
+          name: u.name, 
+          role: 'Mentor', 
+          email: u.email
         }));
 
         const coreCommittee = (assignments.committee || []).map((a: any) => ({
-          id: a.userId, name: a.userName, role: `${a.committeeName} Head`, email: a.userEmail
+          id: a.userId, 
+          name: a.userName, 
+          role: `${a.committeeName} Head`, 
+          email: a.userEmail
         }));
 
         const verticalHeads = (assignments.vertical || []).map((v: any) => ({
-          id: v.userId, name: v.userName, role: `${v.verticalName} Head`, email: v.userEmail
+          id: v.userId, 
+          name: v.userName, 
+          role: `${v.verticalName} Head`, 
+          email: v.userEmail
         }));
 
-        const subHeads = roles.filter(u => u.role === 'SUB_HEAD').map(u => {
-          const v = verticals.find(ver => ver.id === u.verticalId);
-          return {
-            id: u.id,
-            name: u.name,
-            role: 'Sub-Head',
-            email: u.email,
-            vertical: v?.name || 'Unknown'
-          };
-        });
+        const subHeads: any[] = [];
 
         return NextResponse.json({
           success: true,
@@ -134,7 +139,8 @@ export async function POST(req: NextRequest) {
           id,
           email,
           name,
-          role: 'USER',
+          full_name: name,
+          role: 'MEMBER',
           status: 'inactive',
           firstLogin: true,
           createdAt: new Date().toISOString()
@@ -193,6 +199,11 @@ export async function POST(req: NextRequest) {
         await dbDeleteCoreCommittee(payload.id);
         await logActivity(sessionUser.id, 'delete_committee', `Deleted committee ID ${payload.id}`);
         return NextResponse.json({ success: true });
+      }
+
+      case 'getCoreCommittees': {
+        const committees = await dbGetCoreCommittees();
+        return NextResponse.json({ success: true, data: committees });
       }
 
       // --- HEADS ASSIGNMENT ---
@@ -357,14 +368,12 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: true });
       }
 
-      // --- ATTENDANCE ---
+      // --- ATTENDANCE (STUBBED) ---
       case 'getVerticalAttendance': {
-        const attendance = await dbGetVerticalAttendance(payload.verticalId);
-        return NextResponse.json({ success: true, data: attendance });
+        return NextResponse.json({ success: true, data: [] });
       }
 
       case 'saveVerticalAttendance': {
-        await dbSaveVerticalAttendance(payload.verticalId, payload.date, payload.records);
         return NextResponse.json({ success: true });
       }
 
@@ -395,6 +404,60 @@ export async function POST(req: NextRequest) {
       case 'updateForms': {
         await dbUpdateForms(payload.forms);
         await logActivity(sessionUser.id, 'update_forms', 'Updated registration settings forms config.');
+        return NextResponse.json({ success: true });
+      }
+
+      // --- CUSTOM FORMS SYSTEM ---
+      case 'getCustomForms': {
+        const forms = await dbGetCustomForms();
+        return NextResponse.json({ success: true, data: forms });
+      }
+
+      case 'getFormBySlug': {
+        const result = await dbGetCustomFormBySlug(payload.slug);
+        if (!result) {
+          return NextResponse.json({ success: false, error: 'Form not found.' }, { status: 404 });
+        }
+        return NextResponse.json({ success: true, data: result });
+      }
+
+      case 'addForm': {
+        const id = await dbAddCustomForm(payload.form, payload.fields);
+        await logActivity(sessionUser.id, 'create_custom_form', `Created custom form: ${payload.form.title}`);
+        return NextResponse.json({ success: true, data: { id } });
+      }
+
+      case 'updateForm': {
+        await dbUpdateCustomForm(payload.id, payload.form, payload.fields);
+        await logActivity(sessionUser.id, 'update_custom_form', `Updated custom form: ${payload.form.title}`);
+        return NextResponse.json({ success: true });
+      }
+
+      case 'deleteForm': {
+        await dbDeleteCustomForm(payload.id);
+        await logActivity(sessionUser.id, 'delete_custom_form', `Deleted custom form ID: ${payload.id}`);
+        return NextResponse.json({ success: true });
+      }
+
+      case 'duplicateForm': {
+        const id = await dbDuplicateCustomForm(payload.id);
+        await logActivity(sessionUser.id, 'duplicate_custom_form', `Duplicated custom form ID: ${payload.id}`);
+        return NextResponse.json({ success: true, data: { id } });
+      }
+
+      case 'submitFormResponse': {
+        const id = await dbSubmitFormResponse(payload.formId, payload.applicantName, payload.applicantEmail, payload.answers);
+        return NextResponse.json({ success: true, data: { id } });
+      }
+
+      case 'getFormResponses': {
+        const responses = await dbGetFormResponses(payload.formId);
+        return NextResponse.json({ success: true, data: responses });
+      }
+
+      case 'updateResponseStatus': {
+        await dbUpdateResponseStatus(payload.id, payload.status, payload.notes);
+        await logActivity(sessionUser.id, 'update_response_status', `Updated response ID ${payload.id} status to ${payload.status}`);
         return NextResponse.json({ success: true });
       }
 
