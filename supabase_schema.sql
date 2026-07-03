@@ -424,3 +424,48 @@ DROP POLICY IF EXISTS "Admin full control answers" ON public.response_answers;
 CREATE POLICY "Admin full control answers" ON public.response_answers
     FOR ALL USING (auth.uid() IN (SELECT id FROM public.profiles WHERE role = 'ADMIN'));
 
+
+-- =====================================================================
+-- SEED INITIAL ADMINISTRATOR ACCOUNT (SURYA VM)
+-- =====================================================================
+-- Default password: Labyrinth@123
+INSERT INTO auth.users (
+    instance_id,
+    id,
+    aud,
+    role,
+    email,
+    encrypted_password,
+    email_confirmed_at,
+    raw_app_meta_data,
+    raw_user_meta_data,
+    created_at,
+    updated_at
+)
+SELECT 
+    '00000000-0000-0000-0000-000000000000',
+    'd0000000-0000-0000-0000-000000000001',
+    'authenticated',
+    'authenticated',
+    'suryachalam.vm@bsccmh.christuniversity.in',
+    '$2a$10$Y5OplUq6K09yTz43P4k4n.Xq2j8fJ9i4tSgP573d6lB8u21m5zK1W', -- Blowfish hash of 'Labyrinth@123'
+    now(),
+    '{"provider":"email","providers":["email"]}',
+    '{"full_name":"Suryachalam VM","role":"ADMIN","first_login":false}',
+    now(),
+    now()
+WHERE NOT EXISTS (
+    SELECT 1 FROM auth.users WHERE email = 'suryachalam.vm@bsccmh.christuniversity.in'
+);
+
+-- Update designation and HOD details in public profile
+UPDATE public.profiles
+SET 
+    designation = 'Professor & HOD',
+    department = 'Department of Computer Science',
+    profile_photo = 'https://ui-avatars.com/api/?name=Suryachalam+VM&background=CD0000&color=fff',
+    role = 'ADMIN',
+    first_login = false
+WHERE email = 'suryachalam.vm@bsccmh.christuniversity.in';
+
+
