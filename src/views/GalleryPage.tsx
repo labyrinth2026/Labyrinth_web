@@ -9,11 +9,14 @@ import { fetchFromSheet } from '../services/api';
 
 const GalleryPage: React.FC = () => {
   const [filter, setFilter] = useState('all');
+  const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const [galleryData, setGalleryData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   const featuredVideos = [
     { src: "/gallery/Screen_Recording_20260220_090135_Photos.mp4", label: "Sports Tournament Highlights" }
@@ -66,10 +69,33 @@ const GalleryPage: React.FC = () => {
     };
   }, [isLoading, currentVideoIdx]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, search]);
+
+  const handlePageChange = (pageNum: number) => {
+    setCurrentPage(pageNum);
+    if (gridRef.current) {
+      gridRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const filteredImages = galleryData
-    .filter(img => img.image) // Only show items with actual images
-    .filter(img => img.image !== '/gallery/AVOLODHAA.mp4' && img.image !== '/gallery/Screen_Recording_20260220_090135_Photos.mp4') // Exclude the featured videos from the grid
-    .filter(img => filter === 'all' ? true : img.category === filter);
+    .filter(img => img.image)
+    .filter(img => img.image !== '/gallery/AVOLODHAA.mp4' && img.image !== '/gallery/Screen_Recording_20260220_090135_Photos.mp4' && img.image !== '/gallery/AVOLODHAA.webm')
+    .filter(img => {
+      const matchesFilter = filter === 'all' ? true : img.category === filter;
+      const matchesSearch = search ? (
+        img.title.toLowerCase().includes(search.toLowerCase()) ||
+        img.description.toLowerCase().includes(search.toLowerCase())
+      ) : true;
+      return matchesFilter && matchesSearch;
+    });
+
+  const ITEMS_PER_PAGE = 16;
+  const totalPages = Math.ceil(filteredImages.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedImages = filteredImages.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const getCategoryColor = (category: string) => {
     return { bg: 'bg-slate-50 border-slate-200/60', text: 'text-slate-600' };
@@ -155,44 +181,121 @@ const GalleryPage: React.FC = () => {
       </section>
 
       {/* Masonry Grid (Section 2: Off-White) */}
-      <section className="pt-10 pb-24 md:pt-14 bg-slate-50/50">
+      <section ref={gridRef} id="gallery-grid" className="pt-10 pb-24 md:pt-14 bg-slate-50/50 scroll-mt-20">
         <div className="container mx-auto px-6 max-w-7xl">
-          <AnimatePresence mode="wait">
-            {filteredImages.length > 0 ? (
-              <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
-                <ScrollReveal key={filter} stagger={0.05}>
-                  {filteredImages.map((item, i) => {
-                    return (
-                      <div
-                        key={item.id}
-                        className={`relative group rounded-2xl overflow-hidden cursor-pointer border border-slate-200 bg-white shadow-xs hover:shadow-md hover:scale-[1.025] transition-all duration-300 ease-out break-inside-avoid mb-4 ${getHeightClass(i)}`}
-                        onClick={() => setSelectedImage(item)}
-                      >
-                        {item.image ? (
-                          item.image.endsWith('.mp4') ? (
-                            <div className="absolute inset-0 w-full h-full bg-slate-900">
-                              <video src={item.image} muted loop playsInline className="w-full h-full object-cover" onMouseEnter={e => e.currentTarget.play()} onMouseLeave={e => e.currentTarget.pause()} />
-                              <div className="absolute top-2 left-2 bg-slate-950/60 text-white text-[8px] font-black uppercase px-1.5 py-0.5 rounded-sm tracking-wider">Video</div>
-                            </div>
-                          ) : (
-                            <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                          )
-                        ) : (
-                          <div className="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center p-4">
-                            <span className="text-[9px] font-black uppercase tracking-widest text-[#CD0000] mb-1">{item.category}</span>
-                            <h3 className="text-slate-800 font-bold text-center text-xs px-2 line-clamp-2">{item.title}</h3>
-                          </div>
-                        )}
+          
+          {/* Category Filter and Search Bar */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <SearchFilter
+              searchValue={search}
+              onSearchChange={setSearch}
+              activeFilter={filter}
+              onFilterChange={setFilter}
+              placeholder="Search gallery photos..."
+              filters={[
+                { label: 'All Photos', value: 'all' },
+                { label: 'Inauguration', value: 'inauguration' },
+                { label: 'Peer Education', value: 'peer_education' },
+                { label: 'Sports', value: 'sports' },
+                { label: 'Workshops', value: 'workshops' },
+                { label: 'Hackathons', value: 'hackathons' },
+                { label: 'Cultural', value: 'cultural' }
+              ]}
+            />
+          </div>
 
-                        {/* Hover Overlay */}
-                        <div className="absolute inset-0 bg-slate-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                          <ZoomIn className="text-white w-6 h-6 scale-90 group-hover:scale-100 transition-transform duration-200" />
+          <AnimatePresence mode="wait">
+            {paginatedImages.length > 0 ? (
+              <>
+                <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
+                  <ScrollReveal key={`${filter}-${search}-${currentPage}`} stagger={0.03}>
+                    {paginatedImages.map((item, i) => {
+                      return (
+                        <div
+                          key={item.id}
+                          className={`relative group rounded-2xl overflow-hidden cursor-pointer border border-slate-200 bg-white shadow-xs hover:shadow-md hover:scale-[1.025] transition-all duration-300 ease-out break-inside-avoid mb-4 ${getHeightClass(i)}`}
+                          onClick={() => setSelectedImage(item)}
+                        >
+                          {item.image ? (
+                            item.image.endsWith('.mp4') ? (
+                              <div className="absolute inset-0 w-full h-full bg-slate-900">
+                                <video src={item.image} muted loop playsInline className="w-full h-full object-cover" onMouseEnter={e => e.currentTarget.play()} onMouseLeave={e => e.currentTarget.pause()} />
+                                <div className="absolute top-2 left-2 bg-slate-950/60 text-white text-[8px] font-black uppercase px-1.5 py-0.5 rounded-sm tracking-wider">Video</div>
+                              </div>
+                            ) : (
+                              <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                            )
+                          ) : (
+                            <div className="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center p-4">
+                              <span className="text-[9px] font-black uppercase tracking-widest text-[#CD0000] mb-1">{item.category}</span>
+                              <h3 className="text-slate-800 font-bold text-center text-xs px-2 line-clamp-2">{item.title}</h3>
+                            </div>
+                          )}
+
+                          {/* Hover Overlay */}
+                          <div className="absolute inset-0 bg-slate-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                            <ZoomIn className="text-white w-6 h-6 scale-90 group-hover:scale-100 transition-transform duration-200" />
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </ScrollReveal>
-              </div>
+                      );
+                    })}
+                  </ScrollReveal>
+                </div>
+
+                {/* Pagination Control */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-16">
+                    <button
+                      disabled={currentPage === 1}
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      className="w-9 h-9 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-500 hover:text-slate-800 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                      title="Previous Page"
+                    >
+                      <ChevronLeft size={16} />
+                    </button>
+
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                      const isFirstOrLast = page === 1 || page === totalPages;
+                      const isNeighbor = Math.abs(page - currentPage) <= 1;
+                      
+                      if (isFirstOrLast || isNeighbor) {
+                        return (
+                          <button
+                            key={page}
+                            onClick={() => handlePageChange(page)}
+                            className={`w-9 h-9 rounded-xl border text-xs font-bold uppercase transition-all ${
+                              currentPage === page
+                                ? 'bg-slate-900 border-slate-900 text-white shadow-xs'
+                                : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-800'
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        );
+                      } else if (
+                        (page === 2 && currentPage > 3) ||
+                        (page === totalPages - 1 && currentPage < totalPages - 2)
+                      ) {
+                        return (
+                          <span key={page} className="text-slate-300 text-xs px-1 font-bold">
+                            ...
+                          </span>
+                        );
+                      }
+                      return null;
+                    })}
+
+                    <button
+                      disabled={currentPage === totalPages}
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      className="w-9 h-9 rounded-xl border border-slate-200 bg-white flex items-center justify-center text-slate-500 hover:text-slate-800 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                      title="Next Page"
+                    >
+                      <ChevronRight size={16} />
+                    </button>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="text-center py-20">
                 <Images size={36} className="text-[#CD0000] mx-auto mb-4" />

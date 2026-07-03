@@ -1,48 +1,1658 @@
 [
-  { "id": "g1", "title": "HackMatrix Opening Ceremony", "category": "hackathons", "description": "The grand inauguration of our flagship hackathon.", "image": null, "date": "2024-08-15" },
-  { "id": "g2", "title": "AI Model Training Session", "category": "workshops", "description": "Students learning to train neural networks.", "image": null, "date": "2024-09-10" },
-  { "id": "g3", "title": "Football Finals", "category": "sports", "description": "The winning goal moment at the inter-department sports meet.", "image": null, "date": "2024-04-05" },
-  { "id": "g4", "title": "Tech Talk Q&A", "category": "cultural", "description": "Engaging discussion after the keynote speech.", "image": null, "date": "2024-10-20" },
-  { "id": "g5", "title": "Late Night Debugging", "category": "hackathons", "description": "Teams working tirelessly through the night.", "image": null, "date": "2024-08-16" },
-  { "id": "g6", "title": "UI/UX Design Sprint", "category": "workshops", "description": "Brainstorming and wireframing session.", "image": null, "date": "2024-03-10" },
-  { "id": "g7", "title": "Tug of War", "category": "sports", "description": "Intense competition during sports day.", "image": null, "date": "2024-04-05" },
-  { "id": "g8", "title": "Cultural Night Performances", "category": "cultural", "description": "Dance and music to wrap up the tech fest.", "image": null, "date": "2024-11-12" },
-  { "id": "g9", "title": "GameDev Showcase", "category": "hackathons", "description": "Presenting the games built during GameJam.", "image": null, "date": "2024-08-29" },
-  { "id": "g10", "title": "Cloud Architecture Lab", "category": "workshops", "description": "Deploying apps to AWS.", "image": null, "date": "2024-09-20" },
-  { "id": "g11", "title": "Cricket Match Winners", "category": "sports", "description": "The winning team posing with the trophy.", "image": null, "date": "2024-04-06" },
-  { "id": "g12", "title": "Open Mic Session", "category": "cultural", "description": "Students sharing poetry and stories.", "image": null, "date": "2024-11-11" },
-  { "id": "g13", "title": "CTF Leaderboard", "category": "hackathons", "description": "The final moments of the cybersecurity challenge.", "image": null, "date": "2024-09-05" },
-  { "id": "g14", "title": "Hardware Integration", "category": "workshops", "description": "Working with Raspberry Pi and IoT devices.", "image": null, "date": "2024-02-15" },
-  { "id": "g15", "title": "Relay Race", "category": "sports", "description": "Passing the baton at the track and field event.", "image": null, "date": "2024-04-05" },
-  { "id": "g16", "title": "Valedictory Function", "category": "cultural", "description": "Award distribution and closing ceremony.", "image": null, "date": "2024-11-12" },
-  { "id": "g17", "title": "Field Ops Football Match", "category": "sports", "description": "Intense action during the inter-department football tournament.", "image": "/gallery/20260211_165511.webp", "date": "2026-02-11" },
-  { "id": "g18", "title": "Warm-up Session", "category": "sports", "description": "Teams getting ready before the start of the tournament.", "image": "/gallery/20260211_165520.webp", "date": "2026-02-11" },
-  { "id": "g19", "title": "Athletics Event", "category": "sports", "description": "100m sprint finals at the track and field track.", "image": "/gallery/20260212_115102.webp", "date": "2026-02-12" },
-  { "id": "g20", "title": "Track Activities", "category": "sports", "description": "Coordination of athletic trials and qualifying heats.", "image": "/gallery/20260212_115103.webp", "date": "2026-02-12" },
-  { "id": "g21", "title": "Basketball Finals", "category": "sports", "description": "The final basketball match for the Labyrinth cup.", "image": "/gallery/20260212_181051.webp", "date": "2026-02-12" },
-  { "id": "g22", "title": "Basketball Team Presentation", "category": "sports", "description": "Teams aligning before the tip-off.", "image": "/gallery/20260212_181054.webp", "date": "2026-02-12" },
-  { "id": "g23", "title": "Cricket Practice", "category": "sports", "description": "Players warming up in the nets before their league match.", "image": "/gallery/20260213_084731.webp", "date": "2026-02-13" },
-  { "id": "g24", "title": "Field Coordination", "category": "sports", "description": "Organizers managing tournament schedules on the ground.", "image": "/gallery/20260213_084732.webp", "date": "2026-02-13" },
-  { "id": "g25", "title": "Field Ops Group Photo", "category": "sports", "description": "The organizing committee of the sports vertical.", "image": "/gallery/20260215_133007.webp", "date": "2026-02-15" },
-  { "id": "g26", "title": "Team Captains Meet", "category": "sports", "description": "Briefing the team representatives on tournament rules.", "image": "/gallery/IMG-20260209-WA0011.webp", "date": "2026-02-09" },
-  { "id": "g27", "title": "Opening Ceremony", "category": "sports", "description": "Lighting the torch to begin the sports meet.", "image": "/gallery/IMG-20260210-WA0001.webp", "date": "2026-02-10" },
-  { "id": "g28", "title": "Tug of War Challenge", "category": "sports", "description": "Epic strength clash between departmental houses.", "image": "/gallery/IMG-20260213-WA0002(1).webp", "date": "2026-02-13" },
-  { "id": "g29", "title": "Field Ops Coordination Desk", "category": "sports", "description": "The scoring and records registry desk during the event.", "image": "/gallery/IMG-20260213-WA0017.webp", "date": "2026-02-13" },
-  { "id": "g30", "title": "Volleyball Tournament", "category": "sports", "description": "Intense rally during the volleyball semi-finals.", "image": "/gallery/IMG-20260214-WA0005.webp", "date": "2026-02-14" },
-  { "id": "g31", "title": "Runner Up Celebrations", "category": "sports", "description": "Teams cheering after a hard-fought tournament.", "image": "/gallery/IMG-20260214-WA0023.webp", "date": "2026-02-14" },
-  { "id": "g32", "title": "Sports Tournament Highlights", "category": "sports", "description": "Video compilation of key game moments and student cheering.", "image": "/gallery/Screen_Recording_20260220_090135_Photos.mp4", "date": "2026-02-20" },
-  { "id": "g33", "title": "Field Ops Badminton Finals", "category": "sports", "description": "Singles badminton finals in the indoor arena.", "image": "/gallery/_MG_1303.webp", "date": "2026-02-13" },
-  { "id": "g34", "title": "Match Point Moment", "category": "sports", "description": "High energy play in the indoor sports complex.", "image": "/gallery/_MG_1342.webp", "date": "2026-02-13" },
-  { "id": "g35", "title": "Table Tennis Champions", "category": "sports", "description": "Smash action shot from the table tennis event.", "image": "/gallery/_MG_1853.webp", "date": "2026-02-13" },
-  { "id": "g36", "title": "Sports Award Ceremony", "category": "sports", "description": "Medal distribution for the winners and overall house trophy.", "image": "/gallery/_MG_1854.webp", "date": "2026-02-13" },
-  { "id": "g37", "title": "Labyrinth Inauguration Welcome Address", "category": "inauguration", "description": "Welcome speech delivered during the Labyrinth computer science club opening.", "image": "/gallery/inauguration_welcome.webp", "date": "2025-07-28" },
-  { "id": "g38", "title": "Inauguration Presidential Address", "category": "inauguration", "description": "Presidential keynote address during the club inauguration.", "image": "/gallery/inauguration_presidential.webp", "date": "2025-07-28" },
-  { "id": "g39", "title": "Inauguration Panel Discussion", "category": "inauguration", "description": "Expert panel discussion on modern computer science trends.", "image": "/gallery/inauguration_panel.webp", "date": "2025-07-28" },
-  { "id": "g40", "title": "Guest of Honor Dr. Pranab Mohanty", "category": "inauguration", "description": "Guest of Honor addressing the faculty and student members.", "image": "/gallery/inauguration_guest.webp", "date": "2025-07-28" },
-  { "id": "g41", "title": "Inauguration Audience Group", "category": "inauguration", "description": "Students and faculty attending the club opening ceremony.", "image": "/gallery/inauguration_audience.webp", "date": "2025-07-28" },
-  { "id": "g42", "title": "Peer Education Session Intro", "category": "peer_education", "description": "Interactive peer learning session led by senior core members.", "image": "/gallery/peer_edu_1.webp", "date": "2026-06-29" },
-  { "id": "g43", "title": "Peer Education Group Discussions", "category": "peer_education", "description": "Students discussing programming paradigms in focus groups.", "image": "/gallery/peer_edu_2.webp", "date": "2026-06-29" },
-  { "id": "g44", "title": "Peer Education Student Presentation", "category": "peer_education", "description": "Student presenting key solutions during the code review session.", "image": "/gallery/peer_edu_presentation.webp", "date": "2026-06-29" },
-  { "id": "g45", "title": "Peer Education Interactive Q&A", "category": "peer_education", "description": "Answering questions on software development workflows.", "image": "/gallery/peer_edu_qa.webp", "date": "2026-06-29" },
-  { "id": "g46", "title": "Peer Education Group Photo", "category": "peer_education", "description": "Organizers and participants of the Peer Education workshop.", "image": "/gallery/peer_edu_group.webp", "date": "2026-06-29" }
+  {
+    "id": "g1",
+    "title": "HackMatrix Opening Ceremony",
+    "category": "hackathons",
+    "description": "The grand inauguration of our flagship hackathon.",
+    "image": null,
+    "date": "2024-08-15"
+  },
+  {
+    "id": "g2",
+    "title": "AI Model Training Session",
+    "category": "workshops",
+    "description": "Students learning to train neural networks.",
+    "image": null,
+    "date": "2024-09-10"
+  },
+  {
+    "id": "g3",
+    "title": "Football Finals",
+    "category": "sports",
+    "description": "The winning goal moment at the inter-department sports meet.",
+    "image": null,
+    "date": "2024-04-05"
+  },
+  {
+    "id": "g4",
+    "title": "Tech Talk Q&A",
+    "category": "cultural",
+    "description": "Engaging discussion after the keynote speech.",
+    "image": null,
+    "date": "2024-10-20"
+  },
+  {
+    "id": "g5",
+    "title": "Late Night Debugging",
+    "category": "hackathons",
+    "description": "Teams working tirelessly through the night.",
+    "image": null,
+    "date": "2024-08-16"
+  },
+  {
+    "id": "g6",
+    "title": "UI/UX Design Sprint",
+    "category": "workshops",
+    "description": "Brainstorming and wireframing session.",
+    "image": null,
+    "date": "2024-03-10"
+  },
+  {
+    "id": "g7",
+    "title": "Tug of War",
+    "category": "sports",
+    "description": "Intense competition during sports day.",
+    "image": null,
+    "date": "2024-04-05"
+  },
+  {
+    "id": "g8",
+    "title": "Cultural Night Performances",
+    "category": "cultural",
+    "description": "Dance and music to wrap up the tech fest.",
+    "image": null,
+    "date": "2024-11-12"
+  },
+  {
+    "id": "g9",
+    "title": "GameDev Showcase",
+    "category": "hackathons",
+    "description": "Presenting the games built during GameJam.",
+    "image": null,
+    "date": "2024-08-29"
+  },
+  {
+    "id": "g10",
+    "title": "Cloud Architecture Lab",
+    "category": "workshops",
+    "description": "Deploying apps to AWS.",
+    "image": null,
+    "date": "2024-09-20"
+  },
+  {
+    "id": "g11",
+    "title": "Cricket Match Winners",
+    "category": "sports",
+    "description": "The winning team posing with the trophy.",
+    "image": null,
+    "date": "2024-04-06"
+  },
+  {
+    "id": "g12",
+    "title": "Open Mic Session",
+    "category": "cultural",
+    "description": "Students sharing poetry and stories.",
+    "image": null,
+    "date": "2024-11-11"
+  },
+  {
+    "id": "g13",
+    "title": "CTF Leaderboard",
+    "category": "hackathons",
+    "description": "The final moments of the cybersecurity challenge.",
+    "image": null,
+    "date": "2024-09-05"
+  },
+  {
+    "id": "g14",
+    "title": "Hardware Integration",
+    "category": "workshops",
+    "description": "Working with Raspberry Pi and IoT devices.",
+    "image": null,
+    "date": "2024-02-15"
+  },
+  {
+    "id": "g15",
+    "title": "Relay Race",
+    "category": "sports",
+    "description": "Passing the baton at the track and field event.",
+    "image": null,
+    "date": "2024-04-05"
+  },
+  {
+    "id": "g16",
+    "title": "Valedictory Function",
+    "category": "cultural",
+    "description": "Award distribution and closing ceremony.",
+    "image": null,
+    "date": "2024-11-12"
+  },
+  {
+    "id": "g17",
+    "title": "Field Ops Football Match",
+    "category": "sports",
+    "description": "Intense action during the inter-department football tournament.",
+    "image": "/gallery/20260211_165511.webp",
+    "date": "2026-02-11"
+  },
+  {
+    "id": "g18",
+    "title": "Warm-up Session",
+    "category": "sports",
+    "description": "Teams getting ready before the start of the tournament.",
+    "image": "/gallery/20260211_165520.webp",
+    "date": "2026-02-11"
+  },
+  {
+    "id": "g19",
+    "title": "Athletics Event",
+    "category": "sports",
+    "description": "100m sprint finals at the track and field track.",
+    "image": "/gallery/20260212_115102.webp",
+    "date": "2026-02-12"
+  },
+  {
+    "id": "g20",
+    "title": "Track Activities",
+    "category": "sports",
+    "description": "Coordination of athletic trials and qualifying heats.",
+    "image": "/gallery/20260212_115103.webp",
+    "date": "2026-02-12"
+  },
+  {
+    "id": "g21",
+    "title": "Basketball Finals",
+    "category": "sports",
+    "description": "The final basketball match for the Labyrinth cup.",
+    "image": "/gallery/20260212_181051.webp",
+    "date": "2026-02-12"
+  },
+  {
+    "id": "g22",
+    "title": "Basketball Team Presentation",
+    "category": "sports",
+    "description": "Teams aligning before the tip-off.",
+    "image": "/gallery/20260212_181054.webp",
+    "date": "2026-02-12"
+  },
+  {
+    "id": "g23",
+    "title": "Cricket Practice",
+    "category": "sports",
+    "description": "Players warming up in the nets before their league match.",
+    "image": "/gallery/20260213_084731.webp",
+    "date": "2026-02-13"
+  },
+  {
+    "id": "g24",
+    "title": "Field Coordination",
+    "category": "sports",
+    "description": "Organizers managing tournament schedules on the ground.",
+    "image": "/gallery/20260213_084732.webp",
+    "date": "2026-02-13"
+  },
+  {
+    "id": "g25",
+    "title": "Field Ops Group Photo",
+    "category": "sports",
+    "description": "The organizing committee of the sports vertical.",
+    "image": "/gallery/20260215_133007.webp",
+    "date": "2026-02-15"
+  },
+  {
+    "id": "g26",
+    "title": "Team Captains Meet",
+    "category": "sports",
+    "description": "Briefing the team representatives on tournament rules.",
+    "image": "/gallery/IMG-20260209-WA0011.webp",
+    "date": "2026-02-09"
+  },
+  {
+    "id": "g27",
+    "title": "Opening Ceremony",
+    "category": "sports",
+    "description": "Lighting the torch to begin the sports meet.",
+    "image": "/gallery/IMG-20260210-WA0001.webp",
+    "date": "2026-02-10"
+  },
+  {
+    "id": "g28",
+    "title": "Tug of War Challenge",
+    "category": "sports",
+    "description": "Epic strength clash between departmental houses.",
+    "image": "/gallery/IMG-20260213-WA0002(1).webp",
+    "date": "2026-02-13"
+  },
+  {
+    "id": "g29",
+    "title": "Field Ops Coordination Desk",
+    "category": "sports",
+    "description": "The scoring and records registry desk during the event.",
+    "image": "/gallery/IMG-20260213-WA0017.webp",
+    "date": "2026-02-13"
+  },
+  {
+    "id": "g30",
+    "title": "Volleyball Tournament",
+    "category": "sports",
+    "description": "Intense rally during the volleyball semi-finals.",
+    "image": "/gallery/IMG-20260214-WA0005.webp",
+    "date": "2026-02-14"
+  },
+  {
+    "id": "g31",
+    "title": "Runner Up Celebrations",
+    "category": "sports",
+    "description": "Teams cheering after a hard-fought tournament.",
+    "image": "/gallery/IMG-20260214-WA0023.webp",
+    "date": "2026-02-14"
+  },
+  {
+    "id": "g32",
+    "title": "Sports Tournament Highlights",
+    "category": "sports",
+    "description": "Video compilation of key game moments and student cheering.",
+    "image": "/gallery/Screen_Recording_20260220_090135_Photos.mp4",
+    "date": "2026-02-20"
+  },
+  {
+    "id": "g33",
+    "title": "Field Ops Badminton Finals",
+    "category": "sports",
+    "description": "Singles badminton finals in the indoor arena.",
+    "image": "/gallery/_MG_1303.webp",
+    "date": "2026-02-13"
+  },
+  {
+    "id": "g34",
+    "title": "Match Point Moment",
+    "category": "sports",
+    "description": "High energy play in the indoor sports complex.",
+    "image": "/gallery/_MG_1342.webp",
+    "date": "2026-02-13"
+  },
+  {
+    "id": "g35",
+    "title": "Table Tennis Champions",
+    "category": "sports",
+    "description": "Smash action shot from the table tennis event.",
+    "image": "/gallery/_MG_1853.webp",
+    "date": "2026-02-13"
+  },
+  {
+    "id": "g36",
+    "title": "Sports Award Ceremony",
+    "category": "sports",
+    "description": "Medal distribution for the winners and overall house trophy.",
+    "image": "/gallery/_MG_1854.webp",
+    "date": "2026-02-13"
+  },
+  {
+    "id": "g-inaug-1",
+    "title": "Labyrinth Inauguration #1",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_1.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-2",
+    "title": "Labyrinth Inauguration #2",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_2.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-3",
+    "title": "Labyrinth Inauguration #3",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_3.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-4",
+    "title": "Labyrinth Inauguration #4",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_4.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-5",
+    "title": "Labyrinth Inauguration #5",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_5.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-6",
+    "title": "Labyrinth Inauguration #6",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_6.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-7",
+    "title": "Labyrinth Inauguration #7",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_7.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-8",
+    "title": "Labyrinth Inauguration #8",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_8.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-9",
+    "title": "Labyrinth Inauguration #9",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_9.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-10",
+    "title": "Labyrinth Inauguration #10",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_10.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-11",
+    "title": "Labyrinth Inauguration #11",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_11.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-12",
+    "title": "Labyrinth Inauguration #12",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_12.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-13",
+    "title": "Labyrinth Inauguration #13",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_13.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-14",
+    "title": "Labyrinth Inauguration #14",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_14.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-15",
+    "title": "Labyrinth Inauguration #15",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_15.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-16",
+    "title": "Labyrinth Inauguration #16",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_16.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-17",
+    "title": "Labyrinth Inauguration #17",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_17.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-18",
+    "title": "Labyrinth Inauguration #18",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_18.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-19",
+    "title": "Labyrinth Inauguration #19",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_19.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-20",
+    "title": "Labyrinth Inauguration #20",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_20.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-21",
+    "title": "Labyrinth Inauguration #21",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_21.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-22",
+    "title": "Labyrinth Inauguration #22",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_22.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-23",
+    "title": "Labyrinth Inauguration #23",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_23.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-24",
+    "title": "Labyrinth Inauguration #24",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_24.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-25",
+    "title": "Labyrinth Inauguration #25",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_25.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-26",
+    "title": "Labyrinth Inauguration #26",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_26.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-27",
+    "title": "Labyrinth Inauguration #27",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_27.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-28",
+    "title": "Labyrinth Inauguration #28",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_28.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-29",
+    "title": "Labyrinth Inauguration #29",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_29.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-30",
+    "title": "Labyrinth Inauguration #30",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_30.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-31",
+    "title": "Labyrinth Inauguration #31",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_31.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-32",
+    "title": "Labyrinth Inauguration #32",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_32.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-33",
+    "title": "Labyrinth Inauguration #33",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_33.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-34",
+    "title": "Labyrinth Inauguration #34",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_34.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-35",
+    "title": "Labyrinth Inauguration #35",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_35.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-36",
+    "title": "Labyrinth Inauguration #36",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_36.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-37",
+    "title": "Labyrinth Inauguration #37",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_37.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-38",
+    "title": "Labyrinth Inauguration #38",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_38.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-39",
+    "title": "Labyrinth Inauguration #39",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_39.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-40",
+    "title": "Labyrinth Inauguration #40",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_40.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-41",
+    "title": "Labyrinth Inauguration #41",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_41.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-42",
+    "title": "Labyrinth Inauguration #42",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_42.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-43",
+    "title": "Labyrinth Inauguration #43",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_43.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-44",
+    "title": "Labyrinth Inauguration #44",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_44.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-45",
+    "title": "Labyrinth Inauguration #45",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_45.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-46",
+    "title": "Labyrinth Inauguration #46",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_46.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-47",
+    "title": "Labyrinth Inauguration #47",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_47.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-48",
+    "title": "Labyrinth Inauguration #48",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_48.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-49",
+    "title": "Labyrinth Inauguration #49",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_49.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-50",
+    "title": "Labyrinth Inauguration #50",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_50.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-51",
+    "title": "Labyrinth Inauguration #51",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_51.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-52",
+    "title": "Labyrinth Inauguration #52",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_52.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-53",
+    "title": "Labyrinth Inauguration #53",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_53.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-54",
+    "title": "Labyrinth Inauguration #54",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_54.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-55",
+    "title": "Labyrinth Inauguration #55",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_55.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-56",
+    "title": "Labyrinth Inauguration #56",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_56.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-57",
+    "title": "Labyrinth Inauguration #57",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_57.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-58",
+    "title": "Labyrinth Inauguration #58",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_58.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-59",
+    "title": "Labyrinth Inauguration #59",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_59.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-60",
+    "title": "Labyrinth Inauguration #60",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_60.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-61",
+    "title": "Labyrinth Inauguration #61",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_61.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-62",
+    "title": "Labyrinth Inauguration #62",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_62.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-63",
+    "title": "Labyrinth Inauguration #63",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_63.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-64",
+    "title": "Labyrinth Inauguration #64",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_64.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-65",
+    "title": "Labyrinth Inauguration #65",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_65.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-66",
+    "title": "Labyrinth Inauguration #66",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_66.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-67",
+    "title": "Labyrinth Inauguration #67",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_67.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-68",
+    "title": "Labyrinth Inauguration #68",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_68.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-69",
+    "title": "Labyrinth Inauguration #69",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_69.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-70",
+    "title": "Labyrinth Inauguration #70",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_70.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-71",
+    "title": "Labyrinth Inauguration #71",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_71.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-72",
+    "title": "Labyrinth Inauguration #72",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_72.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-73",
+    "title": "Labyrinth Inauguration #73",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_73.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-74",
+    "title": "Labyrinth Inauguration #74",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_74.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-75",
+    "title": "Labyrinth Inauguration #75",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_75.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-76",
+    "title": "Labyrinth Inauguration #76",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_76.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-77",
+    "title": "Labyrinth Inauguration #77",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_77.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-78",
+    "title": "Labyrinth Inauguration #78",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_78.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-79",
+    "title": "Labyrinth Inauguration #79",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_79.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-80",
+    "title": "Labyrinth Inauguration #80",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_80.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-81",
+    "title": "Labyrinth Inauguration #81",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_81.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-82",
+    "title": "Labyrinth Inauguration #82",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_82.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-83",
+    "title": "Labyrinth Inauguration #83",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_83.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-84",
+    "title": "Labyrinth Inauguration #84",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_84.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-85",
+    "title": "Labyrinth Inauguration #85",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_85.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-86",
+    "title": "Labyrinth Inauguration #86",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_86.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-87",
+    "title": "Labyrinth Inauguration #87",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_87.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-88",
+    "title": "Labyrinth Inauguration #88",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_88.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-89",
+    "title": "Labyrinth Inauguration #89",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_89.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-90",
+    "title": "Labyrinth Inauguration #90",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_90.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-91",
+    "title": "Labyrinth Inauguration #91",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_91.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-92",
+    "title": "Labyrinth Inauguration #92",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_92.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-93",
+    "title": "Labyrinth Inauguration #93",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_93.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-94",
+    "title": "Labyrinth Inauguration #94",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_94.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-95",
+    "title": "Labyrinth Inauguration #95",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_95.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-96",
+    "title": "Labyrinth Inauguration #96",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_96.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-97",
+    "title": "Labyrinth Inauguration #97",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_97.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-98",
+    "title": "Labyrinth Inauguration #98",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_98.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-99",
+    "title": "Labyrinth Inauguration #99",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_99.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-100",
+    "title": "Labyrinth Inauguration #100",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_100.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-101",
+    "title": "Labyrinth Inauguration #101",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_101.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-102",
+    "title": "Labyrinth Inauguration #102",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_102.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-103",
+    "title": "Labyrinth Inauguration #103",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_103.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-104",
+    "title": "Labyrinth Inauguration #104",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_104.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-105",
+    "title": "Labyrinth Inauguration #105",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_105.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-106",
+    "title": "Labyrinth Inauguration #106",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_106.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-107",
+    "title": "Labyrinth Inauguration #107",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_107.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-108",
+    "title": "Labyrinth Inauguration #108",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_108.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-109",
+    "title": "Labyrinth Inauguration #109",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_109.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-110",
+    "title": "Labyrinth Inauguration #110",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_110.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-111",
+    "title": "Labyrinth Inauguration #111",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_111.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-112",
+    "title": "Labyrinth Inauguration #112",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_112.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-113",
+    "title": "Labyrinth Inauguration #113",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_113.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-114",
+    "title": "Labyrinth Inauguration #114",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_114.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-115",
+    "title": "Labyrinth Inauguration #115",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_115.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-116",
+    "title": "Labyrinth Inauguration #116",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_116.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-117",
+    "title": "Labyrinth Inauguration #117",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_117.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-118",
+    "title": "Labyrinth Inauguration #118",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_118.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-119",
+    "title": "Labyrinth Inauguration #119",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_119.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-120",
+    "title": "Labyrinth Inauguration #120",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_120.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-121",
+    "title": "Labyrinth Inauguration #121",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_121.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-122",
+    "title": "Labyrinth Inauguration #122",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_122.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-123",
+    "title": "Labyrinth Inauguration #123",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_123.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-124",
+    "title": "Labyrinth Inauguration #124",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_124.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-125",
+    "title": "Labyrinth Inauguration #125",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_125.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-126",
+    "title": "Labyrinth Inauguration #126",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_126.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-127",
+    "title": "Labyrinth Inauguration #127",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_127.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-128",
+    "title": "Labyrinth Inauguration #128",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_128.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-129",
+    "title": "Labyrinth Inauguration #129",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_129.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-130",
+    "title": "Labyrinth Inauguration #130",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_130.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-131",
+    "title": "Labyrinth Inauguration #131",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_131.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-132",
+    "title": "Labyrinth Inauguration #132",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_132.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-133",
+    "title": "Labyrinth Inauguration #133",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_133.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-134",
+    "title": "Labyrinth Inauguration #134",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_134.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-135",
+    "title": "Labyrinth Inauguration #135",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_135.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-136",
+    "title": "Labyrinth Inauguration #136",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_136.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-137",
+    "title": "Labyrinth Inauguration #137",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_137.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-138",
+    "title": "Labyrinth Inauguration #138",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_138.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-139",
+    "title": "Labyrinth Inauguration #139",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_139.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-140",
+    "title": "Labyrinth Inauguration #140",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_140.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-141",
+    "title": "Labyrinth Inauguration #141",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_141.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-142",
+    "title": "Labyrinth Inauguration #142",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_142.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-143",
+    "title": "Labyrinth Inauguration #143",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_143.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-144",
+    "title": "Labyrinth Inauguration #144",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_144.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-145",
+    "title": "Labyrinth Inauguration #145",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_145.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-146",
+    "title": "Labyrinth Inauguration #146",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_146.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-147",
+    "title": "Labyrinth Inauguration #147",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_147.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-148",
+    "title": "Labyrinth Inauguration #148",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_148.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-149",
+    "title": "Labyrinth Inauguration #149",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_149.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-150",
+    "title": "Labyrinth Inauguration #150",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_150.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-151",
+    "title": "Labyrinth Inauguration #151",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_151.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-152",
+    "title": "Labyrinth Inauguration #152",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_152.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-153",
+    "title": "Labyrinth Inauguration #153",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_153.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-154",
+    "title": "Labyrinth Inauguration #154",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_154.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-155",
+    "title": "Labyrinth Inauguration #155",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_155.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-156",
+    "title": "Labyrinth Inauguration #156",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_156.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-157",
+    "title": "Labyrinth Inauguration #157",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_157.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-158",
+    "title": "Labyrinth Inauguration #158",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_158.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-159",
+    "title": "Labyrinth Inauguration #159",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_159.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-inaug-160",
+    "title": "Labyrinth Inauguration #160",
+    "category": "inauguration",
+    "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
+    "image": "/gallery/inauguration_all_160.webp",
+    "date": "2025-07-28"
+  },
+  {
+    "id": "g-peer-1",
+    "title": "Peer Education Session #1",
+    "category": "peer_education",
+    "description": "Interactive peer learning and logic programming mentorship workshops.",
+    "image": "/gallery/peer_edu_all_1.webp",
+    "date": "2026-06-29"
+  },
+  {
+    "id": "g-peer-2",
+    "title": "Peer Education Session #2",
+    "category": "peer_education",
+    "description": "Interactive peer learning and logic programming mentorship workshops.",
+    "image": "/gallery/peer_edu_all_2.webp",
+    "date": "2026-06-29"
+  },
+  {
+    "id": "g-peer-3",
+    "title": "Peer Education Session #3",
+    "category": "peer_education",
+    "description": "Interactive peer learning and logic programming mentorship workshops.",
+    "image": "/gallery/peer_edu_all_3.webp",
+    "date": "2026-06-29"
+  },
+  {
+    "id": "g-peer-4",
+    "title": "Peer Education Session #4",
+    "category": "peer_education",
+    "description": "Interactive peer learning and logic programming mentorship workshops.",
+    "image": "/gallery/peer_edu_all_4.webp",
+    "date": "2026-06-29"
+  },
+  {
+    "id": "g-peer-5",
+    "title": "Peer Education Session #5",
+    "category": "peer_education",
+    "description": "Interactive peer learning and logic programming mentorship workshops.",
+    "image": "/gallery/peer_edu_all_5.webp",
+    "date": "2026-06-29"
+  },
+  {
+    "id": "g-peer-6",
+    "title": "Peer Education Session #6",
+    "category": "peer_education",
+    "description": "Interactive peer learning and logic programming mentorship workshops.",
+    "image": "/gallery/peer_edu_all_6.webp",
+    "date": "2026-06-29"
+  },
+  {
+    "id": "g-peer-7",
+    "title": "Peer Education Session #7",
+    "category": "peer_education",
+    "description": "Interactive peer learning and logic programming mentorship workshops.",
+    "image": "/gallery/peer_edu_all_7.webp",
+    "date": "2026-06-29"
+  },
+  {
+    "id": "g-peer-8",
+    "title": "Peer Education Session #8",
+    "category": "peer_education",
+    "description": "Interactive peer learning and logic programming mentorship workshops.",
+    "image": "/gallery/peer_edu_all_8.webp",
+    "date": "2026-06-29"
+  },
+  {
+    "id": "g-peer-9",
+    "title": "Peer Education Session #9",
+    "category": "peer_education",
+    "description": "Interactive peer learning and logic programming mentorship workshops.",
+    "image": "/gallery/peer_edu_all_9.webp",
+    "date": "2026-06-29"
+  },
+  {
+    "id": "g-peer-10",
+    "title": "Peer Education Session #10",
+    "category": "peer_education",
+    "description": "Interactive peer learning and logic programming mentorship workshops.",
+    "image": "/gallery/peer_edu_all_10.webp",
+    "date": "2026-06-29"
+  },
+  {
+    "id": "g-peer-11",
+    "title": "Peer Education Session #11",
+    "category": "peer_education",
+    "description": "Interactive peer learning and logic programming mentorship workshops.",
+    "image": "/gallery/peer_edu_all_11.webp",
+    "date": "2026-06-29"
+  }
 ]
