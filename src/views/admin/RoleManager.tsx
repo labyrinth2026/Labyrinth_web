@@ -447,7 +447,7 @@ export default function RoleManager() {
                           </td>
                           <td className="p-4 text-right">
                             <button
-                              disabled={!isAdmin || u.email === 'suryachalam.vm@bsccmh.christuniversity.in'}
+                              disabled={!isAdmin}
                               onClick={() => handleRevokeAdmin(u.id)}
                               className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg disabled:opacity-30 transition-colors"
                               title="Revoke Admin Access"
