@@ -48,40 +48,102 @@ export async function POST(req: NextRequest) {
       
       case 'getTeam': {
         const roles = await dbGetRoles();
-        const assignments = await dbGetAssignments();
         const verticals = await dbGetVerticals();
+        const committees = await dbGetCoreCommittees();
 
-        const facultyCoordinators = roles.filter(u => u.role === 'ADMIN').map(u => ({
-          id: u.id, 
-          name: u.name, 
-          role: u.designation || 'Club Administrator',
-          designation: u.designation || 'Faculty Advisor', 
-          department: u.department || 'Department of Computer Science', 
-          email: u.email
+        // Helper to find vertical name by ID
+        const getVerticalName = (vId: string) => {
+          const vert = verticals.find(v => v.id === vId);
+          return vert ? vert.name : null;
+        };
+
+        // Helper to find committee name by ID
+        const getCommitteeName = (cId: string) => {
+          const comm = committees.find(c => c.id === cId);
+          return comm ? comm.name : null;
+        };
+
+        // 1. Faculty Coordinators: Admin users or designation containing faculty keywords
+        const facultyCoordinators = roles.filter(u => 
+          u.role === 'ADMIN' || 
+          (u.designation && (
+            u.designation.toLowerCase().includes('hod') || 
+            u.designation.toLowerCase().includes('professor') || 
+            u.designation.toLowerCase().includes('advisor') || 
+            u.designation.toLowerCase().includes('coordinator')
+          ) && !u.designation.toLowerCase().includes('student') && !u.designation.toLowerCase().includes('member'))
+        ).map(u => ({
+          id: u.id,
+          name: u.full_name || u.name,
+          role: u.designation || 'Faculty Coordinator',
+          designation: u.designation || 'Faculty Coordinator',
+          department: u.department || 'Department of Computer Science',
+          email: u.email,
+          avatar: u.profilePhoto || null
         }));
 
-        const mentors = roles.filter(u => u.role === 'ADMIN' && u.email !== 'suryachalam.vm@bsccmh.christuniversity.in').map(u => ({
-          id: u.id, 
-          name: u.name, 
-          role: 'Mentor', 
-          email: u.email
+        // 2. Mentors: designation contains "Mentor"
+        const mentors = roles.filter(u => 
+          u.designation && u.designation.toLowerCase().includes('mentor')
+        ).map(u => ({
+          id: u.id,
+          name: u.full_name || u.name,
+          role: u.designation || 'Mentor',
+          email: u.email,
+          avatar: u.profilePhoto || null
         }));
 
-        const coreCommittee = (assignments.committee || []).map((a: any) => ({
-          id: a.userId, 
-          name: a.userName, 
-          role: `${a.committeeName} Head`, 
-          email: a.userEmail
-        }));
+        // 3. Core Committee: has committee_id, and is NOT faculty/mentor
+        const coreCommittee = roles.filter(u => 
+          (u.committee_id || u.committeeId) && 
+          !facultyCoordinators.some(f => f.id === u.id) &&
+          !mentors.some(m => m.id === u.id)
+        ).map(u => {
+          const cId = u.committee_id || u.committeeId;
+          const commName = getCommitteeName(cId);
+          return {
+            id: u.id,
+            name: u.full_name || u.name,
+            role: u.designation || (commName ? `${commName} Lead` : 'Core Committee Member'),
+            email: u.email,
+            avatar: u.profilePhoto || null
+          };
+        });
 
-        const verticalHeads = (assignments.vertical || []).map((v: any) => ({
-          id: v.userId, 
-          name: v.userName, 
-          role: `${v.verticalName} Head`, 
-          email: v.userEmail
-        }));
+        // 4. Vertical Heads: has vertical_id and designation contains "Head" (but not Sub-Head)
+        const verticalHeads = roles.filter(u => 
+          (u.vertical_id || u.verticalId) && 
+          u.designation && 
+          u.designation.toLowerCase().includes('head') && 
+          !u.designation.toLowerCase().includes('sub')
+        ).map(u => {
+          const vId = u.vertical_id || u.verticalId;
+          return {
+            id: u.id,
+            name: u.full_name || u.name,
+            role: 'Head',
+            vertical: getVerticalName(vId),
+            email: u.email,
+            avatar: u.profilePhoto || null
+          };
+        });
 
-        const subHeads: any[] = [];
+        // 5. Sub Heads: has vertical_id and designation contains "Sub" (Sub-Head / Sub Head)
+        const subHeads = roles.filter(u => 
+          (u.vertical_id || u.verticalId) && 
+          u.designation && 
+          u.designation.toLowerCase().includes('sub')
+        ).map(u => {
+          const vId = u.vertical_id || u.verticalId;
+          return {
+            id: u.id,
+            name: u.full_name || u.name,
+            role: 'Sub-Head',
+            vertical: getVerticalName(vId),
+            email: u.email,
+            avatar: u.profilePhoto || null
+          };
+        });
 
         return NextResponse.json({
           success: true,
