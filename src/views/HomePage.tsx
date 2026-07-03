@@ -7,7 +7,6 @@ import Button from '../components/ui/Button';
 import SectionHeading from '../components/ui/SectionHeading';
 import StatCounter from '../components/ui/StatCounter';
 import EventCard from '../components/ui/EventCard';
-import TeamCard from '../components/ui/TeamCard';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
@@ -26,16 +25,11 @@ const HERO_IMAGES = [
 
 const HomePage: React.FC = () => {
   const [eventsData, setEventsData] = useState<any[]>([]);
-  const [teamData, setTeamData] = useState<any>({ facultyCoordinators: [], coreCommittee: [] });
   const [isLoading, setIsLoading] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const featuredEvents = eventsData.filter(e => e.featured);
   const upcomingEvents = eventsData.filter(e => e.status === 'upcoming' && !e.featured).slice(0, 3);
-  const leadership = [
-    ...(teamData.facultyCoordinators || []).slice(0, 1),
-    ...(teamData.coreCommittee || []).slice(0, 3)
-  ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -83,9 +77,6 @@ const HomePage: React.FC = () => {
       try {
         const events: any = await fetchFromSheet('getEvents');
         if (Array.isArray(events)) setEventsData(events);
-
-        const team: any = await fetchFromSheet('getTeam');
-        if (team && !Array.isArray(team)) setTeamData(team);
       } catch (err) {
         console.error(err);
       }
@@ -459,24 +450,7 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
-        {/* ── Team Preview ── */}
-        <section id="team" className="py-24 bg-slate-50/50 border-t border-slate-200/60">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <SectionHeading title="Meet The Team" subtitle="Leadership" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <ScrollReveal stagger={0.08}>
-                {leadership.map(member => (
-                  <TeamCard key={member.id} member={member} />
-                ))}
-              </ScrollReveal>
-            </div>
-            <div className="mt-12 text-center">
-              <Button variant="secondary" href="/team">
-                Meet Full Team
-              </Button>
-            </div>
-          </div>
-        </section>
+
 
         {/* ── CTA Banner ── */}
         <section id="contact" className="py-24 bg-white border-t border-slate-100">
