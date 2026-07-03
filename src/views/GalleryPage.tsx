@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ZoomIn, Calendar, Images } from 'lucide-react';
+import { X, ZoomIn, Calendar, Images, ChevronLeft, ChevronRight } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 import SearchFilter from '../components/ui/SearchFilter';
 
@@ -11,6 +11,19 @@ const GalleryPage: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const [galleryData, setGalleryData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
+
+  const featuredVideos = [
+    { src: "/gallery/AVOLODHAA.mp4", label: "Fest Highlights Video" },
+    { src: "/gallery/Screen_Recording_20260220_090135_Photos.mp4", label: "Sports Tournament Highlights" }
+  ];
+
+  const nextVideo = () => {
+    setCurrentVideoIdx((prev) => (prev + 1) % featuredVideos.length);
+  };
+  const prevVideo = () => {
+    setCurrentVideoIdx((prev) => (prev - 1 + featuredVideos.length) % featuredVideos.length);
+  };
 
   React.useEffect(() => {
     const loadData = async () => {
@@ -27,7 +40,7 @@ const GalleryPage: React.FC = () => {
 
   const filteredImages = galleryData
     .filter(img => img.image) // Only show items with actual images
-    .filter(img => !img.image.endsWith('.mp4')) // Exclude the featured video from the grid
+    .filter(img => img.image !== '/gallery/AVOLODHAA.mp4' && img.image !== '/gallery/Screen_Recording_20260220_090135_Photos.mp4') // Exclude the featured videos from the grid
     .filter(img => filter === 'all' ? true : img.category === filter);
 
   const getCategoryColor = (category: string) => {
@@ -63,9 +76,10 @@ const GalleryPage: React.FC = () => {
               fieldops<span className="text-[#CD0000]">2026</span>
             </h1>
             
-            <div className="max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-slate-200/60 aspect-video mb-12 bg-slate-950">
+            <div className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-slate-200/60 aspect-video mb-12 bg-slate-950 group">
               <video 
-                src="/gallery/Screen_Recording_20260220_090135_Photos.mp4" 
+                key={currentVideoIdx}
+                src={featuredVideos[currentVideoIdx].src} 
                 autoPlay 
                 muted 
                 loop 
@@ -73,6 +87,31 @@ const GalleryPage: React.FC = () => {
                 playsInline 
                 className="w-full h-full object-cover" 
               />
+              
+              {/* Navigation Arrows */}
+              <button 
+                onClick={prevVideo}
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-xs transition-all opacity-0 group-hover:opacity-100 z-10"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button 
+                onClick={nextVideo}
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-xs transition-all opacity-0 group-hover:opacity-100 z-10"
+              >
+                <ChevronRight size={20} />
+              </button>
+              
+              {/* Indicators */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                {featuredVideos.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentVideoIdx(idx)}
+                    className={`w-2 h-2 rounded-full transition-all ${idx === currentVideoIdx ? 'bg-white w-4' : 'bg-white/40'}`}
+                  />
+                ))}
+              </div>
             </div>
 
 

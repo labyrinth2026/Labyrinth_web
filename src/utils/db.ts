@@ -9,31 +9,31 @@ const DB_FILE = path.join(process.cwd(), 'src/data/db.json');
 export interface User {
   id: string;
   email: string;
-  name: string;
+  name: string; // fallback mapping for legacy compatibility
+  full_name: string;
   passwordHash?: string; // only used in file-fallback mode
-  role: 'HOD' | 'COORDINATOR' | 'ASSOCIATE' | 'CORE_HEAD' | 'VERTICAL_HEAD' | 'SUB_HEAD' | 'USER';
+  role: 'ADMIN' | 'MEMBER';
   status: 'active' | 'inactive';
   firstLogin: boolean;
   passwordChangedAt?: string;
   createdBy?: string;
   lastLogin?: string;
   createdAt: string;
-
-  // Simplified additions
   phone?: string;
   profilePhoto?: string;
   department?: string;
-  yearOfStudy?: string;
-  registerNumber?: string;
+  designation?: string;
   committeeId?: string;
   verticalId?: string;
-  isHead?: boolean;
 }
 
 export interface CoreCommittee {
   id: string;
   name: string;
   description: string;
+  icon?: string;
+  head_id?: string;
+  createdAt?: string;
 }
 
 export interface Vertical {
@@ -43,20 +43,8 @@ export interface Vertical {
   category: 'tech' | 'non-tech';
   icon: string;
   color: string;
-}
-
-export interface CommitteeAssignment {
-  id: string;
-  userId: string;
-  committeeId: string;
-  assignedAt: string;
-}
-
-export interface VerticalAssignment {
-  id: string;
-  userId: string;
-  verticalId: string;
-  assignedAt: string;
+  head_id?: string;
+  createdAt?: string;
 }
 
 export interface Event {
@@ -64,36 +52,37 @@ export interface Event {
   title: string;
   description: string;
   date: string;
-  category: string;
-  status: 'upcoming' | 'past';
-  featured: boolean;
+  time?: string;
+  location?: string;
+  bannerUrl?: string;
   committeeId?: string;
   verticalId?: string;
   createdBy?: string;
+  status: 'upcoming' | 'past';
+  featured?: boolean;
 }
 
 export interface Announcement {
   id: string;
   title: string;
   content: string;
-  targetType: 'all' | 'committee' | 'vertical';
-  targetId?: string;
+  targetType: 'all' | 'committee' | 'vertical'; // mapped from audience_type
+  targetId?: string; // mapped from audience_id
   createdBy: string;
-  timestamp: string;
+  timestamp: string; // mapped from created_at
 }
 
 export interface Task {
   id: string;
   title: string;
   description: string;
-  taskType: 'committee' | 'vertical' | 'project';
-  status: 'pending' | 'in-progress' | 'completed' | 'planning';
+  status: 'pending' | 'in-progress' | 'completed';
   dueDate?: string;
-  assignedTo?: string;
+  assignedTo?: string; // profile UUID or name
   committeeId?: string;
   verticalId?: string;
-  createdBy?: string;
-  url?: string; // for backwards compatibility with verticalProjects
+  createdAt?: string;
+  url?: string; // for backwards compatibility
 }
 
 export interface Resource {
@@ -101,25 +90,16 @@ export interface Resource {
   title: string;
   description: string;
   url: string;
-  type: 'document' | 'link' | 'video';
   committeeId?: string;
   verticalId?: string;
   uploadedBy?: string;
+  createdAt?: string;
 }
 
 export type CommitteeTask = Task;
 export type CommitteeResource = Resource;
 export type VerticalProject = Task;
 export type VerticalResource = Resource;
-
-export interface VerticalAttendance {
-  id: string;
-  verticalId: string;
-  date: string;
-  memberId: string;
-  memberName: string;
-  status: 'present' | 'absent';
-}
 
 export interface DatabaseSchema {
   users: User[];
@@ -130,8 +110,10 @@ export interface DatabaseSchema {
   announcements: Announcement[];
   tasks: Task[];
   resources: Resource[];
-  verticalAttendance: VerticalAttendance[];
   forms: any[];
+  formFields: any[];
+  formResponses: any[];
+  responseAnswers: any[];
   gallery: any[];
 }
 
@@ -144,8 +126,10 @@ const initialSchema: DatabaseSchema = {
   announcements: [],
   tasks: [],
   resources: [],
-  verticalAttendance: [],
   forms: [],
+  formFields: [],
+  formResponses: [],
+  responseAnswers: [],
   gallery: []
 };
 
@@ -178,136 +162,33 @@ export function saveLocalDb(db: DatabaseSchema): void {
 }
 
 export function initializeLocalDb(): void {
+  // Read existing db.json or fallback
   const db = { ...initialSchema };
-  const salt = bcrypt.genSaltSync(10);
-  const defaultHash = bcrypt.hashSync('admin123', salt);
-
-  db.users = [
-    { id: 'u-hod', email: 'hod@labyrinth.club', name: 'Dr. Suresh Kumar', passwordHash: defaultHash, role: 'HOD', status: 'active', firstLogin: false, isHead: false, createdAt: new Date().toISOString() },
-    { id: 'u-coord', email: 'coordinator@labyrinth.club', name: 'Prof. Anjali Menon', passwordHash: defaultHash, role: 'COORDINATOR', status: 'active', firstLogin: false, isHead: false, createdAt: new Date().toISOString() },
-    { id: 'u-assoc', email: 'associate@labyrinth.club', name: 'Dr. Rajesh Rajan', passwordHash: defaultHash, role: 'ASSOCIATE', status: 'active', firstLogin: false, isHead: false, createdAt: new Date().toISOString() },
-    { id: 'u-core-head', email: 'core@labyrinth.club', name: 'Core Member One', passwordHash: defaultHash, role: 'CORE_HEAD', status: 'active', firstLogin: false, committeeId: 'cc-pub', isHead: true, createdAt: new Date().toISOString() },
-    
-    // AI Creator's Lab (ab000000-0000-0000-0000-000000000000)
-    { id: 'u-vh1', email: 'rishi.raj@mca.christuniversity.in', name: 'Rishi Raj (1 MCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000000', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-vh2', email: 'krupa.m@bsccsh.christuniversity.in', name: 'Krupa (3 BSc CS)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000000', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-sh1', email: 'kapil.maheshwari@bcah.christuniversity.in', name: 'Kapil Maheswari (5 BCA A)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000000', isHead: false, createdAt: new Date().toISOString() },
-
-    // GameNova (ab000000-0000-0000-0000-000000000002)
-    { id: 'u-vh3', email: 'ruchak.khatri@bcah.christuniversity.in', name: 'Ruchak Khatri (5BCA A)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000002', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-vh4', email: 'joel.benedict@bcah.christuniversity.in', name: 'Joel Benedict (5BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000002', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-sh2', email: 'rahul.t@bsccsh.christuniversity.in', name: 'Rahul T (5 BSc CS)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000002', isHead: false, createdAt: new Date().toISOString() },
-
-    // CodeCraft (ab000000-0000-0000-0000-000000000003)
-    { id: 'u-vh5', email: 'kanika.jain@mca.christuniversity.in', name: 'Kanika Jain (1 MCA)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000003', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-vh6', email: 'vvedika.m@bsccmh.christuniversity.in', name: 'Vvedika (5 BSc CM)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000003', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-sh3', email: 'himanshi.kansal@bcah.christuniversity.in', name: 'Himanshi Kansal (3 BCA B)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000003', isHead: false, createdAt: new Date().toISOString() },
-
-    // CipherGuard (ab000000-0000-0000-0000-000000000004)
-    { id: 'u-vh7', email: 'daksh.chandiramani@bcah.christuniversity.in', name: 'Daksh Sunil (5BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000004', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-sh4', email: 'meet.garg@bcah.christuniversity.in', name: 'Meet Garg (3BCA B)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000004', isHead: false, createdAt: new Date().toISOString() },
-
-    // BitOps (ab000000-0000-0000-0000-000000000005)
-    { id: 'u-vh8', email: 'rida.zafar@bsccsh.christuniversity.in', name: 'Rida Zafar (5 BSc CS)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000005', isHead: true, createdAt: new Date().toISOString() },
-
-    // FieldOps (ab000000-0000-0000-0000-000000000006)
-    { id: 'u-vh9', email: 'gautham.s@bsccsh.christuniversity.in', name: 'Gautham S (3BSc CS)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000006', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-vh10', email: 'supal.porwal@bcah.christuniversity.in', name: 'Supal Porwal (5BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000006', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-sh5', email: 'shreyas.v@bsccsh.christuniversity.in', name: 'Shreyas V (3 BSc CS)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000006', isHead: false, createdAt: new Date().toISOString() },
-
-    // CrossCode (ab000000-0000-0000-0000-000000000007)
-    { id: 'u-vh11', email: 'sandhya.m@christuniversity.in', name: 'Sandhya M (5BCA A)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000007', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-vh12', email: 'sreeshma.yetukuri@bcah.christuniversity.in', name: 'Sreeshma Chowdary Yetukuri (3BCA A)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000007', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-sh6', email: 'u.prathikshakini@bcah.christuniversity.in', name: 'U Prathiksha Kini (3BCA A)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000007', isHead: false, createdAt: new Date().toISOString() },
-
-    // The RoundTable (ab000000-0000-0000-0000-000000000008)
-    { id: 'u-vh13', email: 'arush.chandra@bcah.christuniversity.in', name: 'Arush (3BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000008', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-vh14', email: 'purvi.chakarvarti@bcah.christuniversity.in', name: 'Purvi (3BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000008', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-sh7', email: 'maanya.singh@bsccmh.christuniversity.in', name: 'Maanya (5 BSc CM)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000008', isHead: false, createdAt: new Date().toISOString() },
-
-    // The Aesthetic Lab (ab000000-0000-0000-0000-000000000009)
-    { id: 'u-vh15', email: 'nidhi.anil@bsccsh.christuniversity.in', name: 'Nidhi Anil (3 BSc CS)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000009', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-vh16', email: 'alisha.sajeev@bcah.christuniversity.in', name: 'Alisha Sajeev (5BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000009', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-sh8', email: 'tejas.sujith@bcah.christuniversity.in', name: 'Tejas Sujith (3BCA B)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000009', isHead: false, createdAt: new Date().toISOString() },
-
-    // Startovate (ab000000-0000-0000-0000-000000000010)
-    { id: 'u-vh17', email: 'ceyanne.dsouza@bcah.christuniversity.in', name: 'Ceyanne Dsouza (5BCA B)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000010', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-vh18', email: 's.khushal@bcah.christuniversity.in', name: 'Khushal S (3BCA)', passwordHash: defaultHash, role: 'VERTICAL_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000010', isHead: true, createdAt: new Date().toISOString() },
-    { id: 'u-sh9', email: 'prasanth.k@bcah.christuniversity.in', name: 'Prashanth (3BCA)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000010', isHead: false, createdAt: new Date().toISOString() },
-    { id: 'u-sh10', email: 'adit.madan@bsccsh.christuniversity.in', name: 'Adit (5 BSc CS)', passwordHash: defaultHash, role: 'SUB_HEAD', status: 'active', firstLogin: false, verticalId: 'ab000000-0000-0000-0000-000000000010', isHead: false, createdAt: new Date().toISOString() }
-  ];
-
-  // Verticals
-  try {
-    const vertsPath = path.join(process.cwd(), 'src/data/verticals.json');
-    if (fs.existsSync(vertsPath)) {
-      db.verticals = JSON.parse(fs.readFileSync(vertsPath, 'utf8'));
-    }
-  } catch {}
-
-  // Events
-  try {
-    const evtsPath = path.join(process.cwd(), 'src/data/events.json');
-    if (fs.existsSync(evtsPath)) {
-      db.events = JSON.parse(fs.readFileSync(evtsPath, 'utf8'));
-    }
-  } catch {}
-
-  // Committees
-  db.coreCommittees = [
-    { id: 'cc-pub', name: 'Publicity Committee', description: 'Handles all external marketing and social media.' },
-    { id: 'cc-log', name: 'Logistics Committee', description: 'Manages scheduling, venues, tech rider, and refreshments.' },
-    { id: 'cc-des', name: 'Design Committee', description: 'Responsible for posters, video editing, and UI themes.' },
-    { id: 'cc-spn', name: 'Sponsorship Committee', description: 'Finds and interacts with corporate sponsors.' }
-  ];
-
-  db.tasks = [
-    { id: 'ct1', committeeId: 'cc-pub', title: 'Design Teaser Poster', description: 'Create teaser graphics for the upcoming CS fest.', status: 'pending', assignedTo: 'Core Member One', dueDate: '2026-07-20', taskType: 'committee' },
-    { id: 'vp1', verticalId: 'ab000000-0000-0000-0000-000000000000', title: 'Labyrinth Web Portal', description: 'React application for student workspace coordination.', status: 'in-progress', taskType: 'project', url: 'https://github.com/labyrinth/portal' }
-  ];
-
-  db.resources = [
-    { id: 'cr1', committeeId: 'cc-pub', title: 'Club Branding Kit', description: 'Official logos and color rules.', url: 'https://example.com/branding.pdf', type: 'document' },
-    { id: 'vr1', verticalId: 'ab000000-0000-0000-0000-000000000000', title: 'Deep Learning Lecture 1', description: 'Introduction to neural networks.', url: 'https://youtube.com', type: 'video' }
-  ];
-
-  try {
-    const formsPath = path.join(process.cwd(), 'src/data/forms.json');
-    if (fs.existsSync(formsPath)) {
-      db.forms = Object.values(JSON.parse(fs.readFileSync(formsPath, 'utf8')));
-    }
-  } catch {}
-
-  try {
-    const galPath = path.join(process.cwd(), 'src/data/gallery.json');
-    if (fs.existsSync(galPath)) {
-      db.gallery = JSON.parse(fs.readFileSync(galPath, 'utf8'));
-    }
-  } catch {}
-
-  db.verticalAttendance = [
-    { id: 'at1', verticalId: 'ab000000-0000-0000-0000-000000000000', date: '2026-07-01', memberId: 'u-vert-head1', memberName: 'Rishi Raj', status: 'present' }
-  ];
-
   saveLocalDb(db);
 }
 
 // Log actions helper
 export async function logActivity(userId: string, action: string, details: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    await supabase.from('activity_logs').insert({ user_id: userId, action, details });
-  } else {
-    const db = getLocalDb();
-    db.activityLogs.unshift({
-      id: `log-${Date.now()}`,
-      userId,
-      action,
-      details,
-      timestamp: new Date().toISOString()
-    });
-    if (db.activityLogs.length > 500) db.activityLogs = db.activityLogs.slice(0, 500);
-    saveLocalDb(db);
+    try {
+      const { error } = await supabase.from('activity_logs').insert({ user_id: userId, action, details });
+      if (error) throw error;
+      return;
+    } catch (err) {
+      console.warn("Supabase logActivity failed, falling back to local logging:", err);
+    }
   }
+
+  const db = getLocalDb();
+  db.activityLogs.unshift({
+    id: `log-${Date.now()}`,
+    userId,
+    action,
+    details,
+    timestamp: new Date().toISOString()
+  });
+  if (db.activityLogs.length > 500) db.activityLogs = db.activityLogs.slice(0, 500);
+  saveLocalDb(db);
 }
 
 // =====================================================================
@@ -318,74 +199,98 @@ export async function logActivity(userId: string, action: string, details: strin
 export async function dbGetUserByEmail(email: string): Promise<any | null> {
   const cleanEmail = email.toLowerCase().trim();
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('profiles').select('*').eq('email', cleanEmail).maybeSingle();
-    if (error) throw error;
-    if (data) {
-      return {
-        id: data.id,
-        email: data.email,
-        name: data.name,
-        role: data.role,
-        status: data.status,
-        firstLogin: data.first_login,
-        passwordChangedAt: data.password_changed_at,
-        createdBy: data.created_by,
-        lastLogin: data.last_login,
-        committeeId: data.committee_id,
-        verticalId: data.vertical_id,
-        isHead: data.is_head
-      };
+    try {
+      const { data, error } = await supabase.from('profiles').select('*').eq('email', cleanEmail).maybeSingle();
+      if (error) throw error;
+      if (data) {
+        return {
+          id: data.id,
+          email: data.email,
+          name: data.full_name || data.email.split('@')[0],
+          full_name: data.full_name,
+          role: data.role,
+          status: data.status,
+          firstLogin: data.first_login,
+          passwordChangedAt: data.password_changed_at,
+          createdBy: data.created_by,
+          lastLogin: data.last_login,
+          committeeId: data.committee_id,
+          verticalId: data.vertical_id,
+          phone: data.phone,
+          profilePhoto: data.profile_photo,
+          designation: data.designation,
+          department: data.department
+        };
+      }
+      return null;
+    } catch (err) {
+      console.warn("Supabase dbGetUserByEmail failed, using local database fallback:", err);
+      const db = getLocalDb();
+      const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
+      if (user) {
+        return { ...user, name: user.full_name || user.name };
+      }
+      return null;
     }
-    return null;
   } else {
     const db = getLocalDb();
     const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
-    return user || null;
+    if (user) {
+      return { ...user, name: user.full_name || user.name };
+    }
+    return null;
   }
 }
 
 export async function dbGetRoles(): Promise<any[]> {
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('profiles').select('*');
-    if (error) throw error;
-    return (data || []).map((p: any) => ({
-      id: p.id,
-      email: p.email,
-      name: p.name,
-      role: p.role,
-      status: p.status,
-      firstLogin: p.first_login,
-      passwordChangedAt: p.password_changed_at,
-      createdBy: p.created_by,
-      lastLogin: p.last_login,
-      committeeId: p.committee_id,
-      verticalId: p.vertical_id,
-      isHead: p.is_head,
-      createdAt: p.created_at
-    }));
+    try {
+      const { data, error } = await supabase.from('profiles').select('*');
+      if (error) throw error;
+      return (data || []).map((p: any) => ({
+        id: p.id,
+        email: p.email,
+        name: p.full_name || p.email.split('@')[0],
+        full_name: p.full_name,
+        role: p.role,
+        status: p.status,
+        firstLogin: p.first_login,
+        passwordChangedAt: p.password_changed_at,
+        createdBy: p.created_by,
+        lastLogin: p.last_login,
+        committeeId: p.committee_id,
+        verticalId: p.vertical_id,
+        phone: p.phone,
+        profilePhoto: p.profile_photo,
+        designation: p.designation,
+        department: p.department,
+        createdAt: p.created_at
+      }));
+    } catch (err) {
+      console.warn("Supabase dbGetRoles failed, using local database fallback:", err);
+      const db = getLocalDb();
+      return db.users.map(u => ({ ...u, name: u.full_name || u.name }));
+    }
   } else {
     const db = getLocalDb();
-    return db.users;
+    return db.users.map(u => ({ ...u, name: u.full_name || u.name }));
   }
 }
 
 export async function dbAddRole(email: string, name: string, role: string): Promise<void> {
   const cleanEmail = email.toLowerCase().trim();
   if (isSupabaseConfigured() && supabase) {
-    // Check if profile exists
     const { data: existing } = await supabase.from('profiles').select('id').eq('email', cleanEmail).maybeSingle();
     if (existing) {
-      const { error } = await supabase.from('profiles').update({ role, status: 'active' }).eq('id', existing.id);
+      const { error } = await supabase.from('profiles').update({ role: role as any, status: 'active' }).eq('id', existing.id);
       if (error) throw error;
     } else {
-      // Need to invite user or create profile. In Supabase, standard signup creates profiles.
-      // Insert profile directly
       const uuid = genRandomUuid();
       const { error } = await supabase.from('profiles').insert({
         id: uuid,
         email: cleanEmail,
-        name,
-        role,
+        full_name: name,
+        role: role as any,
         status: 'active'
       });
       if (error) throw error;
@@ -398,6 +303,7 @@ export async function dbAddRole(email: string, name: string, role: string): Prom
         id: `u-${Date.now()}`,
         email: cleanEmail,
         name,
+        full_name: name,
         passwordHash: bcrypt.hashSync('admin123', 10),
         role: role as any,
         status: 'active',
@@ -416,20 +322,18 @@ export async function dbAddRole(email: string, name: string, role: string): Prom
 export async function dbDeleteRole(userId: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
     const { error } = await supabase.from('profiles').update({
-      role: 'USER',
+      role: 'MEMBER',
       committee_id: null,
-      vertical_id: null,
-      is_head: false
+      vertical_id: null
     }).eq('id', userId);
     if (error) throw error;
   } else {
     const db = getLocalDb();
     const user = db.users.find(u => u.id === userId);
     if (user) {
-      user.role = 'USER';
+      user.role = 'MEMBER';
       user.committeeId = undefined;
       user.verticalId = undefined;
-      user.isHead = false;
       saveLocalDb(db);
     }
   }
@@ -449,13 +353,12 @@ export async function dbCreateUser(name: string, email: string, role: string, co
       password: defaultPassword,
       email_confirm: true,
       user_metadata: {
-        name,
+        full_name: name,
         role,
         created_by: adminUserId,
         first_login: true,
         committee_id: committeeId || null,
-        vertical_id: verticalId || null,
-        is_head: ['CORE_HEAD', 'VERTICAL_HEAD'].includes(role)
+        vertical_id: verticalId || null
       }
     });
 
@@ -466,10 +369,10 @@ export async function dbCreateUser(name: string, email: string, role: string, co
     const { error: profErr } = await adminClient.from('profiles').update({
       created_by: adminUserId,
       first_login: true,
-      role,
+      role: role as any,
       committee_id: committeeId || null,
       vertical_id: verticalId || null,
-      is_head: ['CORE_HEAD', 'VERTICAL_HEAD'].includes(role)
+      full_name: name
     }).eq('id', userId);
     if (profErr) console.warn('Could not update profile metadata:', profErr);
   } else {
@@ -485,6 +388,7 @@ export async function dbCreateUser(name: string, email: string, role: string, co
       id: userId,
       email: cleanEmail,
       name,
+      full_name: name,
       passwordHash: hash,
       role: role as any,
       status: 'active',
@@ -492,7 +396,6 @@ export async function dbCreateUser(name: string, email: string, role: string, co
       createdBy: adminUserId,
       committeeId,
       verticalId,
-      isHead: ['CORE_HEAD', 'VERTICAL_HEAD'].includes(role),
       createdAt: new Date().toISOString()
     });
 
@@ -515,14 +418,12 @@ export async function dbUpdateUserStatus(userId: string, status: 'active' | 'ina
 }
 
 export async function dbUpdateUserDetails(userId: string, name: string, role: string, committeeId?: string, verticalId?: string): Promise<void> {
-  const isHead = ['CORE_HEAD', 'VERTICAL_HEAD'].includes(role);
   if (isSupabaseConfigured() && supabase) {
     const { error } = await supabase.from('profiles').update({
-      name,
-      role,
+      full_name: name,
+      role: role as any,
       committee_id: committeeId || null,
-      vertical_id: verticalId || null,
-      is_head: isHead
+      vertical_id: verticalId || null
     }).eq('id', userId);
     if (error) throw error;
   } else {
@@ -530,10 +431,10 @@ export async function dbUpdateUserDetails(userId: string, name: string, role: st
     const user = db.users.find(u => u.id === userId);
     if (user) {
       user.name = name;
+      user.full_name = name;
       user.role = role as any;
       user.committeeId = committeeId;
       user.verticalId = verticalId;
-      user.isHead = isHead;
       saveLocalDb(db);
     }
   }
@@ -556,9 +457,14 @@ export async function dbUpdateLastLogin(userId: string): Promise<void> {
 // --- VERTICALS ---
 export async function dbGetVerticals(): Promise<Vertical[]> {
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('verticals').select('*');
-    if (error) throw error;
-    return data || [];
+    try {
+      const { data, error } = await supabase.from('verticals').select('*');
+      if (error) throw error;
+      return data || [];
+    } catch (err) {
+      console.warn("Supabase dbGetVerticals failed, using local database fallback:", err);
+      return getLocalDb().verticals;
+    }
   } else {
     return getLocalDb().verticals;
   }
@@ -606,8 +512,6 @@ export async function dbDeleteVertical(id: string): Promise<void> {
     db.users.forEach(u => {
       if (u.verticalId === id) {
         u.verticalId = undefined;
-        u.isHead = false;
-        if (u.role === 'VERTICAL_HEAD') u.role = 'USER';
       }
     });
     saveLocalDb(db);
@@ -617,9 +521,14 @@ export async function dbDeleteVertical(id: string): Promise<void> {
 // --- CORE COMMITTEES ---
 export async function dbGetCoreCommittees(): Promise<CoreCommittee[]> {
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('core_committees').select('*');
-    if (error) throw error;
-    return data || [];
+    try {
+      const { data, error } = await supabase.from('core_committees').select('*');
+      if (error) throw error;
+      return data || [];
+    } catch (err) {
+      console.warn("Supabase dbGetCoreCommittees failed, using local database fallback:", err);
+      return getLocalDb().coreCommittees;
+    }
   } else {
     return getLocalDb().coreCommittees;
   }
@@ -634,7 +543,8 @@ export async function dbAddCoreCommittee(name: string, description: string): Pro
     db.coreCommittees.push({
       id: `cc-${Date.now()}`,
       name,
-      description
+      description,
+      icon: 'Users'
     });
     saveLocalDb(db);
   }
@@ -650,8 +560,6 @@ export async function dbDeleteCoreCommittee(id: string): Promise<void> {
     db.users.forEach(u => {
       if (u.committeeId === id) {
         u.committeeId = undefined;
-        u.isHead = false;
-        if (u.role === 'CORE_HEAD') u.role = 'USER';
       }
     });
     saveLocalDb(db);
@@ -661,103 +569,121 @@ export async function dbDeleteCoreCommittee(id: string): Promise<void> {
 // --- ASSIGNMENTS ---
 export async function dbGetAssignments(): Promise<any> {
   if (isSupabaseConfigured() && supabase) {
-    const { data: profiles, error } = await supabase.from('profiles').select('id, name, email, committee_id, vertical_id, is_head, created_at, core_committees (name), verticals (name)');
-    if (error) throw error;
-    
-    const committeeHeads = (profiles || []).filter(p => p.committee_id && p.is_head);
-    const verticalHeads = (profiles || []).filter(p => p.vertical_id && p.is_head);
+    try {
+      const { data: comms, error: commError } = await supabase
+        .from('core_committees')
+        .select('id, name, head_id, profiles!core_committees_head_id_fkey(full_name, email)');
+      if (commError) throw commError;
 
-    return {
-      committee: committeeHeads.map((p: any) => ({
-        id: p.id,
-        userId: p.id,
-        committeeId: p.committee_id,
-        assignedAt: p.created_at,
-        userName: p.name || 'Unknown',
-        userEmail: p.email,
-        committeeName: p.core_committees?.name || 'Unknown'
-      })),
-      vertical: verticalHeads.map((p: any) => ({
-        id: p.id,
-        userId: p.id,
-        verticalId: p.vertical_id,
-        assignedAt: p.created_at,
-        userName: p.name || 'Unknown',
-        userEmail: p.email,
-        verticalName: p.verticals?.name || 'Unknown'
-      }))
-    };
+      const { data: verts, error: vertError } = await supabase
+        .from('verticals')
+        .select('id, name, head_id, profiles!verticals_head_id_fkey(full_name, email)');
+      if (vertError) throw vertError;
+
+      return {
+        committee: (comms || []).filter(c => c.head_id).map((c: any) => ({
+          id: c.id,
+          userId: c.head_id,
+          committeeId: c.id,
+          userName: c.profiles?.full_name || 'Unknown',
+          userEmail: c.profiles?.email || '',
+          committeeName: c.name
+        })),
+        vertical: (verts || []).filter(v => v.head_id).map((v: any) => ({
+          id: v.id,
+          userId: v.head_id,
+          verticalId: v.id,
+          userName: v.profiles?.full_name || 'Unknown',
+          userEmail: v.profiles?.email || '',
+          verticalName: v.name
+        }))
+      };
+    } catch (err) {
+      console.warn("Supabase dbGetAssignments failed, using local database fallback:", err);
+      const db = getLocalDb();
+      return getLocalAssignments(db);
+    }
   } else {
     const db = getLocalDb();
-    const committeeHeads = db.users.filter(u => u.committeeId && u.isHead);
-    const verticalHeads = db.users.filter(u => u.verticalId && u.isHead);
-
-    return {
-      committee: committeeHeads.map(u => {
-        const c = db.coreCommittees.find(com => com.id === u.committeeId);
-        return {
-          id: u.id,
-          userId: u.id,
-          committeeId: u.committeeId,
-          assignedAt: u.createdAt,
-          userName: u.name,
-          userEmail: u.email,
-          committeeName: c?.name || 'Unknown'
-        };
-      }),
-      vertical: verticalHeads.map(u => {
-        const v = db.verticals.find(ver => ver.id === u.verticalId);
-        return {
-          id: u.id,
-          userId: u.id,
-          verticalId: u.verticalId,
-          assignedAt: u.createdAt,
-          userName: u.name,
-          userEmail: u.email,
-          verticalName: v?.name || 'Unknown'
-        };
-      })
-    };
+    return getLocalAssignments(db);
   }
+}
+
+function getLocalAssignments(db: DatabaseSchema) {
+  const comms = db.coreCommittees || [];
+  const verts = db.verticals || [];
+  
+  return {
+    committee: comms.filter((c: any) => c.head_id).map((c: any) => {
+      const head = db.users.find((u: any) => u.id === c.head_id);
+      return {
+        id: c.id,
+        userId: c.head_id,
+        committeeId: c.id,
+        userName: head?.full_name || head?.name || 'Unknown',
+        userEmail: head?.email || '',
+        committeeName: c.name
+      };
+    }),
+    vertical: verts.filter((v: any) => v.head_id).map((v: any) => {
+      const head = db.users.find((u: any) => u.id === v.head_id);
+      return {
+        id: v.id,
+        userId: v.head_id,
+        verticalId: v.id,
+        userName: head?.full_name || head?.name || 'Unknown',
+        userEmail: head?.email || '',
+        verticalName: v.name
+      };
+    })
+  };
 }
 
 export async function dbAssignCoreHead(email: string, committeeId: string): Promise<void> {
   const cleanEmail = email.toLowerCase().trim();
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('profiles').update({
-      committee_id: committeeId,
-      is_head: true,
-      role: 'CORE_HEAD',
-      status: 'active'
-    }).eq('email', cleanEmail);
-    if (error) throw error;
+    const { data: user, error: userErr } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('email', cleanEmail)
+      .maybeSingle();
+    if (userErr) throw userErr;
+    if (!user) throw new Error('User not found. Head must register first.');
+
+    const { error: commErr } = await supabase
+      .from('core_committees')
+      .update({ head_id: user.id })
+      .eq('id', committeeId);
+    if (commErr) throw commErr;
+
+    await supabase.from('profiles').update({ committee_id: committeeId }).eq('id', user.id);
   } else {
     const db = getLocalDb();
     const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
     if (!user) throw new Error('User not found. Head must register first.');
+    
+    const comm = db.coreCommittees.find(c => c.id === committeeId);
+    if (comm) comm.head_id = user.id;
     user.committeeId = committeeId;
-    user.isHead = true;
-    user.role = 'CORE_HEAD';
-    user.status = 'active';
     saveLocalDb(db);
   }
 }
 
-export async function dbRemoveCoreAssignment(userId: string): Promise<void> {
+export async function dbRemoveCoreAssignment(userId: string, committeeId?: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('profiles').update({
-      committee_id: null,
-      is_head: false,
-      role: 'USER'
-    }).eq('id', userId);
-    if (error) throw error;
+    let query = supabase.from('core_committees').update({ head_id: null });
+    if (committeeId) {
+      query = query.eq('id', committeeId);
+    }
+    const { error: commErr } = await query.eq('head_id', userId);
+    if (commErr) throw commErr;
   } else {
     const db = getLocalDb();
-    const user = db.users.find(u => u.id === userId);
-    if (user) {
-      user.committeeId = undefined;
-      user.isHead = false;
-      user.role = 'USER';
+    const comm = committeeId 
+      ? db.coreCommittees.find(c => c.id === committeeId) 
+      : db.coreCommittees.find(c => c.head_id === userId);
+    if (comm && comm.head_id === userId) {
+      comm.head_id = undefined;
       saveLocalDb(db);
     }
   }
@@ -766,40 +692,48 @@ export async function dbRemoveCoreAssignment(userId: string): Promise<void> {
 export async function dbAssignVerticalHead(email: string, verticalId: string): Promise<void> {
   const cleanEmail = email.toLowerCase().trim();
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('profiles').update({
-      vertical_id: verticalId,
-      is_head: true,
-      role: 'VERTICAL_HEAD',
-      status: 'active'
-    }).eq('email', cleanEmail);
-    if (error) throw error;
+    const { data: user, error: userErr } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('email', cleanEmail)
+      .maybeSingle();
+    if (userErr) throw userErr;
+    if (!user) throw new Error('User not found. Head must register first.');
+
+    const { error: vertErr } = await supabase
+      .from('verticals')
+      .update({ head_id: user.id })
+      .eq('id', verticalId);
+    if (vertErr) throw vertErr;
+
+    await supabase.from('profiles').update({ vertical_id: verticalId }).eq('id', user.id);
   } else {
     const db = getLocalDb();
     const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
     if (!user) throw new Error('User not found. Head must register first.');
+    
+    const vert = db.verticals.find(v => v.id === verticalId);
+    if (vert) vert.head_id = user.id;
     user.verticalId = verticalId;
-    user.isHead = true;
-    user.role = 'VERTICAL_HEAD';
-    user.status = 'active';
     saveLocalDb(db);
   }
 }
 
-export async function dbRemoveVerticalAssignment(userId: string): Promise<void> {
+export async function dbRemoveVerticalAssignment(userId: string, verticalId?: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('profiles').update({
-      vertical_id: null,
-      is_head: false,
-      role: 'USER'
-    }).eq('id', userId);
-    if (error) throw error;
+    let query = supabase.from('verticals').update({ head_id: null });
+    if (verticalId) {
+      query = query.eq('id', verticalId);
+    }
+    const { error: vertErr } = await query.eq('head_id', userId);
+    if (vertErr) throw vertErr;
   } else {
     const db = getLocalDb();
-    const user = db.users.find(u => u.id === userId);
-    if (user) {
-      user.verticalId = undefined;
-      user.isHead = false;
-      user.role = 'USER';
+    const vert = verticalId 
+      ? db.verticals.find(v => v.id === verticalId) 
+      : db.verticals.find(v => v.head_id === userId);
+    if (vert && vert.head_id === userId) {
+      vert.head_id = undefined;
       saveLocalDb(db);
     }
   }
@@ -807,24 +741,41 @@ export async function dbRemoveVerticalAssignment(userId: string): Promise<void> 
 
 // --- EVENTS ---
 export async function dbGetEvents(): Promise<Event[]> {
+  let rawEvents: any[] = [];
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('events').select('*');
-    if (error) throw error;
-    return (data || []).map((e: any) => ({
+    try {
+      const { data, error } = await supabase.from('events').select('*');
+      if (error) throw error;
+      rawEvents = data || [];
+    } catch (err) {
+      console.warn("Supabase dbGetEvents failed, using local database fallback:", err);
+      rawEvents = getLocalDb().events;
+    }
+  } else {
+    rawEvents = getLocalDb().events;
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return rawEvents.map((e: any) => {
+    const eventDate = new Date(e.date);
+    const status = eventDate >= today ? 'upcoming' : 'past';
+    return {
       id: e.id,
       title: e.title,
       description: e.description,
       date: e.date,
-      category: e.category,
-      status: e.status,
-      featured: e.featured,
-      committeeId: e.committee_id,
-      verticalId: e.vertical_id,
-      createdBy: e.created_by
-    }));
-  } else {
-    return getLocalDb().events;
-  }
+      time: e.time,
+      location: e.location,
+      bannerUrl: e.banner_url || e.bannerUrl,
+      committeeId: e.committee_id || e.committeeId,
+      verticalId: e.vertical_id || e.verticalId,
+      createdBy: e.created_by || e.createdBy,
+      status,
+      featured: e.featured === true
+    };
+  });
 }
 
 export async function dbAddEvent(data: any, createdBy?: string): Promise<void> {
@@ -833,9 +784,9 @@ export async function dbAddEvent(data: any, createdBy?: string): Promise<void> {
       title: data.title,
       description: data.description,
       date: data.date,
-      category: data.category,
-      status: data.status,
-      featured: data.featured,
+      time: data.time || null,
+      location: data.location || null,
+      banner_url: data.bannerUrl || null,
       committee_id: data.committeeId || null,
       vertical_id: data.verticalId || null,
       created_by: createdBy || null
@@ -858,9 +809,9 @@ export async function dbUpdateEvent(id: string, data: any): Promise<void> {
     if (data.title !== undefined) mapped.title = data.title;
     if (data.description !== undefined) mapped.description = data.description;
     if (data.date !== undefined) mapped.date = data.date;
-    if (data.category !== undefined) mapped.category = data.category;
-    if (data.status !== undefined) mapped.status = data.status;
-    if (data.featured !== undefined) mapped.featured = data.featured;
+    if (data.time !== undefined) mapped.time = data.time || null;
+    if (data.location !== undefined) mapped.location = data.location || null;
+    if (data.bannerUrl !== undefined) mapped.banner_url = data.bannerUrl || null;
     if (data.committeeId !== undefined) mapped.committee_id = data.committeeId || null;
     if (data.verticalId !== undefined) mapped.vertical_id = data.verticalId || null;
 
@@ -890,20 +841,25 @@ export async function dbDeleteEvent(id: string): Promise<void> {
 // --- ANNOUNCEMENTS ---
 export async function dbGetAnnouncements(): Promise<Announcement[]> {
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('announcements').select(`
-      id, title, content, target_type, target_id, timestamp, created_by,
-      profiles (name)
-    `).order('timestamp', { ascending: false });
-    if (error) throw error;
-    return (data || []).map((a: any) => ({
-      id: a.id,
-      title: a.title,
-      content: a.content,
-      targetType: a.target_type,
-      targetId: a.target_id,
-      createdBy: a.profiles?.name || 'Club Admin',
-      timestamp: a.timestamp
-    }));
+    try {
+      const { data, error } = await supabase.from('announcements').select(`
+        id, title, content, audience_type, audience_id, created_at, created_by,
+        profiles (full_name)
+      `).order('created_at', { ascending: false });
+      if (error) throw error;
+      return (data || []).map((a: any) => ({
+        id: a.id,
+        title: a.title,
+        content: a.content,
+        targetType: a.audience_type,
+        targetId: a.audience_id,
+        createdBy: a.profiles?.full_name || a.created_by || 'Club Admin',
+        timestamp: a.created_at
+      }));
+    } catch (err) {
+      console.warn("Supabase dbGetAnnouncements failed, using local database fallback:", err);
+      return getLocalDb().announcements;
+    }
   } else {
     return getLocalDb().announcements;
   }
@@ -914,8 +870,8 @@ export async function dbAddAnnouncement(data: any, createdBy: string): Promise<v
     const { error } = await supabase.from('announcements').insert({
       title: data.title,
       content: data.content,
-      target_type: data.targetType,
-      target_id: data.targetId || null,
+      audience_type: data.targetType,
+      audience_id: data.targetId || null,
       created_by: createdBy
     });
     if (error) throw error;
@@ -948,20 +904,24 @@ export async function dbDeleteAnnouncement(id: string): Promise<void> {
 // --- COMMITTEE TASKS ---
 export async function dbGetCommitteeTasks(committeeId: string): Promise<CommitteeTask[]> {
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('tasks').select('*').eq('committee_id', committeeId).eq('task_type', 'committee');
-    if (error) throw error;
-    return (data || []).map((t: any) => ({
-      id: t.id,
-      committeeId: t.committee_id,
-      title: t.title,
-      description: t.description,
-      status: t.status,
-      assignedTo: t.assigned_to,
-      dueDate: t.due_date,
-      taskType: t.task_type
-    }));
+    try {
+      const { data, error } = await supabase.from('tasks').select('*').eq('committee_id', committeeId);
+      if (error) throw error;
+      return (data || []).map((t: any) => ({
+        id: t.id,
+        committeeId: t.committee_id,
+        title: t.title,
+        description: t.description,
+        status: t.status,
+        assignedTo: t.assigned_to,
+        dueDate: t.due_date
+      }));
+    } catch (err) {
+      console.warn("Supabase dbGetCommitteeTasks failed, using local database fallback:", err);
+      return getLocalDb().tasks.filter(t => t.committeeId === committeeId);
+    }
   } else {
-    return getLocalDb().tasks.filter(t => t.committeeId === committeeId && t.taskType === 'committee');
+    return getLocalDb().tasks.filter(t => t.committeeId === committeeId);
   }
 }
 
@@ -972,9 +932,8 @@ export async function dbAddCommitteeTask(committeeId: string, data: any): Promis
       title: data.title,
       description: data.description,
       status: data.status || 'pending',
-      assigned_to: data.assignedTo,
-      due_date: data.dueDate || null,
-      task_type: 'committee'
+      assigned_to: data.assignedTo || null,
+      due_date: data.dueDate || null
     });
     if (error) throw error;
   } else {
@@ -986,8 +945,7 @@ export async function dbAddCommitteeTask(committeeId: string, data: any): Promis
       description: data.description,
       status: data.status || 'pending',
       assignedTo: data.assignedTo,
-      dueDate: data.dueDate,
-      taskType: 'committee'
+      dueDate: data.dueDate
     });
     saveLocalDb(db);
   }
@@ -999,7 +957,7 @@ export async function dbUpdateCommitteeTask(id: string, data: any): Promise<void
     if (data.title !== undefined) mapped.title = data.title;
     if (data.description !== undefined) mapped.description = data.description;
     if (data.status !== undefined) mapped.status = data.status;
-    if (data.assignedTo !== undefined) mapped.assigned_to = data.assignedTo;
+    if (data.assignedTo !== undefined) mapped.assigned_to = data.assignedTo || null;
     if (data.dueDate !== undefined) mapped.due_date = data.dueDate || null;
 
     const { error } = await supabase.from('tasks').update(mapped).eq('id', id);
@@ -1028,16 +986,20 @@ export async function dbDeleteCommitteeTask(id: string): Promise<void> {
 // --- COMMITTEE RESOURCES ---
 export async function dbGetCommitteeResources(committeeId: string): Promise<CommitteeResource[]> {
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('resources').select('*').eq('committee_id', committeeId);
-    if (error) throw error;
-    return (data || []).map((r: any) => ({
-      id: r.id,
-      committeeId: r.committee_id,
-      title: r.title,
-      description: r.description,
-      url: r.url,
-      type: r.type
-    }));
+    try {
+      const { data, error } = await supabase.from('resources').select('*').eq('committee_id', committeeId);
+      if (error) throw error;
+      return (data || []).map((r: any) => ({
+        id: r.id,
+        committeeId: r.committee_id,
+        title: r.title,
+        description: r.description,
+        url: r.url
+      }));
+    } catch (err) {
+      console.warn("Supabase dbGetCommitteeResources failed, using local database fallback:", err);
+      return getLocalDb().resources.filter(r => r.committeeId === committeeId);
+    }
   } else {
     return getLocalDb().resources.filter(r => r.committeeId === committeeId);
   }
@@ -1049,8 +1011,7 @@ export async function dbAddCommitteeResource(committeeId: string, data: any): Pr
       committee_id: committeeId,
       title: data.title,
       description: data.description,
-      url: data.url,
-      type: data.type
+      url: data.url
     });
     if (error) throw error;
   } else {
@@ -1060,8 +1021,7 @@ export async function dbAddCommitteeResource(committeeId: string, data: any): Pr
       committeeId,
       title: data.title,
       description: data.description,
-      url: data.url,
-      type: data.type
+      url: data.url
     });
     saveLocalDb(db);
   }
@@ -1081,19 +1041,23 @@ export async function dbDeleteCommitteeResource(id: string): Promise<void> {
 // --- VERTICAL PROJECTS ---
 export async function dbGetVerticalProjects(verticalId: string): Promise<VerticalProject[]> {
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('tasks').select('*').eq('vertical_id', verticalId).eq('task_type', 'project');
-    if (error) throw error;
-    return (data || []).map((p: any) => ({
-      id: p.id,
-      verticalId: p.vertical_id,
-      title: p.title,
-      description: p.description,
-      status: p.status,
-      url: p.url,
-      taskType: p.task_type
-    }));
+    try {
+      const { data, error } = await supabase.from('tasks').select('*').eq('vertical_id', verticalId);
+      if (error) throw error;
+      return (data || []).map((p: any) => ({
+        id: p.id,
+        verticalId: p.vertical_id,
+        title: p.title,
+        description: p.description,
+        status: p.status,
+        url: p.url
+      }));
+    } catch (err) {
+      console.warn("Supabase dbGetVerticalProjects failed, using local database fallback:", err);
+      return getLocalDb().tasks.filter(p => p.verticalId === verticalId);
+    }
   } else {
-    return getLocalDb().tasks.filter(p => p.verticalId === verticalId && p.taskType === 'project');
+    return getLocalDb().tasks.filter(p => p.verticalId === verticalId);
   }
 }
 
@@ -1103,9 +1067,8 @@ export async function dbAddVerticalProject(verticalId: string, data: any): Promi
       vertical_id: verticalId,
       title: data.title,
       description: data.description,
-      status: data.status || 'planning',
-      url: data.url,
-      task_type: 'project'
+      status: data.status || 'pending',
+      url: data.url || null
     });
     if (error) throw error;
   } else {
@@ -1115,9 +1078,8 @@ export async function dbAddVerticalProject(verticalId: string, data: any): Promi
       verticalId,
       title: data.title,
       description: data.description,
-      status: data.status || 'planning',
-      url: data.url,
-      taskType: 'project'
+      status: data.status || 'pending',
+      url: data.url
     });
     saveLocalDb(db);
   }
@@ -1129,7 +1091,7 @@ export async function dbUpdateVerticalProject(id: string, data: any): Promise<vo
     if (data.title !== undefined) mapped.title = data.title;
     if (data.description !== undefined) mapped.description = data.description;
     if (data.status !== undefined) mapped.status = data.status;
-    if (data.url !== undefined) mapped.url = data.url;
+    if (data.url !== undefined) mapped.url = data.url || null;
 
     const { error } = await supabase.from('tasks').update(mapped).eq('id', id);
     if (error) throw error;
@@ -1157,16 +1119,20 @@ export async function dbDeleteVerticalProject(id: string): Promise<void> {
 // --- VERTICAL RESOURCES ---
 export async function dbGetVerticalResources(verticalId: string): Promise<VerticalResource[]> {
   if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('resources').select('*').eq('vertical_id', verticalId);
-    if (error) throw error;
-    return (data || []).map((r: any) => ({
-      id: r.id,
-      verticalId: r.vertical_id,
-      title: r.title,
-      description: r.description,
-      url: r.url,
-      type: r.type
-    }));
+    try {
+      const { data, error } = await supabase.from('resources').select('*').eq('vertical_id', verticalId);
+      if (error) throw error;
+      return (data || []).map((r: any) => ({
+        id: r.id,
+        verticalId: r.vertical_id,
+        title: r.title,
+        description: r.description,
+        url: r.url
+      }));
+    } catch (err) {
+      console.warn("Supabase dbGetVerticalResources failed, using local database fallback:", err);
+      return getLocalDb().resources.filter(r => r.verticalId === verticalId);
+    }
   } else {
     return getLocalDb().resources.filter(r => r.verticalId === verticalId);
   }
@@ -1178,8 +1144,7 @@ export async function dbAddVerticalResource(verticalId: string, data: any): Prom
       vertical_id: verticalId,
       title: data.title,
       description: data.description,
-      url: data.url,
-      type: data.type
+      url: data.url
     });
     if (error) throw error;
   } else {
@@ -1189,8 +1154,7 @@ export async function dbAddVerticalResource(verticalId: string, data: any): Prom
       verticalId,
       title: data.title,
       description: data.description,
-      url: data.url,
-      type: data.type
+      url: data.url
     });
     saveLocalDb(db);
   }
@@ -1207,89 +1171,48 @@ export async function dbDeleteVerticalResource(id: string): Promise<void> {
   }
 }
 
-// --- VERTICAL ATTENDANCE ---
-export async function dbGetVerticalAttendance(verticalId: string): Promise<VerticalAttendance[]> {
-  if (isSupabaseConfigured() && supabase) {
-    const { data, error } = await supabase.from('vertical_attendance').select('*').eq('vertical_id', verticalId);
-    if (error) throw error;
-    return (data || []).map((a: any) => ({
-      id: a.id,
-      verticalId: a.vertical_id,
-      date: a.date,
-      memberId: a.member_id,
-      memberName: a.member_name,
-      status: a.status
-    }));
-  } else {
-    return getLocalDb().verticalAttendance.filter(a => a.verticalId === verticalId);
-  }
-}
-
-export async function dbSaveVerticalAttendance(verticalId: string, date: string, records: any[]): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    // Delete existing on this date
-    await supabase.from('vertical_attendance').delete().eq('vertical_id', verticalId).eq('date', date);
-    
-    // Map records to insert
-    const toInsert = records.map(r => ({
-      vertical_id: verticalId,
-      date,
-      member_id: r.memberId,
-      member_name: r.memberName,
-      status: r.status
-    }));
-
-    const { error } = await supabase.from('vertical_attendance').insert(toInsert);
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    db.verticalAttendance = db.verticalAttendance.filter(a => !(a.verticalId === verticalId && a.date === date));
-    records.forEach(r => {
-      db.verticalAttendance.push({
-        id: `at-${Date.now()}-${Math.floor(Math.random()*1000)}`,
-        verticalId,
-        date,
-        memberId: r.memberId,
-        memberName: r.memberName,
-        status: r.status
-      });
-    });
-    saveLocalDb(db);
-  }
-}
-
 // --- REGISTRATIONS ---
 export async function dbGetJoinRegistrations(): Promise<any[]> {
   if (isSupabaseConfigured() && supabase) {
-    // Find profiles with status 'inactive' and role 'USER' (which represents candidates)
-    const { data, error } = await supabase.from('profiles').select('*').eq('status', 'inactive').eq('role', 'USER');
-    if (error) throw error;
-    return (data || []).map(p => ({
-      id: p.id,
-      name: p.name || 'Student Candidate',
-      email: p.email,
-      phone: 'N/A',
+    try {
+      const { data, error } = await supabase.from('profiles').select('*').eq('status', 'inactive').eq('role', 'MEMBER');
+      if (error) throw error;
+      return (data || []).map(p => ({
+        id: p.id,
+        name: p.full_name || 'Student Candidate',
+        email: p.email,
+        phone: p.phone || 'N/A',
+        course: 'Computer Science',
+        year: '1',
+        preferredVertical: 'General Inquiry',
+        timestamp: p.created_at
+      }));
+    } catch (err) {
+      console.warn("Supabase dbGetJoinRegistrations failed, using local database fallback:", err);
+      const db = getLocalDb();
+      return db.users.filter(u => u.status === 'inactive' && u.role === 'MEMBER').map(u => ({
+        id: u.id,
+        name: u.full_name || u.name,
+        email: u.email,
+        phone: u.phone || 'N/A',
+        course: 'Computer Science',
+        year: '1',
+        preferredVertical: 'General Inquiry',
+        timestamp: u.createdAt
+      }));
+    }
+  } else {
+    const db = getLocalDb();
+    return db.users.filter(u => u.status === 'inactive' && u.role === 'MEMBER').map(u => ({
+      id: u.id,
+      name: u.full_name || u.name,
+      email: u.email,
+      phone: u.phone || 'N/A',
       course: 'Computer Science',
       year: '1',
       preferredVertical: 'General Inquiry',
-      timestamp: p.created_at
+      timestamp: u.createdAt
     }));
-  } else {
-    const db = getLocalDb();
-    return db.users.filter(u => u.status === 'inactive' && u.role === 'USER').map(u => {
-      const log = db.activityLogs.find(l => l.userId === u.id && l.action === 'registration_submit');
-      const vertical = log ? log.details.split('vertical ')[1] || 'Unspecified' : 'Unspecified';
-      return {
-        id: u.id,
-        name: u.name,
-        email: u.email,
-        phone: 'N/A',
-        course: 'Computer Science',
-        year: '1',
-        preferredVertical: vertical,
-        timestamp: u.createdAt
-      };
-    });
   }
 }
 
@@ -1324,7 +1247,6 @@ export async function dbRejectRegistration(userId: string): Promise<void> {
 // --- SYSTEM FORMS / CONFIG ---
 export async function dbGetForms(): Promise<any[]> {
   if (isSupabaseConfigured() && supabase) {
-    // Standard fetch from file fallback or you can store this in a config table
     return getLocalDb().forms;
   } else {
     return getLocalDb().forms;
@@ -1335,6 +1257,563 @@ export async function dbUpdateForms(forms: any[]): Promise<void> {
   const db = getLocalDb();
   db.forms = forms;
   saveLocalDb(db);
+}
+
+// =====================================================================
+// CUSTOM FORMS ENGINE
+// =====================================================================
+
+export interface CustomForm {
+  id: string;
+  title: string;
+  description: string;
+  slug: string;
+  status: 'draft' | 'published' | 'closed' | 'archived';
+  coverImage?: string;
+  startDate?: string;
+  endDate?: string;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CustomFormField {
+  id: string;
+  formId: string;
+  fieldType: string;
+  label: string;
+  description?: string;
+  placeholder?: string;
+  required: boolean;
+  options?: any;
+  order: number;
+  defaultValue?: string;
+  validation?: string;
+}
+
+export interface CustomFormResponse {
+  id: string;
+  formId: string;
+  applicantName: string;
+  applicantEmail: string;
+  status: 'pending' | 'shortlisted' | 'selected' | 'rejected' | 'interview_scheduled' | 'completed';
+  notes?: string;
+  submittedAt: string;
+  answers?: Record<string, any>;
+}
+
+export async function dbGetCustomForms(): Promise<CustomForm[]> {
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      const { data, error } = await supabase.from('forms').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      return (data || []).map((f: any) => ({
+        id: f.id,
+        title: f.title,
+        description: f.description || '',
+        slug: f.slug,
+        status: f.status,
+        coverImage: f.cover_image || undefined,
+        startDate: f.start_date || undefined,
+        endDate: f.end_date || undefined,
+        createdBy: f.created_by || undefined,
+        createdAt: f.created_at,
+        updatedAt: f.updated_at
+      }));
+    } catch (err) {
+      console.warn("Supabase dbGetCustomForms failed, using local database fallback:", err);
+      return (getLocalDb().forms || []) as CustomForm[];
+    }
+  } else {
+    return (getLocalDb().forms || []) as CustomForm[];
+  }
+}
+
+export async function dbGetCustomFormBySlug(slug: string): Promise<{ form: CustomForm; fields: CustomFormField[] } | null> {
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      const { data: form, error: formErr } = await supabase
+        .from('forms')
+        .select('*')
+        .eq('slug', slug)
+        .maybeSingle();
+      if (formErr) throw formErr;
+      if (!form) return null;
+
+      const { data: fields, error: fieldsErr } = await supabase
+        .from('form_fields')
+        .select('*')
+        .eq('form_id', form.id)
+        .order('order_num', { ascending: true });
+      if (fieldsErr) throw fieldsErr;
+
+      return {
+        form: {
+          id: form.id,
+          title: form.title,
+          description: form.description || '',
+          slug: form.slug,
+          status: form.status,
+          coverImage: form.cover_image || undefined,
+          startDate: form.start_date || undefined,
+          endDate: form.end_date || undefined,
+          createdBy: form.created_by || undefined,
+          createdAt: form.created_at,
+          updatedAt: form.updated_at
+        },
+        fields: (fields || []).map((f: any) => ({
+          id: f.id,
+          formId: f.form_id,
+          fieldType: f.field_type,
+          label: f.label,
+          description: f.description || undefined,
+          placeholder: f.placeholder || undefined,
+          required: f.required,
+          options: f.options || undefined,
+          order: f.order_num,
+          defaultValue: f.default_value || undefined,
+          validation: f.validation || undefined
+        }))
+      };
+    } catch (err) {
+      console.warn("Supabase dbGetCustomFormBySlug failed, using local database fallback:", err);
+    }
+  }
+
+  // Local fallback
+  const db = getLocalDb();
+  const form = (db.forms || []).find((f: any) => f.slug === slug);
+  if (!form) return null;
+  const fields = (db.formFields || [])
+    .filter((f: any) => f.formId === form.id)
+    .sort((a: any, b: any) => a.order - b.order);
+
+  return { form, fields };
+}
+
+export async function dbAddCustomForm(data: Partial<CustomForm>, fields: Partial<CustomFormField>[]): Promise<string> {
+  const formId = genRandomUuid();
+  const timestamp = new Date().toISOString();
+
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      const { error: formErr } = await supabase.from('forms').insert({
+        id: formId,
+        title: data.title,
+        description: data.description || null,
+        slug: data.slug,
+        status: data.status || 'draft',
+        cover_image: data.coverImage || null,
+        start_date: data.startDate || null,
+        end_date: data.endDate || null,
+        created_by: data.createdBy || null,
+        created_at: timestamp,
+        updated_at: timestamp
+      });
+      if (formErr) throw formErr;
+
+      if (fields && fields.length > 0) {
+        const mappedFields = fields.map((f, i) => ({
+          id: f.id || genRandomUuid(),
+          form_id: formId,
+          field_type: f.fieldType,
+          label: f.label,
+          description: f.description || null,
+          placeholder: f.placeholder || null,
+          required: f.required || false,
+          options: f.options ? f.options : null,
+          order_num: i,
+          default_value: f.defaultValue || null,
+          validation: f.validation || null
+        }));
+        const { error: fieldsErr } = await supabase.from('form_fields').insert(mappedFields);
+        if (fieldsErr) throw fieldsErr;
+      }
+      return formId;
+    } catch (err) {
+      console.warn("Supabase dbAddCustomForm failed, using local database fallback:", err);
+    }
+  }
+
+  // Local fallback
+  const db = getLocalDb();
+  if (!db.forms) db.forms = [];
+  if (!db.formFields) db.formFields = [];
+
+  const newForm: CustomForm = {
+    id: formId,
+    title: data.title || 'Untitled Form',
+    description: data.description || '',
+    slug: data.slug || `form-${Date.now()}`,
+    status: data.status || 'draft',
+    coverImage: data.coverImage,
+    startDate: data.startDate,
+    endDate: data.endDate,
+    createdBy: data.createdBy,
+    createdAt: timestamp,
+    updatedAt: timestamp
+  };
+
+  db.forms.push(newForm);
+
+  if (fields && fields.length > 0) {
+    fields.forEach((f, i) => {
+      db.formFields.push({
+        id: f.id || genRandomUuid(),
+        formId: formId,
+        fieldType: f.fieldType || 'short_text',
+        label: f.label || 'Question',
+        description: f.description,
+        placeholder: f.placeholder,
+        required: f.required || false,
+        options: f.options,
+        order: i,
+        defaultValue: f.defaultValue,
+        validation: f.validation
+      });
+    });
+  }
+
+  saveLocalDb(db);
+  return formId;
+}
+
+export async function dbUpdateCustomForm(id: string, data: Partial<CustomForm>, fields: Partial<CustomFormField>[]): Promise<void> {
+  const timestamp = new Date().toISOString();
+
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      const { error: formErr } = await supabase.from('forms').update({
+        title: data.title,
+        description: data.description || null,
+        slug: data.slug,
+        status: data.status,
+        cover_image: data.coverImage || null,
+        start_date: data.startDate || null,
+        end_date: data.endDate || null,
+        updated_at: timestamp
+      }).eq('id', id);
+      if (formErr) throw formErr;
+
+      // Replace fields
+      const { error: delErr } = await supabase.from('form_fields').delete().eq('form_id', id);
+      if (delErr) throw delErr;
+
+      if (fields && fields.length > 0) {
+        const mappedFields = fields.map((f, i) => ({
+          id: f.id || genRandomUuid(),
+          form_id: id,
+          field_type: f.fieldType,
+          label: f.label,
+          description: f.description || null,
+          placeholder: f.placeholder || null,
+          required: f.required || false,
+          options: f.options ? f.options : null,
+          order_num: i,
+          default_value: f.defaultValue || null,
+          validation: f.validation || null
+        }));
+        const { error: fieldsErr } = await supabase.from('form_fields').insert(mappedFields);
+        if (fieldsErr) throw fieldsErr;
+      }
+      return;
+    } catch (err) {
+      console.warn("Supabase dbUpdateCustomForm failed, using local database fallback:", err);
+    }
+  }
+
+  // Local fallback
+  const db = getLocalDb();
+  const idx = (db.forms || []).findIndex((f: any) => f.id === id);
+  if (idx !== -1) {
+    db.forms[idx] = {
+      ...db.forms[idx],
+      ...data,
+      updatedAt: timestamp
+    };
+  }
+
+  // Replace fields locally
+  db.formFields = (db.formFields || []).filter((f: any) => f.formId !== id);
+  if (fields && fields.length > 0) {
+    fields.forEach((f, i) => {
+      db.formFields.push({
+        id: f.id || genRandomUuid(),
+        formId: id,
+        fieldType: f.fieldType || 'short_text',
+        label: f.label || 'Question',
+        description: f.description,
+        placeholder: f.placeholder,
+        required: f.required || false,
+        options: f.options,
+        order: i,
+        defaultValue: f.defaultValue,
+        validation: f.validation
+      });
+    });
+  }
+
+  saveLocalDb(db);
+}
+
+export async function dbDeleteCustomForm(id: string): Promise<void> {
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      const { error } = await supabase.from('forms').delete().eq('id', id);
+      if (error) {
+        console.warn("Supabase delete returned error:", error);
+      }
+    } catch (err) {
+      console.warn("Supabase dbDeleteCustomForm failed:", err);
+    }
+  }
+
+  // Local fallback
+  const db = getLocalDb();
+  db.forms = (db.forms || []).filter((f: any) => f.id !== id);
+  db.formFields = (db.formFields || []).filter((f: any) => f.formId !== id);
+
+  const responses = (db.formResponses || []).filter((r: any) => r.formId === id);
+  const responseIds = responses.map((r: any) => r.id);
+
+  db.formResponses = (db.formResponses || []).filter((r: any) => r.formId !== id);
+  db.responseAnswers = (db.responseAnswers || []).filter((a: any) => !responseIds.includes(a.responseId));
+
+  saveLocalDb(db);
+}
+
+export async function dbDuplicateCustomForm(id: string): Promise<string> {
+  const timestamp = new Date().toISOString();
+  const newFormId = genRandomUuid();
+
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      const { data: form, error: formErr } = await supabase.from('forms').select('*').eq('id', id).single();
+      if (formErr) throw formErr;
+
+      const newSlug = `${form.slug}_copy_${Date.now()}`;
+      const { error: insErr } = await supabase.from('forms').insert({
+        id: newFormId,
+        title: `${form.title} (Copy)`,
+        description: form.description,
+        slug: newSlug,
+        status: 'draft',
+        cover_image: form.cover_image,
+        start_date: form.start_date,
+        end_date: form.end_date,
+        created_by: form.created_by,
+        created_at: timestamp,
+        updated_at: timestamp
+      });
+      if (insErr) throw insErr;
+
+      const { data: fields, error: fieldsErr } = await supabase.from('form_fields').select('*').eq('form_id', id).order('order_num', { ascending: true });
+      if (fieldsErr) throw fieldsErr;
+
+      if (fields && fields.length > 0) {
+        const mappedFields = fields.map((f: any) => ({
+          id: genRandomUuid(),
+          form_id: newFormId,
+          field_type: f.field_type,
+          label: f.label,
+          description: f.description,
+          placeholder: f.placeholder,
+          required: f.required,
+          options: f.options,
+          order_num: f.order_num,
+          default_value: f.default_value,
+          validation: f.validation
+        }));
+        const { error: insFieldsErr } = await supabase.from('form_fields').insert(mappedFields);
+        if (insFieldsErr) throw insFieldsErr;
+      }
+      return newFormId;
+    } catch (err) {
+      console.warn("Supabase dbDuplicateCustomForm failed, using local database fallback:", err);
+    }
+  }
+
+  // Local fallback
+  const db = getLocalDb();
+  const form = (db.forms || []).find((f: any) => f.id === id);
+  if (!form) throw new Error("Source form not found.");
+
+  const newSlug = `${form.slug}_copy_${Date.now()}`;
+  const newForm: CustomForm = {
+    ...form,
+    id: newFormId,
+    title: `${form.title} (Copy)`,
+    slug: newSlug,
+    status: 'draft',
+    createdAt: timestamp,
+    updatedAt: timestamp
+  };
+  db.forms.push(newForm);
+
+  const fields = (db.formFields || []).filter((f: any) => f.formId === id);
+  fields.forEach((f: any) => {
+    db.formFields.push({
+      ...f,
+      id: genRandomUuid(),
+      formId: newFormId
+    });
+  });
+
+  saveLocalDb(db);
+  return newFormId;
+}
+
+export async function dbSubmitFormResponse(
+  formId: string,
+  applicantName: string,
+  applicantEmail: string,
+  answers: Record<string, any>
+): Promise<string> {
+  const responseId = genRandomUuid();
+  const timestamp = new Date().toISOString();
+
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      const { error: respErr } = await supabase.from('form_responses').insert({
+        id: responseId,
+        form_id: formId,
+        applicant_name: applicantName,
+        applicant_email: applicantEmail,
+        status: 'pending',
+        submitted_at: timestamp
+      });
+      if (respErr) throw respErr;
+
+      const answerRecords = Object.keys(answers).map(fieldId => ({
+        id: genRandomUuid(),
+        response_id: responseId,
+        field_id: fieldId,
+        value: answers[fieldId]
+      }));
+
+      if (answerRecords.length > 0) {
+        const { error: ansErr } = await supabase.from('response_answers').insert(answerRecords);
+        if (ansErr) throw ansErr;
+      }
+      return responseId;
+    } catch (err) {
+      console.warn("Supabase dbSubmitFormResponse failed, using local database fallback:", err);
+    }
+  }
+
+  // Local fallback
+  const db = getLocalDb();
+  if (!db.formResponses) db.formResponses = [];
+  if (!db.responseAnswers) db.responseAnswers = [];
+
+  db.formResponses.push({
+    id: responseId,
+    formId,
+    applicantName,
+    applicantEmail,
+    status: 'pending',
+    submittedAt: timestamp
+  });
+
+  Object.keys(answers).forEach(fieldId => {
+    db.responseAnswers.push({
+      id: genRandomUuid(),
+      responseId,
+      fieldId,
+      value: answers[fieldId]
+    });
+  });
+
+  saveLocalDb(db);
+  return responseId;
+}
+
+export async function dbGetFormResponses(formId: string): Promise<CustomFormResponse[]> {
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      const { data: responses, error: respErr } = await supabase
+        .from('form_responses')
+        .select('*')
+        .eq('form_id', formId)
+        .order('submitted_at', { ascending: false });
+      if (respErr) throw respErr;
+
+      const responseIds = (responses || []).map((r: any) => r.id);
+      if (responseIds.length === 0) return [];
+
+      const { data: answers, error: ansErr } = await supabase
+        .from('response_answers')
+        .select('*')
+        .in('response_id', responseIds);
+      if (ansErr) throw ansErr;
+
+      return (responses || []).map((r: any) => {
+        const respAnswers: Record<string, any> = {};
+        (answers || [])
+          .filter((a: any) => a.response_id === r.id)
+          .forEach((a: any) => {
+            respAnswers[a.field_id] = a.value;
+          });
+
+        return {
+          id: r.id,
+          formId: r.form_id,
+          applicantName: r.applicant_name,
+          applicantEmail: r.applicant_email,
+          status: r.status,
+          notes: r.notes || undefined,
+          submittedAt: r.submitted_at,
+          answers: respAnswers
+        };
+      });
+    } catch (err) {
+      console.warn("Supabase dbGetFormResponses failed, using local database fallback:", err);
+    }
+  }
+
+  // Local fallback
+  const db = getLocalDb();
+  const responses = (db.formResponses || []).filter((r: any) => r.formId === formId);
+  
+  return responses.map((r: any) => {
+    const respAnswers: Record<string, any> = {};
+    (db.responseAnswers || [])
+      .filter((a: any) => a.responseId === r.id)
+      .forEach((a: any) => {
+        respAnswers[a.fieldId] = a.value;
+      });
+
+    return {
+      ...r,
+      answers: respAnswers
+    };
+  }).sort((a: any, b: any) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
+}
+
+export async function dbUpdateResponseStatus(responseId: string, status: string, notes?: string): Promise<void> {
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      const { error } = await supabase
+        .from('form_responses')
+        .update({ status, notes: notes !== undefined ? notes : null })
+        .eq('id', responseId);
+      if (error) throw error;
+      return;
+    } catch (err) {
+      console.warn("Supabase dbUpdateResponseStatus failed, using local database fallback:", err);
+    }
+  }
+
+  // Local fallback
+  const db = getLocalDb();
+  const idx = (db.formResponses || []).findIndex((r: any) => r.id === responseId);
+  if (idx !== -1) {
+    db.formResponses[idx].status = status;
+    if (notes !== undefined) {
+      db.formResponses[idx].notes = notes;
+    }
+    saveLocalDb(db);
+  }
 }
 
 // =====================================================================

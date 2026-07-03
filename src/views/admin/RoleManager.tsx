@@ -21,7 +21,7 @@ export default function RoleManager() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newUserName, setNewUserName] = useState('');
   const [newUserEmail, setNewUserEmail] = useState('');
-  const [newUserRole, setNewUserRole] = useState('USER');
+  const [newUserRole, setNewUserRole] = useState('MEMBER');
   const [newUserCommittee, setNewUserCommittee] = useState('');
   const [newUserVertical, setNewUserVertical] = useState('');
 
@@ -29,14 +29,13 @@ export default function RoleManager() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingUserId, setEditingUserId] = useState('');
   const [editingUserName, setEditingUserName] = useState('');
-  const [editingUserRole, setEditingUserRole] = useState('USER');
+  const [editingUserRole, setEditingUserRole] = useState('MEMBER');
   const [editingUserCommittee, setEditingUserCommittee] = useState('');
   const [editingUserVertical, setEditingUserVertical] = useState('');
 
   // Admin section state
   const [adminEmail, setAdminEmail] = useState('');
   const [adminName, setAdminName] = useState('');
-  const [adminRole, setAdminRole] = useState('COORDINATOR');
 
   const [commName, setCommName] = useState('');
   const [commDesc, setCommDesc] = useState('');
@@ -44,13 +43,6 @@ export default function RoleManager() {
   const [vertName, setVertName] = useState('');
   const [vertDesc, setVertDesc] = useState('');
   const [vertCat, setVertCat] = useState<'tech' | 'non-tech'>('tech');
-
-  // Assignment forms state
-  const [assignCommEmail, setAssignCommEmail] = useState('');
-  const [assignCommId, setAssignCommId] = useState('');
-
-  const [assignVertEmail, setAssignVertEmail] = useState('');
-  const [assignVertId, setAssignVertId] = useState('');
 
   const loadAllData = async () => {
     setLoading(true);
@@ -60,19 +52,9 @@ export default function RoleManager() {
 
       const commData: any = await fetchFromSheet('getCoreCommittees');
       setCommittees(commData || []);
-      if (commData && commData.length > 0) {
-        setAssignCommId(commData[0].id);
-        setNewUserCommittee(commData[0].id);
-        setEditingUserCommittee(commData[0].id);
-      }
 
       const vertData: any = await fetchFromSheet('getVerticals');
       setVerticals(vertData || []);
-      if (vertData && vertData.length > 0) {
-        setAssignVertId(vertData[0].id);
-        setNewUserVertical(vertData[0].id);
-        setEditingUserVertical(vertData[0].id);
-      }
 
       const assignData: any = await fetchFromSheet('getAssignments');
       setAssignments(assignData || { committee: [], vertical: [] });
@@ -87,6 +69,9 @@ export default function RoleManager() {
     loadAllData();
   }, []);
 
+  // Helper to check admin permission (all logged-in users on /admin have role === 'ADMIN')
+  const isAdmin = user?.role === 'ADMIN';
+
   // --- USER DIRECTORY CRUD ---
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,12 +81,14 @@ export default function RoleManager() {
         name: newUserName,
         email: newUserEmail,
         role: newUserRole,
-        committeeId: newUserRole === 'CORE_HEAD' ? newUserCommittee : undefined,
-        verticalId: ['VERTICAL_HEAD', 'SUB_HEAD'].includes(newUserRole) ? newUserVertical : undefined
+        committeeId: newUserRole === 'MEMBER' && newUserCommittee ? newUserCommittee : undefined,
+        verticalId: newUserRole === 'MEMBER' && newUserVertical ? newUserVertical : undefined
       });
       setNewUserName('');
       setNewUserEmail('');
-      setNewUserRole('USER');
+      setNewUserRole('MEMBER');
+      setNewUserCommittee('');
+      setNewUserVertical('');
       setShowCreateModal(false);
       loadAllData();
       alert('User created successfully. Default temporary password: Labyrinth@123');
@@ -122,16 +109,10 @@ export default function RoleManager() {
 
   const openEditUser = (u: any) => {
     setEditingUserId(u.id);
-    setEditingUserName(u.name || '');
-    setEditingUserRole(u.role || 'USER');
-    
-    // Resolve existing assignments
-    const commAss = assignments.committee.find((a: any) => a.userId === u.id);
-    if (commAss) setEditingUserCommittee(commAss.committeeId);
-    
-    const vertAss = assignments.vertical.find((a: any) => a.userId === u.id);
-    if (vertAss) setEditingUserVertical(vertAss.verticalId);
-
+    setEditingUserName(u.name || u.full_name || '');
+    setEditingUserRole(u.role || 'MEMBER');
+    setEditingUserCommittee(u.committeeId || '');
+    setEditingUserVertical(u.verticalId || '');
     setShowEditModal(true);
   };
 
@@ -142,8 +123,8 @@ export default function RoleManager() {
         userId: editingUserId,
         name: editingUserName,
         role: editingUserRole,
-        committeeId: editingUserRole === 'CORE_HEAD' ? editingUserCommittee : undefined,
-        verticalId: ['VERTICAL_HEAD', 'SUB_HEAD'].includes(editingUserRole) ? editingUserVertical : undefined
+        committeeId: editingUserRole === 'MEMBER' && editingUserCommittee ? editingUserCommittee : undefined,
+        verticalId: editingUserRole === 'MEMBER' && editingUserVertical ? editingUserVertical : undefined
       });
       setShowEditModal(false);
       loadAllData();
@@ -158,7 +139,7 @@ export default function RoleManager() {
     if (!adminEmail || !adminName) return;
     try {
       await fetchFromSheet('addRole', {
-        data: { email: adminEmail, name: adminName, role: adminRole }
+        data: { email: adminEmail, name: adminName, role: 'ADMIN' }
       });
       setAdminEmail('');
       setAdminName('');
@@ -202,6 +183,25 @@ export default function RoleManager() {
     }
   };
 
+  const handleAssignCommitteeHead = async (committeeId: string, userId: string) => {
+    try {
+      if (userId === '') {
+        const comm = committees.find(c => c.id === committeeId);
+        if (comm && comm.head_id) {
+          await fetchFromSheet('removeCoreAssignment', { id: comm.head_id, committeeId });
+        }
+      } else {
+        const selectedUser = users.find(u => u.id === userId);
+        if (selectedUser) {
+          await fetchFromSheet('assignCoreHead', { userEmail: selectedUser.email, committeeId });
+        }
+      }
+      loadAllData();
+    } catch (err: any) {
+      alert(err.message || 'Failed to assign committee head.');
+    }
+  };
+
   // --- VERTICALS ---
   const handleAddVertical = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -228,13 +228,30 @@ export default function RoleManager() {
     }
   };
 
-  const isHod = user?.role === 'HOD';
+  const handleAssignVerticalHead = async (verticalId: string, userId: string) => {
+    try {
+      if (userId === '') {
+        const vert = verticals.find(v => v.id === verticalId);
+        if (vert && vert.head_id) {
+          await fetchFromSheet('removeVerticalAssignment', { id: vert.head_id, verticalId });
+        }
+      } else {
+        const selectedUser = users.find(u => u.id === userId);
+        if (selectedUser) {
+          await fetchFromSheet('assignVerticalHead', { userEmail: selectedUser.email, verticalId });
+        }
+      }
+      loadAllData();
+    } catch (err: any) {
+      alert(err.message || 'Failed to assign vertical head.');
+    }
+  };
 
   // Search filtering logic
   const filteredUsers = users.filter(u => 
-    u.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    u.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    u.role?.toLowerCase().includes(searchQuery.toLowerCase())
+    (u.name || u.full_name || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
+    (u.email || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (u.role || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const inputClass = "w-full border border-[#E5E7EB] rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#CD0000]/15 focus:border-[#CD0000] text-slate-800 placeholder:text-slate-400 disabled:opacity-50";
@@ -301,7 +318,7 @@ export default function RoleManager() {
                 </div>
 
                 <button
-                  disabled={!isHod}
+                  disabled={!isAdmin}
                   onClick={() => setShowCreateModal(true)}
                   className="w-full sm:w-auto px-4 py-2 bg-[#CD0000] hover:bg-[#A30000] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
                 >
@@ -317,58 +334,62 @@ export default function RoleManager() {
                       <th className="p-4">Email</th>
                       <th className="p-4">Role</th>
                       <th className="p-4">Status</th>
-                      <th className="p-4">Onboarded</th>
-                      <th className="p-4">Last Login</th>
+                      <th className="p-4">Committee</th>
+                      <th className="p-4">Vertical</th>
                       <th className="p-4 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E5E7EB]">
-                    {filteredUsers.map(u => (
-                      <tr key={u.id} className="hover:bg-slate-50/55 transition-colors">
-                        <td className="p-4 text-slate-800 font-bold">{u.name}</td>
-                        <td className="p-4 text-slate-600">{u.email}</td>
-                        <td className="p-4">
-                          <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full text-[10px] font-bold border border-slate-200">
-                            {u.role}
-                          </span>
-                        </td>
-                        <td className="p-4">
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
-                            u.status === 'active' ? 'bg-green-50 border-green-100 text-green-600' : 'bg-red-50 border-red-100 text-red-500'
-                          }`}>
-                            {u.status}
-                          </span>
-                        </td>
-                        <td className="p-4 text-slate-700 font-semibold">{u.firstLogin ? 'No (First Login)' : 'Yes'}</td>
-                        <td className="p-4 text-slate-500 text-xs">
-                          {u.lastLogin ? new Date(u.lastLogin).toLocaleString() : 'Never'}
-                        </td>
-                        <td className="p-4 text-right">
-                          <div className="flex justify-end gap-1.5">
-                            <button
-                              disabled={!isHod}
-                              onClick={() => openEditUser(u)}
-                              className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg disabled:opacity-30 transition-colors"
-                              title="Edit User Details"
-                            >
-                              <Edit2 size={14} />
-                            </button>
-                            <button
-                              disabled={!isHod}
-                              onClick={() => handleToggleStatus(u.id, u.status)}
-                              className={`p-1.5 rounded-lg disabled:opacity-30 transition-colors ${
-                                u.status === 'active' 
-                                  ? 'text-slate-400 hover:text-red-500 hover:bg-red-50' 
-                                  : 'text-slate-400 hover:text-green-500 hover:bg-green-50'
-                              }`}
-                              title={u.status === 'active' ? 'Deactivate User' : 'Activate User'}
-                            >
-                              {u.status === 'active' ? <Ban size={14} /> : <Check size={14} />}
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                    {filteredUsers.map(u => {
+                      const comm = committees.find(c => c.id === u.committeeId);
+                      const vert = verticals.find(v => v.id === u.verticalId);
+                      return (
+                        <tr key={u.id} className="hover:bg-slate-50/55 transition-colors">
+                          <td className="p-4 text-slate-800 font-bold">{u.name || u.full_name}</td>
+                          <td className="p-4 text-slate-600">{u.email}</td>
+                          <td className="p-4">
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                              u.role === 'ADMIN' ? 'bg-[#CD0000]/5 border-[#CD0000]/15 text-[#CD0000]' : 'bg-slate-100 border-slate-200 text-slate-700'
+                            }`}>
+                              {u.role}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                              u.status === 'active' ? 'bg-green-50 border-green-100 text-green-600' : 'bg-red-50 border-red-100 text-red-500'
+                            }`}>
+                              {u.status}
+                            </span>
+                          </td>
+                          <td className="p-4 text-slate-700 font-semibold">{comm ? comm.name : '-'}</td>
+                          <td className="p-4 text-slate-700 font-semibold">{vert ? vert.name : '-'}</td>
+                          <td className="p-4 text-right">
+                            <div className="flex justify-end gap-1.5">
+                              <button
+                                disabled={!isAdmin}
+                                onClick={() => openEditUser(u)}
+                                className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg disabled:opacity-30 transition-colors"
+                                title="Edit User Details"
+                              >
+                                <Edit2 size={14} />
+                              </button>
+                              <button
+                                disabled={!isAdmin}
+                                onClick={() => handleToggleStatus(u.id, u.status)}
+                                className={`p-1.5 rounded-lg disabled:opacity-30 transition-colors ${
+                                  u.status === 'active' 
+                                    ? 'text-slate-400 hover:text-red-500 hover:bg-red-50' 
+                                    : 'text-slate-400 hover:text-green-500 hover:bg-green-50'
+                                }`}
+                                title={u.status === 'active' ? 'Deactivate User' : 'Activate User'}
+                              >
+                                {u.status === 'active' ? <Ban size={14} /> : <Check size={14} />}
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                     {filteredUsers.length === 0 && (
                       <tr><td colSpan={7} className="p-8 text-center text-slate-400">No users found.</td></tr>
                     )}
@@ -387,21 +408,13 @@ export default function RoleManager() {
                 <form onSubmit={handleAddAdmin} className="space-y-4">
                   <div>
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Email</label>
-                    <input type="email" required disabled={!isHod} value={adminEmail} onChange={e => setAdminEmail(e.target.value)} className={inputClass} placeholder="staff@christ.edu" />
+                    <input type="email" required disabled={!isAdmin} value={adminEmail} onChange={e => setAdminEmail(e.target.value)} className={inputClass} placeholder="staff@christ.edu" />
                   </div>
                   <div>
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Name</label>
-                    <input type="text" required disabled={!isHod} value={adminName} onChange={e => setAdminName(e.target.value)} className={inputClass} placeholder="Staff Name" />
+                    <input type="text" required disabled={!isAdmin} value={adminName} onChange={e => setAdminName(e.target.value)} className={inputClass} placeholder="Staff Name" />
                   </div>
-                  <div>
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Admin Level</label>
-                    <select value={adminRole} disabled={!isHod} onChange={e => setAdminRole(e.target.value)} className={inputClass}>
-                      <option value="COORDINATOR">Faculty Coordinator</option>
-                      <option value="ASSOCIATE">Faculty Associate</option>
-                      <option value="HOD">HOD (System Administrator)</option>
-                    </select>
-                  </div>
-                  <button type="submit" disabled={!isHod} className="w-full py-2.5 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-[#A30000] transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5">
+                  <button type="submit" disabled={!isAdmin} className="w-full py-2.5 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-[#A30000] transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5">
                     <Plus size={15} /> Grant Access
                   </button>
                 </form>
@@ -423,18 +436,18 @@ export default function RoleManager() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#E5E7EB]">
-                      {users.filter(u => ['HOD', 'COORDINATOR', 'ASSOCIATE'].includes(u.role)).map(u => (
+                      {users.filter(u => u.role === 'ADMIN').map(u => (
                         <tr key={u.id} className="hover:bg-slate-50 transition-colors">
-                          <td className="p-4 text-slate-800 font-semibold">{u.name}</td>
+                          <td className="p-4 text-slate-800 font-semibold">{u.name || u.full_name}</td>
                           <td className="p-4 text-slate-600">{u.email}</td>
                           <td className="p-4">
-                            <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider border border-slate-200">
-                              {u.role}
+                            <span className="bg-[#CD0000]/5 text-[#CD0000] px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider border border-[#CD0000]/10">
+                              ADMIN
                             </span>
                           </td>
                           <td className="p-4 text-right">
                             <button
-                              disabled={!isHod || u.role === 'HOD'}
+                              disabled={!isAdmin || u.email === 'suryachalam.vm@bsccmh.christuniversity.in'}
                               onClick={() => handleRevokeAdmin(u.id)}
                               className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg disabled:opacity-30 transition-colors"
                               title="Revoke Admin Access"
@@ -461,13 +474,13 @@ export default function RoleManager() {
                   <form onSubmit={handleAddCommittee} className="space-y-4">
                     <div>
                       <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Committee Name *</label>
-                      <input type="text" required disabled={!isHod} value={commName} onChange={e => setCommName(e.target.value)} className={inputClass} placeholder="e.g. Publicity Committee" />
+                      <input type="text" required disabled={!isAdmin} value={commName} onChange={e => setCommName(e.target.value)} className={inputClass} placeholder="e.g. Publicity Committee" />
                     </div>
                     <div>
                       <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Description</label>
-                      <textarea rows={3} disabled={!isHod} value={commDesc} onChange={e => setCommDesc(e.target.value)} className={inputClass} placeholder="Explain committee roles..." />
+                      <textarea rows={3} disabled={!isAdmin} value={commDesc} onChange={e => setCommDesc(e.target.value)} className={inputClass} placeholder="Explain committee roles..." />
                     </div>
-                    <button type="submit" disabled={!isHod} className="w-full py-2.5 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-[#A30000] transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5">
+                    <button type="submit" disabled={!isAdmin} className="w-full py-2.5 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-[#A30000] transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5">
                       <Plus size={15} /> Create Committee
                     </button>
                   </form>
@@ -484,6 +497,7 @@ export default function RoleManager() {
                         <tr className="bg-slate-100/50 text-slate-400 text-xs font-bold uppercase tracking-wider">
                           <th className="p-4">Name</th>
                           <th className="p-4">Description</th>
+                          <th className="p-4">Committee Head</th>
                           <th className="p-4 text-right">Actions</th>
                         </tr>
                       </thead>
@@ -491,10 +505,23 @@ export default function RoleManager() {
                         {committees.map(c => (
                           <tr key={c.id} className="hover:bg-slate-50 transition-colors">
                             <td className="p-4 text-slate-800 font-semibold">{c.name}</td>
-                            <td className="p-4 text-slate-600">{c.description}</td>
+                            <td className="p-4 text-slate-600 text-xs leading-relaxed max-w-xs">{c.description}</td>
+                            <td className="p-4">
+                              <select 
+                                disabled={!isAdmin}
+                                value={c.head_id || ''} 
+                                onChange={(e) => handleAssignCommitteeHead(c.id, e.target.value)}
+                                className="border border-[#E5E7EB] rounded-xl px-2 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#CD0000]"
+                              >
+                                <option value="">No Head Assigned</option>
+                                {users.filter(u => u.role === 'MEMBER').map(u => (
+                                  <option key={u.id} value={u.id}>{u.name || u.full_name} ({u.email})</option>
+                                ))}
+                              </select>
+                            </td>
                             <td className="p-4 text-right">
                               <button
-                                disabled={!isHod}
+                                disabled={!isAdmin}
                                 onClick={() => handleDeleteCommittee(c.id)}
                                 className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg disabled:opacity-30 transition-colors"
                               >
@@ -521,20 +548,20 @@ export default function RoleManager() {
                   <form onSubmit={handleAddVertical} className="space-y-4">
                     <div>
                       <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Vertical Name *</label>
-                      <input type="text" required disabled={!isHod} value={vertName} onChange={e => setVertName(e.target.value)} className={inputClass} placeholder="e.g. CodeCraft" />
+                      <input type="text" required disabled={!isAdmin} value={vertName} onChange={e => setVertName(e.target.value)} className={inputClass} placeholder="e.g. CodeCraft" />
                     </div>
                     <div>
                       <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Description</label>
-                      <textarea rows={3} disabled={!isHod} value={vertDesc} onChange={e => setVertDesc(e.target.value)} className={inputClass} placeholder="Explain domain focus..." />
+                      <textarea rows={3} disabled={!isAdmin} value={vertDesc} onChange={e => setVertDesc(e.target.value)} className={inputClass} placeholder="Explain domain focus..." />
                     </div>
                     <div>
                       <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Category</label>
-                      <select value={vertCat} disabled={!isHod} onChange={e => setVertCat(e.target.value as any)} className={inputClass}>
+                      <select value={vertCat} disabled={!isAdmin} onChange={e => setVertCat(e.target.value as any)} className={inputClass}>
                         <option value="tech">Technical</option>
                         <option value="non-tech">Management &amp; Creative</option>
                       </select>
                     </div>
-                    <button type="submit" disabled={!isHod} className="w-full py-2.5 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-[#A30000] transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5">
+                    <button type="submit" disabled={!isAdmin} className="w-full py-2.5 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-[#A30000] transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5">
                       <Plus size={15} /> Create Vertical
                     </button>
                   </form>
@@ -552,6 +579,7 @@ export default function RoleManager() {
                           <th className="p-4">Name</th>
                           <th className="p-4">Category</th>
                           <th className="p-4">Description</th>
+                          <th className="p-4">Vertical Head</th>
                           <th className="p-4 text-right">Actions</th>
                         </tr>
                       </thead>
@@ -561,9 +589,22 @@ export default function RoleManager() {
                             <td className="p-4 text-slate-800 font-semibold">{v.name}</td>
                             <td className="p-4 text-slate-500 uppercase text-xs font-semibold">{v.category}</td>
                             <td className="p-4 text-slate-600 text-xs leading-relaxed max-w-xs truncate">{v.description}</td>
+                            <td className="p-4">
+                              <select 
+                                disabled={!isAdmin}
+                                value={v.head_id || ''} 
+                                onChange={(e) => handleAssignVerticalHead(v.id, e.target.value)}
+                                className="border border-[#E5E7EB] rounded-xl px-2 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#CD0000]"
+                              >
+                                <option value="">No Head Assigned</option>
+                                {users.filter(u => u.role === 'MEMBER').map(u => (
+                                  <option key={u.id} value={u.id}>{u.name || u.full_name} ({u.email})</option>
+                                ))}
+                              </select>
+                            </td>
                             <td className="p-4 text-right">
                               <button
-                                disabled={!isHod}
+                                disabled={!isAdmin}
                                 onClick={() => handleDeleteVertical(v.id)}
                                 className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg disabled:opacity-30 transition-colors"
                               >
@@ -606,34 +647,31 @@ export default function RoleManager() {
                 <div>
                   <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Role *</label>
                   <select value={newUserRole} onChange={e => setNewUserRole(e.target.value)} className={inputClass}>
-                    <option value="USER">Standard Club Member</option>
-                    <option value="CORE_HEAD">Core Committee Head</option>
-                    <option value="VERTICAL_HEAD">Vertical Head</option>
-                    <option value="SUB_HEAD">Vertical Sub-Head</option>
-                    <option value="ASSOCIATE">Faculty Associate</option>
-                    <option value="COORDINATOR">Faculty Coordinator</option>
+                    <option value="MEMBER">Club Member</option>
+                    <option value="ADMIN">Club Administrator</option>
                   </select>
                 </div>
 
-                {newUserRole === 'CORE_HEAD' && (
-                  <div>
-                    <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Committee *</label>
-                    <select value={newUserCommittee} onChange={e => setNewUserCommittee(e.target.value)} className={inputClass}>
-                      {committees.map(c => (
-                        <option key={c.id} value={c.id}>{c.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {['VERTICAL_HEAD', 'SUB_HEAD'].includes(newUserRole) && (
-                  <div>
-                    <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain *</label>
-                    <select value={newUserVertical} onChange={e => setNewUserVertical(e.target.value)} className={inputClass}>
-                      {verticals.map(v => (
-                        <option key={v.id} value={v.id}>{v.name}</option>
-                      ))}
-                    </select>
+                {newUserRole === 'MEMBER' && (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Committee</label>
+                      <select value={newUserCommittee} onChange={e => setNewUserCommittee(e.target.value)} className={inputClass}>
+                        <option value="">None</option>
+                        {committees.map(c => (
+                          <option key={c.id} value={c.id}>{c.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain</label>
+                      <select value={newUserVertical} onChange={e => setNewUserVertical(e.target.value)} className={inputClass}>
+                        <option value="">None</option>
+                        {verticals.map(v => (
+                          <option key={v.id} value={v.id}>{v.name}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 )}
               </div>
@@ -669,34 +707,31 @@ export default function RoleManager() {
                 <div>
                   <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Role *</label>
                   <select value={editingUserRole} onChange={e => setEditingUserRole(e.target.value)} className={inputClass}>
-                    <option value="USER">Standard Club Member</option>
-                    <option value="CORE_HEAD">Core Committee Head</option>
-                    <option value="VERTICAL_HEAD">Vertical Head</option>
-                    <option value="SUB_HEAD">Vertical Sub-Head</option>
-                    <option value="ASSOCIATE">Faculty Associate</option>
-                    <option value="COORDINATOR">Faculty Coordinator</option>
+                    <option value="MEMBER">Club Member</option>
+                    <option value="ADMIN">Club Administrator</option>
                   </select>
                 </div>
 
-                {editingUserRole === 'CORE_HEAD' && (
-                  <div>
-                    <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Committee *</label>
-                    <select value={editingUserCommittee} onChange={e => setEditingUserCommittee(e.target.value)} className={inputClass}>
-                      {committees.map(c => (
-                        <option key={c.id} value={c.id}>{c.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {['VERTICAL_HEAD', 'SUB_HEAD'].includes(editingUserRole) && (
-                  <div>
-                    <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain *</label>
-                    <select value={editingUserVertical} onChange={e => setEditingUserVertical(e.target.value)} className={inputClass}>
-                      {verticals.map(v => (
-                        <option key={v.id} value={v.id}>{v.name}</option>
-                      ))}
-                    </select>
+                {editingUserRole === 'MEMBER' && (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Committee</label>
+                      <select value={editingUserCommittee} onChange={e => setEditingUserCommittee(e.target.value)} className={inputClass}>
+                        <option value="">None</option>
+                        {committees.map(c => (
+                          <option key={c.id} value={c.id}>{c.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain</label>
+                      <select value={editingUserVertical} onChange={e => setEditingUserVertical(e.target.value)} className={inputClass}>
+                        <option value="">None</option>
+                        {verticals.map(v => (
+                          <option key={v.id} value={v.id}>{v.name}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 )}
               </div>

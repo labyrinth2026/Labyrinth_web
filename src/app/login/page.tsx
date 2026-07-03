@@ -16,14 +16,10 @@ export default function UnifiedLoginPage() {
 
   // Auto redirection helper
   const handleRedirect = (role: string) => {
-    if (['HOD', 'COORDINATOR', 'ASSOCIATE'].includes(role)) {
+    if (role === 'ADMIN') {
       router.push('/admin');
-    } else if (role === 'CORE_HEAD') {
-      router.push('/committee');
-    } else if (role === 'VERTICAL_HEAD') {
-      router.push('/vertical');
     } else {
-      setError('Your account is registered but does not have dashboard access privileges.');
+      router.push('/access-denied');
     }
   };
 
@@ -61,24 +57,18 @@ export default function UnifiedLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 relative overflow-hidden font-inter">
+    <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA] relative overflow-hidden font-inter">
       {/* Background decorations */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#CD0000]/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-900/10 rounded-full blur-[120px] pointer-events-none" />
-
-      {/* Decorative Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-30" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#CD0000]/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#CD0000]/3 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-md mx-4">
         {/* Logo and title */}
         <div className="text-center mb-8">
-          <span className="inline-block px-3 py-1 rounded-full bg-slate-900/80 border border-slate-800 text-[#CD0000] text-[9px] font-black uppercase tracking-widest mb-4 shadow-sm">
-            Labyrinth Club
-          </span>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight font-grotesk">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight font-grotesk">
             SECURE <span className="text-[#CD0000]">LOGIN</span>
           </h1>
-          <p className="text-slate-400 text-xs mt-2">
+          <p className="text-slate-500 text-xs mt-2 font-medium">
             Enter your credentials to access your club workspace.
           </p>
         </div>
@@ -88,26 +78,26 @@ export default function UnifiedLoginPage() {
           style={{
             backdropFilter: 'blur(20px)',
             WebkitBackdropFilter: 'blur(20px)',
-            background: 'rgba(15, 23, 42, 0.45)',
-            border: '1px solid rgba(255, 255, 255, 0.05)',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+            background: 'rgba(255, 255, 255, 0.7)',
+            border: '1px solid rgba(228, 228, 231, 0.8)',
+            boxShadow: '0 20px 40px -15px rgba(9, 9, 11, 0.05)'
           }}
           className="p-8 rounded-3xl"
         >
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="p-3.5 text-xs text-red-400 bg-red-950/35 rounded-xl border border-red-900/40 flex items-start gap-2.5">
+              <div className="p-3.5 text-xs text-red-600 bg-red-50 rounded-xl border border-red-200 flex items-start gap-2.5">
                 <ShieldAlert size={16} className="shrink-0 mt-0.5" />
                 <span>{error}</span>
               </div>
             )}
 
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
+              <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                   <Mail size={14} />
                 </div>
                 <input 
@@ -116,17 +106,17 @@ export default function UnifiedLoginPage() {
                   onChange={e => setEmail(e.target.value)}
                   placeholder="student@cs.christuniversity.in"
                   required
-                  className="w-full pl-10 pr-4 py-3 bg-slate-950/60 border border-slate-800 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CD0000]/25 focus:border-[#CD0000] transition-all text-xs font-semibold placeholder:text-slate-600"
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 text-slate-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CD0000]/10 focus:border-[#CD0000] transition-all text-xs font-semibold placeholder:text-slate-400"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
+              <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
                 Password
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                   <Lock size={14} />
                 </div>
                 <input 
@@ -135,7 +125,7 @@ export default function UnifiedLoginPage() {
                   onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full pl-10 pr-4 py-3 bg-slate-950/60 border border-slate-800 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CD0000]/25 focus:border-[#CD0000] transition-all text-xs font-semibold placeholder:text-slate-600"
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 text-slate-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CD0000]/10 focus:border-[#CD0000] transition-all text-xs font-semibold placeholder:text-slate-400"
                 />
               </div>
             </div>
@@ -143,7 +133,7 @@ export default function UnifiedLoginPage() {
             <button 
               type="submit" 
               disabled={isLoggingIn || isLoading}
-              className="w-full mt-4 py-3.5 bg-[#CD0000] text-white font-black uppercase tracking-widest text-[10px] rounded-xl hover:bg-[#A30000] transition-all disabled:opacity-50 flex items-center justify-center gap-2 group shadow-md shadow-red-950/30"
+              className="w-full mt-4 py-3.5 bg-[#CD0000] text-white font-black uppercase tracking-widest text-[10px] rounded-xl hover:bg-[#A30000] transition-all disabled:opacity-50 flex items-center justify-center gap-2 group shadow-md shadow-red-100/80"
             >
               {isLoggingIn ? (
                 <>

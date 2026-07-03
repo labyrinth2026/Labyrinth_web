@@ -2,7 +2,8 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type Role = 'HOD' | 'COORDINATOR' | 'ASSOCIATE' | 'CORE_HEAD' | 'VERTICAL_HEAD' | 'USER';
+// Simplified roles: ADMIN and MEMBER
+export type Role = 'ADMIN' | 'MEMBER';
 
 interface User {
   id: string;
@@ -34,9 +35,9 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Permission matrix mapping specific actions to roles
+// Simple permission mapping: ADMIN has all rights, MEMBER has none
 const PERMISSIONS: Record<Role, Permission[]> = {
-  HOD: [
+  ADMIN: [
     'manage_content',
     'manage_infrastructure',
     'manage_events',
@@ -46,27 +47,7 @@ const PERMISSIONS: Record<Role, Permission[]> = {
     'review_content',
     'manage_roles'
   ],
-  COORDINATOR: [
-    'manage_content', 
-    'manage_events', 
-    'manage_verticals', 
-    'manage_team', 
-    'view_registrations', 
-    'review_content'
-  ],
-  ASSOCIATE: [
-    'manage_team', 
-    'view_registrations'
-  ],
-  CORE_HEAD: [
-    'manage_content', 
-    'manage_events'
-  ],
-  VERTICAL_HEAD: [
-    'manage_content', 
-    'manage_events'
-  ],
-  USER: []
+  MEMBER: []
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

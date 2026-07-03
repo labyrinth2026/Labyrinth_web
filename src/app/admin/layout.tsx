@@ -29,26 +29,24 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }
 
   // If user is not logged in or is not an admin, don't render layout (middleware handles redirect)
-  const allowedRoles = ['HOD', 'COORDINATOR', 'ASSOCIATE'];
+  const allowedRoles = ['ADMIN'];
   if (!user || !allowedRoles.includes(user.role)) {
     return null;
   }
 
   const roleLabel: Record<string, string> = {
-    HOD: 'Head of Department',
-    COORDINATOR: 'Faculty Coordinator',
-    ASSOCIATE: 'Faculty Associate',
+    ADMIN: 'Club Administrator',
+    MEMBER: 'Club Member'
   };
 
   const roleBadge: Record<string, { bg: string; text: string }> = {
-    HOD: { bg: 'bg-[#CD0000]/5 border-[#CD0000]/10', text: 'text-[#CD0000]' },
-    COORDINATOR: { bg: 'bg-indigo-50 border-indigo-100', text: 'text-indigo-600' },
-    ASSOCIATE: { bg: 'bg-emerald-50 border-emerald-100', text: 'text-emerald-600' },
+    ADMIN: { bg: 'bg-[#CD0000]/5 border-[#CD0000]/10', text: 'text-[#CD0000]' },
+    MEMBER: { bg: 'bg-slate-50 border-slate-100', text: 'text-slate-600' }
   };
 
   const badge = roleBadge[user.role] || { bg: 'bg-slate-50 border-slate-100', text: 'text-slate-600' };
 
-  // Define ALL possible navigation links
+  // Define ALL navigation links
   const allNavItems: Record<string, NavItem> = {
     dashboard: { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     content: { label: 'Content Management', path: '/admin/content', icon: BookOpen },
@@ -59,16 +57,8 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     registrations: { label: 'Registrations', path: '/admin/registrations', icon: CheckSquare }
   };
 
-  // Determine dynamic list of visible links based on roles
-  let visibleItemKeys: string[] = [];
-  if (user.role === 'HOD') {
-    visibleItemKeys = ['dashboard', 'content', 'forms', 'reports', 'team', 'roles', 'registrations'];
-  } else if (user.role === 'COORDINATOR') {
-    visibleItemKeys = ['dashboard', 'content', 'forms', 'reports', 'team', 'registrations'];
-  } else if (user.role === 'ASSOCIATE') {
-    visibleItemKeys = ['dashboard', 'team', 'registrations'];
-  }
-
+  // Admin has access to all panels
+  const visibleItemKeys = ['dashboard', 'content', 'forms', 'reports', 'team', 'roles', 'registrations'];
   const visibleItems = visibleItemKeys.map(key => allNavItems[key]).filter(Boolean);
 
   const handleLogout = async () => {

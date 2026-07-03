@@ -1,5 +1,5 @@
 "use client";
 
-import TeamManager from '../../../views/admin/TeamManager';
+import RoleManager from '../../../views/admin/RoleManager';
 
-export default TeamManager;
+export default RoleManager;

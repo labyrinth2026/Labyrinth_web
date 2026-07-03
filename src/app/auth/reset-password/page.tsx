@@ -47,12 +47,10 @@ export default function ResetPasswordPage() {
         // Refresh session using context
         setTimeout(() => {
           if (user) {
-            if (['HOD', 'COORDINATOR', 'ASSOCIATE'].includes(user.role)) {
+            if (user.role === 'ADMIN') {
               router.push('/admin');
-            } else if (user.role === 'CORE_HEAD') {
-              router.push('/committee');
-            } else if (user.role === 'VERTICAL_HEAD') {
-              router.push('/vertical');
+            } else {
+              router.push('/access-denied');
             }
           }
         }, 1500);
