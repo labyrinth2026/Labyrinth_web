@@ -16,7 +16,6 @@ const GalleryPage: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const featuredVideos = [
-    { src: "/gallery/AVOLODHAA.webm", label: "Fest Highlights Video" },
     { src: "/gallery/Screen_Recording_20260220_090135_Photos.mp4", label: "Sports Tournament Highlights" }
   ];
 
@@ -121,29 +120,35 @@ const GalleryPage: React.FC = () => {
               />
               
               {/* Navigation Arrows */}
-              <button 
-                onClick={prevVideo}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-xs transition-all opacity-0 group-hover:opacity-100 z-10"
-              >
-                <ChevronLeft size={20} />
-              </button>
-              <button 
-                onClick={nextVideo}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-xs transition-all opacity-0 group-hover:opacity-100 z-10"
-              >
-                <ChevronRight size={20} />
-              </button>
+              {featuredVideos.length > 1 && (
+                <>
+                  <button 
+                    onClick={prevVideo}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-xs transition-all opacity-0 group-hover:opacity-100 z-10"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <button 
+                    onClick={nextVideo}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-xs transition-all opacity-0 group-hover:opacity-100 z-10"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </>
+              )}
               
               {/* Indicators */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                {featuredVideos.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentVideoIdx(idx)}
-                    className={`w-2 h-2 rounded-full transition-all ${idx === currentVideoIdx ? 'bg-white w-4' : 'bg-white/40'}`}
-                  />
-                ))}
-              </div>
+              {featuredVideos.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                  {featuredVideos.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentVideoIdx(idx)}
+                      className={`w-2 h-2 rounded-full transition-all ${idx === currentVideoIdx ? 'bg-white w-4' : 'bg-white/40'}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </ScrollReveal>
         </div>
