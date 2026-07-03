@@ -60,63 +60,61 @@
   }
 }
 
-@layer utilities {
-  /* Premium Glassmorphism Card (Exactly to user specs) */
-  .glass-card {
-    backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-    border-radius: 24px;
-  }
+/* Premium Glassmorphism Card (Exactly to user specs) */
+@utility glass-card {
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  border-radius: 24px;
+}
 
-  /* Dark glass version for dark contexts or headers */
-  .glass-card-dark {
-    backdrop-filter: blur(20px);
-    background: rgba(9, 9, 11, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    border-radius: 24px;
-  }
+/* Dark glass version for dark contexts or headers */
+@utility glass-card-dark {
+  backdrop-filter: blur(20px);
+  background: rgba(9, 9, 11, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border-radius: 24px;
+}
 
-  /* Minimal Typography Styles */
-  .title-hero {
-    @apply font-inter text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1];
-  }
+/* Minimal Typography Styles */
+@utility title-hero {
+  @apply font-inter text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1];
+}
 
-  .text-premium-body {
-    @apply font-inter text-base md:text-lg text-slate-600 leading-relaxed;
-  }
+@utility text-premium-body {
+  @apply font-inter text-base md:text-lg text-slate-600 leading-relaxed;
+}
 
-  /* Premium Dotted Grid Background */
-  .minimal-grid {
-    background-size: 32px 32px;
-    background-image: radial-gradient(circle, rgba(9, 9, 11, 0.04) 1px, transparent 1px);
-  }
-  
-  .minimal-grid-dark {
-    background-size: 32px 32px;
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  }
+/* Premium Dotted Grid Background */
+@utility minimal-grid {
+  background-size: 32px 32px;
+  background-image: radial-gradient(circle, rgba(9, 9, 11, 0.04) 1px, transparent 1px);
+}
 
-  /* Premium buttons */
-  .btn-primary-new {
-    background-color: #CD0000;
-    color: #FFFFFF;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
+@utility minimal-grid-dark {
+  background-size: 32px 32px;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
 
-  .btn-primary-new:hover {
+/* Premium buttons */
+@utility btn-primary-new {
+  background-color: #CD0000;
+  color: #FFFFFF;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
     background-color: #9E0000;
     transform: translateY(-0.5px);
   }
+}
 
-  /* Card elevation */
-  .card-hover-new {
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  }
+/* Card elevation */
+@utility card-hover-new {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
-  .card-hover-new:hover {
+  &:hover {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
     transform: translateY(-2px);
   }
