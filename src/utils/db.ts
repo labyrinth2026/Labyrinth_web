@@ -25,6 +25,8 @@ export interface User {
   designation?: string;
   committeeId?: string;
   verticalId?: string;
+  committee_id?: string;
+  vertical_id?: string;
 }
 
 export interface CoreCommittee {
@@ -450,11 +452,11 @@ export async function dbGetVerticals(): Promise<Vertical[]> {
     const { data, error } = await supabase.from('verticals').select('*');
     if (error) throw error;
     return data || [];
-  } else {
-    const db = getLocalDb();
-    verticals = db.verticals || [];
-    users = db.users || [];
   }
+
+  const db = getLocalDb();
+  const verticals = db.verticals || [];
+  const users = db.users || [];
 
   return verticals.map(v => {
     const verticalUsers = users.filter(u => u.verticalId === v.id || u.vertical_id === v.id);
