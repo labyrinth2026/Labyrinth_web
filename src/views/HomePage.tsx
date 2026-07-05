@@ -242,7 +242,7 @@ const HomePage: React.FC = () => {
                 <Button variant="primary" size="md" href="/verticals">
                   Explore Verticals <ArrowRight size={14} />
                 </Button>
-                <Button variant="secondary" size="md" href="/contact">
+                <Button variant="secondary" size="md" href="https://forms.gle/vzHppHwu2C977eNA7">
                   Join Community
                 </Button>
               </div>
@@ -466,7 +466,7 @@ const HomePage: React.FC = () => {
                 <Button
                   variant="primary"
                   size="lg"
-                  href="/contact"
+                  href="https://forms.gle/vzHppHwu2C977eNA7"
                 >
                   Apply to Join
                 </Button>

@@ -18,7 +18,8 @@ import {
   getLocalDb, saveLocalDb, logActivity,
   dbGetCustomForms, dbGetCustomFormBySlug, dbAddCustomForm, dbUpdateCustomForm,
   dbDeleteCustomForm, dbDuplicateCustomForm, dbSubmitFormResponse, dbGetFormResponses,
-  dbUpdateResponseStatus
+  dbUpdateResponseStatus,
+  dbAddGalleryImage, dbUpdateGalleryImage, dbDeleteGalleryImage
 } from '@/utils/db';
 
 export async function POST(req: NextRequest) {
@@ -160,6 +161,24 @@ export async function POST(req: NextRequest) {
       case 'getGallery': {
         const db = getLocalDb();
         return NextResponse.json({ success: true, data: db.gallery || [] });
+      }
+
+      case 'addGalleryImage': {
+        await dbAddGalleryImage(payload.data);
+        await logActivity(sessionUser.id, 'add_gallery_image', `Added gallery image: ${payload.data.title}`);
+        return NextResponse.json({ success: true });
+      }
+
+      case 'updateGalleryImage': {
+        await dbUpdateGalleryImage(payload.id, payload.data);
+        await logActivity(sessionUser.id, 'update_gallery_image', `Updated gallery image ID: ${payload.id}`);
+        return NextResponse.json({ success: true });
+      }
+
+      case 'deleteGalleryImage': {
+        await dbDeleteGalleryImage(payload.id);
+        await logActivity(sessionUser.id, 'delete_gallery_image', `Deleted gallery image ID: ${payload.id}`);
+        return NextResponse.json({ success: true });
       }
 
       case 'getVerticals': {

@@ -145,13 +145,14 @@ const Navbar: React.FC = () => {
 
           {/* Right: CTA Button & Christ Logo */}
           <div className="hidden md:flex items-center gap-4 relative z-50">
-            <Link
-              href="/contact"
-              onClick={(e) => handleLinkClick(e, '/contact')}
+            <a
+              href="https://forms.gle/vzHppHwu2C977eNA7"
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-5 py-2 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-full hover:bg-[#9E0000] transition-colors shadow-sm"
             >
               Join Us
-            </Link>
+            </a>
             <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
             <img src="/christ-logo.png" alt="Christ University Logo" className="h-10 object-contain opacity-80" />
           </div>
@@ -242,13 +243,14 @@ const Navbar: React.FC = () => {
 
             {/* Drawer Bottom CTA and Footer */}
             <div className="mt-auto p-6 shrink-0 border-t border-slate-100 bg-slate-50/50">
-              <Link
-                href="/contact"
-                onClick={(e) => handleLinkClick(e, '/contact')}
+              <a
+                href="https://forms.gle/vzHppHwu2C977eNA7"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center justify-center w-full px-6 py-3 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-[#9E0000] transition-colors shadow-sm mb-4"
               >
                 Join Community
-              </Link>
+              </a>
               
               <div className="text-center pt-3">
                 <p className="text-[10px] font-bold text-slate-800 uppercase tracking-widest mb-0.5">

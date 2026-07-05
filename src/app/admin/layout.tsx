@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import {
   LayoutDashboard, LogOut, BookOpen, Link as LinkIcon,
-  Download, Users, Shield, CheckSquare
+  Download, Users, Shield, CheckSquare, Image
 } from 'lucide-react';
 
 interface NavItem {
@@ -50,6 +50,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const allNavItems: Record<string, NavItem> = {
     dashboard: { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     content: { label: 'Content Management', path: '/admin/content', icon: BookOpen },
+    gallery: { label: 'Gallery Management', path: '/admin/gallery', icon: Image },
     forms: { label: 'Forms Management', path: '/admin/forms', icon: LinkIcon },
     reports: { label: 'Reports & Exports', path: '/admin/reports', icon: Download },
     team: { label: 'Team & Roles', path: '/admin/team', icon: Users },
@@ -57,7 +58,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   // Admin has access to all panels
-  const visibleItemKeys = ['dashboard', 'content', 'forms', 'reports', 'team', 'registrations'];
+  const visibleItemKeys = ['dashboard', 'content', 'gallery', 'forms', 'reports', 'team', 'registrations'];
   const visibleItems = visibleItemKeys.map(key => allNavItems[key]).filter(Boolean);
 
   const handleLogout = async () => {

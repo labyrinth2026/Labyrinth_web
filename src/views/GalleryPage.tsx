@@ -73,13 +73,6 @@ const GalleryPage: React.FC = () => {
     setCurrentPage(1);
   }, [filter, search]);
 
-  const handlePageChange = (pageNum: number) => {
-    setCurrentPage(pageNum);
-    if (gridRef.current) {
-      gridRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
   const filteredImages = galleryData
     .filter(img => img.image)
     .filter(img => img.image !== '/gallery/AVOLODHAA.mp4' && img.image !== '/gallery/Screen_Recording_20260220_090135_Photos.mp4' && img.image !== '/gallery/AVOLODHAA.webm')
@@ -92,6 +85,46 @@ const GalleryPage: React.FC = () => {
       return matchesFilter && matchesSearch;
     });
 
+  const handlePrevImage = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (!selectedImage) return;
+    const currentIndex = filteredImages.findIndex(img => img.id === selectedImage.id);
+    if (currentIndex === -1) return;
+    const prevIndex = (currentIndex - 1 + filteredImages.length) % filteredImages.length;
+    setSelectedImage(filteredImages[prevIndex]);
+  };
+
+  const handleNextImage = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (!selectedImage) return;
+    const currentIndex = filteredImages.findIndex(img => img.id === selectedImage.id);
+    if (currentIndex === -1) return;
+    const nextIndex = (currentIndex + 1) % filteredImages.length;
+    setSelectedImage(filteredImages[nextIndex]);
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!selectedImage) return;
+      if (e.key === 'ArrowLeft') {
+        handlePrevImage();
+      } else if (e.key === 'ArrowRight') {
+        handleNextImage();
+      } else if (e.key === 'Escape') {
+        setSelectedImage(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedImage, filteredImages]);
+
+  const handlePageChange = (pageNum: number) => {
+    setCurrentPage(pageNum);
+    if (gridRef.current) {
+      gridRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const ITEMS_PER_PAGE = 16;
   const totalPages = Math.ceil(filteredImages.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -101,7 +134,16 @@ const GalleryPage: React.FC = () => {
     return { bg: 'bg-slate-50 border-slate-200/60', text: 'text-slate-600' };
   };
 
-  const getHeightClass = (index: number) => {
+  const getHeightClass = (item: any, index: number) => {
+    if (item.orientation) {
+      switch (item.orientation) {
+        case 'portrait': return 'h-72 md:h-80 w-full';
+        case 'landscape': return 'h-44 md:h-56 w-full';
+        case 'square': return 'h-56 md:h-60 w-full';
+        case 'wide': return 'h-36 md:h-40 w-full';
+        default: return 'h-52 md:h-60 w-full';
+      }
+    }
     const pattern = [2, 1, 2, 1, 1, 2];
     const span = pattern[index % pattern.length];
     return span === 2 ? 'h-72 md:h-80 w-full' : 'h-44 md:h-56 w-full';
@@ -213,7 +255,7 @@ const GalleryPage: React.FC = () => {
                       return (
                         <div
                           key={item.id}
-                          className={`relative group rounded-2xl overflow-hidden cursor-pointer border border-slate-200 bg-white shadow-xs hover:shadow-md hover:scale-[1.025] transition-all duration-300 ease-out break-inside-avoid mb-4 ${getHeightClass(i)}`}
+                          className={`relative group rounded-2xl overflow-hidden cursor-pointer border border-slate-200 bg-white shadow-xs hover:shadow-md hover:scale-[1.025] transition-all duration-300 ease-out break-inside-avoid mb-4 ${getHeightClass(item, i)}`}
                           onClick={() => setSelectedImage(item)}
                         >
                           {item.image ? (
@@ -313,12 +355,13 @@ const GalleryPage: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-slate-950/20 backdrop-blur-xs"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-slate-950/40 backdrop-blur-xs"
             onClick={() => setSelectedImage(null)}
           >
             <button
-              className="absolute top-5 right-5 text-slate-500 hover:text-slate-800 p-2 bg-white rounded-full transition-colors z-50 shadow-xs border border-slate-200/60"
+              className="absolute top-5 right-5 text-slate-500 hover:text-slate-800 p-2.5 bg-white rounded-full transition-colors z-55 shadow-xs border border-slate-200/60"
               onClick={(e) => { e.stopPropagation(); setSelectedImage(null); }}
+              title="Close popup"
             >
               <X size={18} />
             </button>
@@ -331,15 +374,15 @@ const GalleryPage: React.FC = () => {
               style={{
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
-                background: 'rgba(255, 255, 255, 0.75)',
-                border: '1px solid rgba(255, 255, 255, 0.25)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)'
+                background: 'rgba(255, 255, 255, 0.85)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)'
               }}
-              className="relative w-full max-w-2xl rounded-3xl overflow-hidden"
+              className="relative w-full max-w-3xl rounded-3xl overflow-hidden flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Image Area inside Modal */}
-              <div className="w-full aspect-video relative bg-slate-950 flex flex-col items-center justify-center">
+              <div className="w-full aspect-video relative bg-slate-950 flex flex-col items-center justify-center group/lightbox">
                 {selectedImage.image ? (
                   selectedImage.image.endsWith('.mp4') ? (
                     <video src={selectedImage.image} controls autoPlay className="w-full h-full object-contain" />
@@ -352,6 +395,51 @@ const GalleryPage: React.FC = () => {
                     <p className="text-slate-400 mt-2 text-[10px] uppercase tracking-widest font-bold">(Image Placeholder)</p>
                   </div>
                 )}
+
+                {/* Lightbox Prev/Next Controls */}
+                {filteredImages.length > 1 && (
+                  <>
+                    <button
+                      onClick={handlePrevImage}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-xs transition-all opacity-0 group-hover/lightbox:opacity-100 z-10"
+                      title="Previous image"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                    <button
+                      onClick={handleNextImage}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center backdrop-blur-xs transition-all opacity-0 group-hover/lightbox:opacity-100 z-10"
+                      title="Next image"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Caption metadata */}
+              <div className="p-5 bg-white/95 border-t border-slate-100/80">
+                <div className="flex justify-between items-start gap-4">
+                  <div className="flex-1">
+                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[9px] font-black uppercase tracking-wider mb-2">
+                      {selectedImage.category}
+                    </span>
+                    <h3 className="text-base font-bold text-slate-900 leading-tight">
+                      {selectedImage.title}
+                    </h3>
+                    {selectedImage.description && (
+                      <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                        {selectedImage.description}
+                      </p>
+                    )}
+                  </div>
+                  {selectedImage.date && (
+                    <div className="text-right shrink-0">
+                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Date</span>
+                      <span className="text-xs text-slate-700 font-semibold">{new Date(selectedImage.date).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             </motion.div>
           </motion.div>

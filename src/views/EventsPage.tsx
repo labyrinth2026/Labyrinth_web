@@ -46,9 +46,9 @@ const EventsPage: React.FC = () => {
 
   const filterEvents = () => {
     return eventsData.filter(e => {
-      const matchesSearch = e.title.toLowerCase().includes(search.toLowerCase()) ||
-        e.description.toLowerCase().includes(search.toLowerCase()) ||
-        e.vertical.toLowerCase().includes(search.toLowerCase());
+      const matchesSearch = (e.title || '').toLowerCase().includes(search.toLowerCase()) ||
+        (e.description || '').toLowerCase().includes(search.toLowerCase()) ||
+        (e.vertical || '').toLowerCase().includes(search.toLowerCase());
       const matchesStatus = filter === 'all' || e.status === filter;
       const matchesCategory = categoryFilter === 'all' || e.category === categoryFilter;
       return matchesSearch && matchesStatus && matchesCategory;

@@ -20,11 +20,11 @@ const ContactPage: React.FC = () => {
       if (joinForm && joinForm.active && joinForm.url) {
         window.open(joinForm.url, '_blank', 'noopener,noreferrer');
       } else {
-        alert('Registrations are currently closed. Please check back later!');
+        window.open('https://forms.gle/vzHppHwu2C977eNA7', '_blank', 'noopener,noreferrer');
       }
     } catch (error) {
       console.error('Failed to fetch forms', error);
-      alert('Could not connect to the server. Please try again later.');
+      window.open('https://forms.gle/vzHppHwu2C977eNA7', '_blank', 'noopener,noreferrer');
     } finally {
       setIsLoadingForm(false);
     }

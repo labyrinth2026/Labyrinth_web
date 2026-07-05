@@ -1282,12 +1282,17 @@ export async function dbRejectRegistration(userId: string): Promise<void> {
 }
 
 // --- SYSTEM FORMS / CONFIG ---
-export async function dbGetForms(): Promise<any[]> {
-  if (isSupabaseConfigured() && supabase) {
-    return getLocalDb().forms;
-  } else {
-    return getLocalDb().forms;
+export async function dbGetForms(): Promise<any> {
+  try {
+    const filePath = path.join(process.cwd(), 'src/data/forms.json');
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, 'utf8');
+      return JSON.parse(data);
+    }
+  } catch (error) {
+    console.warn("dbGetForms failed to read forms.json:", error);
   }
+  return {};
 }
 
 export async function dbUpdateForms(forms: any[]): Promise<void> {
@@ -1863,6 +1868,47 @@ export async function dbUpdateResponseStatus(responseId: string, status: string,
     }
     saveLocalDb(db);
   }
+}
+
+// --- GALLERY ACTIONS ---
+export async function dbAddGalleryImage(data: any): Promise<void> {
+  const db = getLocalDb();
+  if (!db.gallery) db.gallery = [];
+  db.gallery.push({
+    id: `g-${Date.now()}`,
+    title: data.title,
+    category: data.category,
+    description: data.description,
+    image: data.image,
+    date: data.date,
+    orientation: data.orientation || 'landscape'
+  });
+  saveLocalDb(db);
+}
+
+export async function dbUpdateGalleryImage(id: string, data: any): Promise<void> {
+  const db = getLocalDb();
+  if (!db.gallery) db.gallery = [];
+  const idx = db.gallery.findIndex(g => g.id === id);
+  if (idx !== -1) {
+    db.gallery[idx] = {
+      ...db.gallery[idx],
+      title: data.title !== undefined ? data.title : db.gallery[idx].title,
+      category: data.category !== undefined ? data.category : db.gallery[idx].category,
+      description: data.description !== undefined ? data.description : db.gallery[idx].description,
+      image: data.image !== undefined ? data.image : db.gallery[idx].image,
+      date: data.date !== undefined ? data.date : db.gallery[idx].date,
+      orientation: data.orientation !== undefined ? data.orientation : db.gallery[idx].orientation
+    };
+    saveLocalDb(db);
+  }
+}
+
+export async function dbDeleteGalleryImage(id: string): Promise<void> {
+  const db = getLocalDb();
+  if (!db.gallery) db.gallery = [];
+  db.gallery = db.gallery.filter(g => g.id !== id);
+  saveLocalDb(db);
 }
 
 // =====================================================================
