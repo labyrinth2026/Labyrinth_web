@@ -16,7 +16,7 @@
       "vertical_id": "v-1783324339599",
       "createdAt": "2026-07-02T06:52:31.548Z",
       "updatedAt": "2026-07-02T06:52:31.548Z",
-      "lastLogin": "2026-07-06T15:17:50.778Z"
+      "lastLogin": "2026-07-06T15:26:13.011Z"
     },
     {
       "id": "u-member",
@@ -753,6 +753,20 @@
     }
   ],
   "activityLogs": [
+    {
+      "id": "log-1783351635452",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g33",
+      "timestamp": "2026-07-06T15:27:15.452Z"
+    },
+    {
+      "id": "log-1783351631066",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g33",
+      "timestamp": "2026-07-06T15:27:11.066Z"
+    },
     {
       "id": "log-1783347595775",
       "userId": "u-1783343265183",
@@ -2790,7 +2804,9 @@
       "category": "sports",
       "description": "Singles badminton finals in the indoor arena.",
       "image": "/gallery/_MG_1303.webp",
-      "date": "2026-02-13"
+      "date": "2026-02-13",
+      "orientation": "portrait",
+      "rotation": 90
     },
     {
       "id": "g34",
