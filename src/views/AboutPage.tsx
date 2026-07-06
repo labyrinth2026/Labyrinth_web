@@ -4,6 +4,7 @@ import { Target, Lightbulb, Users, BookOpen, Briefcase, Zap } from 'lucide-react
 import PageWrapper from '../components/layout/PageWrapper';
 import SectionHeading from '../components/ui/SectionHeading';
 import ScrollReveal from '../components/ui/ScrollReveal';
+import HomeVideoPlayer from '../components/ui/HomeVideoPlayer';
 
 const AboutPage: React.FC = () => {
 
@@ -46,22 +47,13 @@ const AboutPage: React.FC = () => {
               </div>
             </ScrollReveal>
 
-            {/* Image – right */}
+            {/* Video – right */}
             <ScrollReveal animation="slide-left">
-              <div className="relative rounded-3xl overflow-hidden shadow-xl bg-slate-100" style={{aspectRatio: '4/3'}}>
-                <Image
-                  src="/gallery/inauguration_all_1.webp"
-                  alt="Labyrinth community at the inauguration ceremony"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
+              <div className="relative rounded-3xl overflow-hidden shadow-xl" style={{aspectRatio: '4/3'}}>
+                <HomeVideoPlayer
+                  mp4="/gallery/panel_discussion.mp4"
+                  webm="/gallery/panel_discussion.webm"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 to-transparent" />
-                <div className="absolute bottom-4 left-4">
-                  <span className="inline-block px-3 py-1 rounded-full bg-[#CD0000] text-white text-[9px] font-bold uppercase tracking-widest">
-                    Est. 1997
-                  </span>
-                </div>
               </div>
             </ScrollReveal>
           </div>
