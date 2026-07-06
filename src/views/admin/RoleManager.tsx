@@ -5,14 +5,13 @@ import { Plus, Trash2, Shield, Users, RefreshCw, X, Search, ToggleLeft, ToggleRi
 
 export default function RoleManager() {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'users_dir' | 'admins' | 'committees' | 'verticals'>('users_dir');
+  const [activeTab, setActiveTab] = useState<'users_dir' | 'admins' | 'verticals'>('users_dir');
   const [loading, setLoading] = useState(true);
   
   // Data lists
   const [users, setUsers] = useState<any[]>([]);
-  const [committees, setCommittees] = useState<any[]>([]);
   const [verticals, setVerticals] = useState<any[]>([]);
-  const [assignments, setAssignments] = useState<any>({ committee: [], vertical: [] });
+  const [assignments, setAssignments] = useState<any>({ vertical: [] });
 
   // Search filter
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,7 +21,6 @@ export default function RoleManager() {
   const [newUserName, setNewUserName] = useState('');
   const [newUserEmail, setNewUserEmail] = useState('');
   const [newUserRole, setNewUserRole] = useState('MEMBER');
-  const [newUserCommittee, setNewUserCommittee] = useState('');
   const [newUserVertical, setNewUserVertical] = useState('');
 
   // Edit details modal/forms state
@@ -30,15 +28,11 @@ export default function RoleManager() {
   const [editingUserId, setEditingUserId] = useState('');
   const [editingUserName, setEditingUserName] = useState('');
   const [editingUserRole, setEditingUserRole] = useState('MEMBER');
-  const [editingUserCommittee, setEditingUserCommittee] = useState('');
   const [editingUserVertical, setEditingUserVertical] = useState('');
 
   // Admin section state
   const [adminEmail, setAdminEmail] = useState('');
   const [adminName, setAdminName] = useState('');
-
-  const [commName, setCommName] = useState('');
-  const [commDesc, setCommDesc] = useState('');
   
   const [vertName, setVertName] = useState('');
   const [vertDesc, setVertDesc] = useState('');
@@ -50,14 +44,11 @@ export default function RoleManager() {
       const usersData: any = await fetchFromSheet('getRoles');
       setUsers(usersData || []);
 
-      const commData: any = await fetchFromSheet('getCoreCommittees');
-      setCommittees(commData || []);
-
       const vertData: any = await fetchFromSheet('getVerticals');
       setVerticals(vertData || []);
 
       const assignData: any = await fetchFromSheet('getAssignments');
-      setAssignments(assignData || { committee: [], vertical: [] });
+      setAssignments(assignData || { vertical: [] });
     } catch (e) {
       console.error('Failed to load role/assignment data', e);
     } finally {
@@ -81,13 +72,11 @@ export default function RoleManager() {
         name: newUserName,
         email: newUserEmail,
         role: newUserRole,
-        committeeId: newUserRole === 'MEMBER' && newUserCommittee ? newUserCommittee : undefined,
         verticalId: newUserRole === 'MEMBER' && newUserVertical ? newUserVertical : undefined
       });
       setNewUserName('');
       setNewUserEmail('');
       setNewUserRole('MEMBER');
-      setNewUserCommittee('');
       setNewUserVertical('');
       setShowCreateModal(false);
       loadAllData();
@@ -111,7 +100,6 @@ export default function RoleManager() {
     setEditingUserId(u.id);
     setEditingUserName(u.name || u.full_name || '');
     setEditingUserRole(u.role || 'MEMBER');
-    setEditingUserCommittee(u.committeeId || '');
     setEditingUserVertical(u.verticalId || '');
     setShowEditModal(true);
   };
@@ -123,7 +111,6 @@ export default function RoleManager() {
         userId: editingUserId,
         name: editingUserName,
         role: editingUserRole,
-        committeeId: editingUserRole === 'MEMBER' && editingUserCommittee ? editingUserCommittee : undefined,
         verticalId: editingUserRole === 'MEMBER' && editingUserVertical ? editingUserVertical : undefined
       });
       setShowEditModal(false);
@@ -159,48 +146,7 @@ export default function RoleManager() {
     }
   };
 
-  // --- COMMITTEES ---
-  const handleAddCommittee = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!commName) return;
-    try {
-      await fetchFromSheet('addCoreCommittee', { name: commName, description: commDesc });
-      setCommName('');
-      setCommDesc('');
-      loadAllData();
-    } catch (err: any) {
-      alert(err.message || 'Failed to create committee.');
-    }
-  };
 
-  const handleDeleteCommittee = async (id: string) => {
-    if (!confirm('Deleting this committee will also revoke all head assignments for it. Proceed?')) return;
-    try {
-      await fetchFromSheet('deleteCoreCommittee', { id });
-      loadAllData();
-    } catch (err: any) {
-      alert(err.message || 'Failed to delete committee.');
-    }
-  };
-
-  const handleAssignCommitteeHead = async (committeeId: string, userId: string) => {
-    try {
-      if (userId === '') {
-        const comm = committees.find(c => c.id === committeeId);
-        if (comm && comm.head_id) {
-          await fetchFromSheet('removeCoreAssignment', { id: comm.head_id, committeeId });
-        }
-      } else {
-        const selectedUser = users.find(u => u.id === userId);
-        if (selectedUser) {
-          await fetchFromSheet('assignCoreHead', { userEmail: selectedUser.email, committeeId });
-        }
-      }
-      loadAllData();
-    } catch (err: any) {
-      alert(err.message || 'Failed to assign committee head.');
-    }
-  };
 
   // --- VERTICALS ---
   const handleAddVertical = async (e: React.FormEvent) => {
@@ -274,7 +220,6 @@ export default function RoleManager() {
         {[
           { id: 'users_dir', label: 'User Directory', icon: Users },
           { id: 'admins', label: 'Admin Access Control', icon: Shield },
-          { id: 'committees', label: 'Core Committees', icon: Users },
           { id: 'verticals', label: 'Vertical Domains', icon: Users }
         ].map(tab => (
           <button
@@ -334,14 +279,12 @@ export default function RoleManager() {
                       <th className="p-4">Email</th>
                       <th className="p-4">Role</th>
                       <th className="p-4">Status</th>
-                      <th className="p-4">Committee</th>
                       <th className="p-4">Vertical</th>
                       <th className="p-4 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E5E7EB]">
                     {filteredUsers.map(u => {
-                      const comm = committees.find(c => c.id === u.committeeId);
                       const vert = verticals.find(v => v.id === u.verticalId);
                       return (
                         <tr key={u.id} className="hover:bg-slate-50/55 transition-colors">
@@ -361,7 +304,6 @@ export default function RoleManager() {
                               {u.status}
                             </span>
                           </td>
-                          <td className="p-4 text-slate-700 font-semibold">{comm ? comm.name : '-'}</td>
                           <td className="p-4 text-slate-700 font-semibold">{vert ? vert.name : '-'}</td>
                           <td className="p-4 text-right">
                             <div className="flex justify-end gap-1.5">
@@ -391,7 +333,7 @@ export default function RoleManager() {
                       );
                     })}
                     {filteredUsers.length === 0 && (
-                      <tr><td colSpan={7} className="p-8 text-center text-slate-400">No users found.</td></tr>
+                      <tr><td colSpan={6} className="p-8 text-center text-slate-400">No users found.</td></tr>
                     )}
                   </tbody>
                 </table>
@@ -464,79 +406,7 @@ export default function RoleManager() {
             </div>
           )}
 
-          {/* TAB 3: COMMITTEES */}
-          {activeTab === 'committees' && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Create Committee */}
-                <div className="bg-white border border-[#E5E7EB] p-6 rounded-2xl shadow-xs self-start">
-                  <h3 className="text-sm font-bold text-[#CD0000] mb-4 uppercase tracking-wider">Create Core Committee</h3>
-                  <form onSubmit={handleAddCommittee} className="space-y-4">
-                    <div>
-                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Committee Name *</label>
-                      <input type="text" required disabled={!isAdmin} value={commName} onChange={e => setCommName(e.target.value)} className={inputClass} placeholder="e.g. Publicity Committee" />
-                    </div>
-                    <div>
-                      <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Description</label>
-                      <textarea rows={3} disabled={!isAdmin} value={commDesc} onChange={e => setCommDesc(e.target.value)} className={inputClass} placeholder="Explain committee roles..." />
-                    </div>
-                    <button type="submit" disabled={!isAdmin} className="w-full py-2.5 bg-[#CD0000] text-white text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-[#A30000] transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5">
-                      <Plus size={15} /> Create Committee
-                    </button>
-                  </form>
-                </div>
 
-                {/* List Committees */}
-                <div className="bg-white border border-[#E5E7EB] rounded-2xl overflow-hidden shadow-xs lg:col-span-2">
-                  <div className="p-4 border-b border-[#E5E7EB] bg-slate-50">
-                    <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">Registered Core Committees</h4>
-                  </div>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm">
-                      <thead>
-                        <tr className="bg-slate-100/50 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                          <th className="p-4">Name</th>
-                          <th className="p-4">Description</th>
-                          <th className="p-4">Committee Head</th>
-                          <th className="p-4 text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#E5E7EB]">
-                        {committees.map(c => (
-                          <tr key={c.id} className="hover:bg-slate-50 transition-colors">
-                            <td className="p-4 text-slate-800 font-semibold">{c.name}</td>
-                            <td className="p-4 text-slate-600 text-xs leading-relaxed max-w-xs">{c.description}</td>
-                            <td className="p-4">
-                              <select 
-                                disabled={!isAdmin}
-                                value={c.head_id || ''} 
-                                onChange={(e) => handleAssignCommitteeHead(c.id, e.target.value)}
-                                className="border border-[#E5E7EB] rounded-xl px-2 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#CD0000]"
-                              >
-                                <option value="">No Head Assigned</option>
-                                {users.filter(u => u.role === 'MEMBER').map(u => (
-                                  <option key={u.id} value={u.id}>{u.name || u.full_name} ({u.email})</option>
-                                ))}
-                              </select>
-                            </td>
-                            <td className="p-4 text-right">
-                              <button
-                                disabled={!isAdmin}
-                                onClick={() => handleDeleteCommittee(c.id)}
-                                className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg disabled:opacity-30 transition-colors"
-                              >
-                                <Trash2 size={15} />
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* TAB 4: VERTICALS */}
           {activeTab === 'verticals' && (
@@ -652,28 +522,17 @@ export default function RoleManager() {
                   </select>
                 </div>
 
-                {newUserRole === 'MEMBER' && (
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Committee</label>
-                      <select value={newUserCommittee} onChange={e => setNewUserCommittee(e.target.value)} className={inputClass}>
-                        <option value="">None</option>
-                        {committees.map(c => (
-                          <option key={c.id} value={c.id}>{c.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain</label>
-                      <select value={newUserVertical} onChange={e => setNewUserVertical(e.target.value)} className={inputClass}>
-                        <option value="">None</option>
-                        {verticals.map(v => (
-                          <option key={v.id} value={v.id}>{v.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                )}
+                 {newUserRole === 'MEMBER' && (
+                   <div>
+                     <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain</label>
+                     <select value={newUserVertical} onChange={e => setNewUserVertical(e.target.value)} className={inputClass}>
+                       <option value="">None</option>
+                       {verticals.map(v => (
+                         <option key={v.id} value={v.id}>{v.name}</option>
+                       ))}
+                     </select>
+                   </div>
+                 )}
               </div>
 
               <div className="flex justify-end gap-3 p-5 border-t border-[#E5E7EB]">
@@ -713,25 +572,14 @@ export default function RoleManager() {
                 </div>
 
                 {editingUserRole === 'MEMBER' && (
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Committee</label>
-                      <select value={editingUserCommittee} onChange={e => setEditingUserCommittee(e.target.value)} className={inputClass}>
-                        <option value="">None</option>
-                        {committees.map(c => (
-                          <option key={c.id} value={c.id}>{c.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain</label>
-                      <select value={editingUserVertical} onChange={e => setEditingUserVertical(e.target.value)} className={inputClass}>
-                        <option value="">None</option>
-                        {verticals.map(v => (
-                          <option key={v.id} value={v.id}>{v.name}</option>
-                        ))}
-                      </select>
-                    </div>
+                  <div>
+                    <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain</label>
+                    <select value={editingUserVertical} onChange={e => setEditingUserVertical(e.target.value)} className={inputClass}>
+                      <option value="">None</option>
+                      {verticals.map(v => (
+                        <option key={v.id} value={v.id}>{v.name}</option>
+                      ))}
+                    </select>
                   </div>
                 )}
               </div>

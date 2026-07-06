@@ -51,25 +51,23 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const badge = roleBadge[user.role] || { bg: 'bg-slate-50 border-slate-100', text: 'text-slate-600' };
 
-  // Define ALL navigation links (exactly the 11 CMS items)
+  // Define ALL navigation links (exactly the 9 CMS items)
   const allNavItems: Record<string, NavItem> = {
     dashboard: { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
     members: { label: 'Members', path: '/admin/members', icon: Users },
-    committees: { label: 'Committees', path: '/admin/committees', icon: Layers },
     verticals: { label: 'Verticals', path: '/admin/verticals', icon: BookOpen },
     events: { label: 'Events', path: '/admin/events', icon: Calendar },
     gallery: { label: 'Gallery Manager', path: '/admin/gallery', icon: Image },
     forms: { label: 'Forms', path: '/admin/forms', icon: LinkIcon },
     announcements: { label: 'Announcements', path: '/admin/announcements', icon: Megaphone },
-    resources: { label: 'Resources', path: '/admin/resources', icon: Download },
     tasks: { label: 'Tasks', path: '/admin/tasks', icon: CheckSquare },
     settings: { label: 'Settings', path: '/admin/settings', icon: Settings }
   };
 
-  // Admin has access to all 11 panels
+  // Admin has access to all 9 panels
   const visibleItemKeys = [
-    'dashboard', 'members', 'committees', 'verticals', 'events',
-    'gallery', 'forms', 'announcements', 'resources', 'tasks', 'settings'
+    'dashboard', 'members', 'verticals', 'events',
+    'gallery', 'forms', 'announcements', 'tasks', 'settings'
   ];
   const visibleItems = visibleItemKeys.map(key => allNavItems[key]).filter(Boolean);
 

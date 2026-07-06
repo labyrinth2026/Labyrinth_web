@@ -15,19 +15,19 @@ interface TeamMemberForm {
   email: string;
   linkedin: string;
   avatar: string;
-  category: 'faculty' | 'mentors' | 'core' | 'vertical_head' | 'sub_head';
+  category: 'faculty' | 'mentors' | 'vertical_head' | 'sub_head';
 }
 
 const EMPTY_FORM: TeamMemberForm = {
   name: '', role: '', vertical: '', designation: '', department: '',
-  email: '', linkedin: '', avatar: '', category: 'core'
+  email: '', linkedin: '', avatar: '', category: 'vertical_head'
 };
 
 const TeamManager: React.FC = () => {
   const { user, can } = useAuth();
-  const [teamData, setTeamData] = useState<any>({ facultyCoordinators: [], mentors: [], coreCommittee: [], verticalHeads: [], subHeads: [] });
+  const [teamData, setTeamData] = useState<any>({ facultyCoordinators: [], mentors: [], verticalHeads: [], subHeads: [] });
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'faculty' | 'mentors' | 'core' | 'heads' | 'subheads'>('core');
+  const [activeTab, setActiveTab] = useState<'faculty' | 'mentors' | 'heads' | 'subheads'>('heads');
   const [showModal, setShowModal] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMemberForm | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -58,20 +58,18 @@ const TeamManager: React.FC = () => {
     ? teamData.facultyCoordinators
     : activeTab === 'mentors'
     ? teamData.mentors
-    : activeTab === 'core'
-    ? teamData.coreCommittee
     : activeTab === 'heads'
     ? teamData.verticalHeads
     : teamData.subHeads;
 
   const openAddModal = () => {
-    const categoryMap = { faculty: 'faculty', mentors: 'mentors', core: 'core', heads: 'vertical_head', subheads: 'sub_head' } as const;
+    const categoryMap = { faculty: 'faculty', mentors: 'mentors', heads: 'vertical_head', subheads: 'sub_head' } as const;
     setEditingMember({ ...EMPTY_FORM, category: categoryMap[activeTab] });
     setShowModal(true);
   };
 
   const openEditModal = (member: any) => {
-    const categoryMap = { faculty: 'faculty', mentors: 'mentors', core: 'core', heads: 'vertical_head', subheads: 'sub_head' } as const;
+    const categoryMap = { faculty: 'faculty', mentors: 'mentors', heads: 'vertical_head', subheads: 'sub_head' } as const;
     setEditingMember({
       id: member.id, name: member.name || '', role: member.role || '',
       vertical: member.vertical || '', designation: member.designation || '',
@@ -134,7 +132,6 @@ const TeamManager: React.FC = () => {
           {[
             { id: 'faculty', label: 'Faculty' },
             { id: 'mentors', label: 'Mentors' },
-            { id: 'core', label: 'Core Committee' },
             { id: 'heads', label: 'Vertical Heads' },
             { id: 'subheads', label: 'Sub-Heads' },
           ].map(tab => (
@@ -148,7 +145,6 @@ const TeamManager: React.FC = () => {
               {tab.label} <span className="ml-1.5 text-xs bg-[rgba(205, 0, 0, 0.03)] text-[#CD0000] px-1.5 py-0.5 rounded-full">
                 {tab.id === 'faculty' ? (teamData.facultyCoordinators?.length || 0) :
                  tab.id === 'mentors' ? (teamData.mentors?.length || 0) :
-                 tab.id === 'core' ? (teamData.coreCommittee?.length || 0) :
                  tab.id === 'heads' ? (teamData.verticalHeads?.length || 0) :
                  (teamData.subHeads?.length || 0)}
               </span>

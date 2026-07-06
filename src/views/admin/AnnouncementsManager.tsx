@@ -8,27 +8,24 @@ import { Plus, Trash2, Megaphone, RefreshCw, Layers, BookOpen, AlertTriangle } f
 export default function AnnouncementsManager() {
   const { user } = useAuth();
   const [announcements, setAnnouncements] = useState<any[]>([]);
-  const [committees, setCommittees] = useState<any[]>([]);
   const [verticals, setVerticals] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Form states
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [audienceType, setAudienceType] = useState<'club' | 'committee' | 'vertical'>('club');
+  const [audienceType, setAudienceType] = useState<'club' | 'vertical'>('club');
   const [audienceId, setAudienceId] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
   const loadData = async () => {
     setLoading(true);
     try {
-      const [annData, cData, vData]: any[] = await Promise.all([
+      const [annData, vData]: any[] = await Promise.all([
         fetchFromSheet('getAnnouncements'),
-        fetchFromSheet('getCoreCommittees'),
         fetchFromSheet('getVerticals')
       ]);
       setAnnouncements(annData || []);
-      setCommittees(cData || []);
       setVerticals(vData || []);
     } catch (e) {
       console.error(e);
@@ -107,7 +104,6 @@ export default function AnnouncementsManager() {
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Audience scope</label>
                 <select value={audienceType} onChange={e => { setAudienceType(e.target.value as any); setAudienceId(''); }} className={inputClass}>
                   <option value="club">Public / Club-Wide</option>
-                  <option value="committee">Core Committee Only</option>
                   <option value="vertical">Vertical Domain Only</option>
                 </select>
               </div>
@@ -117,10 +113,7 @@ export default function AnnouncementsManager() {
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Target Group</label>
                   <select required value={audienceId} onChange={e => setAudienceId(e.target.value)} className={inputClass}>
                     <option value="">Select target group...</option>
-                    {audienceType === 'committee' 
-                      ? committees.map(c => <option key={c.id} value={c.id}>{c.name}</option>)
-                      : verticals.map(v => <option key={v.id} value={v.id}>{v.name}</option>)
-                    }
+                    {verticals.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
                   </select>
                 </div>
               )}
@@ -144,10 +137,7 @@ export default function AnnouncementsManager() {
             <div className="divide-y divide-[#E5E7EB]">
               {announcements.map(ann => {
                 let badge = { text: 'Club-Wide', bg: 'bg-red-50 text-red-600 border-red-200' };
-                if (ann.targetType === 'committee') {
-                  const comm = committees.find(c => c.id === ann.targetId);
-                  badge = { text: comm ? comm.name : 'Committee', bg: 'bg-blue-50 text-blue-600 border-blue-200' };
-                } else if (ann.targetType === 'vertical') {
+                if (ann.targetType === 'vertical') {
                   const vert = verticals.find(v => v.id === ann.targetId);
                   badge = { text: vert ? vert.name : 'Vertical', bg: 'bg-purple-50 text-purple-600 border-purple-200' };
                 }
