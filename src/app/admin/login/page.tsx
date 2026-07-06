@@ -145,6 +145,4 @@ export default function AdminLoginPage() {
       </div>
     </div>
   );
-}   </div>
-  );
 }
