@@ -277,17 +277,18 @@ const HomePage: React.FC = () => {
         <section className="py-24 bg-white border-t border-slate-100">
           <div className="container mx-auto px-6 max-w-7xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              {/* Image – left */}
+              {/* Video – left */}
               <ScrollReveal animation="slide-right">
-                <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/3] bg-slate-100">
-                  <Image
-                    src="/gallery/inauguration_all_10.webp"
-                    alt="Labyrinth community at the inauguration panel discussion"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
+                <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/3] bg-slate-950">
+                  <video
+                    src="/gallery/panel_discussion.webm"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4">
                     <span className="inline-block px-3 py-1 rounded-full bg-[#CD0000] text-white text-[9px] font-bold uppercase tracking-widest">
                       Active Since 1997
