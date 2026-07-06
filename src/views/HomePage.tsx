@@ -281,13 +281,15 @@ const HomePage: React.FC = () => {
               <ScrollReveal animation="slide-right">
                 <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/3] bg-slate-950">
                   <video
-                    src="/gallery/panel_discussion.webm"
                     autoPlay
                     muted
                     loop
                     playsInline
+                    preload="auto"
                     className="absolute inset-0 w-full h-full object-cover"
-                  />
+                  >
+                    <source src="/gallery/panel_discussion.webm" type="video/webm" />
+                  </video>
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4">
                     <span className="inline-block px-3 py-1 rounded-full bg-[#CD0000] text-white text-[9px] font-bold uppercase tracking-widest">
