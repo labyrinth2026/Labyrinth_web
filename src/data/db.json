@@ -717,6 +717,279 @@
   ],
   "activityLogs": [
     {
+      "id": "log-1783319188378",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-37",
+      "timestamp": "2026-07-06T06:26:28.378Z"
+    },
+    {
+      "id": "log-1783319183501",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:23.501Z"
+    },
+    {
+      "id": "log-1783319182843",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:22.843Z"
+    },
+    {
+      "id": "log-1783319182619",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:22.619Z"
+    },
+    {
+      "id": "log-1783319182412",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:22.412Z"
+    },
+    {
+      "id": "log-1783319182227",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:22.227Z"
+    },
+    {
+      "id": "log-1783319182035",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:22.035Z"
+    },
+    {
+      "id": "log-1783319181845",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:21.845Z"
+    },
+    {
+      "id": "log-1783319181647",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:21.647Z"
+    },
+    {
+      "id": "log-1783319181487",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:21.487Z"
+    },
+    {
+      "id": "log-1783319181296",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:21.296Z"
+    },
+    {
+      "id": "log-1783319181097",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:21.097Z"
+    },
+    {
+      "id": "log-1783319180916",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:20.916Z"
+    },
+    {
+      "id": "log-1783319180725",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:20.725Z"
+    },
+    {
+      "id": "log-1783319180561",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:20.561Z"
+    },
+    {
+      "id": "log-1783319180376",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:20.376Z"
+    },
+    {
+      "id": "log-1783319180191",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:20.191Z"
+    },
+    {
+      "id": "log-1783319180023",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:20.023Z"
+    },
+    {
+      "id": "log-1783319179870",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:19.870Z"
+    },
+    {
+      "id": "log-1783319179690",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:19.690Z"
+    },
+    {
+      "id": "log-1783319179540",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:19.540Z"
+    },
+    {
+      "id": "log-1783319179375",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:19.375Z"
+    },
+    {
+      "id": "log-1783319179193",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:19.193Z"
+    },
+    {
+      "id": "log-1783319179028",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:19.028Z"
+    },
+    {
+      "id": "log-1783319178879",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:18.879Z"
+    },
+    {
+      "id": "log-1783319178675",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:18.675Z"
+    },
+    {
+      "id": "log-1783319178518",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:18.518Z"
+    },
+    {
+      "id": "log-1783319178358",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:18.358Z"
+    },
+    {
+      "id": "log-1783319178175",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:18.175Z"
+    },
+    {
+      "id": "log-1783319176664",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:16.664Z"
+    },
+    {
+      "id": "log-1783319176468",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:16.468Z"
+    },
+    {
+      "id": "log-1783319176326",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:16.326Z"
+    },
+    {
+      "id": "log-1783319173496",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:13.496Z"
+    },
+    {
+      "id": "log-1783319172616",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T06:26:12.616Z"
+    },
+    {
+      "id": "log-1783319167660",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-33",
+      "timestamp": "2026-07-06T06:26:07.660Z"
+    },
+    {
+      "id": "log-1783319164902",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-32",
+      "timestamp": "2026-07-06T06:26:04.902Z"
+    },
+    {
+      "id": "log-1783319163769",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-32",
+      "timestamp": "2026-07-06T06:26:03.769Z"
+    },
+    {
+      "id": "log-1783319162805",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-32",
+      "timestamp": "2026-07-06T06:26:02.805Z"
+    },
+    {
+      "id": "log-1783268182259",
+      "userId": "u-suryachalam",
+      "action": "update_custom_form",
+      "details": "Updated custom form: New Custom Form",
+      "timestamp": "2026-07-05T16:16:22.259Z"
+    },
+    {
       "id": "log-1783264072537",
       "userId": "u-suryachalam",
       "action": "delete_gallery_image",
@@ -787,13 +1060,13 @@
       "title": "New Custom Form",
       "description": "Please describe the purpose of this form.",
       "slug": "form-1783061093573",
-      "status": "draft",
+      "status": "published",
       "coverImage": "",
       "startDate": "",
       "endDate": "",
       "createdBy": "u-suryachalam",
       "createdAt": "2026-07-03T06:45:16.371Z",
-      "updatedAt": "2026-07-03T06:45:16.371Z"
+      "updatedAt": "2026-07-05T16:16:22.248Z"
     },
     {
       "id": "04cfba5e-7467-4288-934f-e598a433f2b2",
@@ -810,26 +1083,6 @@
     }
   ],
   "formFields": [
-    {
-      "id": "field_1783061093573_1",
-      "formId": "df873988-bac6-4c2c-a859-451f46bf8072",
-      "fieldType": "short_text",
-      "label": "Applicant Full Name",
-      "placeholder": "Enter your name",
-      "required": true,
-      "options": null,
-      "order": 0
-    },
-    {
-      "id": "field_1783061093573_2",
-      "formId": "df873988-bac6-4c2c-a859-451f46bf8072",
-      "fieldType": "email",
-      "label": "University Email Address",
-      "placeholder": "name@cs.christuniversity.in",
-      "required": true,
-      "options": null,
-      "order": 1
-    },
     {
       "id": "b6c2405f-2ff5-46db-94f3-9eb5804264d4",
       "formId": "04cfba5e-7467-4288-934f-e598a433f2b2",
@@ -849,10 +1102,72 @@
       "required": true,
       "options": null,
       "order": 1
+    },
+    {
+      "id": "field_1783061093573_1",
+      "formId": "df873988-bac6-4c2c-a859-451f46bf8072",
+      "fieldType": "short_text",
+      "label": "Applicant Full Name",
+      "placeholder": "Enter your name",
+      "required": true,
+      "options": [],
+      "order": 0
+    },
+    {
+      "id": "field_1783061093573_2",
+      "formId": "df873988-bac6-4c2c-a859-451f46bf8072",
+      "fieldType": "email",
+      "label": "University Email Address",
+      "placeholder": "name@cs.christuniversity.in",
+      "required": true,
+      "options": [],
+      "order": 1
     }
   ],
-  "formResponses": [],
-  "responseAnswers": [],
+  "formResponses": [
+    {
+      "id": "6966fdc6-98a7-46ed-beba-6c285dae7194",
+      "formId": "df873988-bac6-4c2c-a859-451f46bf8072",
+      "applicantName": "Test User",
+      "applicantEmail": "test.user@christuniversity.in",
+      "status": "pending",
+      "submittedAt": "2026-07-05T16:16:51.572Z"
+    },
+    {
+      "id": "ffec9bfe-f6d0-493b-9ae9-f178f33a20ce",
+      "formId": "df873988-bac6-4c2c-a859-451f46bf8072",
+      "applicantName": "sgk",
+      "applicantEmail": "suryachalam18@gmail.com",
+      "status": "pending",
+      "submittedAt": "2026-07-06T06:07:13.333Z"
+    }
+  ],
+  "responseAnswers": [
+    {
+      "id": "9f38bc08-c6de-4f5f-a654-a1a67897d5f8",
+      "responseId": "6966fdc6-98a7-46ed-beba-6c285dae7194",
+      "fieldId": "field_1783061093573_1",
+      "value": "Test User"
+    },
+    {
+      "id": "87883773-a4b5-4ca0-86ce-53d6601738de",
+      "responseId": "6966fdc6-98a7-46ed-beba-6c285dae7194",
+      "fieldId": "field_1783061093573_2",
+      "value": "test.user@christuniversity.in"
+    },
+    {
+      "id": "a31b49d4-2e97-4197-a160-06d4174266a2",
+      "responseId": "ffec9bfe-f6d0-493b-9ae9-f178f33a20ce",
+      "fieldId": "field_1783061093573_1",
+      "value": "sgk"
+    },
+    {
+      "id": "2199c91f-4787-48e0-8ff9-2cd3121a5f3a",
+      "responseId": "ffec9bfe-f6d0-493b-9ae9-f178f33a20ce",
+      "fieldId": "field_1783061093573_2",
+      "value": "suryachalam18@gmail.com"
+    }
+  ],
   "gallery": [
     {
       "id": "g1",
@@ -1396,7 +1711,8 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_32.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "rotation": 270
     },
     {
       "id": "g-inaug-33",
@@ -1404,7 +1720,8 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_33.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "rotation": 270
     },
     {
       "id": "g-inaug-34",
@@ -1412,7 +1729,8 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_34.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "rotation": 270
     },
     {
       "id": "g-inaug-35",
@@ -1436,7 +1754,8 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_37.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "rotation": 270
     },
     {
       "id": "g-inaug-38",

@@ -47,6 +47,7 @@ export interface Vertical {
   category: 'tech' | 'non-tech';
   icon: string;
   color: string;
+  image?: string;
   head_id?: string;
   createdAt?: string;
 }
@@ -492,20 +493,21 @@ export async function dbGetVerticals(): Promise<any[]> {
     const heads = verticalUsers.filter(u => u.designation === 'Vertical Head');
     const subHeads = verticalUsers.filter(u => u.designation === 'Vertical Sub-Head');
 
-    const headName = heads.map(h => h.full_name || h.name).join(' & ');
-    const subHeadName = subHeads.map(s => s.full_name || s.name).join(' & ');
-
     return {
       ...v,
-      head: headName ? { name: headName, email: heads[0]?.email || '' } : null,
-      subHead: subHeadName ? { name: subHeadName, email: subHeads[0]?.email || '' } : null
+      // Legacy single-object for backwards compat
+      head: heads.length > 0 ? { name: heads.map(h => h.full_name || h.name).join(' & '), email: heads[0]?.email || '' } : null,
+      subHead: subHeads.length > 0 ? { name: subHeads.map(s => s.full_name || s.name).join(' & '), email: subHeads[0]?.email || '' } : null,
+      // New: full arrays
+      heads: heads.map(h => ({ id: h.id, name: h.full_name || h.name, email: h.email })),
+      subHeads: subHeads.map(s => ({ id: s.id, name: s.full_name || s.name, email: s.email })),
     };
   });
 }
 
-export async function dbAddVertical(name: string, description: string, category: 'tech' | 'non-tech'): Promise<void> {
+export async function dbAddVertical(name: string, description: string, category: 'tech' | 'non-tech', extra?: { icon?: string; color?: string; image?: string }): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('verticals').insert({ name, description, category });
+    const { error } = await supabase.from('verticals').insert({ name, description, category, icon: extra?.icon, color: extra?.color });
     if (error) throw error;
   } else {
     const db = getLocalDb();
@@ -514,8 +516,9 @@ export async function dbAddVertical(name: string, description: string, category:
       name,
       description,
       category,
-      icon: 'Brain',
-      color: '#CD0000'
+      icon: extra?.icon || 'Brain',
+      color: extra?.color || '#CD0000',
+      image: extra?.image || ''
     });
     saveLocalDb(db);
   }
@@ -773,6 +776,47 @@ export async function dbRemoveVerticalAssignment(userId: string, verticalId?: st
     }
   }
 }
+
+// Remove a person from a vertical role (clears their verticalId + designation)
+export async function dbRemovePersonFromVertical(userId: string): Promise<void> {
+  if (isSupabaseConfigured() && supabase) {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ vertical_id: null, designation: null })
+      .eq('id', userId);
+    if (error) throw error;
+  } else {
+    const db = getLocalDb();
+    const user = db.users.find(u => u.id === userId);
+    if (user) {
+      user.verticalId = undefined;
+      (user as any).vertical_id = undefined;
+      user.designation = undefined;
+      saveLocalDb(db);
+    }
+  }
+}
+
+// Assign a vertical role (head or sub-head) to a user
+export async function dbAssignVerticalRole(userId: string, verticalId: string, designation: 'Vertical Head' | 'Vertical Sub-Head'): Promise<void> {
+  if (isSupabaseConfigured() && supabase) {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ vertical_id: verticalId, designation })
+      .eq('id', userId);
+    if (error) throw error;
+  } else {
+    const db = getLocalDb();
+    const user = db.users.find(u => u.id === userId);
+    if (user) {
+      user.verticalId = verticalId;
+      (user as any).vertical_id = verticalId;
+      user.designation = designation;
+      saveLocalDb(db);
+    }
+  }
+}
+
 
 // --- EVENTS ---
 export async function dbGetEvents(): Promise<Event[]> {
@@ -1881,7 +1925,8 @@ export async function dbAddGalleryImage(data: any): Promise<void> {
     description: data.description,
     image: data.image,
     date: data.date,
-    orientation: data.orientation || 'landscape'
+    orientation: data.orientation || 'landscape',
+    rotation: data.rotation ?? 0
   });
   saveLocalDb(db);
 }
@@ -1898,7 +1943,8 @@ export async function dbUpdateGalleryImage(id: string, data: any): Promise<void>
       description: data.description !== undefined ? data.description : db.gallery[idx].description,
       image: data.image !== undefined ? data.image : db.gallery[idx].image,
       date: data.date !== undefined ? data.date : db.gallery[idx].date,
-      orientation: data.orientation !== undefined ? data.orientation : db.gallery[idx].orientation
+      orientation: data.orientation !== undefined ? data.orientation : db.gallery[idx].orientation,
+      rotation: data.rotation !== undefined ? data.rotation : (db.gallery[idx].rotation ?? 0)
     };
     saveLocalDb(db);
   }

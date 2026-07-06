@@ -625,7 +625,7 @@ export default function RoleManager() {
 
       {/* CREATE USER MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 bg-[#CD0000]/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl border border-[#E5E7EB] w-full max-w-md">
             <form onSubmit={handleCreateUser}>
               <div className="flex items-center justify-between p-5 border-b border-[#E5E7EB]">
@@ -689,7 +689,7 @@ export default function RoleManager() {
 
       {/* EDIT USER DETAILS MODAL */}
       {showEditModal && (
-        <div className="fixed inset-0 z-50 bg-[#CD0000]/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl border border-[#E5E7EB] w-full max-w-md">
             <form onSubmit={handleEditUser}>
               <div className="flex items-center justify-between p-5 border-b border-[#E5E7EB]">

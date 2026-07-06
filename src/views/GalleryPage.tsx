@@ -265,7 +265,7 @@ const GalleryPage: React.FC = () => {
                                 <div className="absolute top-2 left-2 bg-slate-950/60 text-white text-[8px] font-black uppercase px-1.5 py-0.5 rounded-sm tracking-wider">Video</div>
                               </div>
                             ) : (
-                              <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                              <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" style={{ transform: `rotate(${item.rotation ?? 0}deg)` }} />
                             )
                           ) : (
                             <div className="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center p-4">
@@ -387,7 +387,7 @@ const GalleryPage: React.FC = () => {
                   selectedImage.image.endsWith('.mp4') ? (
                     <video src={selectedImage.image} controls autoPlay className="w-full h-full object-contain" />
                   ) : (
-                    <img src={selectedImage.image} alt={selectedImage.title} className="w-full h-full object-contain" />
+                    <img src={selectedImage.image} alt={selectedImage.title} className="w-full h-full object-contain" style={{ transform: `rotate(${selectedImage.rotation ?? 0}deg)` }} />
                   )
                 ) : (
                   <div className="flex flex-col items-center justify-center p-8 text-center bg-slate-100 w-full h-full">

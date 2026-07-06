@@ -25,7 +25,6 @@ const HERO_IMAGES = [
 
 const HomePage: React.FC = () => {
   const [eventsData, setEventsData] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const featuredEvents = eventsData.filter(e => e.featured);
@@ -73,16 +72,10 @@ const HomePage: React.FC = () => {
   }, [heroHovered]);
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const events: any = await fetchFromSheet('getEvents');
-        if (Array.isArray(events)) setEventsData(events);
-      } catch (err) {
-        console.error(err);
-      }
-      setIsLoading(false);
-    };
-    loadData();
+    // Load events data non-blocking — page renders immediately
+    fetchFromSheet('getEvents')
+      .then((events: any) => { if (Array.isArray(events)) setEventsData(events); })
+      .catch(console.error);
   }, []);
 
   useEffect(() => {
@@ -104,50 +97,35 @@ const HomePage: React.FC = () => {
   ];
 
   useGSAP(() => {
-    if (isLoading) return;
-
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
-      if (containerRef.current) {
-        gsap.set(containerRef.current, { opacity: 1 });
-      }
+      if (containerRef.current) gsap.set(containerRef.current, { opacity: 1 });
       return;
     }
 
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-    // Coordinated entrance animation targeting DOM ref elements or children within scope
     if (containerRef.current) {
-      tl.to(containerRef.current, { opacity: 1, duration: 0.5 });
+      tl.to(containerRef.current, { opacity: 1, duration: 0.4 });
     }
 
-    // Target navbar globally (since it is outside containerRef scope)
     const navbar = document.querySelector('.main-navbar');
     if (navbar) {
-      tl.fromTo(navbar, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.1');
+      tl.fromTo(navbar, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.1');
     }
 
     tl.fromTo('.hero-title-word', 
-      { opacity: 0, y: 40 }, 
-      { opacity: 1, y: 0, duration: 0.7, stagger: 0.08 }, 
-      '-=0.3'
+      { opacity: 0, y: 30 }, 
+      { opacity: 1, y: 0, duration: 0.6, stagger: 0.07 }, 
+      '-=0.2'
     )
-    .fromTo('.hero-subtitle', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.5')
-    .fromTo('.hero-desc', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.7 }, '-=0.5')
-    .fromTo('.hero-cta', { opacity: 0, scale: 0.93 }, { opacity: 1, scale: 1, duration: 0.6 }, '-=0.4')
-    .fromTo('.hero-stat-item', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.08 }, '-=0.3');
+    .fromTo('.hero-subtitle', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.4')
+    .fromTo('.hero-desc', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.4')
+    .fromTo('.hero-cta', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.5 }, '-=0.3')
+    .fromTo('.hero-stat-item', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.07 }, '-=0.2');
 
-  }, { scope: containerRef, dependencies: [isLoading] });
+  }, { scope: containerRef, dependencies: [] });
 
-  if (isLoading) {
-    return (
-      <PageWrapper className="pt-0 pb-0">
-        <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA]">
-          <div className="w-8 h-8 border-2 border-[#CD0000] border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </PageWrapper>
-    );
-  }
 
   return (
     <PageWrapper className="pt-0 pb-0">

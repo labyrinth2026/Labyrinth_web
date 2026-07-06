@@ -209,7 +209,7 @@ const TeamManager: React.FC = () => {
 
       {/* Add/Edit Modal */}
       {showModal && editingMember && (
-        <div className="fixed inset-0 z-50 bg-[#CD0000]/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl border border-[#E5E7EB] w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-[#E5E7EB]">
               <h2 className="font-bold text-[#CD0000]">{editingMember.id ? 'Edit Member' : 'Add New Member'}</h2>
@@ -276,7 +276,7 @@ const TeamManager: React.FC = () => {
 
       {/* Delete Confirmation */}
       {deleteConfirm && (
-        <div className="fixed inset-0 z-50 bg-[#CD0000]/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl border border-red-100 w-full max-w-sm p-6 text-center">
             <div className="w-14 h-14 mx-auto rounded-full bg-red-50 flex items-center justify-center mb-4">
               <AlertTriangle size={28} className="text-red-500" />

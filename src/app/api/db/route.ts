@@ -6,7 +6,7 @@ import {
   dbGetVerticals, dbAddVertical, dbUpdateVertical, dbDeleteVertical,
   dbGetCoreCommittees, dbAddCoreCommittee, dbDeleteCoreCommittee,
   dbGetAssignments, dbAssignCoreHead, dbRemoveCoreAssignment,
-  dbAssignVerticalHead, dbRemoveVerticalAssignment,
+  dbAssignVerticalHead, dbRemoveVerticalAssignment, dbRemovePersonFromVertical, dbAssignVerticalRole,
   dbGetAnnouncements, dbAddAnnouncement, dbDeleteAnnouncement,
   dbGetCommitteeTasks, dbAddCommitteeTask, dbUpdateCommitteeTask, dbDeleteCommitteeTask,
   dbGetCommitteeResources, dbAddCommitteeResource, dbDeleteCommitteeResource,
@@ -252,7 +252,12 @@ export async function POST(req: NextRequest) {
 
       // --- VERTICAL MANAGEMENT ---
       case 'addVertical': {
-        await dbAddVertical(payload.data.name, payload.data.description, payload.data.category);
+        await dbAddVertical(
+          payload.data.name, 
+          payload.data.description, 
+          payload.data.category,
+          { icon: payload.data.icon, color: payload.data.color, image: payload.data.image }
+        );
         await logActivity(sessionUser.id, 'add_vertical', `Created vertical ${payload.data.name}`);
         return NextResponse.json({ success: true });
       }
@@ -311,9 +316,15 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: true });
       }
 
-      case 'removeVerticalAssignment': {
-        await dbRemoveVerticalAssignment(payload.id);
-        await logActivity(sessionUser.id, 'remove_vertical_head', `Removed vertical assignment ID ${payload.id}`);
+      case 'assignVerticalRole': {
+        await dbAssignVerticalRole(payload.userId, payload.verticalId, payload.designation);
+        await logActivity(sessionUser.id, 'assign_vertical_role', `Assigned ${payload.userId} as ${payload.designation} of vertical ${payload.verticalId}`);
+        return NextResponse.json({ success: true });
+      }
+
+      case 'removePersonFromVertical': {
+        await dbRemovePersonFromVertical(payload.userId);
+        await logActivity(sessionUser.id, 'remove_vertical_role', `Removed user ${payload.userId} from vertical role`);
         return NextResponse.json({ success: true });
       }
 

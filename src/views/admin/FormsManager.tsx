@@ -145,8 +145,19 @@ export default function FormsManager() {
     setSelectedForm(formItem);
     setLoading(true);
     try {
-      const res: any = await fetchFromSheet('getFormResponses', { formId: formItem.id });
-      setResponses(res || []);
+      // Load both fields and responses in parallel
+      const [fieldsRes, responsesRes]: [any, any] = await Promise.all([
+        fetchFromSheet('getFormBySlug', { slug: formItem.slug }),
+        fetchFromSheet('getFormResponses', { formId: formItem.id })
+      ]);
+      
+      if (fieldsRes && fieldsRes.fields) {
+        setBuilderFields(fieldsRes.fields.map((f: any) => ({
+          ...f,
+          options: Array.isArray(f.options) ? f.options : f.options ? JSON.parse(f.options) : []
+        })));
+      }
+      setResponses(responsesRes || []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -786,7 +797,7 @@ export default function FormsManager() {
 
       {/* RESPONSE DETAILS MODAL */}
       {selectedResponse && selectedForm && (
-        <div className="fixed inset-0 z-50 bg-[#CD0000]/40 backdrop-blur-sm flex items-center justify-end font-inter">
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-end font-inter">
           <div className="bg-white w-full max-w-2xl h-full shadow-2xl flex flex-col justify-between border-l border-slate-200">
             {/* Header */}
             <div className="flex justify-between items-center p-6 border-b border-slate-200">
