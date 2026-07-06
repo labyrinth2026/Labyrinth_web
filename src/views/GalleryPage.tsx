@@ -264,8 +264,19 @@ const GalleryPage: React.FC = () => {
                         >
                           {item.image ? (
                             item.image.endsWith('.mp4') ? (
-                              <div className="absolute inset-0 w-full h-full bg-slate-900">
-                                <video src={item.image} muted loop playsInline className="w-full h-full object-cover" onMouseEnter={e => e.currentTarget.play()} onMouseLeave={e => e.currentTarget.pause()} />
+                              <div className="absolute inset-0 w-full h-full bg-slate-900 overflow-hidden">
+                                <video 
+                                  src={item.image} 
+                                  muted 
+                                  loop 
+                                  playsInline 
+                                  className="w-full h-full object-cover transition-transform duration-300" 
+                                  onMouseEnter={e => e.currentTarget.play()} 
+                                  onMouseLeave={e => e.currentTarget.pause()} 
+                                  style={{ 
+                                    transform: `rotate(${item.rotation ?? 0}deg)${(item.rotation ?? 0) === 90 || (item.rotation ?? 0) === 270 ? ' scale(1.5)' : ''}` 
+                                  }}
+                                />
                                 <div className="absolute top-2 left-2 bg-slate-950/60 text-white text-[8px] font-black uppercase px-1.5 py-0.5 rounded-sm tracking-wider">Video</div>
                               </div>
                             ) : (
@@ -396,7 +407,7 @@ const GalleryPage: React.FC = () => {
               <div className="w-full aspect-video relative bg-slate-950 flex flex-col items-center justify-center group/lightbox">
                 {selectedImage.image ? (
                   selectedImage.image.endsWith('.mp4') ? (
-                    <video src={selectedImage.image} controls autoPlay className="w-full h-full object-contain" />
+                    <video src={selectedImage.image} controls autoPlay className="w-full h-full object-contain" style={{ transform: `rotate(${selectedImage.rotation ?? 0}deg)` }} />
                   ) : (
                     <img src={selectedImage.image} alt={selectedImage.title} className="w-full h-full object-contain" style={{ transform: `rotate(${selectedImage.rotation ?? 0}deg)` }} />
                   )

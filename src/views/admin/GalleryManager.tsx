@@ -207,18 +207,31 @@ const GalleryManager: React.FC = () => {
               const needsSwap = rot === 90 || rot === 270;
               return (
                 <div key={item.id} className="relative group rounded-xl overflow-hidden bg-slate-900 aspect-square shadow-sm hover:shadow-lg transition-all">
-                  {/* Image */}
                   {item.image ? (
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover transition-transform duration-300"
-                      style={{
-                        transform: `rotate(${rot}deg)`,
-                        // When rotated 90/270, we need to scale to fill the square container
-                        ...(needsSwap ? { transformOrigin: 'center', objectFit: 'cover' } : {})
-                      }}
-                    />
+                    item.image.endsWith('.mp4') ? (
+                      <div className="w-full h-full bg-slate-900 overflow-hidden relative">
+                        <video
+                          src={item.image}
+                          muted
+                          loop
+                          playsInline
+                          className="w-full h-full object-cover transition-transform duration-300"
+                          style={{
+                            transform: `rotate(${rot}deg)${needsSwap ? ' scale(1.5)' : ''}`
+                          }}
+                        />
+                        <div className="absolute top-2 right-2 bg-slate-950/60 text-white text-[8px] font-black uppercase px-1.5 py-0.5 rounded-sm tracking-wider z-10">Video</div>
+                      </div>
+                    ) : (
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover transition-transform duration-300"
+                        style={{
+                          transform: `rotate(${rot}deg)${needsSwap ? ' scale(1.5)' : ''}`
+                        }}
+                      />
+                    )
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center text-slate-500">
                       <ImageIcon size={28} />
@@ -384,14 +397,23 @@ const GalleryManager: React.FC = () => {
                     </div>
                   </div>
                   <div className="relative rounded-xl border border-slate-200 bg-slate-950 overflow-hidden flex items-center justify-center" style={{ height: '200px' }}>
-                    <img
-                      src={uploadPreview}
-                      alt="Preview"
-                      className="max-w-full max-h-full object-contain transition-transform duration-300"
-                      style={{ transform: `rotate(${editingItem.rotation ?? 0}deg)` }}
-                    />
+                    {uploadPreview.endsWith('.mp4') ? (
+                      <video
+                        src={uploadPreview}
+                        controls
+                        className="max-w-full max-h-full object-contain transition-transform duration-300"
+                        style={{ transform: `rotate(${editingItem.rotation ?? 0}deg)` }}
+                      />
+                    ) : (
+                      <img
+                        src={uploadPreview}
+                        alt="Preview"
+                        className="max-w-full max-h-full object-contain transition-transform duration-300"
+                        style={{ transform: `rotate(${editingItem.rotation ?? 0}deg)` }}
+                      />
+                    )}
                     <button type="button" onClick={() => { setUploadPreview(null); setEditingItem({ ...editingItem, image: '' }); }}
-                      className="absolute top-2 right-2 p-1 bg-black/60 text-white rounded-full hover:bg-black/80 transition-all">
+                      className="absolute top-2 right-2 p-1 bg-black/60 text-white rounded-full hover:bg-black/80 transition-all z-10">
                       <X size={13} />
                     </button>
                   </div>
