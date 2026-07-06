@@ -34,7 +34,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <body className="flex flex-col min-h-screen relative bg-bg-primary text-text-primary font-inter antialiased overflow-x-hidden">
+      <body className={`${inter.className} flex flex-col min-h-screen relative bg-bg-primary text-text-primary antialiased overflow-x-hidden`}>
         <AuthProvider>
           <SmoothScroll>
             <ScrollProgress />

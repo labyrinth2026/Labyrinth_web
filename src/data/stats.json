@@ -1,6 +1,6 @@
 [
   { "value": 10, "label": "Specialized Verticals", "suffix": "", "icon": "Layers" },
-  { "value": 500, "label": "Active Members", "suffix": "+", "icon": "Users" },
-  { "value": 50, "label": "Events Conducted", "suffix": "+", "icon": "Calendar" },
-  { "value": 20, "label": "Technical Workshops", "suffix": "+", "icon": "BookOpen" }
+  { "value": 50, "label": "Active Members", "suffix": "+", "icon": "Users" },
+  { "value": 15, "label": "Events Conducted", "suffix": "+", "icon": "Calendar" },
+  { "value": 7, "label": "Peer Sessions", "suffix": "+", "icon": "BookOpen" }
 ]

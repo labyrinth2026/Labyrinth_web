@@ -754,6 +754,1168 @@
   ],
   "activityLogs": [
     {
+      "id": "log-1783347595775",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g15",
+      "timestamp": "2026-07-06T14:19:55.775Z"
+    },
+    {
+      "id": "log-1783347592376",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g11",
+      "timestamp": "2026-07-06T14:19:52.376Z"
+    },
+    {
+      "id": "log-1783347590053",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g7",
+      "timestamp": "2026-07-06T14:19:50.053Z"
+    },
+    {
+      "id": "log-1783347587849",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g3",
+      "timestamp": "2026-07-06T14:19:47.849Z"
+    },
+    {
+      "id": "log-1783347583023",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g14",
+      "timestamp": "2026-07-06T14:19:43.023Z"
+    },
+    {
+      "id": "log-1783347581761",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g10",
+      "timestamp": "2026-07-06T14:19:41.761Z"
+    },
+    {
+      "id": "log-1783347580301",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g6",
+      "timestamp": "2026-07-06T14:19:40.301Z"
+    },
+    {
+      "id": "log-1783347578797",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g2",
+      "timestamp": "2026-07-06T14:19:38.798Z"
+    },
+    {
+      "id": "log-1783347575465",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g13",
+      "timestamp": "2026-07-06T14:19:35.465Z"
+    },
+    {
+      "id": "log-1783347574022",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g9",
+      "timestamp": "2026-07-06T14:19:34.022Z"
+    },
+    {
+      "id": "log-1783347572549",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g5",
+      "timestamp": "2026-07-06T14:19:32.549Z"
+    },
+    {
+      "id": "log-1783347571082",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g1",
+      "timestamp": "2026-07-06T14:19:31.082Z"
+    },
+    {
+      "id": "log-1783347567706",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g16",
+      "timestamp": "2026-07-06T14:19:27.706Z"
+    },
+    {
+      "id": "log-1783347566056",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g12",
+      "timestamp": "2026-07-06T14:19:26.056Z"
+    },
+    {
+      "id": "log-1783347564699",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g8",
+      "timestamp": "2026-07-06T14:19:24.699Z"
+    },
+    {
+      "id": "log-1783347563270",
+      "userId": "u-1783343265183",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g4",
+      "timestamp": "2026-07-06T14:19:23.270Z"
+    },
+    {
+      "id": "log-1783347526321",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-69",
+      "timestamp": "2026-07-06T14:18:46.321Z"
+    },
+    {
+      "id": "log-1783347525587",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-69",
+      "timestamp": "2026-07-06T14:18:45.587Z"
+    },
+    {
+      "id": "log-1783347524862",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-69",
+      "timestamp": "2026-07-06T14:18:44.862Z"
+    },
+    {
+      "id": "log-1783347523287",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-68",
+      "timestamp": "2026-07-06T14:18:43.287Z"
+    },
+    {
+      "id": "log-1783347522250",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-68",
+      "timestamp": "2026-07-06T14:18:42.250Z"
+    },
+    {
+      "id": "log-1783347521627",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-68",
+      "timestamp": "2026-07-06T14:18:41.627Z"
+    },
+    {
+      "id": "log-1783347513250",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-15",
+      "timestamp": "2026-07-06T14:18:33.250Z"
+    },
+    {
+      "id": "log-1783347512513",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-15",
+      "timestamp": "2026-07-06T14:18:32.513Z"
+    },
+    {
+      "id": "log-1783347511573",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-15",
+      "timestamp": "2026-07-06T14:18:31.573Z"
+    },
+    {
+      "id": "log-1783347509926",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-15",
+      "timestamp": "2026-07-06T14:18:29.926Z"
+    },
+    {
+      "id": "log-1783343666564",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-160",
+      "timestamp": "2026-07-06T13:14:26.564Z"
+    },
+    {
+      "id": "log-1783343665171",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-159",
+      "timestamp": "2026-07-06T13:14:25.171Z"
+    },
+    {
+      "id": "log-1783343660051",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-147",
+      "timestamp": "2026-07-06T13:14:20.051Z"
+    },
+    {
+      "id": "log-1783343659038",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-146",
+      "timestamp": "2026-07-06T13:14:19.038Z"
+    },
+    {
+      "id": "log-1783343657774",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-145",
+      "timestamp": "2026-07-06T13:14:17.774Z"
+    },
+    {
+      "id": "log-1783343655963",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-144",
+      "timestamp": "2026-07-06T13:14:15.963Z"
+    },
+    {
+      "id": "log-1783343655088",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-143",
+      "timestamp": "2026-07-06T13:14:15.088Z"
+    },
+    {
+      "id": "log-1783343654170",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-142",
+      "timestamp": "2026-07-06T13:14:14.170Z"
+    },
+    {
+      "id": "log-1783343653275",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-141",
+      "timestamp": "2026-07-06T13:14:13.275Z"
+    },
+    {
+      "id": "log-1783343652055",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-140",
+      "timestamp": "2026-07-06T13:14:12.055Z"
+    },
+    {
+      "id": "log-1783343650600",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-139",
+      "timestamp": "2026-07-06T13:14:10.600Z"
+    },
+    {
+      "id": "log-1783343649474",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-138",
+      "timestamp": "2026-07-06T13:14:09.474Z"
+    },
+    {
+      "id": "log-1783343648514",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-137",
+      "timestamp": "2026-07-06T13:14:08.514Z"
+    },
+    {
+      "id": "log-1783343647746",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-136",
+      "timestamp": "2026-07-06T13:14:07.746Z"
+    },
+    {
+      "id": "log-1783343646975",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-135",
+      "timestamp": "2026-07-06T13:14:06.975Z"
+    },
+    {
+      "id": "log-1783343645014",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-134",
+      "timestamp": "2026-07-06T13:14:05.014Z"
+    },
+    {
+      "id": "log-1783343644171",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-133",
+      "timestamp": "2026-07-06T13:14:04.171Z"
+    },
+    {
+      "id": "log-1783343643316",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-132",
+      "timestamp": "2026-07-06T13:14:03.316Z"
+    },
+    {
+      "id": "log-1783343642442",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-131",
+      "timestamp": "2026-07-06T13:14:02.442Z"
+    },
+    {
+      "id": "log-1783343641577",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-130",
+      "timestamp": "2026-07-06T13:14:01.577Z"
+    },
+    {
+      "id": "log-1783343639253",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-125",
+      "timestamp": "2026-07-06T13:13:59.253Z"
+    },
+    {
+      "id": "log-1783343638278",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-126",
+      "timestamp": "2026-07-06T13:13:58.278Z"
+    },
+    {
+      "id": "log-1783343637427",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-127",
+      "timestamp": "2026-07-06T13:13:57.427Z"
+    },
+    {
+      "id": "log-1783343636546",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-128",
+      "timestamp": "2026-07-06T13:13:56.546Z"
+    },
+    {
+      "id": "log-1783343635670",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-129",
+      "timestamp": "2026-07-06T13:13:55.670Z"
+    },
+    {
+      "id": "log-1783343634051",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-124",
+      "timestamp": "2026-07-06T13:13:54.051Z"
+    },
+    {
+      "id": "log-1783343633169",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-123",
+      "timestamp": "2026-07-06T13:13:53.169Z"
+    },
+    {
+      "id": "log-1783343632318",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-122",
+      "timestamp": "2026-07-06T13:13:52.318Z"
+    },
+    {
+      "id": "log-1783343631484",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-121",
+      "timestamp": "2026-07-06T13:13:51.484Z"
+    },
+    {
+      "id": "log-1783343630478",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-120",
+      "timestamp": "2026-07-06T13:13:50.479Z"
+    },
+    {
+      "id": "log-1783343629211",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-115",
+      "timestamp": "2026-07-06T13:13:49.211Z"
+    },
+    {
+      "id": "log-1783343628264",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-116",
+      "timestamp": "2026-07-06T13:13:48.264Z"
+    },
+    {
+      "id": "log-1783343627303",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-117",
+      "timestamp": "2026-07-06T13:13:47.303Z"
+    },
+    {
+      "id": "log-1783343626342",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-118",
+      "timestamp": "2026-07-06T13:13:46.342Z"
+    },
+    {
+      "id": "log-1783343625588",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-119",
+      "timestamp": "2026-07-06T13:13:45.588Z"
+    },
+    {
+      "id": "log-1783343624371",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-114",
+      "timestamp": "2026-07-06T13:13:44.371Z"
+    },
+    {
+      "id": "log-1783343623140",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-113",
+      "timestamp": "2026-07-06T13:13:43.140Z"
+    },
+    {
+      "id": "log-1783343621922",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-110",
+      "timestamp": "2026-07-06T13:13:41.922Z"
+    },
+    {
+      "id": "log-1783343620895",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-111",
+      "timestamp": "2026-07-06T13:13:40.895Z"
+    },
+    {
+      "id": "log-1783343619661",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-112",
+      "timestamp": "2026-07-06T13:13:39.661Z"
+    },
+    {
+      "id": "log-1783343618043",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-109",
+      "timestamp": "2026-07-06T13:13:38.043Z"
+    },
+    {
+      "id": "log-1783343616143",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-104",
+      "timestamp": "2026-07-06T13:13:36.143Z"
+    },
+    {
+      "id": "log-1783343615666",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-104",
+      "timestamp": "2026-07-06T13:13:35.666Z"
+    },
+    {
+      "id": "log-1783343614925",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-104",
+      "timestamp": "2026-07-06T13:13:34.925Z"
+    },
+    {
+      "id": "log-1783343613595",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-104",
+      "timestamp": "2026-07-06T13:13:33.595Z"
+    },
+    {
+      "id": "log-1783343612682",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-103",
+      "timestamp": "2026-07-06T13:13:32.682Z"
+    },
+    {
+      "id": "log-1783343611882",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-102",
+      "timestamp": "2026-07-06T13:13:31.882Z"
+    },
+    {
+      "id": "log-1783343610841",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-101",
+      "timestamp": "2026-07-06T13:13:30.841Z"
+    },
+    {
+      "id": "log-1783343609863",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-100",
+      "timestamp": "2026-07-06T13:13:29.863Z"
+    },
+    {
+      "id": "log-1783343607843",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-99",
+      "timestamp": "2026-07-06T13:13:27.843Z"
+    },
+    {
+      "id": "log-1783343606866",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-98",
+      "timestamp": "2026-07-06T13:13:26.866Z"
+    },
+    {
+      "id": "log-1783343606037",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-97",
+      "timestamp": "2026-07-06T13:13:26.037Z"
+    },
+    {
+      "id": "log-1783343604960",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-96",
+      "timestamp": "2026-07-06T13:13:24.960Z"
+    },
+    {
+      "id": "log-1783343603808",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-95",
+      "timestamp": "2026-07-06T13:13:23.808Z"
+    },
+    {
+      "id": "log-1783343602609",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-90",
+      "timestamp": "2026-07-06T13:13:22.609Z"
+    },
+    {
+      "id": "log-1783343601531",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-91",
+      "timestamp": "2026-07-06T13:13:21.531Z"
+    },
+    {
+      "id": "log-1783343600732",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-92",
+      "timestamp": "2026-07-06T13:13:20.732Z"
+    },
+    {
+      "id": "log-1783343599692",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-93",
+      "timestamp": "2026-07-06T13:13:19.692Z"
+    },
+    {
+      "id": "log-1783343597737",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-94",
+      "timestamp": "2026-07-06T13:13:17.737Z"
+    },
+    {
+      "id": "log-1783343595042",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-89",
+      "timestamp": "2026-07-06T13:13:15.042Z"
+    },
+    {
+      "id": "log-1783343593894",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-88",
+      "timestamp": "2026-07-06T13:13:13.894Z"
+    },
+    {
+      "id": "log-1783343593082",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-87",
+      "timestamp": "2026-07-06T13:13:13.082Z"
+    },
+    {
+      "id": "log-1783343592199",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-86",
+      "timestamp": "2026-07-06T13:13:12.199Z"
+    },
+    {
+      "id": "log-1783343591337",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-85",
+      "timestamp": "2026-07-06T13:13:11.337Z"
+    },
+    {
+      "id": "log-1783343590264",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-81",
+      "timestamp": "2026-07-06T13:13:10.264Z"
+    },
+    {
+      "id": "log-1783343589292",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-82",
+      "timestamp": "2026-07-06T13:13:09.292Z"
+    },
+    {
+      "id": "log-1783343588269",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-83",
+      "timestamp": "2026-07-06T13:13:08.269Z"
+    },
+    {
+      "id": "log-1783343587162",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-84",
+      "timestamp": "2026-07-06T13:13:07.162Z"
+    },
+    {
+      "id": "log-1783343585640",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-79",
+      "timestamp": "2026-07-06T13:13:05.640Z"
+    },
+    {
+      "id": "log-1783343584550",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-78",
+      "timestamp": "2026-07-06T13:13:04.550Z"
+    },
+    {
+      "id": "log-1783343583716",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-77",
+      "timestamp": "2026-07-06T13:13:03.716Z"
+    },
+    {
+      "id": "log-1783343582612",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-76",
+      "timestamp": "2026-07-06T13:13:02.612Z"
+    },
+    {
+      "id": "log-1783343581858",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-75",
+      "timestamp": "2026-07-06T13:13:01.858Z"
+    },
+    {
+      "id": "log-1783343580674",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-74",
+      "timestamp": "2026-07-06T13:13:00.674Z"
+    },
+    {
+      "id": "log-1783343579888",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-73",
+      "timestamp": "2026-07-06T13:12:59.888Z"
+    },
+    {
+      "id": "log-1783343579119",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-72",
+      "timestamp": "2026-07-06T13:12:59.119Z"
+    },
+    {
+      "id": "log-1783343576747",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-69",
+      "timestamp": "2026-07-06T13:12:56.747Z"
+    },
+    {
+      "id": "log-1783343575737",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-68",
+      "timestamp": "2026-07-06T13:12:55.737Z"
+    },
+    {
+      "id": "log-1783343574888",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-67",
+      "timestamp": "2026-07-06T13:12:54.888Z"
+    },
+    {
+      "id": "log-1783343573943",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-66",
+      "timestamp": "2026-07-06T13:12:53.943Z"
+    },
+    {
+      "id": "log-1783343572838",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-65",
+      "timestamp": "2026-07-06T13:12:52.838Z"
+    },
+    {
+      "id": "log-1783343571300",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-64",
+      "timestamp": "2026-07-06T13:12:51.300Z"
+    },
+    {
+      "id": "log-1783343569980",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-63",
+      "timestamp": "2026-07-06T13:12:49.980Z"
+    },
+    {
+      "id": "log-1783343569101",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-62",
+      "timestamp": "2026-07-06T13:12:49.101Z"
+    },
+    {
+      "id": "log-1783343568056",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-61",
+      "timestamp": "2026-07-06T13:12:48.056Z"
+    },
+    {
+      "id": "log-1783343566793",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-60",
+      "timestamp": "2026-07-06T13:12:46.793Z"
+    },
+    {
+      "id": "log-1783343564250",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-55",
+      "timestamp": "2026-07-06T13:12:44.250Z"
+    },
+    {
+      "id": "log-1783343563132",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-56",
+      "timestamp": "2026-07-06T13:12:43.132Z"
+    },
+    {
+      "id": "log-1783343562360",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-57",
+      "timestamp": "2026-07-06T13:12:42.360Z"
+    },
+    {
+      "id": "log-1783343561623",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-58",
+      "timestamp": "2026-07-06T13:12:41.623Z"
+    },
+    {
+      "id": "log-1783343560921",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-59",
+      "timestamp": "2026-07-06T13:12:40.921Z"
+    },
+    {
+      "id": "log-1783343559556",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-54",
+      "timestamp": "2026-07-06T13:12:39.556Z"
+    },
+    {
+      "id": "log-1783343557042",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-47",
+      "timestamp": "2026-07-06T13:12:37.042Z"
+    },
+    {
+      "id": "log-1783343556238",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-46",
+      "timestamp": "2026-07-06T13:12:36.238Z"
+    },
+    {
+      "id": "log-1783343555490",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-45",
+      "timestamp": "2026-07-06T13:12:35.490Z"
+    },
+    {
+      "id": "log-1783343554127",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-40",
+      "timestamp": "2026-07-06T13:12:34.127Z"
+    },
+    {
+      "id": "log-1783343553163",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-41",
+      "timestamp": "2026-07-06T13:12:33.163Z"
+    },
+    {
+      "id": "log-1783343552189",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-42",
+      "timestamp": "2026-07-06T13:12:32.189Z"
+    },
+    {
+      "id": "log-1783343551260",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-43",
+      "timestamp": "2026-07-06T13:12:31.260Z"
+    },
+    {
+      "id": "log-1783343550234",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-44",
+      "timestamp": "2026-07-06T13:12:30.234Z"
+    },
+    {
+      "id": "log-1783343548618",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-39",
+      "timestamp": "2026-07-06T13:12:28.618Z"
+    },
+    {
+      "id": "log-1783343547763",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-38",
+      "timestamp": "2026-07-06T13:12:27.763Z"
+    },
+    {
+      "id": "log-1783343546436",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-36",
+      "timestamp": "2026-07-06T13:12:26.437Z"
+    },
+    {
+      "id": "log-1783343545124",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-35",
+      "timestamp": "2026-07-06T13:12:25.124Z"
+    },
+    {
+      "id": "log-1783343543261",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-33",
+      "timestamp": "2026-07-06T13:12:23.261Z"
+    },
+    {
+      "id": "log-1783343542684",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-33",
+      "timestamp": "2026-07-06T13:12:22.684Z"
+    },
+    {
+      "id": "log-1783343542179",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-33",
+      "timestamp": "2026-07-06T13:12:22.179Z"
+    },
+    {
+      "id": "log-1783343541259",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T13:12:21.259Z"
+    },
+    {
+      "id": "log-1783343540537",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T13:12:20.537Z"
+    },
+    {
+      "id": "log-1783343539956",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T13:12:19.956Z"
+    },
+    {
+      "id": "log-1783343538544",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-34",
+      "timestamp": "2026-07-06T13:12:18.544Z"
+    },
+    {
+      "id": "log-1783343537728",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-33",
+      "timestamp": "2026-07-06T13:12:17.728Z"
+    },
+    {
+      "id": "log-1783343536671",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-32",
+      "timestamp": "2026-07-06T13:12:16.671Z"
+    },
+    {
+      "id": "log-1783343536175",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-32",
+      "timestamp": "2026-07-06T13:12:16.175Z"
+    },
+    {
+      "id": "log-1783343535628",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-32",
+      "timestamp": "2026-07-06T13:12:15.628Z"
+    },
+    {
+      "id": "log-1783343534044",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-32",
+      "timestamp": "2026-07-06T13:12:14.044Z"
+    },
+    {
+      "id": "log-1783343533007",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-31",
+      "timestamp": "2026-07-06T13:12:13.007Z"
+    },
+    {
+      "id": "log-1783343532215",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-30",
+      "timestamp": "2026-07-06T13:12:12.215Z"
+    },
+    {
+      "id": "log-1783343530696",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-25",
+      "timestamp": "2026-07-06T13:12:10.696Z"
+    },
+    {
+      "id": "log-1783343529604",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-26",
+      "timestamp": "2026-07-06T13:12:09.604Z"
+    },
+    {
+      "id": "log-1783343528756",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-27",
+      "timestamp": "2026-07-06T13:12:08.756Z"
+    },
+    {
+      "id": "log-1783343527891",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-28",
+      "timestamp": "2026-07-06T13:12:07.891Z"
+    },
+    {
+      "id": "log-1783343526826",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-29",
+      "timestamp": "2026-07-06T13:12:06.826Z"
+    },
+    {
+      "id": "log-1783343524816",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-24",
+      "timestamp": "2026-07-06T13:12:04.816Z"
+    },
+    {
+      "id": "log-1783343523614",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-23",
+      "timestamp": "2026-07-06T13:12:03.614Z"
+    },
+    {
+      "id": "log-1783343522636",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-22",
+      "timestamp": "2026-07-06T13:12:02.636Z"
+    },
+    {
+      "id": "log-1783343520743",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-21",
+      "timestamp": "2026-07-06T13:12:00.743Z"
+    },
+    {
+      "id": "log-1783343519849",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-20",
+      "timestamp": "2026-07-06T13:11:59.849Z"
+    },
+    {
+      "id": "log-1783343518281",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-15",
+      "timestamp": "2026-07-06T13:11:58.281Z"
+    },
+    {
+      "id": "log-1783343517173",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-16",
+      "timestamp": "2026-07-06T13:11:57.173Z"
+    },
+    {
+      "id": "log-1783343516373",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-17",
+      "timestamp": "2026-07-06T13:11:56.373Z"
+    },
+    {
+      "id": "log-1783343515493",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-19",
+      "timestamp": "2026-07-06T13:11:55.493Z"
+    },
+    {
+      "id": "log-1783343514528",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-18",
+      "timestamp": "2026-07-06T13:11:54.528Z"
+    },
+    {
+      "id": "log-1783343512949",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-14",
+      "timestamp": "2026-07-06T13:11:52.949Z"
+    },
+    {
+      "id": "log-1783343505054",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g34",
+      "timestamp": "2026-07-06T13:11:45.054Z"
+    },
+    {
+      "id": "log-1783343504288",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g34",
+      "timestamp": "2026-07-06T13:11:44.288Z"
+    },
+    {
+      "id": "log-1783343503797",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g34",
+      "timestamp": "2026-07-06T13:11:43.797Z"
+    },
+    {
+      "id": "log-1783343503109",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g34",
+      "timestamp": "2026-07-06T13:11:43.109Z"
+    },
+    {
+      "id": "log-1783343502533",
+      "userId": "u-1783343265183",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g34",
+      "timestamp": "2026-07-06T13:11:42.534Z"
+    },
+    {
+      "id": "log-1783343265276",
+      "userId": "u-suryachalam",
+      "action": "add_admin_role",
+      "details": "Granted role ADMIN to bhargav.g@bsccmh.christuniversity.in",
+      "timestamp": "2026-07-06T13:07:45.276Z"
+    },
+    {
       "id": "log-1783324843112",
       "userId": "u-suryachalam",
       "action": "update_gallery_image",

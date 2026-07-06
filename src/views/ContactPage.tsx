@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import {
   Mail, MapPin, ExternalLink, GraduationCap, ArrowRight, Loader2
 } from 'lucide-react';
@@ -32,9 +33,20 @@ const ContactPage: React.FC = () => {
 
   return (
     <PageWrapper>
-      {/* Header (Section 1: Off-White) */}
-      <section className="py-24 bg-white border-b border-slate-100">
-        <div className="container mx-auto px-6 max-w-5xl text-center">
+      {/* Header with background image */}
+      <section className="relative py-32 bg-white border-b border-slate-100 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="/gallery/inauguration_all_10.webp"
+            alt="Labyrinth community gathering"
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-white/80" />
+        </div>
+        <div className="container mx-auto px-6 max-w-5xl text-center relative z-10">
           <ScrollReveal animation="fade">
             <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
               Connect With Us
@@ -42,8 +54,8 @@ const ContactPage: React.FC = () => {
             <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-slate-900 tracking-tight leading-tight">
               REACH OUT TO <span className="text-[#CD0000]">LABYRINTH</span>
             </h1>
-            <p className="text-slate-500 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed font-semibold">
-              Have questions, want to collaborate, or looking to join the community? We're here.
+            <p className="text-slate-600 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed font-semibold">
+              Have questions, want to collaborate, or looking to join the community? We&apos;re here.
             </p>
           </ScrollReveal>
         </div>
@@ -154,6 +166,26 @@ const ContactPage: React.FC = () => {
               </div>
             </ScrollReveal>
           </div>
+        </div>
+      </section>
+
+      {/* Community photo strip */}
+      <section className="py-16 bg-white border-t border-slate-100">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <ScrollReveal animation="fade">
+            <p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-8">Life at Labyrinth</p>
+            <div className="grid grid-cols-3 gap-3 md:gap-4">
+              {[
+                { src: '/gallery/20260212_181054.webp', alt: 'Sports event at Labyrinth' },
+                { src: '/gallery/inauguration_all_3.webp', alt: 'Labyrinth inauguration event' },
+                { src: '/gallery/peer_edu_all_3.webp', alt: 'Peer education session at Labyrinth' },
+              ].map(img => (
+                <div key={img.src} className="relative rounded-2xl overflow-hidden shadow-sm bg-slate-100" style={{aspectRatio: '4/3'}}>
+                  <Image src={img.src} alt={img.alt} fill className="object-cover hover:scale-105 transition-transform duration-500" sizes="(max-width: 768px) 33vw, 25vw" />
+                </div>
+              ))}
+            </div>
+          </ScrollReveal>
         </div>
       </section>
     </PageWrapper>

@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { Target, Lightbulb, Users, BookOpen, Briefcase, Zap } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 import SectionHeading from '../components/ui/SectionHeading';
@@ -17,29 +18,53 @@ const AboutPage: React.FC = () => {
 
   return (
     <PageWrapper>
-      {/* Hero Banner (Section 1: Off-White) */}
+      {/* Hero Banner: Text left, Image right */}
       <section className="relative py-24 bg-white overflow-hidden border-b border-slate-100">
-        <div className="container mx-auto px-6 max-w-5xl text-center relative z-10">
-          <ScrollReveal animation="fade">
-            <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
-              About Us
-            </span>
-            <h1 className="text-4xl md:text-6xl font-extrabold mb-8 text-slate-900 tracking-tight leading-tight">
-              ABOUT <span className="text-[#CD0000]">LABYRINTH</span>
-            </h1>
-            <p className="text-sm md:text-base text-slate-500 max-w-3xl mx-auto leading-relaxed mb-6 font-medium">
-              The Computer Science Department's Computer Academy has been active since 1997. Labyrinth was established as the official face of this academy and serves as the only Computer Science Club of Christ University.
-            </p>
-            <p className="text-sm md:text-base text-slate-500 max-w-3xl mx-auto leading-relaxed mb-6">
-              Labyrinth was created with the purpose of providing students a platform to showcase their talents, develop leadership skills, collaborate with peers, and explore diverse domains within Computer Science and engineering.
-            </p>
-            <p className="text-sm md:text-base text-slate-500 max-w-3xl mx-auto leading-relaxed mb-6">
-              Every semester, Labyrinth organizes a wide range of technical and non-technical events, including coding competitions, debugging challenges, logical puzzle contests, web development and design competitions, gaming tournaments, debates, sports activities, entrepreneurship initiatives, and interdisciplinary collaborations.
-            </p>
-            <p className="text-lg font-bold text-[#CD0000] max-w-3xl mx-auto leading-relaxed mt-10 uppercase tracking-wider text-xs">
-              Labyrinth is for the students, by the students.
-            </p>
-          </ScrollReveal>
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Text – left */}
+            <ScrollReveal animation="slide-right">
+              <div>
+                <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
+                  About Us
+                </span>
+                <h1 className="text-4xl md:text-5xl font-extrabold mb-8 text-slate-900 tracking-tight leading-tight">
+                  ABOUT <span className="text-[#CD0000]">LABYRINTH</span>
+                </h1>
+                <p className="text-sm md:text-base text-slate-500 leading-relaxed mb-4 font-medium">
+                  The Computer Science Department's Computer Academy has been active since 1997. Labyrinth was established as the official face of this academy and serves as the only Computer Science Club of Christ University.
+                </p>
+                <p className="text-sm md:text-base text-slate-500 leading-relaxed mb-4">
+                  Labyrinth was created with the purpose of providing students a platform to showcase their talents, develop leadership skills, collaborate with peers, and explore diverse domains within Computer Science and engineering.
+                </p>
+                <p className="text-sm md:text-base text-slate-500 leading-relaxed mb-8">
+                  Every semester, Labyrinth organizes a wide range of technical and non-technical events, including coding competitions, debugging challenges, logical puzzle contests, web development and design competitions, gaming tournaments, debates, sports activities, entrepreneurship initiatives, and interdisciplinary collaborations.
+                </p>
+                <p className="font-bold text-[#CD0000] uppercase tracking-wider text-xs">
+                  Labyrinth is for the students, by the students.
+                </p>
+              </div>
+            </ScrollReveal>
+
+            {/* Image – right */}
+            <ScrollReveal animation="slide-left">
+              <div className="relative rounded-3xl overflow-hidden shadow-xl bg-slate-100" style={{aspectRatio: '4/3'}}>
+                <Image
+                  src="/gallery/inauguration_all_1.webp"
+                  alt="Labyrinth community at the inauguration ceremony"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 to-transparent" />
+                <div className="absolute bottom-4 left-4">
+                  <span className="inline-block px-3 py-1 rounded-full bg-[#CD0000] text-white text-[9px] font-bold uppercase tracking-widest">
+                    Est. 1997
+                  </span>
+                </div>
+              </div>
+            </ScrollReveal>
+          </div>
         </div>
       </section>
 
@@ -69,6 +94,26 @@ const AboutPage: React.FC = () => {
               </div>
             </ScrollReveal>
           </div>
+        </div>
+      </section>
+
+      {/* Full-width photo strip */}
+      <section className="relative overflow-hidden" style={{height: '22rem'}}>
+        <Image
+          src="/gallery/peer_edu_all_1.webp"
+          alt="Labyrinth peer education session with students engaged in learning"
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-slate-950/60" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+          <ScrollReveal animation="fade">
+            <p className="text-white/60 text-xs font-bold uppercase tracking-widest mb-3">Our Philosophy</p>
+            <blockquote className="text-white text-2xl md:text-3xl font-extrabold max-w-3xl leading-tight tracking-tight">
+              &ldquo;Building the next generation of <span className="text-[#CD0000]">innovators</span>, one event at a time.&rdquo;
+            </blockquote>
+          </ScrollReveal>
         </div>
       </section>
 
