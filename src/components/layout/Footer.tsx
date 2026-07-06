@@ -134,10 +134,6 @@ const Footer: React.FC = () => {
           </p>
           <p className="text-slate-400/80 text-[10px] mt-0.5 text-center flex items-center gap-1.5 flex-wrap justify-center">
             <span>System Design &amp; Development by Krupa M | Department of Computer Science</span>
-            <span className="text-slate-300">•</span>
-            <Link href="/admin/login" className="text-slate-400 hover:text-[#CD0000] font-semibold transition-colors">
-              Admin Access
-            </Link>
           </p>
         </div>
       </div>

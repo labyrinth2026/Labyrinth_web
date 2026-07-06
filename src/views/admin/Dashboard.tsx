@@ -15,10 +15,10 @@ const Dashboard: React.FC = () => {
   ];
 
   const quickActions = [
-    { label: 'Manage Events', path: '/admin/content', icon: Calendar, show: can('manage_events') },
-    { label: 'Team Members', path: '/admin/team', icon: Users, show: can('manage_team') },
-    { label: 'View Registrations', path: '/admin/registrations', icon: FileText, show: can('view_registrations') },
-    { label: 'Review Content', path: '/admin/content', icon: BookOpen, show: can('review_content') },
+    { label: 'Manage Events', path: '/admin/events', icon: Calendar, show: can('manage_events') },
+    { label: 'Team Members', path: '/admin/members', icon: Users, show: can('manage_team') },
+    { label: 'View Registrations', path: '/admin/forms', icon: FileText, show: can('view_registrations') },
+    { label: 'Review Content', path: '/admin/gallery', icon: BookOpen, show: can('review_content') },
     { label: 'Download Reports', path: '/admin/reports', icon: Download, show: can('manage_content') },
   ].filter(a => a.show);
 
