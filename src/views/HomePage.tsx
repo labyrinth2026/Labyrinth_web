@@ -16,11 +16,14 @@ import { fetchFromSheet } from '../services/api';
 import statsData from '../data/stats.json';
 
 const HERO_IMAGES = [
+  '/gallery/inauguration_all_1.webp',
+  '/gallery/peer_edu_all_1.webp',
   '/gallery/20260212_181054.webp',
-  '/gallery/_MG_1303.webp',
-  '/gallery/20260212_115103.webp',
+  '/gallery/inauguration_all_51.webp',
+  '/gallery/peer_edu_all_3.webp',
   '/gallery/20260215_133007.webp',
-  '/gallery/_MG_1854.webp'
+  '/gallery/inauguration_all_10.webp',
+  '/gallery/IMG-20260214-WA0023.webp'
 ];
 
 const HomePage: React.FC = () => {
@@ -34,7 +37,25 @@ const HomePage: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
 
   // Hero carousel state
-  const [heroIndex, setHeroIndex] = useState(0);
+  const [[heroIndex, direction], setHeroState] = useState([0, 1]);
+  
+  const setHeroIndex = (update: number | ((prev: number) => number)) => {
+    setHeroState(([prevIndex]) => {
+      const nextIndex = typeof update === 'function' ? update(prevIndex) : update;
+      if (nextIndex === prevIndex) return [prevIndex, 1];
+      
+      let dir = 1;
+      if (prevIndex === HERO_IMAGES.length - 1 && nextIndex === 0) {
+        dir = 1;
+      } else if (prevIndex === 0 && nextIndex === HERO_IMAGES.length - 1) {
+        dir = -1;
+      } else {
+        dir = nextIndex > prevIndex ? 1 : -1;
+      }
+      return [nextIndex, dir];
+    });
+  };
+
   const [heroHovered, setHeroHovered] = useState(false);
 
   const touchStartX = useRef<number | null>(null);
@@ -67,7 +88,7 @@ const HomePage: React.FC = () => {
     if (heroHovered) return;
     const interval = setInterval(() => {
       setHeroIndex((prev) => (prev + 1) % HERO_IMAGES.length);
-    }, 4500);
+    }, 7000);
     return () => clearInterval(interval);
   }, [heroHovered]);
 
@@ -142,25 +163,16 @@ const HomePage: React.FC = () => {
         >
           {/* Full Width Image Carousel Background */}
           <div className="absolute inset-0 w-full h-full z-0 overflow-hidden select-none">
-            <AnimatePresence initial={false}>
-              <motion.div
-                key={heroIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1.0, ease: 'easeInOut' }}
-                className="absolute inset-0 w-full h-full"
-              >
-                <Image
-                  src={HERO_IMAGES[heroIndex]}
-                  alt="Labyrinth Activity"
-                  fill
-                  priority={heroIndex === 0}
-                  className="object-cover"
-                  sizes="100vw"
-                />
-              </motion.div>
-            </AnimatePresence>
+            <div className="absolute inset-0 w-full h-full">
+              <Image
+                src={HERO_IMAGES[heroIndex]}
+                alt="Labyrinth Activity"
+                fill
+                priority={heroIndex === 0}
+                className="object-cover"
+                sizes="100vw"
+              />
+            </div>
             {/* Subtle Dark Overlay */}
             <div className="absolute inset-0 bg-slate-950/60 z-10 pointer-events-none" />
           </div>
@@ -237,20 +249,6 @@ const HomePage: React.FC = () => {
                   }`}
                   aria-label={`Go to slide ${idx + 1}`}
                 />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── Stats Summary Row ── */}
-        <section className="py-12 bg-white border-b border-slate-100 z-10 relative">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <div className="flex flex-wrap justify-center gap-12 md:gap-20">
-              {statsData.slice(0, 4).map((stat, i) => (
-                <div key={i} className="hero-stat-item text-center min-w-[140px]">
-                  <div className="text-4xl font-extrabold text-slate-900">{stat.value}{stat.suffix}</div>
-                  <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-2">{stat.label}</div>
-                </div>
               ))}
             </div>
           </div>

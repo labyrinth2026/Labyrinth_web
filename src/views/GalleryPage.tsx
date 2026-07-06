@@ -14,9 +14,14 @@ const GalleryPage: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const [galleryData, setGalleryData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
   const [currentVideoIdx, setCurrentVideoIdx] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const featuredVideos = [
     { src: "/gallery/Screen_Recording_20260220_090135_Photos.mp4", label: "Sports Tournament Highlights" }
@@ -149,7 +154,7 @@ const GalleryPage: React.FC = () => {
     return span === 2 ? 'h-72 md:h-80 w-full' : 'h-44 md:h-56 w-full';
   };
 
-  if (isLoading) {
+  if (!isMounted || isLoading) {
     return (
       <PageWrapper>
         <div className="min-h-[60vh] flex items-center justify-center bg-[#FAFAFA]">
@@ -180,7 +185,6 @@ const GalleryPage: React.FC = () => {
                 key={currentVideoIdx}
                 src={featuredVideos[currentVideoIdx].src} 
                 autoPlay 
-                muted 
                 loop 
                 controls 
                 playsInline 
