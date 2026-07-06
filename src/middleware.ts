@@ -26,6 +26,11 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/auth/reset-password', req.url));
   };
 
+  // Redirect legacy /login route to /admin/login
+  if (pathname === '/login') {
+    return redirectToLogin();
+  }
+
   // 1. Handling Reset Password route
   if (pathname === '/auth/reset-password') {
     if (!user || user.role !== 'ADMIN') {
@@ -64,6 +69,7 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     '/admin/:path*',
-    '/auth/reset-password'
+    '/auth/reset-password',
+    '/login'
   ]
 };

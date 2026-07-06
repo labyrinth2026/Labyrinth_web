@@ -20,6 +20,11 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const pathname = usePathname();
   const router = useRouter();
 
+  // Bypass layout checks and layout wrapper for login screen
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center">

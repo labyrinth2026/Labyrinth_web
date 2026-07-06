@@ -88,6 +88,7 @@ export async function POST(req: NextRequest) {
 
         // 2. Mentors: designation contains "Mentor"
         const mentors = roles.filter(u => 
+          u.role !== 'ADMIN' &&
           u.designation && u.designation.toLowerCase().includes('mentor')
         ).map(u => ({
           id: u.id,
@@ -99,6 +100,7 @@ export async function POST(req: NextRequest) {
 
         // 3. Core Committee: has committee_id, and is NOT faculty/mentor
         const coreCommittee = roles.filter(u => 
+          u.role !== 'ADMIN' &&
           (u.committee_id || u.committeeId) && 
           !facultyCoordinators.some(f => f.id === u.id) &&
           !mentors.some(m => m.id === u.id)
@@ -116,6 +118,7 @@ export async function POST(req: NextRequest) {
 
         // 4. Vertical Heads: has vertical_id and designation contains "Head" (but not Sub-Head)
         const verticalHeads = roles.filter(u => 
+          u.role !== 'ADMIN' &&
           (u.vertical_id || u.verticalId) && 
           u.designation && 
           u.designation.toLowerCase().includes('head') && 
@@ -134,6 +137,7 @@ export async function POST(req: NextRequest) {
 
         // 5. Sub Heads: has vertical_id and designation contains "Sub" (Sub-Head / Sub Head)
         const subHeads = roles.filter(u => 
+          u.role !== 'ADMIN' &&
           (u.vertical_id || u.verticalId) && 
           u.designation && 
           u.designation.toLowerCase().includes('sub')
@@ -211,6 +215,10 @@ export async function POST(req: NextRequest) {
       case 'submitJoinForm': {
         // Fallback local db log or process. For Supabase, users will register via auth signup.
         const { name, email, preferredVertical } = payload;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+          return NextResponse.json({ success: false, error: 'Invalid email address format.' });
+        }
         const db = getLocalDb();
         const existing = db.users.find(u => u.email.toLowerCase() === email.toLowerCase());
         if (existing) {
@@ -339,6 +347,10 @@ export async function POST(req: NextRequest) {
 
       case 'addRole': {
         const { email, name, role } = payload.data;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+          return NextResponse.json({ success: false, error: 'Invalid email address format.' }, { status: 400 });
+        }
         await dbAddRole(email, name, role);
         await logActivity(sessionUser.id, 'add_admin_role', `Granted role ${role} to ${email}`);
         return NextResponse.json({ success: true });
@@ -352,6 +364,10 @@ export async function POST(req: NextRequest) {
 
       case 'createUser': {
         const { name, email, role, committeeId, verticalId } = payload;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+          return NextResponse.json({ success: false, error: 'Invalid email address format.' }, { status: 400 });
+        }
         await dbCreateUser(name, email, role, committeeId, verticalId, sessionUser.id);
         await logActivity(sessionUser.id, 'create_user', `Created user: ${name} (${email}) as ${role}`);
         return NextResponse.json({ success: true });

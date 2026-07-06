@@ -66,6 +66,14 @@ export default function MembersManager() {
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newUserName || !newUserEmail) return;
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newUserEmail)) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
     try {
       await fetchFromSheet('createUser', {
         name: newUserName,
