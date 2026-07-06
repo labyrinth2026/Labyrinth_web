@@ -4,8 +4,15 @@ import React from 'react';
 import Link from 'next/link';
 import { Mail, MapPin } from 'lucide-react';
 import { NAV_LINKS, SOCIAL_LINKS, CLUB_INFO, FACULTY_CONTACT } from '../../utils/constants';
+import { usePathname } from 'next/navigation';
 
 const Footer: React.FC = () => {
+  const pathname = usePathname();
+
+  if (pathname.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <footer className="bg-white border-t border-slate-200/80 pt-16 pb-8 mt-20">
       <div className="container mx-auto px-6 max-w-7xl">

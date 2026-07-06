@@ -15,6 +15,10 @@ const Navbar: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('');
   const pathname = usePathname();
 
+  if (pathname.startsWith('/admin')) {
+    return null;
+  }
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
