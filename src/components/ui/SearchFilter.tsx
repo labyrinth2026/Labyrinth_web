@@ -27,23 +27,9 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   return (
     <div className="w-full flex flex-col mb-8">
       
-      {/* Search Input (Full Width) */}
-      <div className="relative w-full group">
-        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#CD0000] transition-colors">
-          <Search size={16} />
-        </div>
-        <input
-          type="text"
-          value={searchValue}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder={placeholder}
-          className="w-full bg-white border border-slate-200 text-slate-800 rounded-full py-2.5 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-[#CD0000]/10 focus:border-[#CD0000] transition-all shadow-xs placeholder:text-slate-500 text-xs font-semibold uppercase tracking-wider"
-        />
-      </div>
-
-      {/* Filters (Rendered Below Search Input with 16px Spacing) */}
+      {/* Filters (Rendered as Category Tabs) */}
       {filters.length > 0 && onFilterChange && (
-        <div className="w-full mt-4">
+        <div className="w-full">
           <div className="flex flex-wrap gap-3">
             {filters.map((filter) => {
               const isActive = activeFilter === filter.value;

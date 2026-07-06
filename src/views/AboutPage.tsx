@@ -5,13 +5,6 @@ import SectionHeading from '../components/ui/SectionHeading';
 import ScrollReveal from '../components/ui/ScrollReveal';
 
 const AboutPage: React.FC = () => {
-  const milestones = [
-    { year: '2020', title: 'Club Founded', desc: 'Started with just 20 passionate computer science students.' },
-    { year: '2021', title: 'First Hackathon', desc: 'Hosted HackMatrix 1.0 with over 200 participants.' },
-    { year: '2022', title: '10 Verticals Created', desc: 'Expanded our scope to cover specialized domains like AI and GameDev.' },
-    { year: '2023', title: '500+ Members', desc: 'Became the largest tech community in the university.' },
-    { year: '2024', title: 'National Recognition', desc: 'Won "Best Tech Club" at the National College Summit.' }
-  ];
 
   const features = [
     { icon: BookOpen, title: 'Hands-on Learning', desc: 'Move beyond theory with practical workshops and projects.' },
@@ -20,30 +13,7 @@ const AboutPage: React.FC = () => {
     { icon: Zap, title: 'Career Growth', desc: 'Build a portfolio that makes your resume stand out.' }
   ];
 
-  const TimelineItem = ({ milestone, index }: { milestone: any; index: number }) => {
-    const isEven = index % 2 === 0;
 
-    return (
-      <div className={`relative flex items-center justify-between md:justify-normal w-full mb-12 ${isEven ? 'md:flex-row-reverse' : ''}`}>
-        {/* Center Dot */}
-        <div className="hidden md:block absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#CD0000] border-4 border-[#121212] z-10 shadow-md" />
-
-        {/* Content Card */}
-        <div className="w-full md:w-5/12">
-          <ScrollReveal animation={isEven ? 'slide-left' : 'slide-right'}>
-            <div className="bg-[#121212] border border-[#B8B8B8]/10 rounded-3xl shadow-sm p-6 relative">
-              {/* Year Badge */}
-              <span className="absolute -top-3 left-6 bg-[#CD0000] text-[#EFEDE6] px-4 py-0.5 rounded-full text-xs font-black uppercase tracking-wider shadow">
-                {milestone.year}
-              </span>
-              <h3 className="text-lg font-black text-[#EFEDE6] mb-2 mt-2">{milestone.title}</h3>
-              <p className="text-[#B8B8B8] text-sm leading-relaxed">{milestone.desc}</p>
-            </div>
-          </ScrollReveal>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <PageWrapper>
@@ -122,23 +92,7 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* History Timeline (Section 4: Off-White) */}
-      <section className="py-24 bg-slate-50/50">
-        <div className="container mx-auto px-6 max-w-5xl">
-          <SectionHeading title="Our Journey" subtitle="History" />
 
-          <div className="relative mt-16">
-            {/* Center Line */}
-            <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-slate-200" />
-
-            <div className="flex flex-col">
-              {milestones.map((milestone, i) => (
-                <TimelineItem key={i} milestone={milestone} index={i} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
     </PageWrapper>
   );
 };

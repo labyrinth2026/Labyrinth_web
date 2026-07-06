@@ -64,24 +64,27 @@ export async function POST(req: NextRequest) {
           return comm ? comm.name : null;
         };
 
-        // 1. Faculty Coordinators: Admin users or designation containing faculty keywords
-        const facultyCoordinators = roles.filter(u => 
-          u.role === 'ADMIN' || 
-          (u.designation && (
-            u.designation.toLowerCase().includes('hod') || 
-            u.designation.toLowerCase().includes('professor') || 
-            u.designation.toLowerCase().includes('advisor') || 
-            u.designation.toLowerCase().includes('coordinator')
-          ) && !u.designation.toLowerCase().includes('student') && !u.designation.toLowerCase().includes('member'))
-        ).map(u => ({
-          id: u.id,
-          name: u.full_name || u.name,
-          role: u.designation || 'Faculty Coordinator',
-          designation: u.designation || 'Faculty Coordinator',
-          department: u.department || 'Department of Computer Science',
-          email: u.email,
-          avatar: u.profilePhoto || null
-        }));
+        // 1. Faculty Coordinators: Mock faculty data to prevent exposing admin profiles
+        const facultyCoordinators = [
+          {
+            id: 'mock-fac-1',
+            name: 'Dr. Pranab Mohanty',
+            role: 'Head of Department',
+            designation: 'Professor & HOD',
+            department: 'Department of Computer Science',
+            email: 'pranab.mohanty@christuniversity.in',
+            avatar: 'https://ui-avatars.com/api/?name=Pranab+Mohanty&background=CD0000&color=fff&size=128'
+          },
+          {
+            id: 'mock-fac-2',
+            name: 'Dr. Amrutha S',
+            role: 'Faculty Coordinator',
+            designation: 'Assistant Professor',
+            department: 'Department of Computer Science',
+            email: 'amrutha.s@christuniversity.in',
+            avatar: 'https://ui-avatars.com/api/?name=Amrutha+S&background=CD0000&color=fff&size=128'
+          }
+        ];
 
         // 2. Mentors: designation contains "Mentor"
         const mentors = roles.filter(u => 
