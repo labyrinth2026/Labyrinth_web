@@ -125,8 +125,12 @@ const Footer: React.FC = () => {
           <p className="text-slate-400 text-xs text-center">
             © {new Date().getFullYear()} {CLUB_INFO.name} · {CLUB_INFO.university}. All rights reserved.
           </p>
-          <p className="text-slate-400/80 text-[10px] mt-0.5 text-center">
-            System Design &amp; Development by Krupa M | Department of Computer Science
+          <p className="text-slate-400/80 text-[10px] mt-0.5 text-center flex items-center gap-1.5 flex-wrap justify-center">
+            <span>System Design &amp; Development by Krupa M | Department of Computer Science</span>
+            <span className="text-slate-300">•</span>
+            <Link href="/admin/login" className="text-slate-400 hover:text-[#CD0000] font-semibold transition-colors">
+              Admin Access
+            </Link>
           </p>
         </div>
       </div>

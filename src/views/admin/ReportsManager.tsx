@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchFromSheet } from '@/services/api';
 import { FileText, Download, FileDown, RefreshCw } from 'lucide-react';
 import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { Document, Packer, Paragraph, Table, TableRow, TableCell, TextRun, HeadingLevel, WidthType, ImageRun, AlignmentType, BorderStyle } from 'docx';
 import { saveAs } from 'file-saver';
@@ -116,7 +116,7 @@ const ReportsManager: React.FC = () => {
       const title = `Labyrinth ${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report`;
       const { head, body } = getCleanTableData();
 
-      (doc as any).autoTable({
+      autoTable(doc, {
         head: [head],
         body: body,
         startY: 40,

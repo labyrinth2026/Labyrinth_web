@@ -68,6 +68,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Your account is deactivated or inactive.' }, { status: 403 });
     }
 
+    // Only administrators can authenticate
+    if (userDetails.role !== 'ADMIN') {
+      return NextResponse.json({ success: false, error: 'Unauthorized Access' }, { status: 403 });
+    }
+
     // Build session token
     const sessionPayload = {
       id: userDetails.id,
