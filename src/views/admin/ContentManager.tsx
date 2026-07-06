@@ -464,7 +464,7 @@ const ContentManager: React.FC = () => {
       {/* ── Add / Edit Modal ── */}
       {showModal && editingItem && (
         <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl flex flex-col max-h-[94vh]">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl flex flex-col" style={{ maxHeight: '94vh' }}>
             {/* Modal header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 shrink-0">
               <div>
@@ -481,7 +481,7 @@ const ContentManager: React.FC = () => {
             </div>
 
             {/* Modal body */}
-            <div className="overflow-y-auto flex-1 px-6 py-5 space-y-5">
+            <div className="overflow-y-auto flex-1 min-h-0 px-6 py-5 space-y-5">
               {activeTab === 'events' ? (
                 <>
                   <div><label className={labelClass}>Title *</label><input type="text" value={editingItem.title || ''} onChange={e => setEditingItem({ ...editingItem, title: e.target.value })} className={inputClass} placeholder="Event title…" /></div>

@@ -814,7 +814,7 @@ export default function FormsManager() {
             </div>
 
             {/* Content answers scrollable */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6">
               {/* Profile Card Header */}
               <div className="bg-slate-50 border border-slate-200/60 rounded-2xl p-4 flex flex-col sm:flex-row justify-between gap-4">
                 <div className="space-y-1">
