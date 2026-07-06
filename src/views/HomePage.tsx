@@ -281,7 +281,10 @@ const HomePage: React.FC = () => {
               {/* Video – left */}
               <ScrollReveal animation="slide-right">
                 <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/3]">
-                  <HomeVideoPlayer src="/gallery/panel_discussion.webm" type="video/webm" />
+                  <HomeVideoPlayer
+                    mp4="/gallery/panel_discussion.mp4"
+                    webm="/gallery/panel_discussion.webm"
+                  />
                 </div>
               </ScrollReveal>
 
