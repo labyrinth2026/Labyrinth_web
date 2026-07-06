@@ -10,10 +10,10 @@
       "firstLogin": false,
       "passwordHash": "$2b$10$y.vWEOlC0/UY2MOVjIqlGeTN8XWHIqHtp93XGkUN9ZPHq0Z9VlLZm",
       "profilePhoto": "https://ui-avatars.com/api/?name=Suryachalam+VM&background=CD0000&color=fff",
-      "designation": "Professor & HOD",
+      "designation": "Vertical Sub-Head",
       "department": "Department of Computer Science",
       "committee_id": null,
-      "vertical_id": null,
+      "vertical_id": "v-1783324339599",
       "createdAt": "2026-07-02T06:52:31.548Z",
       "updatedAt": "2026-07-02T06:52:31.548Z",
       "lastLogin": "2026-07-05T14:46:58.264Z"
@@ -539,6 +539,42 @@
       "vertical_id": "v-bitops",
       "createdAt": "2026-07-02T06:52:31.548Z",
       "updatedAt": "2026-07-02T06:52:31.548Z"
+    },
+    {
+      "id": "u-1783319691302",
+      "email": "bhargav.g@bsccmh.christuniversity.in",
+      "name": "Bhargav",
+      "full_name": "Bhargav",
+      "passwordHash": "$2b$10$FbcwLTLTRfeDw.T6LLFK.uK2R5b2S/ffV60e6oAsKB0y1dDv/TGFa",
+      "role": "ADMIN",
+      "status": "active",
+      "firstLogin": true,
+      "createdBy": "u-suryachalam",
+      "createdAt": "2026-07-06T06:34:51.416Z"
+    },
+    {
+      "id": "u-1783324490161",
+      "email": "krupa.m@bsc",
+      "name": "KRUPA M",
+      "full_name": "KRUPA M",
+      "passwordHash": "$2b$10$Lg/FC1bLYl202EIXXZcC0eKKgscO5qNQc5Mui5yUdXTjwQN4tG5He",
+      "role": "MEMBER",
+      "status": "active",
+      "firstLogin": true,
+      "createdBy": "u-suryachalam",
+      "createdAt": "2026-07-06T07:54:50.324Z"
+    },
+    {
+      "id": "u-1783324524473",
+      "email": "suryachalam18@gmail.com",
+      "name": "krupa",
+      "full_name": "krupa",
+      "passwordHash": "$2b$10$6pyXF4eAajznO97MM.Lmje85b9hk2Q7X8q29UC2rc7jYf/dduulCm",
+      "role": "ADMIN",
+      "status": "active",
+      "firstLogin": true,
+      "createdBy": "u-suryachalam",
+      "createdAt": "2026-07-06T07:55:24.597Z"
     }
   ],
   "coreCommittees": [
@@ -612,8 +648,9 @@
       "description": "The vibe-makers of Labyrinth! From media, design, and content to event branding and coordination, this vertical ensures creativity powers every move.",
       "category": "non-tech",
       "icon": "Palette",
-      "color": "#ec4899",
-      "head_id": "u-nidhi-anil"
+      "color": "#3b82f6",
+      "head_id": "u-nidhi-anil",
+      "image": ""
     },
     {
       "id": "v-startovate",
@@ -716,6 +753,146 @@
     }
   ],
   "activityLogs": [
+    {
+      "id": "log-1783324843112",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-36",
+      "timestamp": "2026-07-06T08:00:43.112Z"
+    },
+    {
+      "id": "log-1783324823963",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-37",
+      "timestamp": "2026-07-06T08:00:23.963Z"
+    },
+    {
+      "id": "log-1783324822906",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-37",
+      "timestamp": "2026-07-06T08:00:22.906Z"
+    },
+    {
+      "id": "log-1783324821778",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-37",
+      "timestamp": "2026-07-06T08:00:21.778Z"
+    },
+    {
+      "id": "log-1783324820700",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-37",
+      "timestamp": "2026-07-06T08:00:20.700Z"
+    },
+    {
+      "id": "log-1783324811779",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-17",
+      "timestamp": "2026-07-06T08:00:11.779Z"
+    },
+    {
+      "id": "log-1783324810422",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-17",
+      "timestamp": "2026-07-06T08:00:10.422Z"
+    },
+    {
+      "id": "log-1783324809504",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-17",
+      "timestamp": "2026-07-06T08:00:09.504Z"
+    },
+    {
+      "id": "log-1783324807163",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-16",
+      "timestamp": "2026-07-06T08:00:07.163Z"
+    },
+    {
+      "id": "log-1783324806248",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-16",
+      "timestamp": "2026-07-06T08:00:06.248Z"
+    },
+    {
+      "id": "log-1783324805052",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-16",
+      "timestamp": "2026-07-06T08:00:05.052Z"
+    },
+    {
+      "id": "log-1783324779971",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-46",
+      "timestamp": "2026-07-06T07:59:39.971Z"
+    },
+    {
+      "id": "log-1783324524604",
+      "userId": "u-suryachalam",
+      "action": "create_user",
+      "details": "Created user: krupa (suryachalam18@gmail.com) as ADMIN",
+      "timestamp": "2026-07-06T07:55:24.604Z"
+    },
+    {
+      "id": "log-1783324490329",
+      "userId": "u-suryachalam",
+      "action": "create_user",
+      "details": "Created user: KRUPA M (krupa.m@bsc) as MEMBER",
+      "timestamp": "2026-07-06T07:54:50.329Z"
+    },
+    {
+      "id": "log-1783324356335",
+      "userId": "u-suryachalam",
+      "action": "delete_vertical",
+      "details": "Archived vertical ID v-1783324339599",
+      "timestamp": "2026-07-06T07:52:36.335Z"
+    },
+    {
+      "id": "log-1783324339706",
+      "userId": "u-suryachalam",
+      "action": "assign_vertical_role",
+      "details": "Assigned u-suryachalam as Vertical Sub-Head of vertical v-1783324339599",
+      "timestamp": "2026-07-06T07:52:19.706Z"
+    },
+    {
+      "id": "log-1783324339659",
+      "userId": "u-suryachalam",
+      "action": "assign_vertical_role",
+      "details": "Assigned u-suryachalam as Vertical Head of vertical v-1783324339599",
+      "timestamp": "2026-07-06T07:52:19.659Z"
+    },
+    {
+      "id": "log-1783324339604",
+      "userId": "u-suryachalam",
+      "action": "add_vertical",
+      "details": "Created vertical SDT F",
+      "timestamp": "2026-07-06T07:52:19.604Z"
+    },
+    {
+      "id": "log-1783324222665",
+      "userId": "u-suryachalam",
+      "action": "update_vertical",
+      "details": "Updated vertical ID v-aesthetic-lab",
+      "timestamp": "2026-07-06T07:50:22.665Z"
+    },
+    {
+      "id": "log-1783319691425",
+      "userId": "u-suryachalam",
+      "action": "create_user",
+      "details": "Created user: Bhargav (bhargav.g@bsccmh.christuniversity.in) as ADMIN",
+      "timestamp": "2026-07-06T06:34:51.425Z"
+    },
     {
       "id": "log-1783319188378",
       "userId": "u-suryachalam",
@@ -1140,6 +1317,14 @@
       "applicantEmail": "suryachalam18@gmail.com",
       "status": "pending",
       "submittedAt": "2026-07-06T06:07:13.333Z"
+    },
+    {
+      "id": "29d23695-04f1-4fe1-839b-49bc0648e2b1",
+      "formId": "df873988-bac6-4c2c-a859-451f46bf8072",
+      "applicantName": "SDFSGFHJKLL",
+      "applicantEmail": "suryachalam18@gmail.com",
+      "status": "pending",
+      "submittedAt": "2026-07-06T07:53:34.094Z"
     }
   ],
   "responseAnswers": [
@@ -1166,6 +1351,18 @@
       "responseId": "ffec9bfe-f6d0-493b-9ae9-f178f33a20ce",
       "fieldId": "field_1783061093573_2",
       "value": "suryachalam18@gmail.com"
+    },
+    {
+      "id": "32223f29-25ca-41be-a7e2-e054dea16617",
+      "responseId": "29d23695-04f1-4fe1-839b-49bc0648e2b1",
+      "fieldId": "field_1783061093573_2",
+      "value": "suryachalam18@gmail.com"
+    },
+    {
+      "id": "64d2c0ff-1742-4de7-a76d-82f4682b2125",
+      "responseId": "29d23695-04f1-4fe1-839b-49bc0648e2b1",
+      "fieldId": "field_1783061093573_1",
+      "value": "SDFSGFHJKLL"
     }
   ],
   "gallery": [
@@ -1583,7 +1780,8 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_16.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "rotation": 270
     },
     {
       "id": "g-inaug-17",
@@ -1591,7 +1789,8 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_17.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "rotation": 270
     },
     {
       "id": "g-inaug-18",
@@ -1746,7 +1945,8 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_36.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "rotation": 270
     },
     {
       "id": "g-inaug-37",
@@ -1827,7 +2027,8 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_46.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "rotation": 270
     },
     {
       "id": "g-inaug-47",
