@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import {
   LayoutDashboard, LogOut, BookOpen, Link as LinkIcon,
-  Download, Users, Shield, CheckSquare, Image
+  Download, Users, Shield, CheckSquare, Image, Megaphone, Settings, Layers, Calendar
 } from 'lucide-react';
 
 interface NavItem {
@@ -46,24 +46,31 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const badge = roleBadge[user.role] || { bg: 'bg-slate-50 border-slate-100', text: 'text-slate-600' };
 
-  // Define ALL navigation links
+  // Define ALL navigation links (exactly the 11 CMS items)
   const allNavItems: Record<string, NavItem> = {
     dashboard: { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
-    content: { label: 'Content Management', path: '/admin/content', icon: BookOpen },
-    gallery: { label: 'Gallery Management', path: '/admin/gallery', icon: Image },
-    forms: { label: 'Forms Management', path: '/admin/forms', icon: LinkIcon },
-    reports: { label: 'Reports & Exports', path: '/admin/reports', icon: Download },
-    team: { label: 'Team & Roles', path: '/admin/team', icon: Users },
-    registrations: { label: 'Registrations', path: '/admin/registrations', icon: CheckSquare }
+    members: { label: 'Members', path: '/admin/members', icon: Users },
+    committees: { label: 'Committees', path: '/admin/committees', icon: Layers },
+    verticals: { label: 'Verticals', path: '/admin/verticals', icon: BookOpen },
+    events: { label: 'Events', path: '/admin/events', icon: Calendar },
+    gallery: { label: 'Gallery Manager', path: '/admin/gallery', icon: Image },
+    forms: { label: 'Forms', path: '/admin/forms', icon: LinkIcon },
+    announcements: { label: 'Announcements', path: '/admin/announcements', icon: Megaphone },
+    resources: { label: 'Resources', path: '/admin/resources', icon: Download },
+    tasks: { label: 'Tasks', path: '/admin/tasks', icon: CheckSquare },
+    settings: { label: 'Settings', path: '/admin/settings', icon: Settings }
   };
 
-  // Admin has access to all panels
-  const visibleItemKeys = ['dashboard', 'content', 'gallery', 'forms', 'reports', 'team', 'registrations'];
+  // Admin has access to all 11 panels
+  const visibleItemKeys = [
+    'dashboard', 'members', 'committees', 'verticals', 'events',
+    'gallery', 'forms', 'announcements', 'resources', 'tasks', 'settings'
+  ];
   const visibleItems = visibleItemKeys.map(key => allNavItems[key]).filter(Boolean);
 
   const handleLogout = async () => {
     await logout();
-    router.push('/login');
+    router.push('/admin/login');
   };
 
   return (
