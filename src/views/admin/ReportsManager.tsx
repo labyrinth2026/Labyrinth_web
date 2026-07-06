@@ -4,7 +4,7 @@ import { FileText, Download, FileDown, RefreshCw } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
-import { Document, Packer, Paragraph, Table, TableRow, TableCell, TextRun, HeadingLevel, WidthType } from 'docx';
+import { Document, Packer, Paragraph, Table, TableRow, TableCell, TextRun, HeadingLevel, WidthType, ImageRun, AlignmentType, BorderStyle } from 'docx';
 import { saveAs } from 'file-saver';
 
 const ReportsManager: React.FC = () => {
@@ -75,26 +75,92 @@ const ReportsManager: React.FC = () => {
     return { head, body };
   };
 
-  const generatePDF = () => {
+  const getLogoBase64 = async (url: string): Promise<string | null> => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) return null;
+      const blob = await response.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(blob);
+      });
+    } catch (e) {
+      console.error(`Failed to load logo base64: ${url}`, e);
+      return null;
+    }
+  };
+
+  const getLogoArrayBuffer = async (url: string): Promise<ArrayBuffer | null> => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) return null;
+      return await response.arrayBuffer();
+    } catch (e) {
+      console.error(`Failed to load logo buffer: ${url}`, e);
+      return null;
+    }
+  };
+
+  const generatePDF = async () => {
     if (data.length === 0) return;
     setIsExporting(true);
     try {
+      const [labLogo, christLogo] = await Promise.all([
+        getLogoBase64('/labyrinth-logo.png'),
+        getLogoBase64('/christ-logo.png')
+      ]);
+
       const doc = new jsPDF();
       const title = `Labyrinth ${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report`;
-      
-      doc.setFontSize(18);
-      doc.text(title, 14, 22);
-      
       const { head, body } = getCleanTableData();
 
       (doc as any).autoTable({
         head: [head],
         body: body,
-        startY: 30,
-        styles: { fontSize: 10, cellPadding: 3 },
-        headStyles: { fillColor: [0, 91, 172], textColor: 255, fontStyle: 'bold' },
-        alternateRowStyles: { fillColor: [245, 245, 245] }
+        startY: 40,
+        margin: { top: 28, bottom: 20, left: 14, right: 14 },
+        styles: { fontSize: 9, cellPadding: 3.5, font: 'helvetica' },
+        headStyles: { fillColor: [205, 0, 0], textColor: 255, fontStyle: 'bold' },
+        alternateRowStyles: { fillColor: [248, 249, 250] },
+        didDrawPage: (data: any) => {
+          // Draw header logos and lines on every page
+          if (labLogo) {
+            doc.addImage(labLogo, 'PNG', 14, 8, 10, 10);
+          }
+          if (christLogo) {
+            doc.addImage(christLogo, 'PNG', 161, 8, 35, 10);
+          }
+          
+          // Header text
+          doc.setFontSize(8);
+          doc.setTextColor(102, 112, 133);
+          doc.setFont("helvetica", "bold");
+          doc.text(`LABYRINTH COMPUTER ACADEMY | CHRIST UNIVERSITY`, 28, 14.5);
+          
+          // Divider line
+          doc.setDrawColor(229, 231, 235); // Border gray
+          doc.setLineWidth(0.5);
+          doc.line(14, 22, 196, 22);
+          
+          // Footer
+          const pageCount = doc.getNumberOfPages();
+          const str = `Page ${pageCount}`;
+          doc.setFontSize(8);
+          doc.setTextColor(150, 150, 150);
+          doc.setFont("helvetica", "normal");
+          doc.text(str, 196 - doc.getTextWidth(str), 287);
+          doc.text("Official Report Extraction | Labyrinth Computer Science Club", 14, 287);
+        }
       });
+
+      // Draw title on page 1 above the table
+      doc.setPage(1);
+      doc.setFontSize(14);
+      doc.setTextColor(51, 65, 85); // Slate 700
+      doc.setFont("helvetica", "bold");
+      doc.text(title, 14, 32);
 
       doc.save(`labyrinth_${reportType}_report.pdf`);
     } catch (e) {
@@ -108,15 +174,96 @@ const ReportsManager: React.FC = () => {
     if (data.length === 0) return;
     setIsExporting(true);
     try {
+      const [labLogoBuffer, christLogoBuffer] = await Promise.all([
+        getLogoArrayBuffer('/labyrinth-logo.png'),
+        getLogoArrayBuffer('/christ-logo.png')
+      ]);
+
       const { head, body } = getCleanTableData();
-      
-      const table = new Table({
+
+      const labCellChildren: any[] = [];
+      if (labLogoBuffer) {
+        labCellChildren.push(
+          new Paragraph({
+            children: [
+              new ImageRun({
+                data: labLogoBuffer,
+                transformation: { width: 40, height: 40 },
+                type: 'png'
+              })
+            ]
+          })
+        );
+      } else {
+        labCellChildren.push(new Paragraph({ text: "Labyrinth Club" }));
+      }
+
+      const christCellChildren: any[] = [];
+      if (christLogoBuffer) {
+        christCellChildren.push(
+          new Paragraph({
+            alignment: AlignmentType.RIGHT,
+            children: [
+              new ImageRun({
+                data: christLogoBuffer,
+                transformation: { width: 140, height: 40 },
+                type: 'png'
+              })
+            ]
+          })
+        );
+      } else {
+        christCellChildren.push(
+          new Paragraph({
+            alignment: AlignmentType.RIGHT,
+            text: "Christ University"
+          })
+        );
+      }
+
+      const borderNone = {
+        style: BorderStyle.NONE,
+        size: 0,
+        color: "auto",
+      };
+
+      const headerTable = new Table({
+        width: { size: 100, type: WidthType.PERCENTAGE },
+        borders: {
+          top: borderNone,
+          bottom: borderNone,
+          left: borderNone,
+          right: borderNone,
+          insideHorizontal: borderNone,
+          insideVertical: borderNone,
+        },
+        rows: [
+          new TableRow({
+            children: [
+              new TableCell({
+                children: labCellChildren,
+                width: { size: 50, type: WidthType.PERCENTAGE }
+              }),
+              new TableCell({
+                children: christCellChildren,
+                width: { size: 50, type: WidthType.PERCENTAGE }
+              })
+            ]
+          })
+        ]
+      });
+
+      const docxTable = new Table({
         width: { size: 100, type: WidthType.PERCENTAGE },
         rows: [
           new TableRow({
             children: head.map(h => new TableCell({
-              children: [new Paragraph({ children: [new TextRun({ text: h, bold: true })] })],
-              shading: { fill: "EAF4FF" }
+              children: [
+                new Paragraph({
+                  children: [new TextRun({ text: h, bold: true, color: "FFFFFF" })]
+                })
+              ],
+              shading: { fill: "CD0000" }
             }))
           }),
           ...body.map(row => new TableRow({
@@ -131,12 +278,14 @@ const ReportsManager: React.FC = () => {
         sections: [{
           properties: {},
           children: [
+            headerTable,
+            new Paragraph({ text: "", spacing: { before: 200, after: 200 } }),
             new Paragraph({
               text: `Labyrinth ${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report`,
               heading: HeadingLevel.HEADING_1,
               spacing: { after: 200 }
             }),
-            table
+            docxTable
           ]
         }]
       });
@@ -155,22 +304,46 @@ const ReportsManager: React.FC = () => {
     setIsExporting(true);
     try {
       const { head, body } = getCleanTableData();
-      
-      // Map body and head to an array of objects for clean Excel export
-      const excelData = body.map(row => {
-        const rowObj: any = {};
-        head.forEach((colName, idx) => {
-          rowObj[colName] = row[idx];
-        });
-        return rowObj;
-      });
 
-      const worksheet = XLSX.utils.json_to_sheet(excelData);
-      
-      // Auto-adjust column widths
-      const wscols = head.map(h => ({ wch: Math.max(h.length, 15) }));
+      // Top title and metadata rows
+      const titleRow1 = ["LABYRINTH - COMPUTER SCIENCE CLUB"];
+      const titleRow2 = ["CHRIST (Deemed to be University), Bengaluru"];
+      const titleRow3 = [`Official ${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report`];
+      const titleRow4 = [`Generated: ${new Date().toLocaleString()}`];
+      const titleRow5: string[] = []; // Empty separator
+
+      // Build worksheet data array
+      const wsData = [
+        titleRow1,
+        titleRow2,
+        titleRow3,
+        titleRow4,
+        titleRow5,
+        head,
+        ...body
+      ];
+
+      const worksheet = XLSX.utils.aoa_to_sheet(wsData);
+
+      // Merge titles across table column width
+      const colCount = head.length;
+      worksheet['!merges'] = [
+        { s: { r: 0, c: 0 }, e: { r: 0, c: Math.max(colCount - 1, 2) } },
+        { s: { r: 1, c: 0 }, e: { r: 1, c: Math.max(colCount - 1, 2) } },
+        { s: { r: 2, c: 0 }, e: { r: 2, c: Math.max(colCount - 1, 2) } },
+        { s: { r: 3, c: 0 }, e: { r: 3, c: Math.max(colCount - 1, 2) } }
+      ];
+
+      // Auto-adjust column widths based on table content
+      const wscols = head.map((h, i) => {
+        let maxLen = h.length;
+        body.forEach(row => {
+          if (row[i]) maxLen = Math.max(maxLen, row[i].length);
+        });
+        return { wch: Math.min(Math.max(maxLen + 2, 12), 40) }; // cap between 12 and 40 characters wide
+      });
       worksheet['!cols'] = wscols;
-      
+
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Report');
       XLSX.writeFile(workbook, `labyrinth_${reportType}_report.xlsx`);
