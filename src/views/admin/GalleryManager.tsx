@@ -42,13 +42,21 @@ const GalleryManager: React.FC = () => {
 
   useEffect(() => { loadGallery(); }, []);
 
+  const getSwappedOrientation = (orientation: string) => {
+    if (orientation === 'landscape') return 'portrait';
+    if (orientation === 'portrait') return 'landscape';
+    if (orientation === 'wide') return 'portrait';
+    return orientation;
+  };
+
   // ── Quick rotate (save immediately) ─────────────────────────────────────────
   const handleQuickRotate = async (item: any, dir: 'cw' | 'ccw') => {
     const current = item.rotation ?? 0;
     const next = dir === 'cw'
       ? (current + 90) % 360
       : (current - 90 + 360) % 360;
-    const updated = { ...item, rotation: next };
+    const updatedOrientation = getSwappedOrientation(item.orientation || 'landscape');
+    const updated = { ...item, rotation: next, orientation: updatedOrientation };
     // Optimistic update
     setGalleryItems(prev => prev.map(g => g.id === item.id ? updated : g));
     try {
@@ -95,7 +103,8 @@ const GalleryManager: React.FC = () => {
     setEditingItem((prev: any) => {
       const current = prev.rotation ?? 0;
       const next = dir === 'cw' ? (current + 90) % 360 : (current - 90 + 360) % 360;
-      return { ...prev, rotation: next };
+      const updatedOrientation = getSwappedOrientation(prev.orientation || 'landscape');
+      return { ...prev, rotation: next, orientation: updatedOrientation };
     });
   };
 

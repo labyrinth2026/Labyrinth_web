@@ -269,7 +269,14 @@ const GalleryPage: React.FC = () => {
                                 <div className="absolute top-2 left-2 bg-slate-950/60 text-white text-[8px] font-black uppercase px-1.5 py-0.5 rounded-sm tracking-wider">Video</div>
                               </div>
                             ) : (
-                              <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" style={{ transform: `rotate(${item.rotation ?? 0}deg)` }} />
+                              <img 
+                                src={item.image} 
+                                alt={item.title} 
+                                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                                style={{ 
+                                  transform: `rotate(${item.rotation ?? 0}deg)${(item.rotation ?? 0) === 90 || (item.rotation ?? 0) === 270 ? ' scale(1.5)' : ''}` 
+                                }} 
+                              />
                             )
                           ) : (
                             <div className="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center p-4">
