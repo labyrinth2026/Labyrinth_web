@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronRight, ChevronLeft, MapPin, Calendar } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
@@ -69,9 +70,20 @@ const EventsPage: React.FC = () => {
 
   return (
     <PageWrapper>
-      {/* Header (Section 1: Off-White) */}
-      <section className="py-24 bg-white border-b border-slate-100">
-        <div className="container mx-auto px-6 max-w-7xl">
+      {/* Header with background image */}
+      <section className="relative bg-white border-b border-slate-100 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="/gallery/20260215_133007.webp"
+            alt="Labyrinth sports event background"
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-white/85" />
+        </div>
+        <div className="container mx-auto px-6 max-w-7xl relative z-10 pt-24">
           <ScrollReveal animation="fade">
             <div className="text-center mb-16">
               <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
@@ -80,7 +92,7 @@ const EventsPage: React.FC = () => {
               <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-slate-900 tracking-tight leading-tight">
                 EVENTS &amp; <span className="text-[#CD0000]">HACKATHONS</span>
               </h1>
-              <p className="text-slate-500 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
+              <p className="text-slate-600 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
                 Discover workshops, hackathons, and tech talks to level up your skills.
               </p>
             </div>

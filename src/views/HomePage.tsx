@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronRight, ChevronLeft, ArrowRight, Brain, Gamepad2, Code2, Shield, Users, Sparkles } from 'lucide-react';
+import { ChevronRight, ChevronLeft, ArrowRight, Brain, Gamepad2, Code2, Shield, Users, Sparkles, Layers, CalendarCheck, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import PageWrapper from '../components/layout/PageWrapper';
 import Button from '../components/ui/Button';
@@ -38,12 +38,12 @@ const HomePage: React.FC = () => {
 
   // Hero carousel state
   const [[heroIndex, direction], setHeroState] = useState([0, 1]);
-  
+
   const setHeroIndex = (update: number | ((prev: number) => number)) => {
     setHeroState(([prevIndex]) => {
       const nextIndex = typeof update === 'function' ? update(prevIndex) : update;
       if (nextIndex === prevIndex) return [prevIndex, 1];
-      
+
       let dir = 1;
       if (prevIndex === HERO_IMAGES.length - 1 && nextIndex === 0) {
         dir = 1;
@@ -75,7 +75,7 @@ const HomePage: React.FC = () => {
     if (touchStartX.current === null) return;
     const touchEndX = e.changedTouches[0].clientX;
     const diff = touchStartX.current - touchEndX;
-    
+
     if (diff > 50) {
       nextHeroSlide();
     } else if (diff < -50) {
@@ -135,15 +135,15 @@ const HomePage: React.FC = () => {
       tl.fromTo(navbar, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.1');
     }
 
-    tl.fromTo('.hero-title-word', 
-      { opacity: 0, y: 30 }, 
-      { opacity: 1, y: 0, duration: 0.6, stagger: 0.07 }, 
+    tl.fromTo('.hero-title-word',
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.6, stagger: 0.07 },
       '-=0.2'
     )
-    .fromTo('.hero-subtitle', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.4')
-    .fromTo('.hero-desc', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.4')
-    .fromTo('.hero-cta', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.5 }, '-=0.3')
-    .fromTo('.hero-stat-item', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.07 }, '-=0.2');
+      .fromTo('.hero-subtitle', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.4')
+      .fromTo('.hero-desc', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.4')
+      .fromTo('.hero-cta', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.5 }, '-=0.3')
+      .fromTo('.hero-stat-item', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.07 }, '-=0.2');
 
   }, { scope: containerRef, dependencies: [] });
 
@@ -153,8 +153,8 @@ const HomePage: React.FC = () => {
       <div ref={containerRef} className="home-page-container opacity-0">
 
         {/* ── Hero Section ── */}
-        <section 
-          id="hero" 
+        <section
+          id="hero"
           className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950 pt-16 z-0"
           onMouseEnter={() => setHeroHovered(true)}
           onMouseLeave={() => setHeroHovered(false)}
@@ -219,7 +219,7 @@ const HomePage: React.FC = () => {
 
             <div className="hero-cta">
               {/* Hero CTA glassmorphic panel */}
-              <div 
+              <div
                 style={{
                   backdropFilter: 'blur(20px)',
                   WebkitBackdropFilter: 'blur(20px)',
@@ -244,9 +244,8 @@ const HomePage: React.FC = () => {
                 <button
                   key={idx}
                   onClick={() => setHeroIndex(idx)}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                    heroIndex === idx ? 'w-6 bg-[#CD0000]' : 'w-2 bg-white/40 hover:bg-white/60'
-                  }`}
+                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${heroIndex === idx ? 'w-6 bg-[#CD0000]' : 'w-2 bg-white/40 hover:bg-white/60'
+                    }`}
                   aria-label={`Go to slide ${idx + 1}`}
                 />
               ))}
@@ -266,9 +265,53 @@ const HomePage: React.FC = () => {
                     value={stat.value}
                     label={stat.label}
                     suffix={stat.suffix}
-                    icon={i === 0 ? Brain : i === 1 ? Code2 : i === 2 ? Gamepad2 : Shield}
+                    icon={i === 0 ? Layers : i === 1 ? Users : i === 2 ? CalendarCheck : MessageCircle}
                   />
                 ))}
+              </ScrollReveal>
+            </div>
+          </div>
+        </section>
+
+        {/* ── About Labyrinth Split Section ── */}
+        <section className="py-24 bg-white border-t border-slate-100">
+          <div className="container mx-auto px-6 max-w-7xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              {/* Image – left */}
+              <ScrollReveal animation="slide-right">
+                <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/3] bg-slate-100">
+                  <Image
+                    src="/gallery/inauguration_all_10.webp"
+                    alt="Labyrinth community at the inauguration panel discussion"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <span className="inline-block px-3 py-1 rounded-full bg-[#CD0000] text-white text-[9px] font-bold uppercase tracking-widest">
+                      Active Since 1997
+                    </span>
+                  </div>
+                </div>
+              </ScrollReveal>
+
+              {/* Text – right */}
+              <ScrollReveal animation="slide-left">
+                <div className="flex flex-col justify-center">
+                  <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6 w-fit">
+                    Who We Are
+                  </span>
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
+                    The Official CS Club of <span className="text-[#CD0000]">Christ University</span>
+                  </h2>
+                  <p className="text-slate-500 text-sm leading-relaxed mb-4">
+                    The Computer Science Department's Computer Academy has been active since 1997. Labyrinth serves as its official face and is the only Computer Science Club of Christ University.
+                  </p>
+                  <p className="text-slate-500 text-sm leading-relaxed mb-8">
+                    Every semester we host coding competitions, hackathons, workshops, sports tournaments, and interdisciplinary events — giving every student a platform to discover their niche and grow.
+                  </p>
+                </div>
               </ScrollReveal>
             </div>
           </div>
@@ -366,9 +409,8 @@ const HomePage: React.FC = () => {
                         <button
                           key={idx}
                           onClick={() => setCurrentSlide(idx)}
-                          className={`h-1.5 rounded-full transition-all duration-300 ${
-                            currentSlide === idx ? 'w-5 bg-[#CD0000]' : 'w-1.5 bg-slate-200 hover:bg-slate-300'
-                          }`}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${currentSlide === idx ? 'w-5 bg-[#CD0000]' : 'w-1.5 bg-slate-200 hover:bg-slate-300'
+                            }`}
                           aria-label={`Go to slide ${idx + 1}`}
                         />
                       ))}
@@ -402,27 +444,47 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* ── SDG Projects Initiative ── */}
-        <section className="py-24 bg-white border-t border-slate-100">
-          <div className="container mx-auto px-6 max-w-5xl text-center">
-            <ScrollReveal animation="slide-up">
-              <div className="flex flex-col items-center">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-5">
-                  SDG Projects Initiative
-                </h2>
-                <p className="text-slate-500 text-sm md:text-base mb-3 max-w-3xl mx-auto leading-relaxed font-medium">
-                  Inviting project proposals aligned with the United Nations Sustainable Development Goals (SDGs) and relevant to Christ University.
-                </p>
-                <p className="text-slate-500 text-sm md:text-base mb-8 max-w-3xl mx-auto leading-relaxed">
-                  Students are encouraged to submit innovative project ideas that address real-world challenges and create meaningful impact.
-                </p>
-                <div className="bg-slate-50 border border-slate-200/80 rounded-2xl px-6 py-4 inline-block">
-                  <p className="text-[10px] text-slate-400 font-bold mb-1 uppercase tracking-widest">Proposal Submission Email</p>
-                  <a href="mailto:labyrinth@cs.christuniversity.in" className="text-lg md:text-xl font-bold text-[#CD0000] hover:text-[#9E0000] transition-colors tracking-tight">
-                    labyrinth@cs.christuniversity.in
-                  </a>
+        <section className="py-24 bg-slate-50/50 border-t border-slate-100">
+          <div className="container mx-auto px-6 max-w-7xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              {/* Text – left */}
+              <ScrollReveal animation="slide-right">
+                <div className="flex flex-col justify-center">
+                  <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6 w-fit">
+                    Initiative
+                  </span>
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
+                    SDG Projects <span className="text-[#CD0000]">Initiative</span>
+                  </h2>
+                  <p className="text-slate-500 text-sm leading-relaxed mb-4">
+                    Inviting project proposals aligned with the United Nations Sustainable Development Goals (SDGs) and relevant to Christ University.
+                  </p>
+                  <p className="text-slate-500 text-sm leading-relaxed mb-8">
+                    Students are encouraged to submit innovative project ideas that address real-world challenges and create meaningful impact in society.
+                  </p>
+                  <div className="bg-white border border-slate-200/80 rounded-2xl px-6 py-4 inline-block w-fit shadow-xs">
+                    <p className="text-[10px] text-slate-400 font-bold mb-1 uppercase tracking-widest">Proposal Submission Email</p>
+                    <a href="mailto:labyrinth@cs.christuniversity.in" className="text-lg font-bold text-[#CD0000] hover:text-[#9E0000] transition-colors tracking-tight">
+                      labyrinth@cs.christuniversity.in
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </ScrollReveal>
+              </ScrollReveal>
+
+              {/* Image – right */}
+              <ScrollReveal animation="slide-left">
+                <div className="relative rounded-3xl overflow-hidden shadow-xl aspect-[4/3] bg-slate-100">
+                  <Image
+                    src="/gallery/peer_edu_all_4.webp"
+                    alt="Students collaborating on peer education and SDG project ideas"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 to-transparent" />
+                </div>
+              </ScrollReveal>
+            </div>
           </div>
         </section>
 
@@ -430,22 +492,40 @@ const HomePage: React.FC = () => {
 
         {/* ── CTA Banner ── */}
         <section id="contact" className="py-24 bg-white border-t border-slate-100">
-          <div className="container mx-auto px-6 max-w-4xl text-center">
+          <div className="container mx-auto px-6 max-w-7xl">
             <ScrollReveal animation="slide-up">
-              <div className="flex flex-col items-center">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
-                  Ready to be part of something bigger?
-                </h2>
-                <p className="text-slate-500 text-sm md:text-base mb-8 max-w-xl mx-auto leading-relaxed">
-                  Join Labyrinth and collaborate with the brightest tech minds at Christ University.
-                </p>
-                <Button
-                  variant="primary"
-                  size="lg"
-                  href="https://forms.gle/vzHppHwu2C977eNA7"
-                >
-                  Apply to Join
-                </Button>
+              <div className="relative overflow-hidden rounded-3xl bg-[#CD0000] shadow-xl">
+                {/* Background image with overlay */}
+                <div className="absolute inset-0">
+                  <Image
+                    src="/gallery/IMG-20260214-WA0023.webp"
+                    alt="Labyrinth sports celebration"
+                    fill
+                    className="object-cover opacity-20"
+                    sizes="100vw"
+                  />
+                </div>
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 px-10 py-14 md:px-16">
+                  <div className="text-center md:text-left">
+                    <span className="inline-block px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest mb-4">
+                      Join Us
+                    </span>
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-3 tracking-tight">
+                      Ready to be part of something bigger?
+                    </h2>
+                    <p className="text-white/80 text-sm md:text-base max-w-xl leading-relaxed">
+                      Join Labyrinth and collaborate with the brightest tech minds at Christ University.
+                    </p>
+                  </div>
+                  <div className="shrink-0">
+                    <a
+                      href="https://forms.gle/vzHppHwu2C977eNA7"
+                      className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#CD0000] font-extrabold uppercase tracking-wider text-sm rounded-full hover:bg-slate-50 hover:scale-105 transition-all shadow-lg"
+                    >
+                      Apply to Join <ArrowRight size={16} />
+                    </a>
+                  </div>
+                </div>
               </div>
             </ScrollReveal>
           </div>

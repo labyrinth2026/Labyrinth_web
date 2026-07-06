@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import PageWrapper from '../components/layout/PageWrapper';
 import SectionHeading from '../components/ui/SectionHeading';
 import VerticalCard from '../components/ui/VerticalCard';
@@ -38,9 +39,21 @@ const VerticalsPage: React.FC = () => {
 
   return (
     <PageWrapper>
-      {/* Header (Section 1: Off-White) */}
-      <section className="py-24 bg-white border-b border-slate-100">
-        <div className="container mx-auto px-6 max-w-7xl text-center">
+      {/* Header with background image */}
+      <section className="relative py-36 bg-white border-b border-slate-100 overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/gallery/inauguration_all_51.webp"
+            alt="Labyrinth inauguration audience"
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-white/85" />
+        </div>
+        <div className="container mx-auto px-6 max-w-7xl text-center relative z-10">
           <ScrollReveal animation="fade">
             <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
               Our Domains
@@ -48,7 +61,7 @@ const VerticalsPage: React.FC = () => {
             <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-slate-900 tracking-tight leading-tight">
               OUR <span className="text-[#CD0000]">VERTICALS</span>
             </h1>
-            <p className="text-slate-500 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
+            <p className="text-slate-600 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
               Ten specialized domains. Endless possibilities. Find your niche and start building.
             </p>
           </ScrollReveal>
@@ -59,9 +72,8 @@ const VerticalsPage: React.FC = () => {
       <section className="pt-8 pb-24 bg-slate-50/50">
         <div className="container mx-auto px-6 max-w-7xl">
 
-            {/* Tech Verticals */}
             {techVerticals.length > 0 && (
-              <div id="technical-verticals" className="mb-20 scroll-mt-24">
+              <div id="technical-verticals" className="mb-8 scroll-mt-24">
                 <SectionHeading title="Technical Domains" align="left" />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <ScrollReveal key="tech-list" stagger={0.08}>
@@ -73,10 +85,20 @@ const VerticalsPage: React.FC = () => {
               </div>
             )}
 
+            {/* Red section divider */}
+            {techVerticals.length > 0 && nonTechVerticals.length > 0 && (
+              <div className="flex items-center gap-4 my-12">
+                <div className="flex-1 h-px bg-slate-200" />
+                <span className="px-4 py-1.5 rounded-full bg-[#CD0000] text-white text-[10px] font-bold uppercase tracking-widest">
+                  Management & Creative
+                </span>
+                <div className="flex-1 h-px bg-slate-200" />
+              </div>
+            )}
+
             {/* Non-Tech Verticals */}
             {nonTechVerticals.length > 0 && (
               <div id="non-technical-verticals" className="scroll-mt-24">
-                <SectionHeading title="Management &amp; Creative" align="left" />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <ScrollReveal key="nontech-list" stagger={0.08}>
                     {nonTechVerticals.map(vertical => (
