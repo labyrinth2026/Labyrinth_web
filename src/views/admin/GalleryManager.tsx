@@ -144,7 +144,7 @@ const GalleryManager: React.FC = () => {
     const matchSearch = item.title?.toLowerCase().includes(search.toLowerCase()) || item.description?.toLowerCase().includes(search.toLowerCase());
     const matchCat = categoryFilter === 'all' || item.category === categoryFilter;
     const matchOri = orientationFilter === 'all' || item.orientation === orientationFilter;
-    return matchSearch && matchCat && matchOri;
+    return !!item.image && matchSearch && matchCat && matchOri;
   });
 
   const inputClass = "w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#CD0000]/10 focus:border-slate-400 transition-all bg-white";

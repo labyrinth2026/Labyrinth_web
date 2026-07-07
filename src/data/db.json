@@ -16,7 +16,7 @@
       "vertical_id": "v-1783324339599",
       "createdAt": "2026-07-02T06:52:31.548Z",
       "updatedAt": "2026-07-02T06:52:31.548Z",
-      "lastLogin": "2026-07-06T15:52:05.392Z"
+      "lastLogin": "2026-07-07T03:09:39.489Z"
     },
     {
       "id": "u-member",
@@ -753,6 +753,62 @@
     }
   ],
   "activityLogs": [
+    {
+      "id": "log-1783394540864",
+      "userId": "u-suryachalam",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-1783263361074",
+      "timestamp": "2026-07-07T03:22:20.864Z"
+    },
+    {
+      "id": "log-1783394534368",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g33",
+      "timestamp": "2026-07-07T03:22:14.368Z"
+    },
+    {
+      "id": "log-1783394468583",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-20",
+      "timestamp": "2026-07-07T03:21:08.583Z"
+    },
+    {
+      "id": "log-1783394466417",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-19",
+      "timestamp": "2026-07-07T03:21:06.417Z"
+    },
+    {
+      "id": "log-1783394464969",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-18",
+      "timestamp": "2026-07-07T03:21:04.969Z"
+    },
+    {
+      "id": "log-1783394463858",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-18",
+      "timestamp": "2026-07-07T03:21:03.858Z"
+    },
+    {
+      "id": "log-1783394463159",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-18",
+      "timestamp": "2026-07-07T03:21:03.159Z"
+    },
+    {
+      "id": "log-1783394459553",
+      "userId": "u-suryachalam",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-14",
+      "timestamp": "2026-07-07T03:20:59.553Z"
+    },
     {
       "id": "log-1783351635452",
       "userId": "u-suryachalam",
@@ -2805,8 +2861,8 @@
       "description": "Singles badminton finals in the indoor arena.",
       "image": "/gallery/_MG_1303.webp",
       "date": "2026-02-13",
-      "orientation": "portrait",
-      "rotation": 90
+      "orientation": "landscape",
+      "rotation": 0
     },
     {
       "id": "g34",
@@ -2942,7 +2998,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_14.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-15",
@@ -2976,7 +3034,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_18.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-19",
@@ -2984,7 +3044,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_19.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-20",
@@ -2992,7 +3054,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_20.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-21",
@@ -4207,15 +4271,6 @@
       "description": "Interactive peer learning and logic programming mentorship workshops.",
       "image": "/gallery/peer_edu_all_11.webp",
       "date": "2026-06-29"
-    },
-    {
-      "id": "g-1783263361074",
-      "title": "Automation Test Portrait",
-      "category": "sports",
-      "description": "A beautiful gradient test image to verify portrait aspect ratio.",
-      "image": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809",
-      "date": "2026-07-05",
-      "orientation": "portrait"
     }
   ],
   "galleries": [
