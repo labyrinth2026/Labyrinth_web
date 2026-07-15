@@ -71,9 +71,13 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
           if (el) {
             lenisRef.current?.scrollTo(el, { offset: -80 });
           }
-        }, 100);
+          ScrollTrigger.refresh();
+        }, 150);
       } else {
         lenisRef.current.scrollTo(0, { immediate: true });
+        setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 100);
       }
     }
   }, [pathname]);
