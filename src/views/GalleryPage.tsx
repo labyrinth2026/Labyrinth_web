@@ -4,6 +4,7 @@ import { X, ZoomIn, Calendar, Images, ChevronLeft, ChevronRight } from 'lucide-r
 import PageWrapper from '../components/layout/PageWrapper';
 import SearchFilter from '../components/ui/SearchFilter';
 import ScrollReveal from '../components/ui/ScrollReveal';
+import MagicBento from '../components/ui/MagicBento';
 
 import { fetchFromSheet } from '../services/api';
 
@@ -253,56 +254,31 @@ const GalleryPage: React.FC = () => {
           <AnimatePresence mode="wait">
             {paginatedImages.length > 0 ? (
               <>
-                <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
+                <div className="w-full">
                   <ScrollReveal key={`${filter}-${search}-${currentPage}`} stagger={0.03}>
-                    {paginatedImages.map((item, i) => {
-                      return (
-                        <div
-                          key={item.id}
-                          className={`relative group rounded-2xl overflow-hidden cursor-pointer border border-slate-200 bg-white shadow-xs hover:shadow-md hover:scale-[1.025] transition-all duration-300 ease-out break-inside-avoid mb-4 ${getHeightClass(item, i)}`}
-                          onClick={() => setSelectedImage(item)}
-                        >
-                          {item.image ? (
-                            item.image.endsWith('.mp4') ? (
-                              <div className="absolute inset-0 w-full h-full bg-slate-900 overflow-hidden">
-                                <video 
-                                  src={item.image} 
-                                  muted 
-                                  loop 
-                                  playsInline 
-                                  className="w-full h-full object-cover transition-transform duration-300" 
-                                  onMouseEnter={e => e.currentTarget.play()} 
-                                  onMouseLeave={e => e.currentTarget.pause()} 
-                                  style={{ 
-                                    transform: `rotate(${item.rotation ?? 0}deg)${(item.rotation ?? 0) === 90 || (item.rotation ?? 0) === 270 ? ' scale(1.5)' : ''}` 
-                                  }}
-                                />
-                                <div className="absolute top-2 left-2 bg-slate-950/60 text-white text-[8px] font-black uppercase px-1.5 py-0.5 rounded-sm tracking-wider">Video</div>
-                              </div>
-                            ) : (
-                              <img 
-                                src={item.image} 
-                                alt={item.title} 
-                                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                                style={{ 
-                                  transform: `rotate(${item.rotation ?? 0}deg)${(item.rotation ?? 0) === 90 || (item.rotation ?? 0) === 270 ? ' scale(1.5)' : ''}` 
-                                }} 
-                              />
-                            )
-                          ) : (
-                            <div className="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center p-4">
-                              <span className="text-[9px] font-black uppercase tracking-widest text-[#CD0000] mb-1">{item.category}</span>
-                              <h3 className="text-slate-800 font-bold text-center text-xs px-2 line-clamp-2">{item.title}</h3>
-                            </div>
-                          )}
-
-                          {/* Hover Overlay */}
-                          <div className="absolute inset-0 bg-slate-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                            <ZoomIn className="text-white w-6 h-6 scale-90 group-hover:scale-100 transition-transform duration-200" />
-                          </div>
-                        </div>
-                      );
-                    })}
+                    <MagicBento
+                      items={paginatedImages.map(img => ({
+                        id: img.id,
+                        title: img.title,
+                        description: img.description,
+                        category: img.category,
+                        image: img.image,
+                        date: img.date,
+                        rotation: img.rotation,
+                        orientation: img.orientation
+                      }))}
+                      onItemClick={(item) => {
+                        const originalImage = paginatedImages.find(img => img.id === item.id);
+                        if (originalImage) setSelectedImage(originalImage);
+                      }}
+                      enableStars={true}
+                      enableSpotlight={true}
+                      enableBorderGlow={true}
+                      enableTilt={true}
+                      enableMagnetism={true}
+                      clickEffect={true}
+                      glowColor="205, 0, 0"
+                    />
                   </ScrollReveal>
                 </div>
 
@@ -406,11 +382,15 @@ const GalleryPage: React.FC = () => {
               {/* Image Area inside Modal */}
               <div className="w-full aspect-video relative bg-slate-950 flex flex-col items-center justify-center group/lightbox">
                 {selectedImage.image ? (
-                  selectedImage.image.endsWith('.mp4') ? (
-                    <video src={selectedImage.image} controls autoPlay className="w-full h-full object-contain" style={{ transform: `rotate(${selectedImage.rotation ?? 0}deg)` }} />
-                  ) : (
-                    <img src={selectedImage.image} alt={selectedImage.title} className="w-full h-full object-contain" style={{ transform: `rotate(${selectedImage.rotation ?? 0}deg)` }} />
-                  )
+                  (() => {
+                    const isRotated = selectedImage.rotation === 90 || selectedImage.rotation === 270;
+                    const transformStyle = `rotate(${selectedImage.rotation ?? 0}deg)${isRotated ? ' scale(0.5625)' : ''}`;
+                    return selectedImage.image.endsWith('.mp4') ? (
+                      <video src={selectedImage.image} controls autoPlay className="absolute inset-0 w-full h-full object-contain" style={{ transform: transformStyle }} />
+                    ) : (
+                      <img src={selectedImage.image} alt={selectedImage.title} className="absolute inset-0 w-full h-full object-contain" style={{ transform: transformStyle }} />
+                    );
+                  })()
                 ) : (
                   <div className="flex flex-col items-center justify-center p-8 text-center bg-slate-100 w-full h-full">
                     <h2 className="text-2xl md:text-3xl font-extrabold text-slate-700 tracking-tight uppercase leading-none">{selectedImage.title}</h2>
@@ -439,30 +419,6 @@ const GalleryPage: React.FC = () => {
                 )}
               </div>
 
-              {/* Caption metadata */}
-              <div className="p-5 bg-white/95 border-t border-slate-100/80">
-                <div className="flex justify-between items-start gap-4">
-                  <div className="flex-1">
-                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[9px] font-black uppercase tracking-wider mb-2">
-                      {selectedImage.category}
-                    </span>
-                    <h3 className="text-base font-bold text-slate-900 leading-tight">
-                      {selectedImage.title}
-                    </h3>
-                    {selectedImage.description && (
-                      <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
-                        {selectedImage.description}
-                      </p>
-                    )}
-                  </div>
-                  {selectedImage.date && (
-                    <div className="text-right shrink-0">
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Date</span>
-                      <span className="text-xs text-slate-700 font-semibold">{new Date(selectedImage.date).toLocaleDateString()}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
             </motion.div>
           </motion.div>
         )}

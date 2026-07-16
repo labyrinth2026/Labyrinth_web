@@ -89,7 +89,7 @@ const HomePage: React.FC = () => {
     if (heroHovered) return;
     const interval = setInterval(() => {
       setHeroIndex((prev) => (prev + 1) % HERO_IMAGES.length);
-    }, 7000);
+    }, 10000);
     return () => clearInterval(interval);
   }, [heroHovered]);
 
