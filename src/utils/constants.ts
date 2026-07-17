@@ -9,8 +9,8 @@ export const NAV_LINKS = [
 ];
 
 export const SOCIAL_LINKS = {
-  instagram: 'https://instagram.com/labyrinth_christuniversity',
-  linkedin: 'https://linkedin.com/company/labyrinth-christ-university',
+  instagram: 'https://www.instagram.com/labyrinth_cu?igsh=aWZ6aWJ3cW1iZWZ5',
+  linkedin: 'https://www.linkedin.com/school/labyrinthcu/',
   email: 'mailto:labyrinth@cs.christuniversity.in',
   github: 'https://github.com/labyrinth-christ'
 };

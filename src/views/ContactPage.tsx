@@ -96,23 +96,36 @@ const ContactPage: React.FC = () => {
             <ScrollReveal animation="slide-left">
               <div className="space-y-6 flex flex-col justify-between h-full">
 
-                {/* Faculty Coordinator Card */}
+                {/* Faculty Coordinators Card */}
                 <div className="bg-slate-900 border border-slate-900 rounded-2xl p-8 text-white relative overflow-hidden group shadow-sm flex flex-col justify-center hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md hover:shadow-white/[0.01] transition-all duration-300">
                   <div className="relative z-10">
-                    <div className="flex items-center gap-4 mb-5">
-                      <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                    <div className="flex items-center gap-3 mb-5">
+                      <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
                         <GraduationCap size={20} className="text-white" />
                       </div>
                       <div>
-                        <p className="text-slate-400 text-[8px] font-black uppercase tracking-widest mb-0.5">Faculty Coordinator</p>
-                        <h3 className="font-bold text-white text-lg tracking-tight">Dr. Suresh Kumar</h3>
+                        <p className="text-slate-400 text-[8px] font-black uppercase tracking-widest mb-0.5">Faculty Coordinators</p>
+                        <p className="text-slate-300 text-[10px]">Department of Computer Science</p>
                       </div>
                     </div>
-                    <p className="text-slate-200 text-xs mb-0.5 font-bold">Head Coordinator, Labyrinth</p>
-                    <p className="text-slate-400 text-[10px] mb-5">Professor, Dept. of Computer Science</p>
-                    <a href="mailto:suresh@christ.edu" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/15 rounded-full text-white text-[10px] font-bold uppercase tracking-wider transition-colors border border-white/5">
-                      <Mail size={12} /> suresh@christ.edu
-                    </a>
+                    <div className="space-y-3">
+                      {[
+                        { name: 'Dr. Amrutha K', url: 'https://christuniversity.in/computer-science/faculty-details/NzE0Mg==/NjI=' },
+                        { name: 'Dr. Binayak Dutta', url: 'https://christuniversity.in/computer-science/faculty-details/ODc2OQ==/NjI=' },
+                        { name: 'Dr. Syam Mohan E', url: 'https://christuniversity.in/computer-science/faculty-details/OTM1NA==/NjI=' },
+                      ].map(({ name, url }) => (
+                        <a
+                          key={name}
+                          href={url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center justify-between gap-3 px-3 py-2.5 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 transition-all group/item"
+                        >
+                          <span className="text-white text-xs font-semibold group-hover/item:text-slate-100">{name}</span>
+                          <ExternalLink size={12} className="text-slate-500 group-hover/item:text-white transition-colors shrink-0" />
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
