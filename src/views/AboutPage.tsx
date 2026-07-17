@@ -194,11 +194,7 @@ const AboutPage: React.FC = () => {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 420px"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-5">
-                      <span className="text-[9px] font-bold text-[#CD0000] uppercase tracking-widest mb-1.5 block">Launch</span>
-                      <h3 className="text-white font-extrabold text-sm tracking-tight leading-tight">Inauguration Ceremony</h3>
-                      <p className="text-slate-300 text-[11px] font-medium leading-normal mt-1">Welcoming the new batch of innovators to Labyrinth.</p>
-                    </div>
+
                   </div>
                 </Card>
  
@@ -211,11 +207,7 @@ const AboutPage: React.FC = () => {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 420px"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-5">
-                      <span className="text-[9px] font-bold text-[#CD0000] uppercase tracking-widest mb-1.5 block">Learning</span>
-                      <h3 className="text-white font-extrabold text-sm tracking-tight leading-tight">Peer Education Sessions</h3>
-                      <p className="text-slate-300 text-[11px] font-medium leading-normal mt-1">Students teaching students about cutting-edge tech.</p>
-                    </div>
+
                   </div>
                 </Card>
  
@@ -228,11 +220,7 @@ const AboutPage: React.FC = () => {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 420px"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-5">
-                      <span className="text-[9px] font-bold text-[#CD0000] uppercase tracking-widest mb-1.5 block">Build</span>
-                      <h3 className="text-white font-extrabold text-sm tracking-tight leading-tight">Hackathons & Coding</h3>
-                      <p className="text-slate-300 text-[11px] font-medium leading-normal mt-1">Developing real-world solutions under tight deadlines.</p>
-                    </div>
+
                   </div>
                 </Card>
  
@@ -245,11 +233,7 @@ const AboutPage: React.FC = () => {
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 420px"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-5">
-                      <span className="text-[9px] font-bold text-[#CD0000] uppercase tracking-widest mb-1.5 block">Community</span>
-                      <h3 className="text-white font-extrabold text-sm tracking-tight leading-tight">Celebrations & Sports</h3>
-                      <p className="text-slate-300 text-[11px] font-medium leading-normal mt-1">Fostering collaboration, networking, and fun.</p>
-                    </div>
+
                   </div>
                 </Card>
               </CardSwap>
