@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, GraduationCap } from 'lucide-react';
+import { ExternalLink, GraduationCap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export interface FacultyMember {
@@ -9,6 +9,7 @@ export interface FacultyMember {
   designation?: string;
   department?: string;
   email: string;
+  profileUrl?: string;
   linkedin: string;
   avatar: string | null;
 }
@@ -55,8 +56,20 @@ const FacultyCard: React.FC<FacultyCardProps> = ({ faculty }) => {
           </div>
         </div>
 
-        {/* Name */}
-        <h3 className="text-base font-bold text-slate-900 mt-4 mb-0.5">{faculty.name}</h3>
+        {/* Name — clickable if profileUrl exists */}
+        {faculty.profileUrl ? (
+          <a
+            href={faculty.profileUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="text-base font-bold text-slate-900 mt-4 mb-0.5 hover:text-[#CD0000] transition-colors inline-flex items-center gap-1 group"
+          >
+            {faculty.name}
+            <ExternalLink size={11} className="opacity-0 group-hover:opacity-100 transition-opacity text-[#CD0000]" />
+          </a>
+        ) : (
+          <h3 className="text-base font-bold text-slate-900 mt-4 mb-0.5">{faculty.name}</h3>
+        )}
 
         {/* Designation */}
         {faculty.designation && (
@@ -76,16 +89,27 @@ const FacultyCard: React.FC<FacultyCardProps> = ({ faculty }) => {
         {/* Spacer */}
         <div className="flex-grow" />
 
-        {/* Contact */}
+        {/* Footer */}
         <div className="flex justify-center gap-2 mt-4 pt-4 border-t border-slate-100 w-full">
-          <a
-            href={`mailto:${faculty.email}`}
-            className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-[#CD0000] font-semibold transition-colors"
-            title={`Email ${faculty.name}`}
-          >
-            <Mail size={13} className="text-slate-400" />
-            <span className="truncate max-w-[160px]">{faculty.email}</span>
-          </a>
+          {faculty.profileUrl ? (
+            <a
+              href={faculty.profileUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 text-[10px] font-bold text-slate-500 hover:text-[#CD0000] transition-colors uppercase tracking-wider"
+            >
+              <ExternalLink size={11} />
+              View Profile
+            </a>
+          ) : (
+            <a
+              href={`mailto:${faculty.email}`}
+              className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-[#CD0000] font-semibold transition-colors"
+              title={`Email ${faculty.name}`}
+            >
+              <span className="truncate max-w-[160px]">{faculty.email}</span>
+            </a>
+          )}
         </div>
       </div>
     </motion.div>

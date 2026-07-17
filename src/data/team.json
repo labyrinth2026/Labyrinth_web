@@ -1,11 +1,10 @@
 {
   "facultyCoordinators": [
-    { "id": "f1", "name": "Dr. Suresh Kumar", "role": "Head Coordinator", "designation": "Professor", "department": "Department of Computer Science", "email": "suresh@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "f2", "name": "Prof. Anjali Menon", "role": "Faculty Coordinator", "designation": "Associate Professor", "department": "Department of Computer Science", "email": "anjali@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "f3", "name": "Dr. Rajesh Rajan", "role": "Faculty Associate", "designation": "Assistant Professor", "department": "Department of Computer Science", "email": "rajesh@cs.christuniversity.in", "linkedin": "#", "avatar": null }
+    { "id": "f1", "name": "Dr. Amrutha K", "role": "Faculty Coordinator", "designation": "Assistant Professor", "department": "Department of Computer Science", "email": "amrutha@cs.christuniversity.in", "profileUrl": "https://christuniversity.in/computer-science/faculty-details/NzE0Mg==/NjI=", "linkedin": "#", "avatar": null },
+    { "id": "f2", "name": "Dr. Binayak Dutta", "role": "Faculty Coordinator", "designation": "Assistant Professor", "department": "Department of Computer Science", "email": "binayak@cs.christuniversity.in", "profileUrl": "https://christuniversity.in/computer-science/faculty-details/ODc2OQ==/NjI=", "linkedin": "#", "avatar": null },
+    { "id": "f3", "name": "Dr. Syam Mohan E", "role": "Faculty Coordinator", "designation": "Assistant Professor", "department": "Department of Computer Science", "email": "syam@cs.christuniversity.in", "profileUrl": "https://christuniversity.in/computer-science/faculty-details/OTM1NA==/NjI=", "linkedin": "#", "avatar": null }
   ],
   "mentors": [
-    { "id": "m1", "name": "Dr. Rajesh Rajan", "role": "Mentor", "email": "rajesh@cs.christuniversity.in", "linkedin": "#", "avatar": null }
   ],
   "coreCommittee": [
     { "id": "c1", "name": "Core Member One", "role": "Technical Lead", "email": "core1@labyrinth.club", "linkedin": "#", "avatar": null }
