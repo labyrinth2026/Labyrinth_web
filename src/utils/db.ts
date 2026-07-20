@@ -1655,16 +1655,18 @@ export async function dbUpdateCustomForm(id: string, data: Partial<CustomForm>, 
     const adminClient = getSupabaseAdmin();
     if (adminClient) {
       try {
-        const { error: formErr } = await adminClient.from('forms').update({
-          title: data.title,
-          description: data.description || null,
-          slug: data.slug,
-          status: data.status,
-          cover_image: data.coverImage || null,
-          start_date: data.startDate || null,
-          end_date: data.endDate || null,
+        const updatePayload: any = {
           updated_at: timestamp
-        }).eq('id', id);
+        };
+        if (data.title !== undefined) updatePayload.title = data.title;
+        if (data.description !== undefined) updatePayload.description = data.description || null;
+        if (data.slug !== undefined) updatePayload.slug = data.slug;
+        if (data.status !== undefined) updatePayload.status = data.status;
+        if (data.coverImage !== undefined) updatePayload.cover_image = data.coverImage || null;
+        if (data.startDate !== undefined) updatePayload.start_date = data.startDate || null;
+        if (data.endDate !== undefined) updatePayload.end_date = data.endDate || null;
+
+        const { error: formErr } = await adminClient.from('forms').update(updatePayload).eq('id', id);
         if (formErr) throw formErr;
 
         // Replace fields

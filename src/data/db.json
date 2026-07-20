@@ -38,7 +38,7 @@
       "verticalId": "v-devzen",
       "vertical_id": "v-devzen",
       "createdAt": "2026-07-20T15:00:58.060Z",
-      "lastLogin": "2026-07-20T15:37:36.568Z"
+      "lastLogin": "2026-07-20T15:58:50.331Z"
     },
     {
       "id": "u-krupa-m",
@@ -687,6 +687,13 @@
   "resources": [],
   "tasks": [],
   "activityLogs": [
+    {
+      "id": "log-1784563169581",
+      "userId": "u-1784558851639",
+      "action": "update_custom_form",
+      "details": "Updated custom form: Test Form Name",
+      "timestamp": "2026-07-20T15:59:29.581Z"
+    },
     {
       "id": "log-1784559225452",
       "userId": "u-1784558851639",
@@ -2722,7 +2729,7 @@
   "forms": [
     {
       "id": "df873988-bac6-4c2c-a859-451f46bf8072",
-      "title": "New Custom Form",
+      "title": "Test Form Name",
       "description": "Please describe the purpose of this form.",
       "slug": "form-1783061093573",
       "status": "published",
@@ -2731,7 +2738,7 @@
       "endDate": "",
       "createdBy": "u-suryachalam",
       "createdAt": "2026-07-03T06:45:16.371Z",
-      "updatedAt": "2026-07-05T16:16:22.248Z"
+      "updatedAt": "2026-07-20T15:59:29.572Z"
     },
     {
       "id": "04cfba5e-7467-4288-934f-e598a433f2b2",
@@ -2769,7 +2776,7 @@
       "order": 1
     },
     {
-      "id": "field_1783061093573_1",
+      "id": "31dafa81-850c-47ff-93bd-96a12f459ec7",
       "formId": "df873988-bac6-4c2c-a859-451f46bf8072",
       "fieldType": "short_text",
       "label": "Applicant Full Name",
@@ -2779,7 +2786,7 @@
       "order": 0
     },
     {
-      "id": "field_1783061093573_2",
+      "id": "8c4544c2-497d-4039-8c52-0b56f04567af",
       "formId": "df873988-bac6-4c2c-a859-451f46bf8072",
       "fieldType": "email",
       "label": "University Email Address",
