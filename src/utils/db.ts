@@ -443,13 +443,20 @@ export async function dbUpdateUserStatus(userId: string, status: 'active' | 'ina
   }
 }
 
-export async function dbUpdateUserDetails(userId: string, name: string, role: string, committeeId?: string, verticalId?: string): Promise<void> {
+export async function dbUpdateUserDetails(
+  userId: string, name: string, role: string,
+  committeeId?: string, verticalId?: string,
+  designation?: string, profilePhoto?: string, github?: string
+): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
     const { error } = await supabase.from('profiles').update({
       full_name: name,
       role: role as any,
       committee_id: committeeId || null,
-      vertical_id: verticalId || null
+      vertical_id: verticalId || null,
+      designation: designation || null,
+      profile_photo: profilePhoto || null,
+      github: github || null
     }).eq('id', userId);
     if (error) throw error;
   } else {
@@ -461,6 +468,9 @@ export async function dbUpdateUserDetails(userId: string, name: string, role: st
       user.role = role as any;
       user.committeeId = committeeId;
       user.verticalId = verticalId;
+      if (designation !== undefined) user.designation = designation;
+      if (profilePhoto !== undefined) user.profilePhoto = profilePhoto;
+      if (github !== undefined) user.github = github;
       saveLocalDb(db);
     }
   }

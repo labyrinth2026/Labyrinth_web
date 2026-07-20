@@ -36,6 +36,9 @@ export default function MembersManager() {
   const [editingUserRole, setEditingUserRole] = useState('MEMBER');
   const [editingUserCommittee, setEditingUserCommittee] = useState('');
   const [editingUserVertical, setEditingUserVertical] = useState('');
+  const [editingUserDesignation, setEditingUserDesignation] = useState('');
+  const [editingUserPhoto, setEditingUserPhoto] = useState('');
+  const [editingUserGithub, setEditingUserGithub] = useState('');
 
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
@@ -103,7 +106,10 @@ export default function MembersManager() {
         name: editingUserName,
         role: editingUserRole,
         committeeId: editingUserCommittee || undefined,
-        verticalId: editingUserVertical || undefined
+        verticalId: editingUserVertical || undefined,
+        designation: editingUserDesignation || undefined,
+        profilePhoto: editingUserPhoto || undefined,
+        github: editingUserGithub || undefined
       });
       setShowEditModal(false);
       await loadData();
@@ -156,6 +162,9 @@ export default function MembersManager() {
     setEditingUserRole(u.role || 'MEMBER');
     setEditingUserCommittee(u.committeeId || u.committee_id || '');
     setEditingUserVertical(u.verticalId || u.vertical_id || '');
+    setEditingUserDesignation(u.designation || '');
+    setEditingUserPhoto(u.profilePhoto || u.profile_photo || '');
+    setEditingUserGithub(u.github || '');
     setShowEditModal(true);
   };
 
@@ -459,6 +468,39 @@ export default function MembersManager() {
                     <option value="">None</option>
                     {verticals.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
                   </select>
+                </div>
+
+                {/* Designation */}
+                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Designation / Title</label>
+                  <input type="text" value={editingUserDesignation}
+                    onChange={e => setEditingUserDesignation(e.target.value)}
+                    className={inputClass} placeholder="e.g. Vertical Head, Core Member…" />
+                </div>
+
+                {/* Photo URL + live preview */}
+                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Photo URL</label>
+                  <div className="flex gap-3 items-center">
+                    <input type="url" value={editingUserPhoto}
+                      onChange={e => setEditingUserPhoto(e.target.value)}
+                      className={inputClass} placeholder="https://drive.google.com/… or any image URL" />
+                    <div className="w-12 h-12 rounded-xl border border-[#E5E7EB] bg-slate-50 overflow-hidden shrink-0 flex items-center justify-center text-[10px] font-bold text-slate-400">
+                      {editingUserPhoto
+                        ? <img src={editingUserPhoto} alt="Preview" className="w-full h-full object-cover"
+                            onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                        : 'IMG'
+                      }
+                    </div>
+                  </div>
+                </div>
+
+                {/* GitHub */}
+                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">GitHub URL</label>
+                  <input type="url" value={editingUserGithub}
+                    onChange={e => setEditingUserGithub(e.target.value)}
+                    className={inputClass} placeholder="https://github.com/username" />
                 </div>
               </div>
 

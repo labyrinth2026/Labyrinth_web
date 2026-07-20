@@ -112,7 +112,8 @@ export async function POST(req: NextRequest) {
             name: u.full_name || u.name,
             role: u.designation || (commName ? `${commName} Lead` : 'Core Committee Member'),
             email: u.email,
-            avatar: u.profilePhoto || null
+            avatar: u.profilePhoto || u.profile_photo || null,
+            github: u.github || null
           };
         });
 
@@ -131,7 +132,8 @@ export async function POST(req: NextRequest) {
             role: 'Head',
             vertical: getVerticalName(vId),
             email: u.email,
-            avatar: u.profilePhoto || null
+            avatar: u.profilePhoto || u.profile_photo || null,
+            github: u.github || null
           };
         });
 
@@ -149,7 +151,8 @@ export async function POST(req: NextRequest) {
             role: 'Sub-Head',
             vertical: getVerticalName(vId),
             email: u.email,
-            avatar: u.profilePhoto || null
+            avatar: u.profilePhoto || u.profile_photo || null,
+            github: u.github || null
           };
         });
 
@@ -387,8 +390,8 @@ export async function POST(req: NextRequest) {
       }
 
       case 'updateUserDetails': {
-        const { userId, name, role, committeeId, verticalId } = payload;
-        await dbUpdateUserDetails(userId, name, role, committeeId, verticalId);
+        const { userId, name, role, committeeId, verticalId, designation, profilePhoto, github } = payload;
+        await dbUpdateUserDetails(userId, name, role, committeeId, verticalId, designation, profilePhoto, github);
         await logActivity(sessionUser.id, 'update_user_details', `Updated profile of user ${userId}`);
         return NextResponse.json({ success: true });
       }
