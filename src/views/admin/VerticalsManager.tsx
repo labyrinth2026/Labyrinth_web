@@ -140,6 +140,12 @@ export default function VerticalsManager() {
   const [originalSubHeadIds, setOriginalSubHeadIds] = useState<Set<string>>(new Set());
   const [originalCoreCommitteeIds, setOriginalCoreCommitteeIds] = useState<Set<string>>(new Set());
 
+  // Core Committees Hierarchy states
+  const [verticalCommittees, setVerticalCommittees] = useState<any[]>([]);
+  const [newCommInput, setNewCommInput] = useState('');
+  const [editingCommId, setEditingCommId] = useState<string | null>(null);
+  const [editingCommName, setEditingCommName] = useState('');
+
   const loadData = async () => {
     setLoading(true);
     try {
@@ -180,6 +186,10 @@ export default function VerticalsManager() {
     setOriginalHeadIds(new Set());
     setOriginalSubHeadIds(new Set());
     setOriginalCoreCommitteeIds(new Set());
+    setVerticalCommittees([]);
+    setNewCommInput('');
+    setEditingCommId(null);
+    setEditingCommName('');
     setShowModal(true);
   };
 
@@ -194,6 +204,10 @@ export default function VerticalsManager() {
     setOriginalHeadIds(new Set(heads.map((h: any) => h.id)));
     setOriginalSubHeadIds(new Set(subHeads.map((s: any) => s.id)));
     setOriginalCoreCommitteeIds(new Set(coreMembers.map((c: any) => c.id)));
+    setVerticalCommittees(item.committees || []);
+    setNewCommInput('');
+    setEditingCommId(null);
+    setEditingCommName('');
     setShowModal(true);
   };
 
@@ -272,6 +286,70 @@ export default function VerticalsManager() {
       alert('Failed to delete vertical.');
     }
     setDeleteConfirm(null);
+  };
+
+  // Core Committees Inline CRUD handlers
+  const handleInlineAddComm = async () => {
+    if (!newCommInput.trim() || !editingItem?.id) return;
+    try {
+      await fetchFromSheet('addCoreCommittee', { 
+        name: newCommInput.trim(), 
+        description: 'Created in vertical manager', 
+        verticalId: editingItem.id 
+      });
+      setNewCommInput('');
+      const fresh: any = await fetchFromSheet('getVerticals');
+      const updatedItem = (fresh || []).find((v: any) => v.id === editingItem.id);
+      if (updatedItem) {
+        setEditingItem(updatedItem);
+        setVerticalCommittees(updatedItem.committees || []);
+      }
+      await loadData();
+    } catch (err) {
+      alert('Failed to add core committee.');
+    }
+  };
+
+  const handleStartEditingComm = (id: string, name: string) => {
+    setEditingCommId(id);
+    setEditingCommName(name);
+  };
+
+  const handleSaveEditingComm = async (id: string) => {
+    if (!editingCommName.trim() || !editingItem?.id) return;
+    try {
+      await fetchFromSheet('updateCoreCommittee', { 
+        id, 
+        name: editingCommName.trim(), 
+        verticalId: editingItem.id 
+      });
+      setEditingCommId(null);
+      const fresh: any = await fetchFromSheet('getVerticals');
+      const updatedItem = (fresh || []).find((v: any) => v.id === editingItem.id);
+      if (updatedItem) {
+        setEditingItem(updatedItem);
+        setVerticalCommittees(updatedItem.committees || []);
+      }
+      await loadData();
+    } catch (err) {
+      alert('Failed to update core committee.');
+    }
+  };
+
+  const handleDeleteComm = async (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this core committee? This will unassign any member of this committee.')) return;
+    try {
+      await fetchFromSheet('deleteCoreCommittee', { id });
+      const fresh: any = await fetchFromSheet('getVerticals');
+      const updatedItem = (fresh || []).find((v: any) => v.id === editingItem.id);
+      if (updatedItem) {
+        setEditingItem(updatedItem);
+        setVerticalCommittees(updatedItem.committees || []);
+      }
+      await loadData();
+    } catch (err) {
+      alert('Failed to delete core committee.');
+    }
   };
 
   const inputClass = "w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#CD0000]/10 focus:border-slate-400 transition-all bg-white";
@@ -428,6 +506,59 @@ export default function VerticalsManager() {
                   onAdd={p => setSelectedCoreCommittee(prev => [...prev, p])}
                   onRemove={id => setSelectedCoreCommittee(prev => prev.filter(c => c.id !== id))}
                 />
+
+                {/* Core Committees Hierarchy CRUD */}
+                {editingItem.id && (
+                  <div className="p-4 border border-slate-100 rounded-2xl bg-slate-50/50 space-y-3 mt-4 text-left">
+                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5 font-mono">
+                      <Users size={12} className="text-[#CD0000]" /> Core Committees List (CRUD)
+                    </label>
+                    
+                    <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                      {verticalCommittees.length === 0 ? (
+                        <p className="text-xs text-slate-400 italic">No core committees linked to this vertical.</p>
+                      ) : (
+                        verticalCommittees.map(c => (
+                          <div key={c.id} className="flex items-center justify-between bg-white border border-slate-200 rounded-xl px-3 py-2">
+                            {editingCommId === c.id ? (
+                              <div className="flex gap-2 items-center flex-1 mr-2">
+                                <input 
+                                  type="text" 
+                                  value={editingCommName} 
+                                  onChange={e => setEditingCommName(e.target.value)} 
+                                  className="flex-1 border border-slate-200 rounded-lg px-2 py-0.5 text-xs text-slate-800 focus:outline-none"
+                                />
+                                <button type="button" onClick={() => handleSaveEditingComm(c.id)} className="p-1 text-green-600 hover:bg-slate-50 rounded"><Check size={12} /></button>
+                                <button type="button" onClick={() => setEditingCommId(null)} className="p-1 text-slate-400 hover:bg-slate-50 rounded"><X size={12} /></button>
+                              </div>
+                            ) : (
+                              <>
+                                <span className="text-xs font-semibold text-slate-700">{c.name}</span>
+                                <div className="flex gap-1">
+                                  <button type="button" onClick={() => handleStartEditingComm(c.id, c.name)} className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded" title="Edit Name"><Edit2 size={12} /></button>
+                                  <button type="button" onClick={() => handleDeleteComm(c.id)} className="p-1 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded" title="Delete Committee"><Trash2 size={12} /></button>
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    <div className="flex gap-2 pt-2 border-t border-slate-100/50">
+                      <input 
+                        type="text" 
+                        value={newCommInput} 
+                        onChange={e => setNewCommInput(e.target.value)} 
+                        placeholder="New committee name..."
+                        className="flex-1 border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                      />
+                      <button type="button" onClick={handleInlineAddComm} className="px-3 py-1.5 bg-[#CD0000] text-white text-xs font-semibold rounded-xl hover:bg-[#A30000] flex items-center justify-center shrink-0">
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
