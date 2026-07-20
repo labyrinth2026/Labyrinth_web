@@ -70,6 +70,18 @@ export default function MembersManager() {
     loadData();
   }, []);
 
+  // Lock background scroll when any modal is open
+  useEffect(() => {
+    if (showCreateModal || showEditModal || deleteConfirm || showNewCommitteeModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showCreateModal, showEditModal, deleteConfirm, showNewCommitteeModal]);
+
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newUserName || !newUserEmail) return;

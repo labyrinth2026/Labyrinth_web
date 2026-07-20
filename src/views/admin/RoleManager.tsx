@@ -60,6 +60,18 @@ export default function RoleManager() {
     loadAllData();
   }, []);
 
+  // Lock background scroll when modal is open
+  useEffect(() => {
+    if (showCreateModal || showEditModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showCreateModal, showEditModal]);
+
   // Helper to check admin permission (all logged-in users on /admin have role === 'ADMIN')
   const isAdmin = user?.role === 'ADMIN';
 

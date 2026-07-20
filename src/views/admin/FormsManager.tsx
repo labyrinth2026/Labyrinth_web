@@ -80,6 +80,18 @@ export default function FormsManager() {
     loadAllForms();
   }, []);
 
+  // Lock background scroll when response details modal is open
+  useEffect(() => {
+    if (selectedResponse) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedResponse]);
+
   const loadAllForms = async () => {
     setLoading(true);
     try {

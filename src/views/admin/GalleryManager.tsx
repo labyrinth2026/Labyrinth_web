@@ -42,6 +42,18 @@ const GalleryManager: React.FC = () => {
 
   useEffect(() => { loadGallery(); }, []);
 
+  // Lock background scroll when modal is open
+  useEffect(() => {
+    if (showModal || deleteConfirmId) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showModal, deleteConfirmId]);
+
   const getSwappedOrientation = (orientation: string) => {
     if (orientation === 'landscape') return 'portrait';
     if (orientation === 'portrait') return 'landscape';

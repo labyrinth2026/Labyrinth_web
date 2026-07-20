@@ -31,6 +31,18 @@ export default function EventsManager() {
     loadData();
   }, []);
 
+  // Lock background scroll when modal is open
+  useEffect(() => {
+    if (showModal || deleteConfirm) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showModal, deleteConfirm]);
+
   const openAddModal = () => {
     setEditingItem({ title: '', date: '', status: 'upcoming', description: '', banner: '', location: '' });
     setShowModal(true);
