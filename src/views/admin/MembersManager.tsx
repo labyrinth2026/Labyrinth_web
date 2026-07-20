@@ -180,7 +180,13 @@ export default function MembersManager() {
   const handleCreateNewCommittee = async () => {
     if (!newCommitteeName.trim()) return;
     try {
-      await fetchFromSheet('addCoreCommittee', { name: newCommitteeName, description: 'Created dynamically' });
+      // Pass the selected vertical ID to addCoreCommittee so they are linked
+      const activeVerticalId = showEditModal ? editingUserVertical : newUserVertical;
+      await fetchFromSheet('addCoreCommittee', { 
+        name: newCommitteeName, 
+        description: 'Created dynamically',
+        verticalId: activeVerticalId || undefined 
+      });
       const updated: any = await fetchFromSheet('getCoreCommittees');
       setCommittees(updated || []);
       const newlyCreated = updated.find((c: any) => c.name.toLowerCase() === newCommitteeName.toLowerCase());
@@ -431,6 +437,23 @@ export default function MembersManager() {
                     <option value="MEMBER">Member (No Login)</option>
                     <option value="ADMIN">Administrator (CMS Login)</option>
                   </select>
+                </div>                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical</label>
+                  <select 
+                    value={newUserVertical} 
+                    onChange={e => {
+                      const vId = e.target.value;
+                      setNewUserVertical(vId);
+                      if (vId) {
+                        const isMatch = committees.some(c => c.id === newUserCommittee && (c.verticalId === vId || c.vertical_id === vId));
+                        if (!isMatch) setNewUserCommittee('');
+                      }
+                    }} 
+                    className={inputClass}
+                  >
+                    <option value="">None</option>
+                    {verticals.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+                  </select>
                 </div>
 
                 <div>
@@ -438,21 +461,16 @@ export default function MembersManager() {
                   <div className="flex gap-2">
                     <select value={newUserCommittee} onChange={e => setNewUserCommittee(e.target.value)} className={inputClass}>
                       <option value="">None</option>
-                      {committees.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                      {committees
+                        .filter(c => !newUserVertical || c.verticalId === newUserVertical || c.vertical_id === newUserVertical)
+                        .map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                     </select>
                     <button type="button" onClick={handleAddCommitteePrompt} className="px-3 border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 hover:text-[#CD0000] transition-colors flex items-center justify-center shrink-0" title="Create New Core Committee">
                       <Plus size={16} />
                     </button>
                   </div>
                 </div>
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical</label>
-                  <select value={newUserVertical} onChange={e => setNewUserVertical(e.target.value)} className={inputClass}>
-                    <option value="">None</option>
-                    {verticals.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
-                  </select>
                 </div>
-              </div>
 
               <div className="flex justify-end gap-3 p-5 border-t border-[#E5E7EB]">
                 <button type="button" onClick={() => setShowCreateModal(false)} className="px-4 py-2 text-sm text-[#667085] hover:text-[#CD0000]">Cancel</button>
@@ -488,6 +506,23 @@ export default function MembersManager() {
                     <option value="MEMBER">Member (No Login)</option>
                     <option value="ADMIN">Administrator (CMS Login)</option>
                   </select>
+                </div>                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical</label>
+                  <select 
+                    value={editingUserVertical} 
+                    onChange={e => {
+                      const vId = e.target.value;
+                      setEditingUserVertical(vId);
+                      if (vId) {
+                        const isMatch = committees.some(c => c.id === editingUserCommittee && (c.verticalId === vId || c.vertical_id === vId));
+                        if (!isMatch) setEditingUserCommittee('');
+                      }
+                    }} 
+                    className={inputClass}
+                  >
+                    <option value="">None</option>
+                    {verticals.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+                  </select>
                 </div>
 
                 <div>
@@ -495,19 +530,14 @@ export default function MembersManager() {
                   <div className="flex gap-2">
                     <select value={editingUserCommittee} onChange={e => setEditingUserCommittee(e.target.value)} className={inputClass}>
                       <option value="">None</option>
-                      {committees.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                      {committees
+                        .filter(c => !editingUserVertical || c.verticalId === editingUserVertical || c.vertical_id === editingUserVertical)
+                        .map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                     </select>
                     <button type="button" onClick={handleAddCommitteePrompt} className="px-3 border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 hover:text-[#CD0000] transition-colors flex items-center justify-center shrink-0" title="Create New Core Committee">
                       <Plus size={16} />
                     </button>
                   </div>
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical</label>
-                  <select value={editingUserVertical} onChange={e => setEditingUserVertical(e.target.value)} className={inputClass}>
-                    <option value="">None</option>
-                    {verticals.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
-                  </select>
                 </div>
 
                 {/* Designation */}

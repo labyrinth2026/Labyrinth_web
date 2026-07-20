@@ -37,7 +37,8 @@
       "committee_id": null,
       "verticalId": "v-devzen",
       "vertical_id": "v-devzen",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "lastLogin": "2026-07-20T15:37:36.568Z"
     },
     {
       "id": "u-krupa-m",
@@ -422,91 +423,117 @@
       "name": "Dhairya",
       "description": "Dhairya Core Committee",
       "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "verticalId": "v-ai-hub",
+      "vertical_id": "v-ai-hub"
     },
     {
       "id": "cc-nirantara",
       "name": "Nirantara",
       "description": "Nirantara Core Committee",
       "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "verticalId": "v-ai-hub",
+      "vertical_id": "v-ai-hub"
     },
     {
       "id": "cc-karline",
       "name": "Karline",
       "description": "Karline Core Committee",
       "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "verticalId": "v-devzen",
+      "vertical_id": "v-devzen"
     },
     {
       "id": "cc-neo",
       "name": "Neo",
       "description": "Neo Core Committee",
       "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "verticalId": "v-autobot",
+      "vertical_id": "v-autobot"
     },
     {
       "id": "cc-spoorthi",
       "name": "Spoorthi",
       "description": "Spoorthi Core Committee",
       "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "verticalId": "v-fieldops",
+      "vertical_id": "v-fieldops"
     },
     {
       "id": "cc-vidhya-yadav",
       "name": "Vidhya Yadav",
       "description": "Vidhya Yadav Core Committee",
       "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "verticalId": "v-fieldops",
+      "vertical_id": "v-fieldops"
     },
     {
       "id": "cc-arush",
       "name": "Arush",
       "description": "Arush Core Committee",
       "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "verticalId": "v-debate",
+      "vertical_id": "v-debate"
     },
     {
       "id": "cc-sneka",
       "name": "Sneka",
       "description": "Sneka Core Committee",
       "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "verticalId": "v-debate",
+      "vertical_id": "v-debate"
     },
     {
       "id": "cc-katam",
       "name": "Katam",
       "description": "Katam Core Committee",
       "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "verticalId": "v-startovate",
+      "vertical_id": "v-startovate"
     },
     {
       "id": "cc-brian",
       "name": "Brian",
       "description": "Brian Core Committee",
       "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "verticalId": "v-startovate",
+      "vertical_id": "v-startovate"
     },
     {
       "id": "cc-sanidhya",
       "name": "Sanidhya",
       "description": "Sanidhya Core Committee",
       "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "verticalId": "v-interverse",
+      "vertical_id": "v-interverse"
     },
     {
       "id": "cc-akshat",
       "name": "Akshat",
       "description": "Akshat Core Committee",
       "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "verticalId": "v-peer-sessions",
+      "vertical_id": "v-peer-sessions"
     },
     {
       "id": "cc-keerthana-dhanvanthika",
       "name": "Keerthana & Dhanvanthika",
       "description": "Keerthana & Dhanvanthika Core Committee",
       "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "verticalId": "v-research-guidance",
+      "vertical_id": "v-research-guidance"
     }
   ],
   "verticals": [

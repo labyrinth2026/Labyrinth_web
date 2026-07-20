@@ -23,10 +23,11 @@ export interface User {
   profilePhoto?: string;
   department?: string;
   designation?: string;
-  committeeId?: string;
-  verticalId?: string;
-  committee_id?: string;
-  vertical_id?: string;
+  committeeId?: string | null;
+  verticalId?: string | null;
+  committee_id?: string | null;
+  vertical_id?: string | null;
+  github?: string | null;
   isHead?: boolean;
   is_head?: boolean;
 }
@@ -37,6 +38,8 @@ export interface CoreCommittee {
   description: string;
   icon?: string;
   head_id?: string;
+  verticalId?: string | null;
+  vertical_id?: string | null;
   createdAt?: string;
 }
 
@@ -527,6 +530,9 @@ export async function dbGetVerticals(): Promise<any[]> {
     const subHeads = verticalUsers.filter(u => u.designation === 'Vertical Sub-Head');
     const coreCommittee = verticalUsers.filter(u => u.designation === 'Core Committee Member');
 
+    const db = getLocalDb();
+    const committees = (db.coreCommittees || []).filter(c => c.verticalId === v.id || c.vertical_id === v.id);
+
     return {
       ...v,
       // Legacy single-object for backwards compat
@@ -536,6 +542,7 @@ export async function dbGetVerticals(): Promise<any[]> {
       heads: heads.map(h => ({ id: h.id, name: h.full_name || h.name, email: h.email })),
       subHeads: subHeads.map(s => ({ id: s.id, name: s.full_name || s.name, email: s.email })),
       coreCommittee: coreCommittee.map(c => ({ id: c.id, name: c.full_name || c.name, email: c.email })),
+      committees: committees.map(c => ({ id: c.id, name: c.name, description: c.description }))
     };
   });
 }
@@ -605,9 +612,9 @@ export async function dbGetCoreCommittees(): Promise<CoreCommittee[]> {
   }
 }
 
-export async function dbAddCoreCommittee(name: string, description: string): Promise<void> {
+export async function dbAddCoreCommittee(name: string, description: string, verticalId?: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('core_committees').insert({ name, description });
+    const { error } = await supabase.from('core_committees').insert({ name, description, vertical_id: verticalId });
     if (error) throw error;
   } else {
     const db = getLocalDb();
@@ -615,9 +622,33 @@ export async function dbAddCoreCommittee(name: string, description: string): Pro
       id: `cc-${Date.now()}`,
       name,
       description,
+      verticalId,
+      vertical_id: verticalId || null,
       icon: 'Users'
     });
     saveLocalDb(db);
+  }
+}
+
+export async function dbUpdateCoreCommittee(id: string, name: string, description?: string, verticalId?: string): Promise<void> {
+  if (isSupabaseConfigured() && supabase) {
+    const { error } = await supabase
+      .from('core_committees')
+      .update({ name, description, vertical_id: verticalId })
+      .eq('id', id);
+    if (error) throw error;
+  } else {
+    const db = getLocalDb();
+    const comm = db.coreCommittees.find(c => c.id === id);
+    if (comm) {
+      comm.name = name;
+      if (description !== undefined) comm.description = description;
+      if (verticalId !== undefined) {
+        comm.verticalId = verticalId;
+        comm.vertical_id = verticalId || null;
+      }
+      saveLocalDb(db);
+    }
   }
 }
 

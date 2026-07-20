@@ -4,7 +4,7 @@ import { verifyJWT } from '@/utils/jwt';
 import {
   dbGetEvents, dbAddEvent, dbUpdateEvent, dbDeleteEvent,
   dbGetVerticals, dbAddVertical, dbUpdateVertical, dbDeleteVertical,
-  dbGetCoreCommittees, dbAddCoreCommittee, dbDeleteCoreCommittee,
+  dbGetCoreCommittees, dbAddCoreCommittee, dbUpdateCoreCommittee, dbDeleteCoreCommittee,
   dbGetAssignments, dbAssignCoreHead, dbRemoveCoreAssignment,
   dbAssignVerticalHead, dbRemoveVerticalAssignment, dbRemovePersonFromVertical, dbAssignVerticalRole,
   dbGetAnnouncements, dbAddAnnouncement, dbDeleteAnnouncement,
@@ -290,8 +290,16 @@ export async function POST(req: NextRequest) {
 
       // --- CORE COMMITTEES ---
       case 'addCoreCommittee': {
-        await dbAddCoreCommittee(payload.name, payload.description);
-        await logActivity(sessionUser.id, 'add_committee', `Created committee ${payload.name}`);
+        const { name, description, verticalId } = payload;
+        await dbAddCoreCommittee(name, description, verticalId);
+        await logActivity(sessionUser.id, 'add_committee', `Created committee ${name} under vertical ${verticalId}`);
+        return NextResponse.json({ success: true });
+      }
+
+      case 'updateCoreCommittee': {
+        const { id, name, description, verticalId } = payload;
+        await dbUpdateCoreCommittee(id, name, description, verticalId);
+        await logActivity(sessionUser.id, 'update_committee', `Updated committee ID ${id}`);
         return NextResponse.json({ success: true });
       }
 
