@@ -155,7 +155,7 @@ const TeamPage: React.FC = () => {
             {hasResults ? (
               <div key={filter + search}>
                 {/* ── FACULTY COORDINATORS ── */}
-                {(filter === 'all' || filter === 'faculty') && faculty.length > 0 && (
+                {(filter === 'all' || filter === 'faculty') && (
                   <div className="mb-20">
                     <div className="bg-slate-900 border border-slate-950 rounded-2xl px-6 py-5 mb-8 flex items-center gap-4 shadow-sm">
                       <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
@@ -167,8 +167,42 @@ const TeamPage: React.FC = () => {
                       </div>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                      <ScrollReveal key={`${filter}-faculty`} stagger={0.06}>
-                        {faculty.map(member => (
+                      <ScrollReveal stagger={0.06}>
+                        {[
+                          {
+                            id: 'fc1',
+                            name: 'Dr. Amrutha K',
+                            role: 'Faculty Coordinator',
+                            designation: 'Assistant Professor',
+                            department: 'Department of Computer Science',
+                            email: 'amrutha.k@christuniversity.in',
+                            profileUrl: 'https://christuniversity.in/computer-science/faculty-details/NzE0Mg==/NjI=',
+                            linkedin: '#',
+                            avatar: null,
+                          },
+                          {
+                            id: 'fc2',
+                            name: 'Dr. Binayak Dutta',
+                            role: 'Faculty Coordinator',
+                            designation: 'Assistant Professor',
+                            department: 'Department of Computer Science',
+                            email: 'binayak.dutta@christuniversity.in',
+                            profileUrl: 'https://christuniversity.in/computer-science/faculty-details/ODc2OQ==/NjI=',
+                            linkedin: '#',
+                            avatar: null,
+                          },
+                          {
+                            id: 'fc3',
+                            name: 'Dr. Syam Mohan E',
+                            role: 'Faculty Coordinator',
+                            designation: 'Assistant Professor',
+                            department: 'Department of Computer Science',
+                            email: 'syam.mohan@christuniversity.in',
+                            profileUrl: 'https://christuniversity.in/computer-science/faculty-details/OTM1NA==/NjI=',
+                            linkedin: '#',
+                            avatar: null,
+                          },
+                        ].map(member => (
                           <FacultyCard key={member.id} faculty={member} />
                         ))}
                       </ScrollReveal>

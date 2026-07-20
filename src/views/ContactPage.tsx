@@ -97,35 +97,58 @@ const ContactPage: React.FC = () => {
               <div className="space-y-6 flex flex-col justify-between h-full">
 
                 {/* Faculty Coordinators Card */}
-                <div className="bg-slate-900 border border-slate-900 rounded-2xl p-8 text-white relative overflow-hidden group shadow-sm flex flex-col justify-center hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md hover:shadow-white/[0.01] transition-all duration-300">
-                  <div className="relative z-10">
-                    <div className="flex items-center gap-3 mb-5">
-                      <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                        <GraduationCap size={20} className="text-white" />
-                      </div>
-                      <div>
-                        <p className="text-slate-400 text-[8px] font-black uppercase tracking-widest mb-0.5">Faculty Coordinators</p>
-                        <p className="text-slate-300 text-[10px]">Department of Computer Science</p>
-                      </div>
+                <div
+                  className="rounded-2xl p-8 flex flex-col justify-center hover:scale-[1.015] hover:-translate-y-1 transition-all duration-300"
+                  style={{
+                    background: 'rgba(255,255,255,0.65)',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(255,255,255,0.4)',
+                    boxShadow: '0 2px 12px 0 rgba(0,0,0,0.06), 0 1px 3px 0 rgba(0,0,0,0.04)',
+                  }}
+                >
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center shrink-0">
+                      <GraduationCap size={20} className="text-[#CD0000]" />
                     </div>
-                    <div className="space-y-3">
-                      {[
-                        { name: 'Dr. Amrutha K', url: 'https://christuniversity.in/computer-science/faculty-details/NzE0Mg==/NjI=' },
-                        { name: 'Dr. Binayak Dutta', url: 'https://christuniversity.in/computer-science/faculty-details/ODc2OQ==/NjI=' },
-                        { name: 'Dr. Syam Mohan E', url: 'https://christuniversity.in/computer-science/faculty-details/OTM1NA==/NjI=' },
-                      ].map(({ name, url }) => (
-                        <a
-                          key={name}
-                          href={url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="flex items-center justify-between gap-3 px-3 py-2.5 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 transition-all group/item"
-                        >
-                          <span className="text-white text-xs font-semibold group-hover/item:text-slate-100">{name}</span>
-                          <ExternalLink size={12} className="text-slate-500 group-hover/item:text-white transition-colors shrink-0" />
-                        </a>
-                      ))}
+                    <div>
+                      <p className="text-[#6B7280] text-[8px] font-black uppercase tracking-widest mb-0.5">Faculty Coordinators</p>
+                      <p className="text-[#6B7280] text-[10px]">Department of Computer Science</p>
                     </div>
+                  </div>
+                  <div className="space-y-2.5">
+                    {[
+                      { name: 'Dr. Amrutha K', url: 'https://christuniversity.in/computer-science/faculty-details/NzE0Mg==/NjI=' },
+                      { name: 'Dr. Binayak Dutta', url: 'https://christuniversity.in/computer-science/faculty-details/ODc2OQ==/NjI=' },
+                      { name: 'Dr. Syam Mohan E', url: 'https://christuniversity.in/computer-science/faculty-details/OTM1NA==/NjI=' },
+                    ].map(({ name, url }) => (
+                      <a
+                        key={name}
+                        href={url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-200 group/item"
+                        style={{
+                          background: '#F5F5F7',
+                          border: '1px solid #E5E7EB',
+                        }}
+                        onMouseEnter={e => {
+                          (e.currentTarget as HTMLElement).style.background = '#ECECEC';
+                          (e.currentTarget as HTMLElement).style.borderColor = '#CD0000';
+                          (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)';
+                          (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 12px rgba(0,0,0,0.07)';
+                        }}
+                        onMouseLeave={e => {
+                          (e.currentTarget as HTMLElement).style.background = '#F5F5F7';
+                          (e.currentTarget as HTMLElement).style.borderColor = '#E5E7EB';
+                          (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
+                          (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+                        }}
+                      >
+                        <span className="text-[#1F2937] text-xs font-semibold">{name}</span>
+                        <ExternalLink size={12} className="text-[#CD0000] shrink-0" />
+                      </a>
+                    ))}
                   </div>
                 </div>
 

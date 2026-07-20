@@ -102,7 +102,8 @@ const EventsPage: React.FC = () => {
           {carouselEvents.length > 0 && (
             <ScrollReveal animation="slide-up">
               <div
-                className="relative w-full h-[380px] md:h-[460px] rounded-3xl overflow-hidden shadow-xs border border-slate-200/80 bg-slate-950"
+                className="relative w-full h-[380px] md:h-[460px] rounded-3xl overflow-hidden shadow-xs border border-slate-200/80"
+                style={{ background: 'rgba(255,255,255,0.72)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
               >
@@ -115,8 +116,8 @@ const EventsPage: React.FC = () => {
                     transition={{ duration: 0.3 }}
                     className="absolute inset-0"
                   >
-                    <div className="w-full h-full relative flex items-end bg-gradient-to-br from-slate-900 to-slate-950">
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent" />
+                    <div className="w-full h-full relative flex items-end" style={{ background: 'linear-gradient(135deg, #F5F5F7 0%, #ECECEC 100%)' }}>
+                      <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(245,245,247,0.98) 0%, rgba(245,245,247,0.55) 55%, transparent 100%)' }} />
 
                       {/* Content */}
                       <div className="relative z-10 p-8 md:p-12 w-full max-w-4xl">
@@ -126,24 +127,24 @@ const EventsPage: React.FC = () => {
                           </span>
                           <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border ${
                             carouselEvents[currentSlide].status === 'upcoming'
-                              ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
-                              : 'bg-white/10 text-slate-300 border-white/10'
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                              : 'bg-slate-100 text-slate-500 border-slate-200'
                           }`}>
                             {carouselEvents[currentSlide].status}
                           </span>
                         </div>
-                        <h2 className="text-2xl md:text-4xl font-extrabold text-white mb-3 leading-tight tracking-tight">
+                        <h2 className="text-2xl md:text-4xl font-extrabold text-[#1F2937] mb-3 leading-tight tracking-tight">
                           {carouselEvents[currentSlide].title}
                         </h2>
-                        <p className="text-slate-300 text-xs md:text-sm mb-5 line-clamp-2 max-w-3xl leading-relaxed">
+                        <p className="text-[#6B7280] text-xs md:text-sm mb-5 line-clamp-2 max-w-3xl leading-relaxed">
                           {carouselEvents[currentSlide].description}
                         </p>
                         <div className="flex flex-wrap gap-2.5 mb-6">
-                          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-200 bg-white/5 border border-white/10 px-3 py-1 rounded-xl">
+                          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#1F2937] bg-white border border-slate-200 px-3 py-1 rounded-xl shadow-xs">
                             <Calendar size={12} className="text-[#CD0000]" />
                             <span>{new Date(carouselEvents[currentSlide].date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
                           </div>
-                          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-200 bg-white/5 border border-white/10 px-3 py-1 rounded-xl">
+                          <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#1F2937] bg-white border border-slate-200 px-3 py-1 rounded-xl shadow-xs">
                             <MapPin size={12} className="text-[#CD0000]" />
                             <span>{carouselEvents[currentSlide].location}</span>
                           </div>
@@ -158,10 +159,10 @@ const EventsPage: React.FC = () => {
 
                 {/* Controls */}
                 <div className="absolute right-4 md:right-6 bottom-6 flex gap-1.5 z-20">
-                  <button onClick={prevSlide} className="w-8 h-8 rounded-full bg-white/10 backdrop-blur border border-white/10 flex items-center justify-center text-white hover:bg-[#CD0000] hover:border-[#CD0000] transition-all">
+                  <button onClick={prevSlide} className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-[#CD0000] hover:border-[#CD0000] hover:text-white transition-all shadow-xs">
                     <ChevronLeft size={16} />
                   </button>
-                  <button onClick={nextSlide} className="w-8 h-8 rounded-full bg-white/10 backdrop-blur border border-white/10 flex items-center justify-center text-white hover:bg-[#CD0000] hover:border-[#CD0000] transition-all">
+                  <button onClick={nextSlide} className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-[#CD0000] hover:border-[#CD0000] hover:text-white transition-all shadow-xs">
                     <ChevronRight size={16} />
                   </button>
                 </div>
@@ -170,7 +171,7 @@ const EventsPage: React.FC = () => {
                 <div className="absolute top-6 right-6 flex gap-1.5 z-20">
                   {carouselEvents.map((_, idx) => (
                     <button key={idx} onClick={() => setCurrentSlide(idx)}
-                      className={`h-1 rounded-full transition-all duration-300 ${currentSlide === idx ? 'w-5 bg-[#CD0000]' : 'w-1 bg-white/30 hover:bg-[#CD0000]/65'}`}
+                      className={`h-1 rounded-full transition-all duration-300 ${currentSlide === idx ? 'w-5 bg-[#CD0000]' : 'w-1 bg-slate-300 hover:bg-[#CD0000]/65'}`}
                     />
                   ))}
                 </div>
