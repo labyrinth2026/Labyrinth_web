@@ -1454,14 +1454,25 @@ export interface CustomFormResponse {
   answers?: Record<string, any>;
 }
 
+let customFormsCache: { data: CustomForm[]; timestamp: number } | null = null;
+
+export function invalidateCustomFormsCache() {
+  customFormsCache = null;
+}
+
 export async function dbGetCustomForms(): Promise<CustomForm[]> {
+  const now = Date.now();
+  if (customFormsCache && (now - customFormsCache.timestamp < 10000)) {
+    return customFormsCache.data;
+  }
+
   if (isSupabaseConfigured()) {
     const adminClient = getSupabaseAdmin();
     if (adminClient) {
       try {
         const { data, error } = await adminClient.from('forms').select('*').order('created_at', { ascending: false });
         if (error) throw error;
-        return (data || []).map((f: any) => ({
+        const mapped = (data || []).map((f: any) => ({
           id: f.id,
           title: f.title,
           description: f.description || '',
@@ -1474,6 +1485,8 @@ export async function dbGetCustomForms(): Promise<CustomForm[]> {
           createdAt: f.created_at,
           updatedAt: f.updated_at
         }));
+        customFormsCache = { data: mapped, timestamp: now };
+        return mapped;
       } catch (err) {
         console.warn("Supabase dbGetCustomForms failed, using local database fallback:", err);
         return (getLocalDb().forms || []) as CustomForm[];
@@ -1554,6 +1567,7 @@ const isUuid = (str?: string | null): boolean => {
 };
 
 export async function dbAddCustomForm(data: Partial<CustomForm>, fields: Partial<CustomFormField>[]): Promise<string> {
+  invalidateCustomFormsCache();
   const formId = genRandomUuid();
   const timestamp = new Date().toISOString();
 
@@ -1649,6 +1663,7 @@ export async function dbAddCustomForm(data: Partial<CustomForm>, fields: Partial
 }
 
 export async function dbUpdateCustomForm(id: string, data: Partial<CustomForm>, fields: Partial<CustomFormField>[]): Promise<void> {
+  invalidateCustomFormsCache();
   const timestamp = new Date().toISOString();
 
   if (isSupabaseConfigured()) {
@@ -1737,6 +1752,7 @@ export async function dbUpdateCustomForm(id: string, data: Partial<CustomForm>, 
 }
 
 export async function dbDeleteCustomForm(id: string): Promise<void> {
+  invalidateCustomFormsCache();
   if (isSupabaseConfigured()) {
     const adminClient = getSupabaseAdmin();
     if (adminClient) {
@@ -1765,6 +1781,7 @@ export async function dbDeleteCustomForm(id: string): Promise<void> {
 }
 
 export async function dbDuplicateCustomForm(id: string): Promise<string> {
+  invalidateCustomFormsCache();
   const timestamp = new Date().toISOString();
   const newFormId = genRandomUuid();
 
