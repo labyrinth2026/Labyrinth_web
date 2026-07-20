@@ -16,9 +16,10 @@
       "class": "3BScCM",
       "committee_id": null,
       "vertical_id": "v-devzen",
+      "committeeId": null,
+      "verticalId": "v-devzen",
       "createdAt": "2026-07-20T14:44:32.695Z",
       "lastLogin": "2026-07-20T14:46:58.207Z",
-      "verticalId": "v-devzen",
       "github": "https://github.com/sgk18"
     },
     {
@@ -35,8 +36,10 @@
       "department": "Department of Computer Science",
       "regNo": "2440251",
       "class": "5BScCS",
-      "committee_id": null,
+      "committee_id": "cc-dhairya",
       "vertical_id": "v-ai-hub",
+      "committeeId": "cc-dhairya",
+      "verticalId": "v-ai-hub",
       "createdAt": "2026-07-20T14:44:32.695Z"
     },
     {
@@ -55,6 +58,8 @@
       "class": "3BCA B",
       "committee_id": null,
       "vertical_id": "v-ai-hub",
+      "committeeId": null,
+      "verticalId": "v-ai-hub",
       "createdAt": "2026-07-20T14:44:32.695Z"
     },
     {
@@ -73,6 +78,8 @@
       "class": "5BCA B",
       "committee_id": null,
       "vertical_id": "v-devzen",
+      "committeeId": null,
+      "verticalId": "v-devzen",
       "createdAt": "2026-07-20T14:44:32.695Z"
     },
     {
@@ -85,7 +92,12 @@
       "status": "active",
       "firstLogin": false,
       "createdBy": "u-suryachalam",
-      "createdAt": "2026-07-20T14:47:31.749Z"
+      "committee_id": null,
+      "vertical_id": null,
+      "committeeId": null,
+      "verticalId": null,
+      "createdAt": "2026-07-20T14:47:31.749Z",
+      "lastLogin": "2026-07-20T14:53:11.618Z"
     }
   ],
   "coreCommittees": [
@@ -181,6 +193,13 @@
   "resources": [],
   "tasks": [],
   "activityLogs": [
+    {
+      "id": "log-1784559225452",
+      "userId": "u-1784558851639",
+      "action": "update_user_details",
+      "details": "Updated profile of user u-krupa-m",
+      "timestamp": "2026-07-20T14:53:45.452Z"
+    },
     {
       "id": "log-1784558851756",
       "userId": "u-suryachalam",

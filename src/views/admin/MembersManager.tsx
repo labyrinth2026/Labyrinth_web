@@ -168,6 +168,26 @@ export default function MembersManager() {
     setShowEditModal(true);
   };
 
+  const handleAddCommitteePrompt = async () => {
+    const name = window.prompt("Enter new core committee name:");
+    if (!name) return;
+    try {
+      await fetchFromSheet('addCoreCommittee', { name, description: 'Created dynamically' });
+      const updated: any = await fetchFromSheet('getCoreCommittees');
+      setCommittees(updated || []);
+      const newlyCreated = updated.find((c: any) => c.name.toLowerCase() === name.toLowerCase());
+      if (newlyCreated) {
+        if (showEditModal) {
+          setEditingUserCommittee(newlyCreated.id);
+        } else {
+          setNewUserCommittee(newlyCreated.id);
+        }
+      }
+    } catch (err: any) {
+      alert(err.message || 'Failed to create core committee.');
+    }
+  };
+
   const handleExportCSV = () => {
     if (registrations.length === 0) return;
     const headers = ['Name', 'Email', 'Phone', 'Course', 'Year', 'Preferred Vertical', 'Reason', 'Date'];
@@ -405,10 +425,15 @@ export default function MembersManager() {
 
                 <div>
                   <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Committee</label>
-                  <select value={newUserCommittee} onChange={e => setNewUserCommittee(e.target.value)} className={inputClass}>
-                    <option value="">None</option>
-                    {committees.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                  </select>
+                  <div className="flex gap-2">
+                    <select value={newUserCommittee} onChange={e => setNewUserCommittee(e.target.value)} className={inputClass}>
+                      <option value="">None</option>
+                      {committees.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                    </select>
+                    <button type="button" onClick={handleAddCommitteePrompt} className="px-3 border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 hover:text-[#CD0000] transition-colors flex items-center justify-center shrink-0" title="Create New Core Committee">
+                      <Plus size={16} />
+                    </button>
+                  </div>
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical</label>
@@ -457,10 +482,15 @@ export default function MembersManager() {
 
                 <div>
                   <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Committee</label>
-                  <select value={editingUserCommittee} onChange={e => setEditingUserCommittee(e.target.value)} className={inputClass}>
-                    <option value="">None</option>
-                    {committees.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                  </select>
+                  <div className="flex gap-2">
+                    <select value={editingUserCommittee} onChange={e => setEditingUserCommittee(e.target.value)} className={inputClass}>
+                      <option value="">None</option>
+                      {committees.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                    </select>
+                    <button type="button" onClick={handleAddCommitteePrompt} className="px-3 border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 hover:text-[#CD0000] transition-colors flex items-center justify-center shrink-0" title="Create New Core Committee">
+                      <Plus size={16} />
+                    </button>
+                  </div>
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical</label>

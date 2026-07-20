@@ -422,6 +422,8 @@ export async function dbCreateUser(name: string, email: string, role: string, co
       createdBy: adminUserId,
       committeeId,
       verticalId,
+      committee_id: committeeId || null,
+      vertical_id: verticalId || null,
       createdAt: new Date().toISOString()
     });
 
@@ -468,6 +470,8 @@ export async function dbUpdateUserDetails(
       user.role = role as any;
       user.committeeId = committeeId;
       user.verticalId = verticalId;
+      user.committee_id = committeeId || null;
+      user.vertical_id = verticalId || null;
       if (designation !== undefined) user.designation = designation;
       if (profilePhoto !== undefined) user.profilePhoto = profilePhoto;
       if (github !== undefined) user.github = github;
