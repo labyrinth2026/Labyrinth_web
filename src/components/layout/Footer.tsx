@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 const Footer: React.FC = () => {
   const pathname = usePathname();
 
-  if (pathname.startsWith('/admin')) {
+  if (pathname.startsWith('/admin') || pathname.startsWith('/forms/')) {
     return null;
   }
 
