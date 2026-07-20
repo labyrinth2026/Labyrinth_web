@@ -42,6 +42,10 @@ export default function MembersManager() {
 
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
+  // New Core Committee creation states
+  const [showNewCommitteeModal, setShowNewCommitteeModal] = useState(false);
+  const [newCommitteeName, setNewCommitteeName] = useState('');
+
   const loadData = async () => {
     setLoading(true);
     try {
@@ -168,14 +172,18 @@ export default function MembersManager() {
     setShowEditModal(true);
   };
 
-  const handleAddCommitteePrompt = async () => {
-    const name = window.prompt("Enter new core committee name:");
-    if (!name) return;
+  const handleAddCommitteePrompt = () => {
+    setNewCommitteeName('');
+    setShowNewCommitteeModal(true);
+  };
+
+  const handleCreateNewCommittee = async () => {
+    if (!newCommitteeName.trim()) return;
     try {
-      await fetchFromSheet('addCoreCommittee', { name, description: 'Created dynamically' });
+      await fetchFromSheet('addCoreCommittee', { name: newCommitteeName, description: 'Created dynamically' });
       const updated: any = await fetchFromSheet('getCoreCommittees');
       setCommittees(updated || []);
-      const newlyCreated = updated.find((c: any) => c.name.toLowerCase() === name.toLowerCase());
+      const newlyCreated = updated.find((c: any) => c.name.toLowerCase() === newCommitteeName.toLowerCase());
       if (newlyCreated) {
         if (showEditModal) {
           setEditingUserCommittee(newlyCreated.id);
@@ -183,6 +191,8 @@ export default function MembersManager() {
           setNewUserCommittee(newlyCreated.id);
         }
       }
+      setShowNewCommitteeModal(false);
+      setNewCommitteeName('');
     } catch (err: any) {
       alert(err.message || 'Failed to create core committee.');
     }
@@ -503,9 +513,18 @@ export default function MembersManager() {
                 {/* Designation */}
                 <div>
                   <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Designation / Title</label>
-                  <input type="text" value={editingUserDesignation}
+                  <select
+                    value={editingUserDesignation}
                     onChange={e => setEditingUserDesignation(e.target.value)}
-                    className={inputClass} placeholder="e.g. Vertical Head, Core Member…" />
+                    className={inputClass}
+                  >
+                    <option value="">None / Regular Member</option>
+                    <option value="Core Committee Member">Core Committee Member</option>
+                    <option value="Vertical Head">Vertical Head</option>
+                    <option value="Vertical Sub-Head">Vertical Sub-Head</option>
+                    <option value="Mentor">Mentor</option>
+                    <option value="Faculty Coordinator">Faculty Coordinator</option>
+                  </select>
                 </div>
 
                 {/* Photo URL + live preview */}
@@ -557,6 +576,41 @@ export default function MembersManager() {
             <div className="flex gap-3">
               <button onClick={() => setDeleteConfirm(null)} className="flex-1 px-4 py-2 text-sm font-semibold text-slate-500 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">Cancel</button>
               <button onClick={() => handleDeleteUser(deleteConfirm)} className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-red-500 rounded-xl hover:bg-red-600 transition-colors">Confirm</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* NEW CORE COMMITTEE MODAL */}
+      {showNewCommitteeModal && (
+        <div className="fixed inset-0 z-[60] bg-slate-950/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-sm p-6 text-left">
+            <h3 className="font-bold text-[#CD0000] mb-2 text-sm uppercase tracking-wider">New Core Committee</h3>
+            <p className="text-slate-500 text-xs mb-4">Enter a name for the new core committee. This will be added to the database and automatically selected.</p>
+            <input
+              type="text"
+              required
+              value={newCommitteeName}
+              onChange={e => setNewCommitteeName(e.target.value)}
+              className={inputClass}
+              placeholder="e.g. Publicity, Editorial, Tech Support…"
+            />
+            <div className="flex gap-3 mt-5">
+              <button
+                type="button"
+                onClick={() => { setShowNewCommitteeModal(false); setNewCommitteeName(''); }}
+                className="flex-1 px-4 py-2 text-xs font-semibold text-slate-500 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleCreateNewCommittee}
+                disabled={!newCommitteeName.trim()}
+                className="flex-1 px-4 py-2 text-xs font-semibold text-white bg-[#CD0000] hover:bg-[#A30000] rounded-xl transition-colors disabled:opacity-40"
+              >
+                Create Committee
+              </button>
             </div>
           </div>
         </div>

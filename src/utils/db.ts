@@ -525,6 +525,7 @@ export async function dbGetVerticals(): Promise<any[]> {
     const verticalUsers = users.filter(u => u.verticalId === v.id || u.vertical_id === v.id);
     const heads = verticalUsers.filter(u => u.designation === 'Vertical Head');
     const subHeads = verticalUsers.filter(u => u.designation === 'Vertical Sub-Head');
+    const coreCommittee = verticalUsers.filter(u => u.designation === 'Core Committee Member');
 
     return {
       ...v,
@@ -534,6 +535,7 @@ export async function dbGetVerticals(): Promise<any[]> {
       // New: full arrays
       heads: heads.map(h => ({ id: h.id, name: h.full_name || h.name, email: h.email })),
       subHeads: subHeads.map(s => ({ id: s.id, name: s.full_name || s.name, email: s.email })),
+      coreCommittee: coreCommittee.map(c => ({ id: c.id, name: c.full_name || c.name, email: c.email })),
     };
   });
 }
@@ -830,8 +832,8 @@ export async function dbRemovePersonFromVertical(userId: string): Promise<void> 
   }
 }
 
-// Assign a vertical role (head or sub-head) to a user
-export async function dbAssignVerticalRole(userId: string, verticalId: string, designation: 'Vertical Head' | 'Vertical Sub-Head'): Promise<void> {
+// Assign a vertical role (head, sub-head, or core committee) to a user
+export async function dbAssignVerticalRole(userId: string, verticalId: string, designation: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
     const { error } = await supabase
       .from('profiles')

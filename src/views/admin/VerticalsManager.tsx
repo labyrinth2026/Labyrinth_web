@@ -135,8 +135,10 @@ export default function VerticalsManager() {
   // Leadership states
   const [selectedHeads, setSelectedHeads] = useState<PersonChip[]>([]);
   const [selectedSubHeads, setSelectedSubHeads] = useState<PersonChip[]>([]);
+  const [selectedCoreCommittee, setSelectedCoreCommittee] = useState<PersonChip[]>([]);
   const [originalHeadIds, setOriginalHeadIds] = useState<Set<string>>(new Set());
   const [originalSubHeadIds, setOriginalSubHeadIds] = useState<Set<string>>(new Set());
+  const [originalCoreCommitteeIds, setOriginalCoreCommitteeIds] = useState<Set<string>>(new Set());
 
   const loadData = async () => {
     setLoading(true);
@@ -158,12 +160,26 @@ export default function VerticalsManager() {
     loadData();
   }, []);
 
+  // Lock background scroll when modal is open
+  useEffect(() => {
+    if (showModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showModal]);
+
   const openAddModal = () => {
     setEditingItem({ name: '', description: '', category: 'tech', icon: 'Brain', color: '#3b82f6', image: '' });
     setSelectedHeads([]);
     setSelectedSubHeads([]);
+    setSelectedCoreCommittee([]);
     setOriginalHeadIds(new Set());
     setOriginalSubHeadIds(new Set());
+    setOriginalCoreCommitteeIds(new Set());
     setShowModal(true);
   };
 
@@ -171,10 +187,13 @@ export default function VerticalsManager() {
     setEditingItem({ ...item, image: item.image || '', icon: item.icon || 'Brain', color: item.color || '#3b82f6' });
     const heads = item.heads || [];
     const subHeads = item.subHeads || [];
+    const coreMembers = item.coreCommittee || [];
     setSelectedHeads(heads);
     setSelectedSubHeads(subHeads);
+    setSelectedCoreCommittee(coreMembers);
     setOriginalHeadIds(new Set(heads.map((h: any) => h.id)));
     setOriginalSubHeadIds(new Set(subHeads.map((s: any) => s.id)));
+    setOriginalCoreCommitteeIds(new Set(coreMembers.map((c: any) => c.id)));
     setShowModal(true);
   };
 
@@ -215,6 +234,12 @@ export default function VerticalsManager() {
             await fetchFromSheet('removePersonFromVertical', { userId: oldId });
           }
         }
+        const newCoreIds = new Set(selectedCoreCommittee.map(c => c.id));
+        for (const oldId of originalCoreCommitteeIds) {
+          if (!newCoreIds.has(oldId)) {
+            await fetchFromSheet('removePersonFromVertical', { userId: oldId });
+          }
+        }
         for (const head of selectedHeads) {
           if (!originalHeadIds.has(head.id)) {
             await fetchFromSheet('assignVerticalRole', { userId: head.id, verticalId: vertId, designation: 'Vertical Head' });
@@ -223,6 +248,11 @@ export default function VerticalsManager() {
         for (const sub of selectedSubHeads) {
           if (!originalSubHeadIds.has(sub.id)) {
             await fetchFromSheet('assignVerticalRole', { userId: sub.id, verticalId: vertId, designation: 'Vertical Sub-Head' });
+          }
+        }
+        for (const coreMember of selectedCoreCommittee) {
+          if (!originalCoreCommitteeIds.has(coreMember.id)) {
+            await fetchFromSheet('assignVerticalRole', { userId: coreMember.id, verticalId: vertId, designation: 'Core Committee Member' });
           }
         }
       }
@@ -310,6 +340,15 @@ export default function VerticalsManager() {
                       {(item.subHeads || []).length === 0 && <span className="text-xs text-slate-400 italic">None assigned</span>}
                     </div>
                   </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Core Committee</span>
+                    <div className="flex flex-wrap gap-1">
+                      {(item.coreCommittee || []).map((c: any) => (
+                        <span key={c.id} className="text-[11px] font-semibold bg-slate-50 text-slate-600 border border-slate-200/50 px-2 py-0.5 rounded-lg">{c.name}</span>
+                      ))}
+                      {(item.coreCommittee || []).length === 0 && <span className="text-xs text-slate-400 italic">None assigned</span>}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -326,7 +365,7 @@ export default function VerticalsManager() {
               <button onClick={() => setShowModal(false)} className="text-[#8c97a8] hover:text-[#CD0000]"><X size={18} /></button>
             </div>
             
-            <div className="p-5 overflow-y-auto space-y-4 flex-1">
+            <div className="px-5 pt-5 pb-36 overflow-y-auto space-y-4 flex-1">
               <div>
                 <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Name *</label>
                 <input type="text" value={editingItem.name || ''} onChange={e => setEditingItem({ ...editingItem, name: e.target.value })} className={inputClass} placeholder="e.g. AI Creator's Lab" />
@@ -379,6 +418,15 @@ export default function VerticalsManager() {
                   allUsers={allUsers}
                   onAdd={p => setSelectedSubHeads(prev => [...prev, p])}
                   onRemove={id => setSelectedSubHeads(prev => prev.filter(s => s.id !== id))}
+                />
+                <PeoplePicker 
+                  label="Core Committee Members"
+                  icon={<Users size={12} className="text-slate-500" />}
+                  accentClass="bg-slate-50 border-slate-200 text-slate-700"
+                  selected={selectedCoreCommittee}
+                  allUsers={allUsers}
+                  onAdd={p => setSelectedCoreCommittee(prev => [...prev, p])}
+                  onRemove={id => setSelectedCoreCommittee(prev => prev.filter(c => c.id !== id))}
                 />
               </div>
             </div>
