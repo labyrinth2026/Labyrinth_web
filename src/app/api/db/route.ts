@@ -13,7 +13,7 @@ import {
   dbGetVerticalProjects, dbAddVerticalProject, dbUpdateVerticalProject, dbDeleteVerticalProject,
   dbGetVerticalResources, dbAddVerticalResource, dbDeleteVerticalResource,
   dbGetJoinRegistrations, dbApproveRegistration, dbRejectRegistration,
-  dbGetRoles, dbAddRole, dbDeleteRole, dbCreateUser, dbUpdateUserStatus, dbUpdateUserDetails,
+  dbGetRoles, dbAddRole, dbDeleteRole, dbDeleteUser, dbCreateUser, dbUpdateUserStatus, dbUpdateUserDetails,
   dbGetForms, dbUpdateForms,
   getLocalDb, saveLocalDb, logActivity,
   dbGetCustomForms, dbGetCustomFormBySlug, dbAddCustomForm, dbUpdateCustomForm,
@@ -359,6 +359,12 @@ export async function POST(req: NextRequest) {
       case 'deleteRole': {
         await dbDeleteRole(payload.id);
         await logActivity(sessionUser.id, 'revoke_admin_role', `Revoked permissions for ID ${payload.id}`);
+        return NextResponse.json({ success: true });
+      }
+
+      case 'deleteUser': {
+        await dbDeleteUser(payload.id);
+        await logActivity(sessionUser.id, 'delete_user', `Permanently deleted user ID ${payload.id}`);
         return NextResponse.json({ success: true });
       }
 

@@ -124,8 +124,7 @@ export default function MembersManager() {
 
   const handleDeleteUser = async (userId: string) => {
     try {
-      // Direct deletion of role or demotion to basic member
-      await fetchFromSheet('deleteRole', { id: userId });
+      await fetchFromSheet('deleteUser', { id: userId });
       await loadData();
     } catch (err: any) {
       alert(err.message || 'Failed to remove user.');

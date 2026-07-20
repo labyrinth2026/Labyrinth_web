@@ -346,6 +346,25 @@ export async function dbDeleteRole(userId: string): Promise<void> {
   }
 }
 
+export async function dbDeleteUser(userId: string): Promise<void> {
+  if (isSupabaseConfigured() && supabase) {
+    const adminClient = getSupabaseAdmin();
+    if (adminClient) {
+      // Delete from Supabase Auth (cascades to profiles via RLS/trigger)
+      const { error: authErr } = await adminClient.auth.admin.deleteUser(userId);
+      if (authErr) throw authErr;
+    } else {
+      // Fallback: just delete the profile row
+      const { error } = await supabase.from('profiles').delete().eq('id', userId);
+      if (error) throw error;
+    }
+  } else {
+    const db = getLocalDb();
+    db.users = db.users.filter((u: any) => u.id !== userId);
+    saveLocalDb(db);
+  }
+}
+
 export async function dbCreateUser(name: string, email: string, role: string, committeeId?: string, verticalId?: string, adminUserId?: string): Promise<void> {
   const cleanEmail = email.toLowerCase().trim();
   const defaultPassword = process.env.DEFAULT_TEMPORARY_PASSWORD || 'Labyrinth@123';
