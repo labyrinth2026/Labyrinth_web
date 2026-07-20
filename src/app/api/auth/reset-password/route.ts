@@ -21,10 +21,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Current password and new password are required.' }, { status: 400 });
     }
 
-    // Password validation regex check on server side
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if (!passwordRegex.test(newPassword)) {
-      return NextResponse.json({ success: false, error: 'New password does not meet complexity requirements.' }, { status: 400 });
+    // Simple length check: minimum 6 characters
+    if (newPassword.length < 6) {
+      return NextResponse.json({ success: false, error: 'New password must be at least 6 characters long.' }, { status: 400 });
     }
 
     if (isSupabaseConfigured()) {
