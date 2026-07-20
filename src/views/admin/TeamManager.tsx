@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchFromSheet } from '@/services/api';
 import { useAuth } from '@/context/AuthContext';
 import {
-  Edit2, Trash2, Plus, RefreshCw, X, Check, AlertTriangle
+  Edit2, Trash2, Plus, RefreshCw, X, Check, AlertTriangle, Github, Mail, Linkedin
 } from 'lucide-react';
 
 interface TeamMemberForm {
@@ -14,13 +14,14 @@ interface TeamMemberForm {
   department: string;
   email: string;
   linkedin: string;
+  github: string;
   avatar: string;
   category: 'faculty' | 'mentors' | 'vertical_head' | 'sub_head';
 }
 
 const EMPTY_FORM: TeamMemberForm = {
   name: '', role: '', vertical: '', designation: '', department: '',
-  email: '', linkedin: '', avatar: '', category: 'vertical_head'
+  email: '', linkedin: '', github: '', avatar: '', category: 'vertical_head'
 };
 
 const TeamManager: React.FC = () => {
@@ -74,7 +75,8 @@ const TeamManager: React.FC = () => {
       id: member.id, name: member.name || '', role: member.role || '',
       vertical: member.vertical || '', designation: member.designation || '',
       department: member.department || '', email: member.email || '',
-      linkedin: member.linkedin || '', avatar: member.avatar || '',
+      linkedin: member.linkedin || '', github: member.github || '',
+      avatar: member.avatar || '',
       category: categoryMap[activeTab]
     });
     setShowModal(true);
@@ -164,9 +166,9 @@ const TeamManager: React.FC = () => {
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-[rgba(205, 0, 0, 0.03)] border-b border-[rgba(205, 0, 0, 0.07)] text-xs font-bold text-[#8c97a8] uppercase tracking-wider">
-                  <th className="p-4">Name</th>
+                  <th className="p-4">Member</th>
                   <th className="p-4">Role</th>
-                  <th className="p-4">Email</th>
+                  <th className="p-4">Contact</th>
                   {(activeTab === 'heads' || activeTab === 'subheads') && <th className="p-4">Vertical</th>}
                   {activeTab === 'faculty' && <th className="p-4">Department</th>}
                   <th className="p-4 text-right">Actions</th>
@@ -175,9 +177,40 @@ const TeamManager: React.FC = () => {
               <tbody className="divide-y divide-[#E5E7EB]">
                 {currentList.map((member: any) => (
                   <tr key={member.id} className="hover:bg-[rgba(205, 0, 0, 0.03)]/30 transition-colors text-sm">
-                    <td className="p-4 text-[#CD0000] font-semibold">{member.name}</td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full overflow-hidden bg-slate-100 border border-slate-200 shrink-0 flex items-center justify-center text-[10px] font-bold text-slate-500">
+                          {member.avatar
+                            ? <img src={member.avatar} alt={member.name} className="w-full h-full object-cover" />
+                            : (member.name || '').split(' ').map((n: string) => n[0]).slice(0,2).join('').toUpperCase()
+                          }
+                        </div>
+                        <span className="text-[#CD0000] font-semibold">{member.name}</span>
+                      </div>
+                    </td>
                     <td className="p-4 text-[#667085]">{member.role}</td>
-                    <td className="p-4 text-[#667085]">{member.email}</td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-1.5">
+                        {member.email && (
+                          <a href={`mailto:${member.email}`} title={member.email}
+                            className="w-6 h-6 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-[#CD0000] hover:text-white transition-all">
+                            <Mail size={11} />
+                          </a>
+                        )}
+                        {member.linkedin && member.linkedin !== '#' && (
+                          <a href={member.linkedin} target="_blank" rel="noreferrer" title="LinkedIn"
+                            className="w-6 h-6 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-[#CD0000] hover:text-white transition-all">
+                            <Linkedin size={11} />
+                          </a>
+                        )}
+                        {member.github && member.github !== '#' && (
+                          <a href={member.github} target="_blank" rel="noreferrer" title="GitHub"
+                            className="w-6 h-6 rounded-full bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-400 hover:bg-[#CD0000] hover:text-white transition-all">
+                            <Github size={11} />
+                          </a>
+                        )}
+                      </div>
+                    </td>
                     {(activeTab === 'heads' || activeTab === 'subheads') && <td className="p-4"><span className="px-2 py-0.5 rounded-full bg-[rgba(205, 0, 0, 0.03)] text-[#CD0000] text-xs font-semibold">{member.vertical}</span></td>}
                     {activeTab === 'faculty' && <td className="p-4 text-[#667085]">{member.department}</td>}
                     <td className="p-4 text-right">
@@ -252,9 +285,36 @@ const TeamManager: React.FC = () => {
                   </div>
                 </>
               )}
+              {/* Photo URL + live preview */}
               <div>
                 <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Photo URL</label>
-                <input type="url" value={editingMember.avatar} onChange={e => setEditingMember({ ...editingMember, avatar: e.target.value })} className={inputClass} placeholder="https://..." />
+                <div className="flex gap-3 items-start">
+                  <input
+                    type="url"
+                    value={editingMember.avatar}
+                    onChange={e => setEditingMember({ ...editingMember, avatar: e.target.value })}
+                    className={inputClass}
+                    placeholder="https://drive.google.com/... or any image URL"
+                  />
+                  <div className="w-12 h-12 rounded-xl border border-[#E5E7EB] bg-slate-50 overflow-hidden shrink-0 flex items-center justify-center text-[10px] font-bold text-slate-400">
+                    {editingMember.avatar
+                      ? <img src={editingMember.avatar} alt="Preview" className="w-full h-full object-cover" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                      : 'IMG'
+                    }
+                  </div>
+                </div>
+              </div>
+
+              {/* GitHub URL */}
+              <div>
+                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">GitHub URL</label>
+                <input
+                  type="url"
+                  value={editingMember.github}
+                  onChange={e => setEditingMember({ ...editingMember, github: e.target.value })}
+                  className={inputClass}
+                  placeholder="https://github.com/username"
+                />
               </div>
             </div>
             <div className="flex justify-end gap-3 p-6 border-t border-[#E5E7EB]">
