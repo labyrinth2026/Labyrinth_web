@@ -1548,6 +1548,11 @@ export async function dbGetCustomFormBySlug(slug: string): Promise<{ form: Custo
   return { form, fields };
 }
 
+const isUuid = (str?: string | null): boolean => {
+  if (!str) return false;
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
+};
+
 export async function dbAddCustomForm(data: Partial<CustomForm>, fields: Partial<CustomFormField>[]): Promise<string> {
   const formId = genRandomUuid();
   const timestamp = new Date().toISOString();
@@ -1572,24 +1577,29 @@ export async function dbAddCustomForm(data: Partial<CustomForm>, fields: Partial
         if (formErr) throw formErr;
 
         if (fields && fields.length > 0) {
-          const mappedFields = fields.map((f, i) => ({
-            id: f.id || genRandomUuid(),
-            form_id: formId,
-            field_type: f.fieldType,
-            label: f.label,
-            description: f.description || null,
-            placeholder: f.placeholder || null,
-            required: f.required || false,
-            options: f.options ? f.options : null,
-            order_num: i,
-            default_value: f.defaultValue || null,
-            validation: f.validation || null
-          }));
+          const mappedFields = fields.map((f, i) => {
+            const fieldId = (f.id && isUuid(f.id)) ? f.id : genRandomUuid();
+            f.id = fieldId; // Sync ID
+            return {
+              id: fieldId,
+              form_id: formId,
+              field_type: f.fieldType,
+              label: f.label,
+              description: f.description || null,
+              placeholder: f.placeholder || null,
+              required: f.required || false,
+              options: f.options ? f.options : null,
+              order_num: i,
+              default_value: f.defaultValue || null,
+              validation: f.validation || null
+            };
+          });
           const { error: fieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
           if (fieldsErr) throw fieldsErr;
         }
       } catch (err) {
-        console.warn("Supabase dbAddCustomForm failed, using local database fallback:", err);
+        console.warn("Supabase dbAddCustomForm failed:", err);
+        throw err;
       }
     }
   }
@@ -1617,8 +1627,9 @@ export async function dbAddCustomForm(data: Partial<CustomForm>, fields: Partial
 
   if (fields && fields.length > 0) {
     fields.forEach((f, i) => {
+      const fieldId = (f.id && isUuid(f.id)) ? f.id : genRandomUuid();
       db.formFields.push({
-        id: f.id || genRandomUuid(),
+        id: fieldId,
         formId: formId,
         fieldType: f.fieldType || 'short_text',
         label: f.label || 'Question',
@@ -1661,24 +1672,29 @@ export async function dbUpdateCustomForm(id: string, data: Partial<CustomForm>, 
         if (delErr) throw delErr;
 
         if (fields && fields.length > 0) {
-          const mappedFields = fields.map((f, i) => ({
-            id: f.id || genRandomUuid(),
-            form_id: id,
-            field_type: f.fieldType,
-            label: f.label,
-            description: f.description || null,
-            placeholder: f.placeholder || null,
-            required: f.required || false,
-            options: f.options ? f.options : null,
-            order_num: i,
-            default_value: f.defaultValue || null,
-            validation: f.validation || null
-          }));
+          const mappedFields = fields.map((f, i) => {
+            const fieldId = (f.id && isUuid(f.id)) ? f.id : genRandomUuid();
+            f.id = fieldId; // Sync ID
+            return {
+              id: fieldId,
+              form_id: id,
+              field_type: f.fieldType,
+              label: f.label,
+              description: f.description || null,
+              placeholder: f.placeholder || null,
+              required: f.required || false,
+              options: f.options ? f.options : null,
+              order_num: i,
+              default_value: f.defaultValue || null,
+              validation: f.validation || null
+            };
+          });
           const { error: fieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
           if (fieldsErr) throw fieldsErr;
         }
       } catch (err) {
-        console.warn("Supabase dbUpdateCustomForm failed, using local database fallback:", err);
+        console.warn("Supabase dbUpdateCustomForm failed:", err);
+        throw err;
       }
     }
   }
@@ -1698,8 +1714,9 @@ export async function dbUpdateCustomForm(id: string, data: Partial<CustomForm>, 
   db.formFields = (db.formFields || []).filter((f: any) => f.formId !== id);
   if (fields && fields.length > 0) {
     fields.forEach((f, i) => {
+      const fieldId = (f.id && isUuid(f.id)) ? f.id : genRandomUuid();
       db.formFields.push({
-        id: f.id || genRandomUuid(),
+        id: fieldId,
         formId: id,
         fieldType: f.fieldType || 'short_text',
         label: f.label || 'Question',
@@ -1723,11 +1740,10 @@ export async function dbDeleteCustomForm(id: string): Promise<void> {
     if (adminClient) {
       try {
         const { error } = await adminClient.from('forms').delete().eq('id', id);
-        if (error) {
-          console.warn("Supabase delete returned error:", error);
-        }
+        if (error) throw error;
       } catch (err) {
         console.warn("Supabase dbDeleteCustomForm failed:", err);
+        throw err;
       }
     }
   }
@@ -1794,7 +1810,8 @@ export async function dbDuplicateCustomForm(id: string): Promise<string> {
           if (insFieldsErr) throw insFieldsErr;
         }
       } catch (err) {
-        console.warn("Supabase dbDuplicateCustomForm failed, using local database fallback:", err);
+        console.warn("Supabase dbDuplicateCustomForm failed:", err);
+        throw err;
       }
     }
   }
