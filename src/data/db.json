@@ -688,6 +688,13 @@
   "tasks": [],
   "activityLogs": [
     {
+      "id": "log-1784563308252",
+      "userId": "u-1784558851639",
+      "action": "update_custom_form",
+      "details": "Updated custom form: Devzen",
+      "timestamp": "2026-07-20T16:01:48.252Z"
+    },
+    {
       "id": "log-1784563169581",
       "userId": "u-1784558851639",
       "action": "update_custom_form",
@@ -2729,7 +2736,7 @@
   "forms": [
     {
       "id": "df873988-bac6-4c2c-a859-451f46bf8072",
-      "title": "Test Form Name",
+      "title": "Devzen",
       "description": "Please describe the purpose of this form.",
       "slug": "form-1783061093573",
       "status": "published",
@@ -2738,7 +2745,7 @@
       "endDate": "",
       "createdBy": "u-suryachalam",
       "createdAt": "2026-07-03T06:45:16.371Z",
-      "updatedAt": "2026-07-20T15:59:29.572Z"
+      "updatedAt": "2026-07-20T16:01:48.243Z"
     },
     {
       "id": "04cfba5e-7467-4288-934f-e598a433f2b2",
