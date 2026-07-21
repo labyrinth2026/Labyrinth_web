@@ -187,29 +187,9 @@ export function initializeLocalDb(): void {
   saveLocalDb(db);
 }
 
-// Log actions helper
+// Log actions helper (disabled — not required)
 export async function logActivity(userId: string, action: string, details: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { error } = await supabase.from('activity_logs').insert({ user_id: userId, action, details });
-      if (error) throw error;
-      return;
-    } catch (err) {
-      console.error("Supabase logActivity failed:", err);
-      throw err;
-    }
-  }
-
-  const db = getLocalDb();
-  db.activityLogs.unshift({
-    id: `log-${Date.now()}`,
-    userId,
-    action,
-    details,
-    timestamp: new Date().toISOString()
-  });
-  if (db.activityLogs.length > 500) db.activityLogs = db.activityLogs.slice(0, 500);
-  saveLocalDb(db);
+  return;
 }
 
 // =====================================================================
