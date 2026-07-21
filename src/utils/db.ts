@@ -28,6 +28,7 @@ export interface User {
   committee_id?: string | null;
   vertical_id?: string | null;
   github?: string | null;
+  linkedin?: string | null;
   isHead?: boolean;
   is_head?: boolean;
 }
@@ -451,7 +452,7 @@ export async function dbUpdateUserStatus(userId: string, status: 'active' | 'ina
 export async function dbUpdateUserDetails(
   userId: string, name: string, role: string,
   committeeId?: string, verticalId?: string,
-  designation?: string, profilePhoto?: string, github?: string
+  designation?: string, profilePhoto?: string, github?: string, linkedin?: string
 ): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
     const { error } = await supabase.from('profiles').update({
@@ -478,6 +479,7 @@ export async function dbUpdateUserDetails(
       if (designation !== undefined) user.designation = designation;
       if (profilePhoto !== undefined) user.profilePhoto = profilePhoto;
       if (github !== undefined) user.github = github;
+      if (linkedin !== undefined) user.linkedin = linkedin;
       saveLocalDb(db);
     }
   }

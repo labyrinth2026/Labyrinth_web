@@ -204,7 +204,7 @@ const GalleryManager: React.FC = () => {
           <option value="square">Square</option>
           <option value="wide">Wide</option>
         </select>
-        <button onClick={loadGallery} className="p-2 text-slate-400 hover:text-[#CD0000] border border-slate-200 rounded-xl transition-all" title="Reload">
+        <button onClick={() => loadGallery(false)} className="p-2 text-slate-400 hover:text-[#CD0000] border border-slate-200 rounded-xl transition-all" title="Reload">
           <RefreshCw size={15} className={isLoading ? 'animate-spin' : ''} />
         </button>
       </div>

@@ -95,7 +95,9 @@ export async function POST(req: NextRequest) {
           name: u.full_name || u.name,
           role: u.designation || 'Mentor',
           email: u.email,
-          avatar: u.profilePhoto || null
+          avatar: u.profilePhoto || null,
+          github: u.github || null,
+          linkedin: u.linkedin || null
         }));
 
         // 3. Core Committee: has committee_id, and is NOT faculty/mentor
@@ -113,7 +115,8 @@ export async function POST(req: NextRequest) {
             role: u.designation || (commName ? `${commName} Lead` : 'Core Committee Member'),
             email: u.email,
             avatar: u.profilePhoto || u.profile_photo || null,
-            github: u.github || null
+            github: u.github || null,
+            linkedin: u.linkedin || null
           };
         });
 
@@ -133,7 +136,8 @@ export async function POST(req: NextRequest) {
             vertical: getVerticalName(vId),
             email: u.email,
             avatar: u.profilePhoto || u.profile_photo || null,
-            github: u.github || null
+            github: u.github || null,
+            linkedin: u.linkedin || null
           };
         });
 
@@ -152,7 +156,8 @@ export async function POST(req: NextRequest) {
             vertical: getVerticalName(vId),
             email: u.email,
             avatar: u.profilePhoto || u.profile_photo || null,
-            github: u.github || null
+            github: u.github || null,
+            linkedin: u.linkedin || null
           };
         });
 
@@ -398,8 +403,8 @@ export async function POST(req: NextRequest) {
       }
 
       case 'updateUserDetails': {
-        const { userId, name, role, committeeId, verticalId, designation, profilePhoto, github } = payload;
-        await dbUpdateUserDetails(userId, name, role, committeeId, verticalId, designation, profilePhoto, github);
+        const { userId, name, role, committeeId, verticalId, designation, profilePhoto, github, linkedin } = payload;
+        await dbUpdateUserDetails(userId, name, role, committeeId, verticalId, designation, profilePhoto, github, linkedin);
         await logActivity(sessionUser.id, 'update_user_details', `Updated profile of user ${userId}`);
         return NextResponse.json({ success: true });
       }

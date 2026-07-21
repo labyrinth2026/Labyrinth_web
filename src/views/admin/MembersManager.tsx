@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { fetchFromSheet } from '@/services/api';
 import { 
   Plus, Search, Shield, Ban, Check, Edit2, Trash2, 
-  Users, RefreshCw, X, AlertTriangle, UserCheck, Inbox, Download
+  Users, RefreshCw, X, AlertTriangle, UserCheck, Inbox, Download, Upload
 } from 'lucide-react';
 
 export default function MembersManager() {
@@ -39,6 +39,7 @@ export default function MembersManager() {
   const [editingUserDesignation, setEditingUserDesignation] = useState('');
   const [editingUserPhoto, setEditingUserPhoto] = useState('');
   const [editingUserGithub, setEditingUserGithub] = useState('');
+  const [editingUserLinkedin, setEditingUserLinkedin] = useState('');
 
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
@@ -125,7 +126,8 @@ export default function MembersManager() {
         verticalId: editingUserVertical || undefined,
         designation: editingUserDesignation || undefined,
         profilePhoto: editingUserPhoto || undefined,
-        github: editingUserGithub || undefined
+        github: editingUserGithub || undefined,
+        linkedin: editingUserLinkedin || undefined
       });
       setShowEditModal(false);
       await loadData();
@@ -181,6 +183,7 @@ export default function MembersManager() {
     setEditingUserDesignation(u.designation || '');
     setEditingUserPhoto(u.profilePhoto || u.profile_photo || '');
     setEditingUserGithub(u.github || '');
+    setEditingUserLinkedin(u.linkedin || '');
     setShowEditModal(true);
   };
 
@@ -569,13 +572,37 @@ export default function MembersManager() {
                   </select>
                 </div>
 
-                {/* Photo URL + live preview */}
+                {/* Photo URL + upload + live preview */}
                 <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Photo URL</label>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Photo (URL or Upload)</label>
                   <div className="flex gap-3 items-center">
-                    <input type="url" value={editingUserPhoto}
-                      onChange={e => setEditingUserPhoto(e.target.value)}
-                      className={inputClass} placeholder="https://drive.google.com/… or any image URL" />
+                    <div className="flex-1 flex gap-2">
+                      <input
+                        type="text"
+                        value={editingUserPhoto}
+                        onChange={e => setEditingUserPhoto(e.target.value)}
+                        className={inputClass}
+                        placeholder="Image URL or uploaded file base64"
+                      />
+                      <label className="px-3 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer shrink-0 transition-all">
+                        <Upload size={13} />
+                        Upload
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={e => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                              setEditingUserPhoto(reader.result as string);
+                            };
+                            reader.readAsDataURL(file);
+                          }}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
                     <div className="w-12 h-12 rounded-xl border border-[#E5E7EB] bg-slate-50 overflow-hidden shrink-0 flex items-center justify-center text-[10px] font-bold text-slate-400">
                       {editingUserPhoto
                         ? <img src={editingUserPhoto} alt="Preview" className="w-full h-full object-cover"
@@ -592,6 +619,14 @@ export default function MembersManager() {
                   <input type="url" value={editingUserGithub}
                     onChange={e => setEditingUserGithub(e.target.value)}
                     className={inputClass} placeholder="https://github.com/username" />
+                </div>
+
+                {/* LinkedIn */}
+                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">LinkedIn URL</label>
+                  <input type="url" value={editingUserLinkedin}
+                    onChange={e => setEditingUserLinkedin(e.target.value)}
+                    className={inputClass} placeholder="https://linkedin.com/in/username" />
                 </div>
               </div>
 
