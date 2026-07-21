@@ -1,8 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 
-const STATUS_FILE = path.join('/tmp', 'supabase_status.json');
+const STATUS_FILE = path.join(os.tmpdir(), 'supabase_status.json');
 
 const writeOfflineStatus = () => {
   try {

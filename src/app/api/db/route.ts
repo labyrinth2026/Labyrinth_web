@@ -88,7 +88,6 @@ export async function POST(req: NextRequest) {
 
         // 2. Mentors: designation contains "Mentor"
         const mentors = roles.filter(u => 
-          u.role !== 'ADMIN' &&
           u.designation && u.designation.toLowerCase().includes('mentor')
         ).map(u => ({
           id: u.id,
@@ -102,7 +101,6 @@ export async function POST(req: NextRequest) {
 
         // 3. Core Committee: has committee_id, and is NOT faculty/mentor
         const coreCommittee = roles.filter(u => 
-          u.role !== 'ADMIN' &&
           (u.committee_id || u.committeeId) && 
           !facultyCoordinators.some(f => f.id === u.id) &&
           !mentors.some(m => m.id === u.id)
@@ -122,7 +120,6 @@ export async function POST(req: NextRequest) {
 
         // 4. Vertical Heads: has vertical_id and designation contains "Head" (but not Sub-Head)
         const verticalHeads = roles.filter(u => 
-          u.role !== 'ADMIN' &&
           (u.vertical_id || u.verticalId) && 
           u.designation && 
           u.designation.toLowerCase().includes('head') && 
@@ -143,7 +140,6 @@ export async function POST(req: NextRequest) {
 
         // 5. Sub Heads: has vertical_id and designation contains "Sub" (Sub-Head / Sub Head)
         const subHeads = roles.filter(u => 
-          u.role !== 'ADMIN' &&
           (u.vertical_id || u.verticalId) && 
           u.designation && 
           u.designation.toLowerCase().includes('sub')
