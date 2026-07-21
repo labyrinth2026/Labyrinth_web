@@ -645,6 +645,11 @@ export async function POST(req: NextRequest) {
     }
   } catch (error: any) {
     console.error('[API Router] Error executing sheet action:', error);
-    return NextResponse.json({ success: false, error: error.message || 'Internal server error.' }, { status: 500 });
+    const detail = error.cause ? ` (${error.cause.message || error.cause})` : '';
+    return NextResponse.json({ 
+      success: false, 
+      error: (error.message || 'Internal server error') + detail,
+      stack: error.stack
+    }, { status: 500 });
   }
 }
