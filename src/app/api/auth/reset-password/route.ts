@@ -40,27 +40,31 @@ export async function POST(req: NextRequest) {
         password: currentPassword
       });
 
-      if (authError || !authData.user) {
-        localMode = true;
-      } else {
-        // 2. Change password in Supabase Auth
-        const { error: resetErr } = await adminClient.auth.admin.updateUserById(sessionUser.id, {
-          password: newPassword
-        });
+      if (authError) {
+        return NextResponse.json({ success: false, error: authError.message }, { status: 401 });
+      }
+      if (!authData.user) {
+        return NextResponse.json({ success: false, error: 'Authentication failed.' }, { status: 401 });
+      }
 
-        if (resetErr) {
-          return NextResponse.json({ success: false, error: resetErr.message }, { status: 500 });
-        }
+      // 2. Change password in Supabase Auth
+      const { error: resetErr } = await adminClient.auth.admin.updateUserById(sessionUser.id, {
+        password: newPassword
+      });
 
-        // 3. Update public.profiles set first_login = false, password_changed_at = now()
-        const { error: profErr } = await supabase!.from('profiles').update({
-          first_login: false,
-          password_changed_at: new Date().toISOString()
-        }).eq('id', sessionUser.id);
+      if (resetErr) {
+        return NextResponse.json({ success: false, error: resetErr.message }, { status: 500 });
+      }
 
-        if (profErr) {
-          console.warn('Could not update profile fields:', profErr);
-        }
+      // 3. Update public.profiles set first_login = false, password_changed_at = now()
+      const { error: profErr } = await supabase!.from('profiles').update({
+        first_login: false,
+        password_changed_at: new Date().toISOString()
+      }).eq('id', sessionUser.id);
+
+      if (profErr) {
+        console.error('Could not update profile fields:', profErr);
+        return NextResponse.json({ success: false, error: profErr.message }, { status: 500 });
       }
     } else {
       localMode = true;

@@ -24,22 +24,20 @@ export async function POST(req: NextRequest) {
         });
 
         if (authError) {
-          if (authError.message === 'fetch failed' || authError.message.includes('fetch') || !authError.status) {
-            throw authError;
-          }
-          localMode = true;
-        } else if (!authData.user) {
-          localMode = true;
-        } else {
-          // 2. Fetch profile role & status details
-          userDetails = await dbGetUserByEmail(email);
-          if (!userDetails) {
-            localMode = true;
-          }
+          return NextResponse.json({ success: false, error: authError.message }, { status: 401 });
+        }
+        if (!authData.user) {
+          return NextResponse.json({ success: false, error: 'User authentication failed.' }, { status: 401 });
+        }
+
+        // 2. Fetch profile role & status details
+        userDetails = await dbGetUserByEmail(email);
+        if (!userDetails) {
+          return NextResponse.json({ success: false, error: 'User profile not found in database.' }, { status: 401 });
         }
       } catch (err: any) {
-        console.warn("[Login API] Supabase auth connection failed, falling back to local auth:", err);
-        localMode = true;
+        console.error("[Login API] Supabase authentication error:", err);
+        return NextResponse.json({ success: false, error: err.message || 'Authentication error.' }, { status: 500 });
       }
     } else {
       localMode = true;

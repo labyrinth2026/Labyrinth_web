@@ -188,7 +188,8 @@ export async function logActivity(userId: string, action: string, details: strin
       if (error) throw error;
       return;
     } catch (err) {
-      console.warn("Supabase logActivity failed, falling back to local logging:", err);
+      console.error("Supabase logActivity failed:", err);
+      throw err;
     }
   }
 
@@ -237,13 +238,8 @@ export async function dbGetUserByEmail(email: string): Promise<any | null> {
       }
       return null;
     } catch (err) {
-      console.warn("Supabase dbGetUserByEmail failed, using local database fallback:", err);
-      const db = getLocalDb();
-      const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
-      if (user) {
-        return { ...user, name: user.full_name || user.name };
-      }
-      return null;
+      console.error("Supabase dbGetUserByEmail failed:", err);
+      throw err;
     }
   } else {
     const db = getLocalDb();
@@ -290,7 +286,8 @@ export async function dbGetRoles(): Promise<any[]> {
           createdAt: p.created_at
         }));
       } catch (err) {
-        console.warn('Supabase dbGetRoles failed, falling back to local database:', err);
+        console.error('Supabase dbGetRoles failed:', err);
+        throw err;
       }
     }
   }
@@ -452,8 +449,9 @@ export async function dbUpdateUserStatus(userId: string, status: 'active' | 'ina
       try {
         const { error } = await client.from('profiles').update({ status }).or(`id.eq.${userId},email.eq.${userId}`);
         if (error) throw error;
+        return;
       } catch (err) {
-        console.warn("Supabase dbUpdateUserStatus failed:", err);
+        console.error("Supabase dbUpdateUserStatus failed:", err);
         throw err;
       }
     }
@@ -492,8 +490,9 @@ export async function dbUpdateUserDetails(
 
         const { error } = await client.from('profiles').update(updatePayload).or(`id.eq.${userId},email.eq.${userId}`);
         if (error) throw error;
+        return;
       } catch (err) {
-        console.warn("Supabase dbUpdateUserDetails failed:", err);
+        console.error("Supabase dbUpdateUserDetails failed:", err);
         throw err;
       }
     }
@@ -537,6 +536,7 @@ export async function dbUpdateLastLogin(userId: string): Promise<void> {
 export async function dbGetVerticals(): Promise<any[]> {
   let verticals: any[] = [];
   let users: any[] = [];
+  let committees: any[] = [];
 
   if (isSupabaseConfigured()) {
     const client = getSupabaseAdmin() || supabase;
@@ -549,17 +549,20 @@ export async function dbGetVerticals(): Promise<any[]> {
         const { data: uData, error: uErr } = await client.from('profiles').select('*');
         if (uErr) throw uErr;
         users = uData || [];
+
+        const { data: cData, error: cErr } = await client.from('core_committees').select('*');
+        if (cErr) throw cErr;
+        committees = cData || [];
       } catch (err) {
-        console.warn('Supabase dbGetVerticals failed, falling back to local database:', err);
-        const db = getLocalDb();
-        verticals = db.verticals || [];
-        users = db.users || [];
+        console.error('Supabase dbGetVerticals failed:', err);
+        throw err;
       }
     }
   } else {
     const db = getLocalDb();
     verticals = db.verticals || [];
     users = db.users || [];
+    committees = db.coreCommittees || [];
   }
 
   return verticals.map(v => {
@@ -568,8 +571,7 @@ export async function dbGetVerticals(): Promise<any[]> {
     const subHeads = verticalUsers.filter(u => u.designation === 'Vertical Sub-Head');
     const coreCommittee = verticalUsers.filter(u => u.designation === 'Core Committee Member');
 
-    const db = getLocalDb();
-    const committees = (db.coreCommittees || []).filter(c => c.verticalId === v.id || c.vertical_id === v.id);
+    const vCommittees = committees.filter(c => c.verticalId === v.id || c.vertical_id === v.id);
 
     return {
       ...v,
@@ -642,8 +644,8 @@ export async function dbGetCoreCommittees(): Promise<CoreCommittee[]> {
       if (error) throw error;
       return data || [];
     } catch (err) {
-      console.warn("Supabase dbGetCoreCommittees failed, using local database fallback:", err);
-      return getLocalDb().coreCommittees;
+      console.error("Supabase dbGetCoreCommittees failed:", err);
+      throw err;
     }
   } else {
     return getLocalDb().coreCommittees;
@@ -739,10 +741,8 @@ export async function dbGetAssignments(): Promise<any> {
         }))
       };
     } catch (err) {
-      console.warn('Supabase dbGetAssignments failed, falling back to local database. Setting Supabase to offline.', err);
-      setSupabaseOffline(true);
-      const db = getLocalDb();
-      return getLocalAssignments(db);
+      console.error('Supabase dbGetAssignments failed:', err);
+      throw err;
     }
   } else {
     const db = getLocalDb();
@@ -931,9 +931,8 @@ export async function dbGetEvents(): Promise<Event[]> {
       if (error) throw error;
       rawEvents = data || [];
     } catch (err) {
-      console.warn('Supabase dbGetEvents failed, falling back to local database. Setting Supabase to offline.', err);
-      setSupabaseOffline(true);
-      rawEvents = getLocalDb().events;
+      console.error('Supabase dbGetEvents failed:', err);
+      throw err;
     }
   } else {
     rawEvents = getLocalDb().events;
@@ -1042,8 +1041,8 @@ export async function dbGetAnnouncements(): Promise<Announcement[]> {
         timestamp: a.created_at
       }));
     } catch (err) {
-      console.warn("Supabase dbGetAnnouncements failed, using local database fallback:", err);
-      return getLocalDb().announcements;
+      console.error("Supabase dbGetAnnouncements failed:", err);
+      throw err;
     }
   } else {
     return getLocalDb().announcements;
@@ -1102,8 +1101,8 @@ export async function dbGetCommitteeTasks(committeeId: string): Promise<Committe
         dueDate: t.due_date
       }));
     } catch (err) {
-      console.warn("Supabase dbGetCommitteeTasks failed, using local database fallback:", err);
-      return getLocalDb().tasks.filter(t => t.committeeId === committeeId);
+      console.error("Supabase dbGetCommitteeTasks failed:", err);
+      throw err;
     }
   } else {
     return getLocalDb().tasks.filter(t => t.committeeId === committeeId);
@@ -1182,8 +1181,8 @@ export async function dbGetCommitteeResources(committeeId: string): Promise<Comm
         url: r.url
       }));
     } catch (err) {
-      console.warn("Supabase dbGetCommitteeResources failed, using local database fallback:", err);
-      return getLocalDb().resources.filter(r => r.committeeId === committeeId);
+      console.error("Supabase dbGetCommitteeResources failed:", err);
+      throw err;
     }
   } else {
     return getLocalDb().resources.filter(r => r.committeeId === committeeId);
@@ -1238,8 +1237,8 @@ export async function dbGetVerticalProjects(verticalId: string): Promise<Vertica
         url: p.url
       }));
     } catch (err) {
-      console.warn("Supabase dbGetVerticalProjects failed, using local database fallback:", err);
-      return getLocalDb().tasks.filter(p => p.verticalId === verticalId);
+      console.error("Supabase dbGetVerticalProjects failed:", err);
+      throw err;
     }
   } else {
     return getLocalDb().tasks.filter(p => p.verticalId === verticalId);
@@ -1315,8 +1314,8 @@ export async function dbGetVerticalResources(verticalId: string): Promise<Vertic
         url: r.url
       }));
     } catch (err) {
-      console.warn("Supabase dbGetVerticalResources failed, using local database fallback:", err);
-      return getLocalDb().resources.filter(r => r.verticalId === verticalId);
+      console.error("Supabase dbGetVerticalResources failed:", err);
+      throw err;
     }
   } else {
     return getLocalDb().resources.filter(r => r.verticalId === verticalId);
@@ -1373,18 +1372,8 @@ export async function dbGetJoinRegistrations(): Promise<any[]> {
         timestamp: p.created_at
       }));
     } catch (err) {
-      console.warn("Supabase dbGetJoinRegistrations failed, using local database fallback:", err);
-      const db = getLocalDb();
-      return db.users.filter(u => u.status === 'inactive' && u.role === 'MEMBER').map(u => ({
-        id: u.id,
-        name: u.full_name || u.name,
-        email: u.email,
-        phone: u.phone || 'N/A',
-        course: 'Computer Science',
-        year: '1',
-        preferredVertical: 'General Inquiry',
-        timestamp: u.createdAt
-      }));
+      console.error("Supabase dbGetJoinRegistrations failed:", err);
+      throw err;
     }
   } else {
     const db = getLocalDb();
@@ -1526,8 +1515,8 @@ export async function dbGetCustomForms(): Promise<CustomForm[]> {
         customFormsCache = { data: mapped, timestamp: now };
         return mapped;
       } catch (err) {
-        console.warn("Supabase dbGetCustomForms failed, using local database fallback:", err);
-        return (getLocalDb().forms || []) as CustomForm[];
+        console.error("Supabase dbGetCustomForms failed:", err);
+        throw err;
       }
     }
   }
@@ -1591,7 +1580,8 @@ export async function dbGetCustomFormBySlug(slug: string): Promise<{ form: Custo
           })
         };
       } catch (err) {
-        console.warn("Supabase dbGetCustomFormBySlug failed, using local database fallback:", err);
+        console.error("Supabase dbGetCustomFormBySlug failed:", err);
+        throw err;
       }
     }
   }
@@ -1981,8 +1971,10 @@ export async function dbSubmitFormResponse(
           const { error: ansErr } = await client.from('response_answers').insert(answerRecords);
           if (ansErr) throw ansErr;
         }
+        return responseId;
       } catch (err) {
-        console.warn("Supabase dbSubmitFormResponse failed, using local database fallback:", err);
+        console.error("Supabase dbSubmitFormResponse failed:", err);
+        throw err;
       }
     }
   }
@@ -2063,7 +2055,8 @@ export async function dbGetFormResponses(formId: string): Promise<CustomFormResp
           };
         });
       } catch (err) {
-        console.warn("Supabase dbGetFormResponses failed, using local database fallback:", err);
+        console.error("Supabase dbGetFormResponses failed:", err);
+        throw err;
       }
     }
   }
@@ -2109,8 +2102,10 @@ export async function dbUpdateResponseStatus(responseId: string, status: string,
           .update({ status, notes: notes !== undefined ? notes : null })
           .eq('id', responseId);
         if (error) throw error;
+        return;
       } catch (err) {
-        console.warn("Supabase dbUpdateResponseStatus failed, using local database fallback:", err);
+        console.error("Supabase dbUpdateResponseStatus failed:", err);
+        throw err;
       }
     }
   }

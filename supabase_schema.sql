@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     email TEXT UNIQUE NOT NULL,
     full_name TEXT,
+    name TEXT,
     phone TEXT,
     role TEXT NOT NULL DEFAULT 'MEMBER' CHECK (role IN ('ADMIN', 'MEMBER')),
     status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
@@ -27,6 +28,13 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     committee_id UUID,
     vertical_id UUID,
     
+    -- Socials & Details
+    github TEXT,
+    linkedin TEXT,
+    reg_no TEXT,
+    class_name TEXT,
+    created_by UUID,
+
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     last_login TIMESTAMP WITH TIME ZONE
@@ -42,6 +50,7 @@ CREATE TABLE IF NOT EXISTS public.core_committees (
     description TEXT,
     icon TEXT DEFAULT 'Users',
     head_id UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
+    vertical_id UUID,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -67,6 +76,9 @@ ALTER TABLE public.verticals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.profiles 
     ADD CONSTRAINT fk_profiles_committee FOREIGN KEY (committee_id) REFERENCES public.core_committees(id) ON DELETE SET NULL,
     ADD CONSTRAINT fk_profiles_vertical FOREIGN KEY (vertical_id) REFERENCES public.verticals(id) ON DELETE SET NULL;
+
+ALTER TABLE public.core_committees
+    ADD CONSTRAINT fk_core_committees_vertical FOREIGN KEY (vertical_id) REFERENCES public.verticals(id) ON DELETE SET NULL;
 
 -- 4. Create Events Table (Consolidated for Club, Committees, and Verticals)
 CREATE TABLE IF NOT EXISTS public.events (
@@ -282,21 +294,25 @@ BEGIN
     id, 
     email, 
     full_name, 
+    name,
     role, 
     status, 
     first_login, 
     committee_id,
-    vertical_id
+    vertical_id,
+    created_by
   )
   VALUES (
     new.id,
     new.email,
     COALESCE(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1)),
+    COALESCE(new.raw_user_meta_data->>'name', new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1)),
     COALESCE(new.raw_user_meta_data->>'role', 'MEMBER'),
     'active',
     COALESCE((new.raw_user_meta_data->>'first_login')::boolean, true),
     (new.raw_user_meta_data->>'committee_id')::uuid,
-    (new.raw_user_meta_data->>'vertical_id')::uuid
+    (new.raw_user_meta_data->>'vertical_id')::uuid,
+    (new.raw_user_meta_data->>'created_by')::uuid
   );
   RETURN new;
 END;
