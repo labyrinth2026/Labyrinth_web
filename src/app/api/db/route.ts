@@ -20,7 +20,7 @@ import {
   dbGetCustomForms, dbGetCustomFormBySlug, dbAddCustomForm, dbUpdateCustomForm,
   dbDeleteCustomForm, dbDuplicateCustomForm, dbSubmitFormResponse, dbGetFormResponses,
   dbUpdateResponseStatus,
-  dbAddGalleryImage, dbUpdateGalleryImage, dbDeleteGalleryImage
+  dbGetGallery, dbAddGalleryImage, dbUpdateGalleryImage, dbDeleteGalleryImage
 } from '@/utils/db';
 
 export async function POST(req: NextRequest) {
@@ -179,9 +179,8 @@ export async function POST(req: NextRequest) {
       }
 
       case 'getGallery': {
-
-        const db = getLocalDb();
-        return NextResponse.json({ success: true, data: db.gallery || [] });
+        const gallery = await dbGetGallery();
+        return NextResponse.json({ success: true, data: gallery });
       }
 
       case 'addGalleryImage': {

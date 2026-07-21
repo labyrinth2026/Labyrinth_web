@@ -2148,7 +2148,44 @@ export async function dbUpdateResponseStatus(responseId: string, status: string,
 }
 
 // --- GALLERY ACTIONS ---
+export async function dbGetGallery(): Promise<any[]> {
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { data, error } = await client.from('gallery').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        return data || [];
+      } catch (err) {
+        if (isSupabaseConfigured()) throw err;
+      }
+    }
+  }
+  const db = getLocalDb();
+  return db.gallery || [];
+}
+
 export async function dbAddGalleryImage(data: any): Promise<void> {
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client.from('gallery').insert({
+          title: data.title,
+          category: data.category,
+          description: data.description,
+          image: data.image,
+          date: data.date,
+          orientation: data.orientation || 'landscape',
+          rotation: data.rotation ?? 0
+        });
+        if (error) throw error;
+        return;
+      } catch (err) {
+        if (isSupabaseConfigured()) throw err;
+      }
+    }
+  }
   const db = getLocalDb();
   if (!db.gallery) db.gallery = [];
   db.gallery.push({
@@ -2165,6 +2202,26 @@ export async function dbAddGalleryImage(data: any): Promise<void> {
 }
 
 export async function dbUpdateGalleryImage(id: string, data: any): Promise<void> {
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client.from('gallery').update({
+          title: data.title,
+          category: data.category,
+          description: data.description,
+          image: data.image,
+          date: data.date,
+          orientation: data.orientation,
+          rotation: data.rotation
+        }).eq('id', id);
+        if (error) throw error;
+        return;
+      } catch (err) {
+        if (isSupabaseConfigured()) throw err;
+      }
+    }
+  }
   const db = getLocalDb();
   if (!db.gallery) db.gallery = [];
   const idx = db.gallery.findIndex(g => g.id === id);
@@ -2184,6 +2241,18 @@ export async function dbUpdateGalleryImage(id: string, data: any): Promise<void>
 }
 
 export async function dbDeleteGalleryImage(id: string): Promise<void> {
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client.from('gallery').delete().eq('id', id);
+        if (error) throw error;
+        return;
+      } catch (err) {
+        if (isSupabaseConfigured()) throw err;
+      }
+    }
+  }
   const db = getLocalDb();
   if (!db.gallery) db.gallery = [];
   db.gallery = db.gallery.filter(g => g.id !== id);
