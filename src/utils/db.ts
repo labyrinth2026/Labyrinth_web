@@ -1876,13 +1876,23 @@ export async function dbSubmitFormResponse(
   const responseId = genRandomUuid();
   const timestamp = new Date().toISOString();
 
+  // Ensure formId is a valid UUID
+  let validFormId = formId;
+  if (!isUuid(formId)) {
+    const db = getLocalDb();
+    const matchedForm = (db.forms || []).find((f: any) => f.slug === formId || f.id === formId);
+    if (matchedForm && isUuid(matchedForm.id)) {
+      validFormId = matchedForm.id;
+    }
+  }
+
   if (isSupabaseConfigured()) {
     const client = getSupabaseAdmin() || supabase;
     if (client) {
       try {
         const { error: respErr } = await client.from('form_responses').insert({
           id: responseId,
-          form_id: formId,
+          form_id: validFormId,
           applicant_name: applicantName,
           applicant_email: applicantEmail,
           status: 'pending',
@@ -1893,10 +1903,11 @@ export async function dbSubmitFormResponse(
         const answerRecords = Object.keys(answers).map(fieldId => {
           const rawVal = answers[fieldId];
           const valStr = (typeof rawVal === 'object' && rawVal !== null) ? JSON.stringify(rawVal) : String(rawVal ?? '');
+          const validFieldId = isUuid(fieldId) ? fieldId : genRandomUuid();
           return {
             id: genRandomUuid(),
             response_id: responseId,
-            field_id: fieldId,
+            field_id: validFieldId,
             value: valStr
           };
         });
@@ -1918,7 +1929,7 @@ export async function dbSubmitFormResponse(
 
   db.formResponses.push({
     id: responseId,
-    formId,
+    formId: validFormId,
     applicantName,
     applicantEmail,
     status: 'pending',
@@ -1928,10 +1939,11 @@ export async function dbSubmitFormResponse(
   Object.keys(answers).forEach(fieldId => {
     const rawVal = answers[fieldId];
     const valStr = (typeof rawVal === 'object' && rawVal !== null) ? JSON.stringify(rawVal) : String(rawVal ?? '');
+    const validFieldId = isUuid(fieldId) ? fieldId : genRandomUuid();
     db.responseAnswers.push({
       id: genRandomUuid(),
       responseId,
-      fieldId,
+      fieldId: validFieldId,
       value: valStr
     });
   });
@@ -1941,6 +1953,15 @@ export async function dbSubmitFormResponse(
 }
 
 export async function dbGetFormResponses(formId: string): Promise<CustomFormResponse[]> {
+  let validFormId = formId;
+  if (!isUuid(formId)) {
+    const db = getLocalDb();
+    const matchedForm = (db.forms || []).find((f: any) => f.slug === formId || f.id === formId);
+    if (matchedForm && isUuid(matchedForm.id)) {
+      validFormId = matchedForm.id;
+    }
+  }
+
   if (isSupabaseConfigured()) {
     const client = getSupabaseAdmin() || supabase;
     if (client) {
@@ -1948,7 +1969,7 @@ export async function dbGetFormResponses(formId: string): Promise<CustomFormResp
         const { data: responses, error: respErr } = await client
           .from('form_responses')
           .select('*')
-          .eq('form_id', formId)
+          .eq('form_id', validFormId)
           .order('submitted_at', { ascending: false });
         if (respErr) throw respErr;
 
@@ -1992,7 +2013,7 @@ export async function dbGetFormResponses(formId: string): Promise<CustomFormResp
 
   // Local fallback
   const db = getLocalDb();
-  const responses = (db.formResponses || []).filter((r: any) => r.formId === formId);
+  const responses = (db.formResponses || []).filter((r: any) => r.formId === validFormId || r.formId === formId);
 
   return responses.map((r: any) => {
     const respAnswers: Record<string, any> = {};

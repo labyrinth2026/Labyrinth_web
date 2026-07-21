@@ -3878,7 +3878,7 @@
   "registrations": [],
   "forms": [
     {
-      "id": "form-join-community-2026",
+      "id": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
       "title": "JOIN COMMUNITY FORM",
       "description": "Labyrinth was created with the purpose of providing students a platform to showcase their talents, develop leadership skills, collaborate with peers, and explore diverse domains within Computer Science and engineering.\n\nEvery semester, Labyrinth organizes a wide range of technical and non-technical events, including coding competitions, debugging challenges, logical puzzle contests, web development and design competitions, gaming tournaments, debates, sports activities, entrepreneurship initiatives, and interdisciplinary collaborations.",
       "slug": "join-community",
@@ -3887,8 +3887,8 @@
       "startDate": "",
       "endDate": "",
       "createdBy": "u-suryachalam",
-      "createdAt": "2026-07-21T14:03:41.477Z",
-      "updatedAt": "2026-07-21T14:03:41.478Z"
+      "createdAt": "2026-07-21T14:17:36.360Z",
+      "updatedAt": "2026-07-21T14:17:36.361Z"
     },
     {
       "id": "df873988-bac6-4c2c-a859-451f46bf8072",
@@ -3959,8 +3959,8 @@
       "order": 1
     },
     {
-      "id": "f-name-join",
-      "formId": "form-join-community-2026",
+      "id": "8157ebb3-7a68-45d0-9eb6-181d33c76ddf",
+      "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
       "fieldType": "short_text",
       "label": "NAME",
       "placeholder": "Enter your full name",
@@ -3970,8 +3970,8 @@
       "order": 0
     },
     {
-      "id": "f-class-join",
-      "formId": "form-join-community-2026",
+      "id": "d9ae4b48-4b9a-4905-a6ae-9d01c6cafc77",
+      "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
       "fieldType": "short_text",
       "label": "CLASS",
       "placeholder": "e.g. 3BCA A / 5BScCS / 1MCA B",
@@ -3981,8 +3981,8 @@
       "order": 1
     },
     {
-      "id": "f-regno-join",
-      "formId": "form-join-community-2026",
+      "id": "07e23494-56ac-4267-a8af-59e161bbe6dd",
+      "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
       "fieldType": "short_text",
       "label": "REGISTER NUMBER",
       "placeholder": "e.g. 2541505",
@@ -3992,8 +3992,8 @@
       "order": 2
     },
     {
-      "id": "f-email-join",
-      "formId": "form-join-community-2026",
+      "id": "9bd6c522-253e-4cf1-ba2a-363a92abf9a4",
+      "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
       "fieldType": "email",
       "label": "CHRIST EMAIL ID",
       "placeholder": "student@cs.christuniversity.in",
@@ -4003,8 +4003,8 @@
       "order": 3
     },
     {
-      "id": "f-tech-vertical-join",
-      "formId": "form-join-community-2026",
+      "id": "e3eeb111-a46c-4ee4-9c7a-0d2e62afc04f",
+      "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
       "fieldType": "radio_buttons",
       "label": "Select the vertical you are interested in a being member(TECHNICAL)",
       "placeholder": "Choose a technical vertical",
@@ -4019,8 +4019,8 @@
       "order": 4
     },
     {
-      "id": "f-nontech-vertical-join",
-      "formId": "form-join-community-2026",
+      "id": "4bf47419-a0ae-45ea-9a5d-4add2809b01b",
+      "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
       "fieldType": "radio_buttons",
       "label": "Select the vertical you are interested in a being member(NON-TECHNICAL)",
       "placeholder": "Choose a non-technical vertical",
