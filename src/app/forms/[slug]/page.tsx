@@ -97,8 +97,8 @@ export default function PublicFormPage() {
         return;
       }
     }
-    const nameField = fields.find(f => f.label.toLowerCase().includes('name') || f.fieldType === 'short_text');
-    const emailField = fields.find(f => f.fieldType === 'email' || f.label.toLowerCase().includes('email'));
+    const nameField = fields.find(f => f.label.toLowerCase().trim() === 'name') || fields.find(f => f.label.toLowerCase().includes('name')) || fields.find(f => f.fieldType === 'short_text');
+    const emailField = fields.find(f => f.fieldType === 'email') || fields.find(f => f.label.toLowerCase().includes('email'));
     const applicantName = nameField ? formData[nameField.id] || 'Anonymous' : 'Anonymous';
     const applicantEmail = emailField ? formData[emailField.id] || 'anonymous@labyrinth.club' : 'anonymous@labyrinth.club';
 

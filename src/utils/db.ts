@@ -1876,31 +1876,38 @@ export async function dbSubmitFormResponse(
   const responseId = genRandomUuid();
   const timestamp = new Date().toISOString();
 
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { error: respErr } = await supabase.from('form_responses').insert({
-        id: responseId,
-        form_id: formId,
-        applicant_name: applicantName,
-        applicant_email: applicantEmail,
-        status: 'pending',
-        submitted_at: timestamp
-      });
-      if (respErr) throw respErr;
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error: respErr } = await client.from('form_responses').insert({
+          id: responseId,
+          form_id: formId,
+          applicant_name: applicantName,
+          applicant_email: applicantEmail,
+          status: 'pending',
+          submitted_at: timestamp
+        });
+        if (respErr) throw respErr;
 
-      const answerRecords = Object.keys(answers).map(fieldId => ({
-        id: genRandomUuid(),
-        response_id: responseId,
-        field_id: fieldId,
-        value: answers[fieldId]
-      }));
+        const answerRecords = Object.keys(answers).map(fieldId => {
+          const rawVal = answers[fieldId];
+          const valStr = (typeof rawVal === 'object' && rawVal !== null) ? JSON.stringify(rawVal) : String(rawVal ?? '');
+          return {
+            id: genRandomUuid(),
+            response_id: responseId,
+            field_id: fieldId,
+            value: valStr
+          };
+        });
 
-      if (answerRecords.length > 0) {
-        const { error: ansErr } = await supabase.from('response_answers').insert(answerRecords);
-        if (ansErr) throw ansErr;
+        if (answerRecords.length > 0) {
+          const { error: ansErr } = await client.from('response_answers').insert(answerRecords);
+          if (ansErr) throw ansErr;
+        }
+      } catch (err) {
+        console.warn("Supabase dbSubmitFormResponse failed, using local database fallback:", err);
       }
-    } catch (err) {
-      console.warn("Supabase dbSubmitFormResponse failed, using local database fallback:", err);
     }
   }
 
@@ -1919,11 +1926,13 @@ export async function dbSubmitFormResponse(
   });
 
   Object.keys(answers).forEach(fieldId => {
+    const rawVal = answers[fieldId];
+    const valStr = (typeof rawVal === 'object' && rawVal !== null) ? JSON.stringify(rawVal) : String(rawVal ?? '');
     db.responseAnswers.push({
       id: genRandomUuid(),
       responseId,
       fieldId,
-      value: answers[fieldId]
+      value: valStr
     });
   });
 
@@ -1932,45 +1941,52 @@ export async function dbSubmitFormResponse(
 }
 
 export async function dbGetFormResponses(formId: string): Promise<CustomFormResponse[]> {
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data: responses, error: respErr } = await supabase
-        .from('form_responses')
-        .select('*')
-        .eq('form_id', formId)
-        .order('submitted_at', { ascending: false });
-      if (respErr) throw respErr;
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { data: responses, error: respErr } = await client
+          .from('form_responses')
+          .select('*')
+          .eq('form_id', formId)
+          .order('submitted_at', { ascending: false });
+        if (respErr) throw respErr;
 
-      const responseIds = (responses || []).map((r: any) => r.id);
-      if (responseIds.length === 0) return [];
+        const responseIds = (responses || []).map((r: any) => r.id);
+        if (responseIds.length === 0) return [];
 
-      const { data: answers, error: ansErr } = await supabase
-        .from('response_answers')
-        .select('*')
-        .in('response_id', responseIds);
-      if (ansErr) throw ansErr;
+        const { data: answers, error: ansErr } = await client
+          .from('response_answers')
+          .select('*')
+          .in('response_id', responseIds);
+        if (ansErr) throw ansErr;
 
-      return (responses || []).map((r: any) => {
-        const respAnswers: Record<string, any> = {};
-        (answers || [])
-          .filter((a: any) => a.response_id === r.id)
-          .forEach((a: any) => {
-            respAnswers[a.field_id] = a.value;
-          });
+        return (responses || []).map((r: any) => {
+          const respAnswers: Record<string, any> = {};
+          (answers || [])
+            .filter((a: any) => a.response_id === r.id)
+            .forEach((a: any) => {
+              let parsed = a.value;
+              if (typeof a.value === 'string' && (a.value.startsWith('{') || a.value.startsWith('['))) {
+                try { parsed = JSON.parse(a.value); } catch (_) {}
+              }
+              respAnswers[a.field_id] = parsed;
+            });
 
-        return {
-          id: r.id,
-          formId: r.form_id,
-          applicantName: r.applicant_name,
-          applicantEmail: r.applicant_email,
-          status: r.status,
-          notes: r.notes || undefined,
-          submittedAt: r.submitted_at,
-          answers: respAnswers
-        };
-      });
-    } catch (err) {
-      console.warn("Supabase dbGetFormResponses failed, using local database fallback:", err);
+          return {
+            id: r.id,
+            formId: r.form_id,
+            applicantName: r.applicant_name,
+            applicantEmail: r.applicant_email,
+            status: r.status,
+            notes: r.notes || undefined,
+            submittedAt: r.submitted_at,
+            answers: respAnswers
+          };
+        });
+      } catch (err) {
+        console.warn("Supabase dbGetFormResponses failed, using local database fallback:", err);
+      }
     }
   }
 
@@ -1983,7 +1999,11 @@ export async function dbGetFormResponses(formId: string): Promise<CustomFormResp
     (db.responseAnswers || [])
       .filter((a: any) => a.responseId === r.id)
       .forEach((a: any) => {
-        respAnswers[a.fieldId] = a.value;
+        let parsed = a.value;
+        if (typeof a.value === 'string' && (a.value.startsWith('{') || a.value.startsWith('['))) {
+          try { parsed = JSON.parse(a.value); } catch (_) {}
+        }
+        respAnswers[a.fieldId] = parsed;
       });
 
     return {
@@ -1994,15 +2014,18 @@ export async function dbGetFormResponses(formId: string): Promise<CustomFormResp
 }
 
 export async function dbUpdateResponseStatus(responseId: string, status: string, notes?: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { error } = await supabase
-        .from('form_responses')
-        .update({ status, notes: notes !== undefined ? notes : null })
-        .eq('id', responseId);
-      if (error) throw error;
-    } catch (err) {
-      console.warn("Supabase dbUpdateResponseStatus failed, using local database fallback:", err);
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client
+          .from('form_responses')
+          .update({ status, notes: notes !== undefined ? notes : null })
+          .eq('id', responseId);
+        if (error) throw error;
+      } catch (err) {
+        console.warn("Supabase dbUpdateResponseStatus failed, using local database fallback:", err);
+      }
     }
   }
 
