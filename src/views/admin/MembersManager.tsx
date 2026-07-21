@@ -5,7 +5,8 @@ import { useAuth } from '@/context/AuthContext';
 import { fetchFromSheet } from '@/services/api';
 import { 
   Plus, Search, Shield, Ban, Check, Edit2, Trash2, 
-  Users, RefreshCw, X, AlertTriangle, UserCheck, Inbox, Download, Upload
+  Users, RefreshCw, X, AlertTriangle, UserCheck, Inbox, Download, Upload,
+  ChevronLeft, ChevronRight, CheckCircle2
 } from 'lucide-react';
 
 export default function MembersManager() {
@@ -21,6 +22,20 @@ export default function MembersManager() {
 
   // Search/Filters
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  // Toast notification state
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+  const showToast = (message: string, type: 'success' | 'error' = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => {
+      setToast(null);
+    }, 3500);
+  };
 
   // Modals / forms
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -38,6 +53,8 @@ export default function MembersManager() {
   const [editingUserVertical, setEditingUserVertical] = useState('');
   const [editingUserDesignation, setEditingUserDesignation] = useState('');
   const [editingUserPhoto, setEditingUserPhoto] = useState('');
+  const [editingUserRegNo, setEditingUserRegNo] = useState('');
+  const [editingUserClass, setEditingUserClass] = useState('');
   const [editingUserGithub, setEditingUserGithub] = useState('');
   const [editingUserLinkedin, setEditingUserLinkedin] = useState('');
 
@@ -71,6 +88,10 @@ export default function MembersManager() {
     loadData();
   }, []);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, activeTab]);
+
   // Lock background scroll when any modal is open
   useEffect(() => {
     if (showCreateModal || showEditModal || deleteConfirm || showNewCommitteeModal) {
@@ -93,7 +114,7 @@ export default function MembersManager() {
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(newUserEmail)) {
-      alert('Please enter a valid email address.');
+      showToast('Please enter a valid email address.', 'error');
       return;
     }
 
@@ -112,9 +133,9 @@ export default function MembersManager() {
       setNewUserVertical('');
       setShowCreateModal(false);
       await loadData();
-      alert('User created successfully. Default temporary password: Labyrinth@123');
+      showToast('New member added successfully!', 'success');
     } catch (err: any) {
-      alert(err.message || 'Failed to create user.');
+      showToast(err.message || 'Failed to create user.', 'error');
     }
   };
 
@@ -130,12 +151,15 @@ export default function MembersManager() {
         designation: editingUserDesignation || undefined,
         profilePhoto: editingUserPhoto || undefined,
         github: editingUserGithub || undefined,
-        linkedin: editingUserLinkedin || undefined
+        linkedin: editingUserLinkedin || undefined,
+        regNo: editingUserRegNo || undefined,
+        class: editingUserClass || undefined
       });
       setShowEditModal(false);
       await loadData();
+      showToast('Member details updated successfully!', 'success');
     } catch (err: any) {
-      alert(err.message || 'Failed to update user.');
+      showToast(err.message || 'Failed to update user.', 'error');
     }
   };
 
@@ -144,8 +168,9 @@ export default function MembersManager() {
     try {
       await fetchFromSheet('updateUserStatus', { userId, status: nextStatus });
       await loadData();
+      showToast(`Member status updated to ${nextStatus}.`, 'success');
     } catch (err: any) {
-      alert(err.message || 'Failed to update status.');
+      showToast(err.message || 'Failed to update status.', 'error');
     }
   };
 
@@ -153,8 +178,9 @@ export default function MembersManager() {
     try {
       await fetchFromSheet('deleteUser', { id: userId });
       await loadData();
+      showToast('Member removed from directory.', 'success');
     } catch (err: any) {
-      alert(err.message || 'Failed to remove user.');
+      showToast(err.message || 'Failed to remove user.', 'error');
     }
     setDeleteConfirm(null);
   };
@@ -163,8 +189,9 @@ export default function MembersManager() {
     try {
       await fetchFromSheet('approveRegistration', { id });
       await loadData();
+      showToast('Registration application approved!', 'success');
     } catch (e) {
-      alert('Failed to approve registration.');
+      showToast('Failed to approve registration.', 'error');
     }
   };
 
@@ -172,8 +199,9 @@ export default function MembersManager() {
     try {
       await fetchFromSheet('rejectRegistration', { id });
       await loadData();
+      showToast('Registration application rejected.', 'error');
     } catch (e) {
-      alert('Failed to reject registration.');
+      showToast('Failed to reject registration.', 'error');
     }
   };
 
@@ -185,6 +213,8 @@ export default function MembersManager() {
     setEditingUserVertical(u.verticalId || u.vertical_id || '');
     setEditingUserDesignation(u.designation || '');
     setEditingUserPhoto(u.profilePhoto || u.profile_photo || '');
+    setEditingUserRegNo(u.regNo || u.reg_no || '');
+    setEditingUserClass(u.class || u.class_name || '');
     setEditingUserGithub(u.github || '');
     setEditingUserLinkedin(u.linkedin || '');
     setShowEditModal(true);
@@ -198,7 +228,6 @@ export default function MembersManager() {
   const handleCreateNewCommittee = async () => {
     if (!newCommitteeName.trim()) return;
     try {
-      // Pass the selected vertical ID to addCoreCommittee so they are linked
       const activeVerticalId = showEditModal ? editingUserVertical : newUserVertical;
       await fetchFromSheet('addCoreCommittee', { 
         name: newCommitteeName, 
@@ -217,38 +246,77 @@ export default function MembersManager() {
       }
       setShowNewCommitteeModal(false);
       setNewCommitteeName('');
+      showToast('Core Committee created successfully!', 'success');
     } catch (err: any) {
-      alert(err.message || 'Failed to create core committee.');
+      showToast(err.message || 'Failed to create committee.', 'error');
     }
   };
 
   const handleExportCSV = () => {
     if (registrations.length === 0) return;
-    const headers = ['Name', 'Email', 'Phone', 'Course', 'Year', 'Preferred Vertical', 'Reason', 'Date'];
+
+    const headers = ["ID", "Name", "Email", "Phone", "Course", "Year", "Preferred Domain", "Submission Date"];
     const rows = registrations.map(r => [
-      r.name, r.email, r.phone, r.course, r.year, r.preferredVertical, r.reason, r.timestamp
-    ].map(v => `"${(v || '').toString().replace(/"/g, '""')}"`).join(','));
-    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows].join('\n');
-    const link = document.createElement('a');
-    link.setAttribute('href', encodeURI(csvContent));
-    link.setAttribute('download', `labyrinth_recruits_${new Date().toISOString().split('T')[0]}.csv`);
+      r.id,
+      `"${r.name.replace(/"/g, '""')}"`,
+      `"${r.email.replace(/"/g, '""')}"`,
+      `"${r.phone}"`,
+      `"${r.course}"`,
+      `"${r.year}"`,
+      `"${r.preferredVertical}"`,
+      `"${new Date(r.timestamp).toLocaleDateString()}"`
+    ]);
+
+    const csvContent = "data:text/csv;charset=utf-8," 
+      + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `labyrinth_recruits_${new Date().toISOString().split('T')[0]}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const filteredUsers = users.filter(u => 
-    (u.name || u.full_name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (u.email || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (u.role || '').toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filters
+  const filteredUsers = users.filter(u => {
+    const q = searchQuery.toLowerCase();
+    const nameStr = (u.name || u.full_name || '').toLowerCase();
+    const emailStr = (u.email || '').toLowerCase();
+    const roleStr = (u.role || '').toLowerCase();
+    const regStr = (u.regNo || u.reg_no || '').toLowerCase();
+    const classStr = (u.class || u.class_name || '').toLowerCase();
+    return nameStr.includes(q) || emailStr.includes(q) || roleStr.includes(q) || regStr.includes(q) || classStr.includes(q);
+  });
 
-  const inputClass = "w-full border border-slate-200 rounded-xl px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#CD0000]/10 focus:border-slate-400 transition-all bg-white";
+  // Pagination calculation
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
+
+  const inputClass = "w-full border border-[#E5E7EB] rounded-xl px-3.5 py-2 text-sm text-[#1D2939] bg-white focus:outline-none focus:ring-2 focus:ring-[#CD0000]/15";
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {/* Toast Notification */}
+      {toast && (
+        <div className="fixed top-6 right-6 z-[100] flex items-center gap-3 px-5 py-3.5 bg-white border border-slate-200 rounded-2xl shadow-xl animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${toast.type === 'success' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-red-50 text-red-600 border border-red-100'}`}>
+            {toast.type === 'success' ? <CheckCircle2 size={18} /> : <AlertTriangle size={18} />}
+          </div>
+          <div>
+            <p className="text-xs font-extrabold text-slate-900 tracking-tight">{toast.type === 'success' ? 'Success' : 'Notice'}</p>
+            <p className="text-xs text-slate-500 font-medium">{toast.message}</p>
+          </div>
+          <button onClick={() => setToast(null)} className="ml-2 text-slate-400 hover:text-slate-600 p-1">
+            <X size={14} />
+          </button>
+        </div>
+      )}
+
       {/* Header */}
-      <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-sm p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-xs p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-xl font-bold font-grotesk text-[#CD0000]">Members Workspace</h1>
           <p className="text-slate-500 text-sm mt-0.5">Manage directory access, roles, and review new registration recruits.</p>
@@ -259,7 +327,7 @@ export default function MembersManager() {
           </button>
           <button 
             onClick={() => setShowCreateModal(true)} 
-            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 bg-[#CD0000] hover:bg-[#A30000] text-white text-sm font-semibold rounded-xl transition-colors shadow-sm"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 bg-[#CD0000] hover:bg-[#A30000] text-white text-sm font-semibold rounded-xl transition-colors shadow-xs"
           >
             <Plus size={15} /> Add Member
           </button>
@@ -297,25 +365,32 @@ export default function MembersManager() {
         </div>
       ) : activeTab === 'directory' ? (
         /* Active Directory */
-        <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-sm space-y-4">
-          <div className="max-w-xs relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-              <Search size={14} />
+        <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="max-w-xs relative w-full">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                <Search size={14} />
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder="Search name, email, reg no, or class..."
+                className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#CD0000]/10"
+              />
             </div>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Search name, email, or role..."
-              className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#CD0000]/10"
-            />
+            {filteredUsers.length > 0 && (
+              <p className="text-xs text-slate-400 font-semibold">
+                Showing <strong className="text-slate-700">{startIndex + 1}–{Math.min(startIndex + itemsPerPage, filteredUsers.length)}</strong> of <strong className="text-slate-700">{filteredUsers.length}</strong> members
+              </p>
+            )}
           </div>
 
           <div className="overflow-x-auto border border-slate-100 rounded-xl">
             <table className="w-full text-left text-sm text-[#667085]">
               <thead className="bg-slate-50/80 border-b border-slate-100 text-xs font-bold text-[#8c97a8] uppercase tracking-wider">
                 <tr>
-                  <th className="p-4">Name</th>
+                  <th className="p-4">Name & Profile</th>
                   <th className="p-4">Email</th>
                   <th className="p-4">Role</th>
                   <th className="p-4">Status</th>
@@ -324,12 +399,39 @@ export default function MembersManager() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#E5E7EB]">
-                {filteredUsers.map(u => {
-                  const commName = committees.find(c => c.id === u.committeeId)?.name;
-                  const vertName = verticals.find(v => v.id === u.verticalId)?.name;
+                {paginatedUsers.map(u => {
+                  const commName = committees.find(c => c.id === u.committeeId || c.id === u.committee_id)?.name;
+                  const vertName = verticals.find(v => v.id === u.verticalId || v.id === u.vertical_id)?.name;
+                  const photoSrc = u.profilePhoto || u.profile_photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name || u.full_name || 'U')}&background=CD0000&color=fff`;
+                  const regNum = u.regNo || u.reg_no;
+                  const className = u.class || u.class_name;
+
                   return (
                     <tr key={u.id} className="hover:bg-slate-50/50 transition-colors text-slate-700">
-                      <td className="p-4 text-slate-900 font-bold">{u.name || u.full_name}</td>
+                      <td className="p-4">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={photoSrc}
+                            alt={u.name || u.full_name}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0"
+                            onError={e => {
+                              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name || u.full_name || 'U')}&background=CD0000&color=fff`;
+                            }}
+                          />
+                          <div>
+                            <p className="text-slate-900 font-bold leading-tight">{u.name || u.full_name}</p>
+                            {(regNum || className) && (
+                              <p className="text-[10px] text-slate-400 font-semibold mt-0.5">
+                                {regNum ? `Reg: ${regNum}` : ''}
+                                {regNum && className ? ' · ' : ''}
+                                {className ? `Class: ${className}` : ''}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </td>
                       <td className="p-4 text-slate-500 font-semibold">{u.email}</td>
                       <td className="p-4">
                         <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
@@ -363,15 +465,67 @@ export default function MembersManager() {
                   );
                 })}
                 {filteredUsers.length === 0 && (
-                  <tr><td colSpan={6} className="p-10 text-center text-slate-400">No members found.</td></tr>
+                  <tr><td colSpan={6} className="p-10 text-center text-slate-400">No members found matching your search.</td></tr>
                 )}
               </tbody>
             </table>
           </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+              <p className="text-xs text-slate-500 font-semibold">
+                Page <strong className="text-slate-800">{currentPage}</strong> of <strong className="text-slate-800">{totalPages}</strong>
+              </p>
+              <div className="flex items-center gap-1.5">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  className="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all"
+                >
+                  <ChevronLeft size={14} /> Previous
+                </button>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
+                  const isNeighbor = Math.abs(page - currentPage) <= 1;
+                  const isEdge = page === 1 || page === totalPages;
+                  if (isEdge || isNeighbor) {
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-8 h-8 rounded-xl text-xs font-bold border transition-all ${
+                          currentPage === page
+                            ? 'bg-[#CD0000] border-[#CD0000] text-white shadow-xs'
+                            : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  } else if (
+                    (page === 2 && currentPage > 3) ||
+                    (page === totalPages - 1 && currentPage < totalPages - 2)
+                  ) {
+                    return <span key={page} className="text-slate-300 text-xs font-bold px-0.5">...</span>;
+                  }
+                  return null;
+                })}
+
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  className="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1 transition-all"
+                >
+                  Next <ChevronRight size={14} />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         /* Recruitment applications */
-        <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-sm space-y-4">
+        <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider">Candidate Queue</h3>
             <button
@@ -398,29 +552,33 @@ export default function MembersManager() {
               </thead>
               <tbody className="divide-y divide-[#E5E7EB]">
                 {registrations.map((reg, i) => (
-                  <tr key={i} className="hover:bg-slate-50/50 transition-colors text-slate-700">
-                    <td className="p-4 text-slate-900 font-bold">{reg.name}</td>
+                  <tr key={reg.id || i} className="hover:bg-slate-50/50 transition-colors text-slate-700">
+                    <td className="p-4 font-bold text-slate-900">{reg.name}</td>
                     <td className="p-4 text-slate-500 font-semibold">{reg.email}</td>
-                    <td className="p-4 text-slate-500 font-semibold">{reg.phone}</td>
-                    <td className="p-4 font-bold text-slate-800">
-                      {reg.course} <span className="text-[10px] font-black uppercase text-slate-400">(Y{reg.year})</span>
-                    </td>
-                    <td className="p-4">
-                      <span className="px-2.5 py-0.5 rounded-full bg-purple-50 border border-purple-200 text-purple-600 text-xs font-semibold whitespace-nowrap">
-                        {reg.preferredVertical}
-                      </span>
-                    </td>
-                    <td className="p-4 text-xs leading-relaxed max-w-xs">{reg.reason}</td>
+                    <td className="p-4">{reg.phone || 'N/A'}</td>
+                    <td className="p-4 text-xs font-semibold">{reg.course} · Yr {reg.year}</td>
+                    <td className="p-4 text-xs font-bold text-[#CD0000]">{reg.preferredVertical}</td>
+                    <td className="p-4 text-xs text-slate-500 max-w-xs truncate">{reg.reasoning || 'General candidate application.'}</td>
                     <td className="p-4 text-right">
-                      <div className="flex justify-end gap-1.5">
-                        <button onClick={() => handleApproveRegistration(reg.id)} className="p-1.5 bg-green-50 text-green-600 hover:bg-green-100 rounded-lg transition-colors border border-green-150" title="Approve applicant"><Check size={14} /></button>
-                        <button onClick={() => handleRejectRegistration(reg.id)} className="p-1.5 bg-red-50 text-red-500 hover:bg-red-100 rounded-lg transition-colors border border-red-150" title="Reject applicant"><X size={14} /></button>
+                      <div className="flex justify-end gap-2">
+                        <button
+                          onClick={() => handleApproveRegistration(reg.id)}
+                          className="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-150 text-emerald-700 text-xs font-bold rounded-lg transition-colors flex items-center gap-1"
+                        >
+                          <UserCheck size={13} /> Approve
+                        </button>
+                        <button
+                          onClick={() => handleRejectRegistration(reg.id)}
+                          className="px-3 py-1.5 bg-red-50 hover:bg-red-100 border border-red-150 text-red-600 text-xs font-bold rounded-lg transition-colors flex items-center gap-1"
+                        >
+                          <Ban size={13} /> Reject
+                        </button>
                       </div>
                     </td>
                   </tr>
                 ))}
                 {registrations.length === 0 && (
-                  <tr><td colSpan={7} className="p-10 text-center text-slate-400">No recruitment registrations pending.</td></tr>
+                  <tr><td colSpan={7} className="p-10 text-center text-slate-400">No new recruitment applications.</td></tr>
                 )}
               </tbody>
             </table>
@@ -430,70 +588,64 @@ export default function MembersManager() {
 
       {/* CREATE MEMBER MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl border border-[#E5E7EB] w-full max-w-md">
-            <form onSubmit={handleCreateUser}>
-              <div className="flex items-center justify-between p-5 border-b border-[#E5E7EB]">
-                <h2 className="font-bold text-[#CD0000]">Invite Member</h2>
-                <button type="button" onClick={() => setShowCreateModal(false)} className="text-[#8c97a8] hover:text-[#CD0000]">
-                  <X size={18} />
-                </button>
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-[#E5E7EB]">
+              <h3 className="font-bold font-grotesk text-[#CD0000]">Add Directory Member</h3>
+              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-600"><X size={18} /></button>
+            </div>
+            <form onSubmit={handleCreateUser} className="p-6 space-y-4">
+              <div>
+                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Full Name *</label>
+                <input type="text" required value={newUserName} onChange={e => setNewUserName(e.target.value)} className={inputClass} placeholder="e.g. Suryachalam V M" />
               </div>
-              
-              <div className="p-5 space-y-4 text-left">
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Full Name *</label>
-                  <input type="text" required value={newUserName} onChange={e => setNewUserName(e.target.value)} className={inputClass} placeholder="Full Name" />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">University Email *</label>
-                  <input type="email" required value={newUserEmail} onChange={e => setNewUserEmail(e.target.value)} className={inputClass} placeholder="student@cs.christuniversity.in" />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">System Role *</label>
-                  <select value={newUserRole} onChange={e => setNewUserRole(e.target.value)} className={inputClass}>
-                    <option value="MEMBER">Member (No Login)</option>
-                    <option value="ADMIN">Administrator (CMS Login)</option>
-                  </select>
-                </div>                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical</label>
+              <div>
+                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Christ Email ID *</label>
+                <input type="email" required value={newUserEmail} onChange={e => setNewUserEmail(e.target.value)} className={inputClass} placeholder="name@cs.christuniversity.in" />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">System Access Role</label>
+                <select value={newUserRole} onChange={e => setNewUserRole(e.target.value)} className={inputClass}>
+                  <option value="MEMBER">Member (Standard Access)</option>
+                  <option value="ADMIN">Admin (Full Access)</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain</label>
+                <select 
+                  value={newUserVertical} 
+                  onChange={e => {
+                    setNewUserVertical(e.target.value);
+                    setNewUserCommittee('');
+                  }} 
+                  className={inputClass}
+                >
+                  <option value="">None / Floating Member</option>
+                  {verticals.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Core Committee</label>
+                <div className="flex gap-2">
                   <select 
-                    value={newUserVertical} 
-                    onChange={e => {
-                      const vId = e.target.value;
-                      setNewUserVertical(vId);
-                      if (vId) {
-                        const isMatch = committees.some(c => c.id === newUserCommittee && (c.verticalId === vId || c.vertical_id === vId));
-                        if (!isMatch) setNewUserCommittee('');
-                      }
-                    }} 
+                    value={newUserCommittee} 
+                    onChange={e => setNewUserCommittee(e.target.value)} 
                     className={inputClass}
                   >
                     <option value="">None</option>
-                    {verticals.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+                    {committees
+                      .filter(c => !newUserVertical || c.verticalId === newUserVertical || c.vertical_id === newUserVertical)
+                      .map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
+                  <button type="button" onClick={handleAddCommitteePrompt} className="px-3 border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 hover:text-[#CD0000] transition-colors flex items-center justify-center shrink-0" title="Create New Core Committee">
+                    <Plus size={16} />
+                  </button>
                 </div>
-
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Committee</label>
-                  <div className="flex gap-2">
-                    <select value={newUserCommittee} onChange={e => setNewUserCommittee(e.target.value)} className={inputClass}>
-                      <option value="">None</option>
-                      {committees
-                        .filter(c => !newUserVertical || c.verticalId === newUserVertical || c.vertical_id === newUserVertical)
-                        .map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                    </select>
-                    <button type="button" onClick={handleAddCommitteePrompt} className="px-3 border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 hover:text-[#CD0000] transition-colors flex items-center justify-center shrink-0" title="Create New Core Committee">
-                      <Plus size={16} />
-                    </button>
-                  </div>
-                </div>
-                </div>
-
-              <div className="flex justify-end gap-3 p-5 border-t border-[#E5E7EB]">
+              </div>
+              <div className="flex justify-end gap-3 pt-4 border-t border-[#E5E7EB]">
                 <button type="button" onClick={() => setShowCreateModal(false)} className="px-4 py-2 text-sm text-[#667085] hover:text-[#CD0000]">Cancel</button>
                 <button type="submit" className="px-5 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000] transition-colors">
-                  Create Profile
+                  Create Member
                 </button>
               </div>
             </form>
@@ -501,52 +653,68 @@ export default function MembersManager() {
         </div>
       )}
 
-      {/* EDIT USER MODAL */}
+      {/* EDIT MEMBER MODAL */}
       {showEditModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl border border-[#E5E7EB] w-full max-w-md">
-            <form onSubmit={handleEditUser}>
-              <div className="flex items-center justify-between p-5 border-b border-[#E5E7EB]">
-                <h2 className="font-bold text-[#CD0000]">Edit Member Details</h2>
-                <button type="button" onClick={() => setShowEditModal(false)} className="text-[#8c97a8] hover:text-[#CD0000]">
-                  <X size={18} />
-                </button>
-              </div>
-              
-              <div className="p-5 space-y-4 text-left">
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col">
+            <div className="flex justify-between items-center px-6 py-4 border-b border-[#E5E7EB] shrink-0">
+              <h3 className="font-bold font-grotesk text-[#CD0000]">Edit Member Details</h3>
+              <button onClick={() => setShowEditModal(false)} className="text-slate-400 hover:text-slate-600"><X size={18} /></button>
+            </div>
+            <form onSubmit={handleEditUser} className="p-6 space-y-4 overflow-y-auto flex-1">
+              <div className="space-y-4">
+                {/* Full Name */}
                 <div>
                   <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Full Name *</label>
                   <input type="text" required value={editingUserName} onChange={e => setEditingUserName(e.target.value)} className={inputClass} />
                 </div>
+
+                {/* Reg No + Class */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Register Number</label>
+                    <input type="text" value={editingUserRegNo} onChange={e => setEditingUserRegNo(e.target.value)} className={inputClass} placeholder="e.g. 2540146" />
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Class / Section</label>
+                    <input type="text" value={editingUserClass} onChange={e => setEditingUserClass(e.target.value)} className={inputClass} placeholder="e.g. 3BScCM" />
+                  </div>
+                </div>
+
+                {/* System Role */}
                 <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">System Role *</label>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">System Access Role</label>
                   <select value={editingUserRole} onChange={e => setEditingUserRole(e.target.value)} className={inputClass}>
-                    <option value="MEMBER">Member (No Login)</option>
-                    <option value="ADMIN">Administrator (CMS Login)</option>
+                    <option value="MEMBER">Member (Standard Access)</option>
+                    <option value="ADMIN">Admin (Full Access)</option>
                   </select>
-                </div>                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical</label>
+                </div>
+
+                {/* Vertical Domain */}
+                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain</label>
                   <select 
                     value={editingUserVertical} 
                     onChange={e => {
-                      const vId = e.target.value;
-                      setEditingUserVertical(vId);
-                      if (vId) {
-                        const isMatch = committees.some(c => c.id === editingUserCommittee && (c.verticalId === vId || c.vertical_id === vId));
-                        if (!isMatch) setEditingUserCommittee('');
-                      }
+                      setEditingUserVertical(e.target.value);
+                      setEditingUserCommittee('');
                     }} 
                     className={inputClass}
                   >
-                    <option value="">None</option>
+                    <option value="">None / Floating Member</option>
                     {verticals.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
                   </select>
                 </div>
 
+                {/* Core Committee */}
                 <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Committee</label>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Core Committee</label>
                   <div className="flex gap-2">
-                    <select value={editingUserCommittee} onChange={e => setEditingUserCommittee(e.target.value)} className={inputClass}>
+                    <select 
+                      value={editingUserCommittee} 
+                      onChange={e => setEditingUserCommittee(e.target.value)} 
+                      className={inputClass}
+                    >
                       <option value="">None</option>
                       {committees
                         .filter(c => !editingUserVertical || c.verticalId === editingUserVertical || c.vertical_id === editingUserVertical)
@@ -633,9 +801,9 @@ export default function MembersManager() {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 p-5 border-t border-[#E5E7EB]">
+              <div className="flex justify-end gap-3 pt-5 border-t border-[#E5E7EB]">
                 <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 text-sm text-[#667085] hover:text-[#CD0000]">Cancel</button>
-                <button type="submit" className="px-5 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000] transition-colors">
+                <button type="submit" className="px-5 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000] transition-colors shadow-xs">
                   Save Changes
                 </button>
               </div>
@@ -646,7 +814,7 @@ export default function MembersManager() {
 
       {/* DELETE USER CONFIRM MODAL */}
       {deleteConfirm && (
-        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl border border-red-100 w-full max-w-sm p-6 text-center">
             <div className="w-14 h-14 mx-auto rounded-full bg-red-50 flex items-center justify-center mb-4 text-red-500">
               <AlertTriangle size={28} />

@@ -119,6 +119,7 @@ const BentoCardMedia: React.FC<{
           className="magic-bento-img"
           style={{ transform: transformStyle }}
           loading="lazy"
+          decoding="async"
           draggable={false}
         />
       )}

@@ -404,8 +404,8 @@ export async function POST(req: NextRequest) {
       }
 
       case 'updateUserDetails': {
-        const { userId, name, role, committeeId, verticalId, designation, profilePhoto, github, linkedin } = payload;
-        await dbUpdateUserDetails(userId, name, role, committeeId, verticalId, designation, profilePhoto, github, linkedin);
+        const { userId, name, role, committeeId, verticalId, designation, profilePhoto, github, linkedin, regNo, class: className } = payload;
+        await dbUpdateUserDetails(userId, name, role, committeeId, verticalId, designation, profilePhoto, github, linkedin, regNo, className);
         await logActivity(sessionUser.id, 'update_user_details', `Updated profile of user ${userId}`);
         return NextResponse.json({ success: true });
       }

@@ -31,6 +31,10 @@ export interface User {
   linkedin?: string | null;
   isHead?: boolean;
   is_head?: boolean;
+  regNo?: string | null;
+  reg_no?: string | null;
+  class?: string | null;
+  class_name?: string | null;
 }
 
 export interface CoreCommittee {
@@ -274,6 +278,10 @@ export async function dbGetRoles(): Promise<any[]> {
         profilePhoto: p.profile_photo,
         designation: p.designation,
         department: p.department,
+        regNo: p.reg_no || p.regNo,
+        reg_no: p.reg_no || p.regNo,
+        class: p.class_name || p.class,
+        class_name: p.class_name || p.class,
         createdAt: p.created_at
       }));
     } catch (err) {
@@ -436,52 +444,72 @@ export async function dbCreateUser(name: string, email: string, role: string, co
 }
 
 export async function dbUpdateUserStatus(userId: string, status: 'active' | 'inactive'): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('profiles').update({ status }).eq('id', userId);
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    const user = db.users.find(u => u.id === userId);
-    if (user) {
-      user.status = status;
-      saveLocalDb(db);
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client.from('profiles').update({ status }).eq('id', userId);
+        if (error) throw error;
+      } catch (err) {
+        console.warn("Supabase dbUpdateUserStatus failed:", err);
+      }
     }
+  }
+  const db = getLocalDb();
+  const user = db.users.find(u => u.id === userId);
+  if (user) {
+    user.status = status;
+    saveLocalDb(db);
   }
 }
 
 export async function dbUpdateUserDetails(
   userId: string, name: string, role: string,
   committeeId?: string, verticalId?: string,
-  designation?: string, profilePhoto?: string, github?: string, linkedin?: string
+  designation?: string, profilePhoto?: string, github?: string, linkedin?: string,
+  regNo?: string, className?: string
 ): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('profiles').update({
-      full_name: name,
-      role: role as any,
-      committee_id: committeeId || null,
-      vertical_id: verticalId || null,
-      designation: designation || null,
-      profile_photo: profilePhoto || null,
-      github: github || null
-    }).eq('id', userId);
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    const user = db.users.find(u => u.id === userId);
-    if (user) {
-      user.name = name;
-      user.full_name = name;
-      user.role = role as any;
-      user.committeeId = committeeId;
-      user.verticalId = verticalId;
-      user.committee_id = committeeId || null;
-      user.vertical_id = verticalId || null;
-      if (designation !== undefined) user.designation = designation;
-      if (profilePhoto !== undefined) user.profilePhoto = profilePhoto;
-      if (github !== undefined) user.github = github;
-      if (linkedin !== undefined) user.linkedin = linkedin;
-      saveLocalDb(db);
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const updatePayload: any = {
+          full_name: name,
+          name: name,
+          role: role as any,
+          committee_id: committeeId || null,
+          vertical_id: verticalId || null
+        };
+        if (designation !== undefined) updatePayload.designation = designation || null;
+        if (profilePhoto !== undefined) updatePayload.profile_photo = profilePhoto || null;
+        if (regNo !== undefined) updatePayload.reg_no = regNo || null;
+        if (className !== undefined) updatePayload.class_name = className || null;
+
+        const { error } = await client.from('profiles').update(updatePayload).eq('id', userId);
+        if (error) throw error;
+      } catch (err) {
+        console.warn("Supabase dbUpdateUserDetails failed:", err);
+      }
     }
+  }
+  
+  const db = getLocalDb();
+  const user = db.users.find(u => u.id === userId);
+  if (user) {
+    user.name = name;
+    user.full_name = name;
+    user.role = role as any;
+    user.committeeId = committeeId;
+    user.verticalId = verticalId;
+    user.committee_id = committeeId || null;
+    user.vertical_id = verticalId || null;
+    if (designation !== undefined) user.designation = designation;
+    if (profilePhoto !== undefined) user.profilePhoto = profilePhoto;
+    if (github !== undefined) user.github = github;
+    if (linkedin !== undefined) user.linkedin = linkedin;
+    if (regNo !== undefined) { user.regNo = regNo; user.reg_no = regNo; }
+    if (className !== undefined) { user.class = className; user.class_name = className; }
+    saveLocalDb(db);
   }
 }
 
@@ -1532,19 +1560,27 @@ export async function dbGetCustomFormBySlug(slug: string): Promise<{ form: Custo
             createdAt: form.created_at,
             updatedAt: form.updated_at
           },
-          fields: (fields || []).map((f: any) => ({
-            id: f.id,
-            formId: f.form_id,
-            fieldType: f.field_type,
-            label: f.label,
-            description: f.description || undefined,
-            placeholder: f.placeholder || undefined,
-            required: f.required,
-            options: f.options || undefined,
-            order: f.order_num,
-            defaultValue: f.default_value || undefined,
-            validation: f.validation || undefined
-          }))
+          fields: (fields || []).map((f: any) => {
+            let parsedOpts = [];
+            if (Array.isArray(f.options)) {
+              parsedOpts = f.options;
+            } else if (typeof f.options === 'string' && f.options.trim()) {
+              try { parsedOpts = JSON.parse(f.options); } catch (_) { parsedOpts = []; }
+            }
+            return {
+              id: f.id,
+              formId: f.form_id,
+              fieldType: f.field_type,
+              label: f.label,
+              description: f.description || undefined,
+              placeholder: f.placeholder || undefined,
+              required: f.required,
+              options: parsedOpts,
+              order: f.order_num,
+              defaultValue: f.default_value || undefined,
+              validation: f.validation || undefined
+            };
+          })
         };
       } catch (err) {
         console.warn("Supabase dbGetCustomFormBySlug failed, using local database fallback:", err);

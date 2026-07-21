@@ -3,8 +3,8 @@
     {
       "id": "u-suryachalam",
       "email": "suryachalam.vm@bsccmh.christuniversity.in",
-      "name": "Suryachalam VM",
-      "full_name": "Suryachalam VM",
+      "name": "Suryachalam V",
+      "full_name": "Suryachalam V",
       "passwordHash": "$2b$10$BN2loUrb6mDrgr9URTUcwuA23KIYMplDRI4GLsiSQB4c/CZsRIwKW",
       "role": "MEMBER",
       "status": "active",
@@ -19,7 +19,8 @@
       "vertical_id": "v-devzen",
       "createdAt": "2026-07-20T15:00:58.060Z",
       "github": "https://github.com/sgk18",
-      "committeeId": null
+      "reg_no": "2540146",
+      "class_name": "3BScCM"
     },
     {
       "id": "u-1784558851639",
@@ -38,7 +39,7 @@
       "verticalId": "v-devzen",
       "vertical_id": "v-devzen",
       "createdAt": "2026-07-20T15:00:58.060Z",
-      "lastLogin": "2026-07-21T13:46:19.555Z"
+      "lastLogin": "2026-07-21T14:37:37.087Z"
     },
     {
       "id": "u-krupa-m",
@@ -1249,6 +1250,13 @@
   "resources": [],
   "tasks": [],
   "activityLogs": [
+    {
+      "id": "log-1784644726107",
+      "userId": "u-1784558851639",
+      "action": "update_user_details",
+      "details": "Updated profile of user u-suryachalam",
+      "timestamp": "2026-07-21T14:38:46.107Z"
+    },
     {
       "id": "log-1784598209099",
       "userId": "u-1784558851639",

@@ -242,6 +242,8 @@ const GalleryManager: React.FC = () => {
                       <img
                         src={item.image}
                         alt={item.title}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover transition-transform duration-300"
                         style={{
                           transform: `rotate(${rot}deg)${needsSwap ? ' scale(1.5)' : ''}`

@@ -388,7 +388,7 @@ const GalleryPage: React.FC = () => {
                     return selectedImage.image.endsWith('.mp4') ? (
                       <video src={selectedImage.image} controls autoPlay className="absolute inset-0 w-full h-full object-contain" style={{ transform: transformStyle }} />
                     ) : (
-                      <img src={selectedImage.image} alt={selectedImage.title} className="absolute inset-0 w-full h-full object-contain" style={{ transform: transformStyle }} />
+                      <img src={selectedImage.image} alt={selectedImage.title} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-contain" style={{ transform: transformStyle }} />
                     );
                   })()
                 ) : (
