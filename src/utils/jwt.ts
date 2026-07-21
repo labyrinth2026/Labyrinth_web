@@ -23,7 +23,7 @@ function base64UrlToArrayBuffer(base64Url: string): ArrayBuffer {
   return bytes.buffer;
 }
 
-const JWT_SECRET = process.env.JWT_SECRET || 'labyrinth-secret-key-32-chars-long-or-more';
+const JWT_SECRET = (process.env.JWT_SECRET || 'labyrinth-secret-key-32-chars-long-or-more').trim();
 
 async function getSigningKey() {
   return await crypto.subtle.importKey(
