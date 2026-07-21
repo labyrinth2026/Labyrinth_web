@@ -48,29 +48,9 @@ const VerticalCard: React.FC<VerticalCardProps> = ({ vertical }) => {
         <h3 className="text-base font-bold text-slate-900 mb-2 tracking-tight group-hover:text-[#CD0000] transition-colors leading-tight">
           {vertical.name}
         </h3>
-        <p className="text-slate-500 text-xs leading-relaxed mb-6 flex-grow">
+        <p className="text-slate-500 text-xs leading-relaxed flex-grow">
           {vertical.description}
         </p>
-
-        {/* Leadership */}
-        {(vertical.head || vertical.subHead) && (
-          <div className="mt-auto pt-4 border-t border-slate-100">
-            <div className="flex flex-col gap-2">
-              {vertical.head && (
-                <div className="flex justify-between items-center">
-                  <span className="text-[9px] text-slate-400 uppercase tracking-widest font-bold">Head</span>
-                  <span className="text-xs text-[#CD0000] font-bold">{vertical.head.name}</span>
-                </div>
-              )}
-              {vertical.subHead && (
-                <div className="flex justify-between items-center">
-                  <span className="text-[9px] text-slate-400 uppercase tracking-widest font-bold">Sub-Head</span>
-                  <span className="text-xs text-slate-700 font-bold">{vertical.subHead.name}</span>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </motion.div>
   );

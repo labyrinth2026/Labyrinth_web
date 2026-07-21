@@ -146,6 +146,13 @@ export default function VerticalsManager() {
   const [editingCommId, setEditingCommId] = useState<string | null>(null);
   const [editingCommName, setEditingCommName] = useState('');
 
+  // Dedicated Add/Manage Committee Modal State
+  const [showCommitteeModal, setShowCommitteeModal] = useState(false);
+  const [commModalVerticalId, setCommModalVerticalId] = useState<string>('');
+  const [commNameInput, setCommNameInput] = useState('');
+  const [commDescInput, setCommDescInput] = useState('');
+  const [isCommSaving, setIsCommSaving] = useState(false);
+
   const loadData = async () => {
     setLoading(true);
     try {
@@ -168,15 +175,55 @@ export default function VerticalsManager() {
 
   // Lock background scroll when modal is open
   useEffect(() => {
-    if (showModal) {
+    if (showModal || deleteConfirm || showCommitteeModal) {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     }
     return () => {
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
-  }, [showModal]);
+  }, [showModal, deleteConfirm, showCommitteeModal]);
+
+  const openCommitteeModal = (verticalId?: string) => {
+    setCommModalVerticalId(verticalId || (verticals[0]?.id || ''));
+    setCommNameInput('');
+    setCommDescInput('');
+    setShowCommitteeModal(true);
+  };
+
+  const handleSaveCommittee = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!commNameInput.trim() || !commModalVerticalId) return;
+    setIsCommSaving(true);
+    try {
+      await fetchFromSheet('addCoreCommittee', { 
+        name: commNameInput.trim(), 
+        description: commDescInput.trim() || 'Created via Committee Manager', 
+        verticalId: commModalVerticalId 
+      });
+      setCommNameInput('');
+      setCommDescInput('');
+      const fresh: any = await fetchFromSheet('getVerticals');
+      if (fresh) {
+        setVerticals(fresh);
+        if (editingItem && editingItem.id === commModalVerticalId) {
+          const updatedItem = fresh.find((v: any) => v.id === commModalVerticalId);
+          if (updatedItem) {
+            setEditingItem(updatedItem);
+            setVerticalCommittees(updatedItem.committees || []);
+          }
+        }
+      }
+    } catch (err) {
+      alert('Failed to add core committee.');
+    } finally {
+      setIsCommSaving(false);
+    }
+  };
 
   const openAddModal = () => {
     setEditingItem({ name: '', description: '', category: 'tech', icon: 'Brain', color: '#3b82f6', image: '' });
@@ -363,11 +410,14 @@ export default function VerticalsManager() {
           <p className="text-slate-500 text-sm mt-0.5">Manage domain verticals, category types, and leadership heads.</p>
         </div>
         <div className="flex gap-2 w-full sm:w-auto">
-          <button onClick={loadData} className="p-2.5 text-slate-500 hover:text-[#CD0000] border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shrink-0">
+          <button onClick={loadData} className="p-2.5 text-slate-500 hover:text-[#CD0000] border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shrink-0" title="Refresh data">
             <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
           </button>
-          <button onClick={openAddModal} className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000] transition-colors shadow-sm">
-            <Plus size={15} /> Add Vertical
+          <button onClick={() => openCommitteeModal()} className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3.5 py-2 bg-slate-800 text-white text-xs font-semibold rounded-xl hover:bg-slate-900 transition-colors shadow-sm">
+            <Users size={14} /> Add Core Committee
+          </button>
+          <button onClick={openAddModal} className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 bg-[#CD0000] text-white text-xs font-semibold rounded-xl hover:bg-[#A30000] transition-colors shadow-sm">
+            <Plus size={14} /> Add Vertical
           </button>
         </div>
       </div>
@@ -392,8 +442,8 @@ export default function VerticalsManager() {
                       }`}>{item.category}</span>
                     </div>
                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button onClick={() => openEditModal(item)} className="p-1 text-slate-400 hover:text-[#CD0000] rounded hover:bg-slate-50"><Edit2 size={13} /></button>
-                      <button onClick={() => setDeleteConfirm(item.id)} className="p-1 text-slate-400 hover:text-red-500 rounded hover:bg-slate-50"><Trash2 size={13} /></button>
+                      <button onClick={() => openEditModal(item)} className="p-1 text-slate-400 hover:text-[#CD0000] rounded hover:bg-slate-50" title="Edit Vertical"><Edit2 size={13} /></button>
+                      <button onClick={() => setDeleteConfirm(item.id)} className="p-1 text-slate-400 hover:text-red-500 rounded hover:bg-slate-50" title="Delete Vertical"><Trash2 size={13} /></button>
                     </div>
                   </div>
                   <p className="text-xs text-slate-500 leading-relaxed line-clamp-3 mb-4">{item.description}</p>
@@ -419,7 +469,12 @@ export default function VerticalsManager() {
                     </div>
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Core Committee</span>
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Core Committee</span>
+                      <button onClick={() => openCommitteeModal(item.id)} className="text-[10px] font-bold text-[#CD0000] hover:underline flex items-center gap-0.5">
+                        <Plus size={10} /> Add Committee
+                      </button>
+                    </div>
                     <div className="flex flex-wrap gap-1">
                       {(item.coreCommittee || []).map((c: any) => (
                         <span key={c.id} className="text-[11px] font-semibold bg-slate-50 text-slate-600 border border-slate-200/50 px-2 py-0.5 rounded-lg">{c.name}</span>
@@ -436,14 +491,14 @@ export default function VerticalsManager() {
 
       {/* CREATE/EDIT MODAL */}
       {showModal && editingItem && (
-        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-lg flex flex-col max-h-[90vh]">
-            <div className="flex items-center justify-between p-5 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto overscroll-contain">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-lg flex flex-col max-h-[85vh] my-auto overflow-hidden">
+            <div className="flex items-center justify-between p-5 border-b border-slate-100 shrink-0 bg-white z-10">
               <h2 className="font-bold text-slate-800">{editingItem.id ? 'Edit Vertical' : 'Create Vertical'}</h2>
               <button onClick={() => setShowModal(false)} className="text-[#8c97a8] hover:text-[#CD0000]"><X size={18} /></button>
             </div>
             
-            <div className="px-5 pt-5 pb-36 overflow-y-auto space-y-4 flex-1 min-h-0">
+            <div className="p-5 overflow-y-auto space-y-4 flex-1 min-h-0 overscroll-contain pb-24">
               <div>
                 <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Name *</label>
                 <input type="text" value={editingItem.name || ''} onChange={e => setEditingItem({ ...editingItem, name: e.target.value })} className={inputClass} placeholder="e.g. AI Creator's Lab" />
@@ -574,7 +629,7 @@ export default function VerticalsManager() {
 
       {/* DELETE CONFIRM */}
       {deleteConfirm && (
-        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4 overscroll-contain">
           <div className="bg-white rounded-2xl shadow-xl border border-red-100 w-full max-w-sm p-6 text-center">
             <div className="w-14 h-14 mx-auto rounded-full bg-red-50 flex items-center justify-center mb-4 text-red-500">
               <AlertTriangle size={28} />
@@ -584,6 +639,131 @@ export default function VerticalsManager() {
             <div className="flex gap-3">
               <button onClick={() => setDeleteConfirm(null)} className="flex-1 px-4 py-2 text-sm font-semibold text-slate-500 border border-slate-200 rounded-xl hover:bg-slate-50">Cancel</button>
               <button onClick={() => handleDelete(deleteConfirm)} className="flex-1 px-4 py-2 text-sm font-semibold text-white bg-red-500 rounded-xl hover:bg-red-600">Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ADD / MANAGE CORE COMMITTEE MODAL */}
+      {showCommitteeModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto overscroll-contain">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-md flex flex-col max-h-[85vh] my-auto overflow-hidden">
+            <div className="flex items-center justify-between p-5 border-b border-slate-100 shrink-0 bg-white z-10">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#CD0000]/10 text-[#CD0000] flex items-center justify-center">
+                  <Users size={16} />
+                </div>
+                <div>
+                  <h2 className="font-bold text-slate-800 text-sm leading-tight">Core Committees</h2>
+                  <p className="text-[11px] text-slate-400">Add or manage sub-committees in domain verticals</p>
+                </div>
+              </div>
+              <button onClick={() => setShowCommitteeModal(false)} className="text-[#8c97a8] hover:text-[#CD0000] p-1"><X size={18} /></button>
+            </div>
+
+            <div className="p-5 overflow-y-auto space-y-5 flex-1 min-h-0 overscroll-contain">
+              {/* Form to add new committee */}
+              <form onSubmit={handleSaveCommittee} className="space-y-3 bg-slate-50 border border-slate-200/80 rounded-xl p-4">
+                <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <Plus size={12} className="text-[#CD0000]" /> Add New Committee
+                </h3>
+                <div>
+                  <label className="text-[11px] font-semibold text-slate-500 block mb-1">Target Vertical Domain *</label>
+                  <select 
+                    value={commModalVerticalId} 
+                    onChange={e => setCommModalVerticalId(e.target.value)}
+                    className={inputClass}
+                  >
+                    {verticals.map(v => (
+                      <option key={v.id} value={v.id}>{v.name} ({v.category})</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[11px] font-semibold text-slate-500 block mb-1">Committee Name *</label>
+                  <input 
+                    type="text"
+                    required
+                    value={commNameInput}
+                    onChange={e => setCommNameInput(e.target.value)}
+                    placeholder="e.g. Technical Operations / Media Team"
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className="text-[11px] font-semibold text-slate-500 block mb-1">Description (Optional)</label>
+                  <input 
+                    type="text"
+                    value={commDescInput}
+                    onChange={e => setCommDescInput(e.target.value)}
+                    placeholder="Brief description..."
+                    className={inputClass}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isCommSaving || !commNameInput.trim()}
+                  className="w-full flex items-center justify-center gap-1.5 px-4 py-2 bg-[#CD0000] text-white text-xs font-bold rounded-xl hover:bg-[#A30000] transition-colors disabled:opacity-50"
+                >
+                  {isCommSaving ? <RefreshCw size={13} className="animate-spin" /> : <Plus size={13} />}
+                  Add Committee
+                </button>
+              </form>
+
+              {/* List of existing committees for selected vertical */}
+              <div>
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono mb-2 flex items-center justify-between">
+                  <span>Existing Committees ({verticals.find(v => v.id === commModalVerticalId)?.name || 'Selected'})</span>
+                  <span className="text-[10px] text-slate-400 font-normal">
+                    {(verticals.find(v => v.id === commModalVerticalId)?.committees || []).length} total
+                  </span>
+                </h3>
+                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                  {(verticals.find(v => v.id === commModalVerticalId)?.committees || []).length === 0 ? (
+                    <div className="p-4 border border-dashed border-slate-200 rounded-xl text-center text-xs text-slate-400">
+                      No committees found for this vertical. Use the form above to add one.
+                    </div>
+                  ) : (
+                    (verticals.find(v => v.id === commModalVerticalId)?.committees || []).map((c: any) => (
+                      <div key={c.id} className="flex items-center justify-between bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs">
+                        {editingCommId === c.id ? (
+                          <div className="flex gap-2 items-center flex-1 mr-2">
+                            <input 
+                              type="text" 
+                              value={editingCommName} 
+                              onChange={e => setEditingCommName(e.target.value)} 
+                              className="flex-1 border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-800 focus:outline-none"
+                            />
+                            <button type="button" onClick={() => handleSaveEditingComm(c.id)} className="p-1 text-green-600 hover:bg-slate-50 rounded"><Check size={13} /></button>
+                            <button type="button" onClick={() => setEditingCommId(null)} className="p-1 text-slate-400 hover:bg-slate-50 rounded"><X size={13} /></button>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="min-w-0 pr-2">
+                              <p className="font-semibold text-slate-800 truncate">{c.name}</p>
+                              {c.description && <p className="text-[10px] text-slate-400 truncate">{c.description}</p>}
+                            </div>
+                            <div className="flex gap-1 shrink-0">
+                              <button type="button" onClick={() => handleStartEditingComm(c.id, c.name)} className="p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded" title="Edit Committee"><Edit2 size={12} /></button>
+                              <button type="button" onClick={() => handleDeleteComm(c.id)} className="p-1 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded" title="Delete Committee"><Trash2 size={12} /></button>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end p-4 border-t border-slate-100 shrink-0 bg-slate-50/50">
+              <button 
+                type="button" 
+                onClick={() => setShowCommitteeModal(false)} 
+                className="px-4 py-2 bg-white border border-slate-200 text-xs font-semibold text-slate-700 rounded-xl hover:bg-slate-100 transition-colors"
+              >
+                Done
+              </button>
             </div>
           </div>
         </div>
