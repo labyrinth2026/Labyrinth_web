@@ -43,7 +43,7 @@ const FacultyCard: React.FC<FacultyCardProps> = ({ faculty }) => {
         <div className="relative mb-4 mt-2">
           <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-slate-100 shadow-xs bg-slate-50 flex items-center justify-center">
             {faculty.avatar ? (
-              <img src={faculty.avatar} alt={faculty.name} loading="lazy" className="w-full h-full object-cover" />
+              <img src={faculty.avatar} alt={faculty.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
             ) : (
               <span className="text-xl font-bold text-slate-400">{getInitials(faculty.name)}</span>
             )}

@@ -256,44 +256,43 @@ export async function dbGetUserByEmail(email: string): Promise<any | null> {
 }
 
 export async function dbGetRoles(): Promise<any[]> {
-  if (isSupabaseConfigured() && !getSupabaseOffline() && supabase) {
-    try {
-      const { data, error } = await supabase.from('profiles').select('*');
-      if (error) throw error;
-      return (data || []).map((p: any) => ({
-        id: p.id,
-        email: p.email,
-        name: p.full_name || p.name || p.email.split('@')[0],
-        full_name: p.full_name || p.name || p.email.split('@')[0],
-        role: p.role,
-        status: p.status,
-        firstLogin: p.first_login,
-        passwordChangedAt: p.password_changed_at,
-        createdBy: p.created_by,
-        lastLogin: p.last_login,
-        committeeId: p.committee_id,
-        verticalId: p.vertical_id,
-        isHead: p.is_head,
-        phone: p.phone,
-        profilePhoto: p.profile_photo,
-        designation: p.designation,
-        department: p.department,
-        regNo: p.reg_no || p.regNo,
-        reg_no: p.reg_no || p.regNo,
-        class: p.class_name || p.class,
-        class_name: p.class_name || p.class,
-        createdAt: p.created_at
-      }));
-    } catch (err) {
-      console.warn('Supabase dbGetRoles failed, falling back to local database. Setting Supabase to offline.', err);
-      setSupabaseOffline(true);
-      const db = getLocalDb();
-      return db.users.map(u => ({ ...u, name: u.full_name || u.name }));
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { data, error } = await client.from('profiles').select('*');
+        if (error) throw error;
+        return (data || []).map((p: any) => ({
+          id: p.id,
+          email: p.email,
+          name: p.full_name || p.name || p.email.split('@')[0],
+          full_name: p.full_name || p.name || p.email.split('@')[0],
+          role: p.role,
+          status: p.status,
+          firstLogin: p.first_login,
+          passwordChangedAt: p.password_changed_at,
+          createdBy: p.created_by,
+          lastLogin: p.last_login,
+          committeeId: p.committee_id,
+          verticalId: p.vertical_id,
+          isHead: p.is_head,
+          phone: p.phone,
+          profilePhoto: p.profile_photo,
+          designation: p.designation,
+          department: p.department,
+          regNo: p.reg_no || p.regNo,
+          reg_no: p.reg_no || p.regNo,
+          class: p.class_name || p.class,
+          class_name: p.class_name || p.class,
+          createdAt: p.created_at
+        }));
+      } catch (err) {
+        console.warn('Supabase dbGetRoles failed, falling back to local database:', err);
+      }
     }
-  } else {
-    const db = getLocalDb();
-    return db.users.map(u => ({ ...u, name: u.full_name || u.name }));
   }
+  const db = getLocalDb();
+  return db.users.map(u => ({ ...u, name: u.full_name || u.name }));
 }
 
 export async function dbAddRole(email: string, name: string, role: string): Promise<void> {
@@ -448,15 +447,16 @@ export async function dbUpdateUserStatus(userId: string, status: 'active' | 'ina
     const client = getSupabaseAdmin() || supabase;
     if (client) {
       try {
-        const { error } = await client.from('profiles').update({ status }).eq('id', userId);
+        const { error } = await client.from('profiles').update({ status }).or(`id.eq.${userId},email.eq.${userId}`);
         if (error) throw error;
       } catch (err) {
         console.warn("Supabase dbUpdateUserStatus failed:", err);
+        throw err;
       }
     }
   }
   const db = getLocalDb();
-  const user = db.users.find(u => u.id === userId);
+  const user = db.users.find(u => u.id === userId || u.email === userId);
   if (user) {
     user.status = status;
     saveLocalDb(db);
@@ -482,19 +482,22 @@ export async function dbUpdateUserDetails(
         };
         if (designation !== undefined) updatePayload.designation = designation || null;
         if (profilePhoto !== undefined) updatePayload.profile_photo = profilePhoto || null;
+        if (github !== undefined) updatePayload.github = github || null;
+        if (linkedin !== undefined) updatePayload.linkedin = linkedin || null;
         if (regNo !== undefined) updatePayload.reg_no = regNo || null;
         if (className !== undefined) updatePayload.class_name = className || null;
 
-        const { error } = await client.from('profiles').update(updatePayload).eq('id', userId);
+        const { error } = await client.from('profiles').update(updatePayload).or(`id.eq.${userId},email.eq.${userId}`);
         if (error) throw error;
       } catch (err) {
         console.warn("Supabase dbUpdateUserDetails failed:", err);
+        throw err;
       }
     }
   }
   
   const db = getLocalDb();
-  const user = db.users.find(u => u.id === userId);
+  const user = db.users.find(u => u.id === userId || u.email === userId);
   if (user) {
     user.name = name;
     user.full_name = name;
@@ -532,21 +535,23 @@ export async function dbGetVerticals(): Promise<any[]> {
   let verticals: any[] = [];
   let users: any[] = [];
 
-  if (isSupabaseConfigured() && !getSupabaseOffline() && supabase) {
-    try {
-      const { data: vData, error: vErr } = await supabase.from('verticals').select('*');
-      if (vErr) throw vErr;
-      verticals = vData || [];
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { data: vData, error: vErr } = await client.from('verticals').select('*');
+        if (vErr) throw vErr;
+        verticals = vData || [];
 
-      const { data: uData, error: uErr } = await supabase.from('profiles').select('*');
-      if (uErr) throw uErr;
-      users = uData || [];
-    } catch (err) {
-      console.warn('Supabase dbGetVerticals failed, falling back to local database. Setting Supabase to offline.', err);
-      setSupabaseOffline(true);
-      const db = getLocalDb();
-      verticals = db.verticals || [];
-      users = db.users || [];
+        const { data: uData, error: uErr } = await client.from('profiles').select('*');
+        if (uErr) throw uErr;
+        users = uData || [];
+      } catch (err) {
+        console.warn('Supabase dbGetVerticals failed, falling back to local database:', err);
+        const db = getLocalDb();
+        verticals = db.verticals || [];
+        users = db.users || [];
+      }
     }
   } else {
     const db = getLocalDb();

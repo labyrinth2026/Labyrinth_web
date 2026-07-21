@@ -28,8 +28,11 @@ const TeamPage: React.FC = () => {
   });
   const [verticalsData, setVerticalsData] = useState<any[]>([]);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const loadData = async () => {
+      setLoading(true);
       try {
         const teamResult: any = await fetchFromSheet('getTeam');
         if (teamResult && !Array.isArray(teamResult)) {
@@ -48,6 +51,8 @@ const TeamPage: React.FC = () => {
         }
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
     loadData();
@@ -66,7 +71,18 @@ const TeamPage: React.FC = () => {
   const heads = filterMembers(teamData.verticalHeads);
   const subHeads = filterMembers(teamData.subHeads);
 
-  const hasResults = faculty.length > 0 || mentors.length > 0 || core.length > 0 || heads.length > 0 || subHeads.length > 0;
+  const isFacultyActive = filter === 'all' || filter === 'faculty';
+  const isMentorsActive = filter === 'all' || filter === 'mentors';
+  const isCoreActive = filter === 'all' || filter === 'core';
+  const isVerticalsActive = filter === 'all' || filter === 'verticals';
+
+  const activeFaculty = isFacultyActive ? faculty : [];
+  const activeMentors = isMentorsActive ? mentors : [];
+  const activeCore = isCoreActive ? core : [];
+  const activeHeads = isVerticalsActive ? heads : [];
+  const activeSubHeads = isVerticalsActive ? subHeads : [];
+
+  const hasResults = activeFaculty.length > 0 || activeMentors.length > 0 || activeCore.length > 0 || activeHeads.length > 0 || activeSubHeads.length > 0;
 
   const techVerticals = verticalsData.filter(v => v.category === 'tech');
   const nonTechVerticals = verticalsData.filter(v => v.category === 'non-tech');
@@ -152,7 +168,17 @@ const TeamPage: React.FC = () => {
       <section className="pt-8 pb-24 bg-slate-50/50">
         <div className="container mx-auto px-6 max-w-7xl">
           <AnimatePresence mode="wait">
-            {hasResults ? (
+            {loading ? (
+              <div key="loading-skeleton" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse py-8">
+                {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                  <div key={i} className="bg-white border border-slate-200/60 rounded-2xl p-5 flex flex-col h-64 space-y-4">
+                    <div className="w-full h-32 bg-slate-100 rounded-xl" />
+                    <div className="h-4 bg-slate-100 rounded-md w-3/4 mx-auto" />
+                    <div className="h-3 bg-slate-100 rounded-md w-1/2 mx-auto" />
+                  </div>
+                ))}
+              </div>
+            ) : hasResults ? (
               <div key={filter + search}>
                 {/* ── FACULTY COORDINATORS ── */}
                 {(filter === 'all' || filter === 'faculty') && (
