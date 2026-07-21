@@ -1876,14 +1876,12 @@ export async function dbSubmitFormResponse(
   const responseId = genRandomUuid();
   const timestamp = new Date().toISOString();
 
-  // Ensure formId is a valid UUID
+  // Ensure formId is resolved if a slug was passed
   let validFormId = formId;
-  if (!isUuid(formId)) {
-    const db = getLocalDb();
-    const matchedForm = (db.forms || []).find((f: any) => f.slug === formId || f.id === formId);
-    if (matchedForm && isUuid(matchedForm.id)) {
-      validFormId = matchedForm.id;
-    }
+  const db = getLocalDb();
+  const matchedForm = (db.forms || []).find((f: any) => f.slug === formId || f.id === formId);
+  if (matchedForm) {
+    validFormId = matchedForm.id;
   }
 
   if (isSupabaseConfigured()) {
@@ -1903,11 +1901,10 @@ export async function dbSubmitFormResponse(
         const answerRecords = Object.keys(answers).map(fieldId => {
           const rawVal = answers[fieldId];
           const valStr = (typeof rawVal === 'object' && rawVal !== null) ? JSON.stringify(rawVal) : String(rawVal ?? '');
-          const validFieldId = isUuid(fieldId) ? fieldId : genRandomUuid();
           return {
             id: genRandomUuid(),
             response_id: responseId,
-            field_id: validFieldId,
+            field_id: fieldId,
             value: valStr
           };
         });
@@ -1923,7 +1920,6 @@ export async function dbSubmitFormResponse(
   }
 
   // Local fallback (always sync!)
-  const db = getLocalDb();
   if (!db.formResponses) db.formResponses = [];
   if (!db.responseAnswers) db.responseAnswers = [];
 
@@ -1939,11 +1935,10 @@ export async function dbSubmitFormResponse(
   Object.keys(answers).forEach(fieldId => {
     const rawVal = answers[fieldId];
     const valStr = (typeof rawVal === 'object' && rawVal !== null) ? JSON.stringify(rawVal) : String(rawVal ?? '');
-    const validFieldId = isUuid(fieldId) ? fieldId : genRandomUuid();
     db.responseAnswers.push({
       id: genRandomUuid(),
       responseId,
-      fieldId: validFieldId,
+      fieldId: fieldId,
       value: valStr
     });
   });
