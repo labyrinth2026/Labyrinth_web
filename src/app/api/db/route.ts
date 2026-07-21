@@ -433,10 +433,10 @@ export async function POST(req: NextRequest) {
           }
 
           const { data } = adminClient.storage.from('gallery').getPublicUrl(fileName);
-          return NextResponse.json({ success: true, url: data.publicUrl });
+          return NextResponse.json({ success: true, data: { url: data.publicUrl } });
         } else {
           // Fallback to echo base64 if Supabase is offline
-          return NextResponse.json({ success: true, url: base64 });
+          return NextResponse.json({ success: true, data: { url: base64 } });
         }
       }
 
