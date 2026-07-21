@@ -653,111 +653,49 @@ export default function MembersManager() {
         </div>
       )}
 
-      {/* EDIT MEMBER MODAL */}
+      {/* EDIT MEMBER MODAL (Horizontal Multi-Column Layout) */}
       {showEditModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col">
-            <div className="flex justify-between items-center px-6 py-4 border-b border-[#E5E7EB] shrink-0">
-              <h3 className="font-bold font-grotesk text-[#CD0000]">Edit Member Details</h3>
-              <button onClick={() => setShowEditModal(false)} className="text-slate-400 hover:text-slate-600"><X size={18} /></button>
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6">
+          <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-4xl overflow-hidden max-h-[92vh] flex flex-col">
+            {/* Header */}
+            <div className="flex justify-between items-center px-8 py-5 border-b border-slate-100 bg-slate-50/50 shrink-0">
+              <div>
+                <span className="inline-block px-2.5 py-0.5 rounded-full bg-red-50 border border-red-100 text-[#CD0000] text-[10px] font-black uppercase tracking-widest mb-1">
+                  Directory Profile
+                </span>
+                <h3 className="font-extrabold text-xl text-slate-900 tracking-tight">Edit Member Details</h3>
+              </div>
+              <button 
+                onClick={() => setShowEditModal(false)} 
+                className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-all"
+              >
+                <X size={18} />
+              </button>
             </div>
-            <form onSubmit={handleEditUser} className="p-6 space-y-4 overflow-y-auto flex-1">
-              <div className="space-y-4">
-                {/* Full Name */}
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Full Name *</label>
-                  <input type="text" required value={editingUserName} onChange={e => setEditingUserName(e.target.value)} className={inputClass} />
-                </div>
 
-                {/* Reg No + Class */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Register Number</label>
-                    <input type="text" value={editingUserRegNo} onChange={e => setEditingUserRegNo(e.target.value)} className={inputClass} placeholder="e.g. 2540146" />
-                  </div>
-                  <div>
-                    <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Class / Section</label>
-                    <input type="text" value={editingUserClass} onChange={e => setEditingUserClass(e.target.value)} className={inputClass} placeholder="e.g. 3BScCM" />
-                  </div>
-                </div>
+            {/* Content Body Form */}
+            <form onSubmit={handleEditUser} className="p-8 overflow-y-auto flex-1 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                
+                {/* Left Column (Personal Info & Photo Avatar) */}
+                <div className="md:col-span-5 space-y-5 border-b md:border-b-0 md:border-r border-slate-100 pb-6 md:pb-0 md:pr-6">
+                  <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Personal & Academic</p>
 
-                {/* System Role */}
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">System Access Role</label>
-                  <select value={editingUserRole} onChange={e => setEditingUserRole(e.target.value)} className={inputClass}>
-                    <option value="MEMBER">Member (Standard Access)</option>
-                    <option value="ADMIN">Admin (Full Access)</option>
-                  </select>
-                </div>
-
-                {/* Vertical Domain */}
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Vertical Domain</label>
-                  <select 
-                    value={editingUserVertical} 
-                    onChange={e => {
-                      setEditingUserVertical(e.target.value);
-                      setEditingUserCommittee('');
-                    }} 
-                    className={inputClass}
-                  >
-                    <option value="">None / Floating Member</option>
-                    {verticals.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
-                  </select>
-                </div>
-
-                {/* Core Committee */}
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Assign Core Committee</label>
-                  <div className="flex gap-2">
-                    <select 
-                      value={editingUserCommittee} 
-                      onChange={e => setEditingUserCommittee(e.target.value)} 
-                      className={inputClass}
-                    >
-                      <option value="">None</option>
-                      {committees
-                        .filter(c => !editingUserVertical || c.verticalId === editingUserVertical || c.vertical_id === editingUserVertical)
-                        .map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                    </select>
-                    <button type="button" onClick={handleAddCommitteePrompt} className="px-3 border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 hover:text-[#CD0000] transition-colors flex items-center justify-center shrink-0" title="Create New Core Committee">
-                      <Plus size={16} />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Designation */}
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Designation / Title</label>
-                  <select
-                    value={editingUserDesignation}
-                    onChange={e => setEditingUserDesignation(e.target.value)}
-                    className={inputClass}
-                  >
-                    <option value="">None / Regular Member</option>
-                    <option value="Core Committee Member">Core Committee Member</option>
-                    <option value="Vertical Head">Vertical Head</option>
-                    <option value="Vertical Sub-Head">Vertical Sub-Head</option>
-                    <option value="Mentor">Mentor</option>
-                    <option value="Faculty Coordinator">Faculty Coordinator</option>
-                  </select>
-                </div>
-
-                {/* Photo URL + upload + live preview */}
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Photo (URL or Upload)</label>
-                  <div className="flex gap-3 items-center">
-                    <div className="flex-1 flex gap-2">
-                      <input
-                        type="text"
-                        value={editingUserPhoto}
-                        onChange={e => setEditingUserPhoto(e.target.value)}
-                        className={inputClass}
-                        placeholder="Image URL or uploaded file base64"
+                  {/* Photo Avatar Card */}
+                  <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
+                    <div className="relative w-24 h-24 mx-auto rounded-2xl overflow-hidden border-2 border-white shadow-md bg-white mb-3 group">
+                      <img
+                        src={editingUserPhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(editingUserName || 'U')}&background=CD0000&color=fff`}
+                        alt="Profile Preview"
+                        className="w-full h-full object-cover"
+                        onError={e => {
+                          (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(editingUserName || 'U')}&background=CD0000&color=fff`;
+                        }}
                       />
-                      <label className="px-3 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer shrink-0 transition-all">
-                        <Upload size={13} />
-                        Upload
+                    </div>
+                    <div className="flex gap-2 justify-center">
+                      <label className="px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer shadow-xs transition-all">
+                        <Upload size={12} className="text-[#CD0000]" /> Upload Image
                         <input
                           type="file"
                           accept="image/*"
@@ -773,39 +711,160 @@ export default function MembersManager() {
                           className="hidden"
                         />
                       </label>
+                      {editingUserPhoto && (
+                        <button
+                          type="button"
+                          onClick={() => setEditingUserPhoto('')}
+                          className="px-2.5 py-1.5 bg-white hover:bg-red-50 border border-slate-200 text-red-500 text-xs font-bold rounded-xl transition-all"
+                          title="Reset photo"
+                        >
+                          Reset
+                        </button>
+                      )}
                     </div>
-                    <div className="w-12 h-12 rounded-xl border border-[#E5E7EB] bg-slate-50 overflow-hidden shrink-0 flex items-center justify-center text-[10px] font-bold text-slate-400">
-                      {editingUserPhoto
-                        ? <img src={editingUserPhoto} alt="Preview" className="w-full h-full object-cover"
-                            onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                        : 'IMG'
-                      }
+                    <input
+                      type="text"
+                      value={editingUserPhoto}
+                      onChange={e => setEditingUserPhoto(e.target.value)}
+                      className="w-full mt-3 px-3 py-1.5 text-[11px] border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-1 focus:ring-[#CD0000]/20"
+                      placeholder="Or paste photo URL directly..."
+                    />
+                  </div>
+
+                  {/* Full Name */}
+                  <div>
+                    <label className="text-xs font-bold text-slate-700 block mb-1.5">Full Official Name *</label>
+                    <input type="text" required value={editingUserName} onChange={e => setEditingUserName(e.target.value)} className={inputClass} placeholder="Full Name" />
+                  </div>
+
+                  {/* Reg No + Class */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs font-bold text-slate-700 block mb-1.5">Register Number</label>
+                      <input type="text" value={editingUserRegNo} onChange={e => setEditingUserRegNo(e.target.value)} className={inputClass} placeholder="e.g. 2540146" />
+                    </div>
+                    <div>
+                      <label className="text-xs font-bold text-slate-700 block mb-1.5">Class / Section</label>
+                      <input type="text" value={editingUserClass} onChange={e => setEditingUserClass(e.target.value)} className={inputClass} placeholder="e.g. 3BScCM" />
                     </div>
                   </div>
                 </div>
 
-                {/* GitHub */}
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">GitHub URL</label>
-                  <input type="url" value={editingUserGithub}
-                    onChange={e => setEditingUserGithub(e.target.value)}
-                    className={inputClass} placeholder="https://github.com/username" />
+                {/* Right Column (Access, Domain Assignments & Socials) */}
+                <div className="md:col-span-7 space-y-5">
+                  <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Assignments & Role</p>
+
+                  {/* Designation / Title */}
+                  <div>
+                    <label className="text-xs font-bold text-slate-700 block mb-1.5">Designation / Title</label>
+                    <select
+                      value={editingUserDesignation}
+                      onChange={e => setEditingUserDesignation(e.target.value)}
+                      className={inputClass}
+                    >
+                      <option value="">None / Regular Member</option>
+                      <option value="Core Committee Member">Core Committee Member</option>
+                      <option value="Vertical Head">Vertical Head</option>
+                      <option value="Vertical Sub-Head">Vertical Sub-Head</option>
+                      <option value="Mentor">Mentor</option>
+                      <option value="Faculty Coordinator">Faculty Coordinator</option>
+                    </select>
+                  </div>
+
+                  {/* System Access Role */}
+                  <div>
+                    <label className="text-xs font-bold text-slate-700 block mb-1.5">System Access Permission</label>
+                    <select value={editingUserRole} onChange={e => setEditingUserRole(e.target.value)} className={inputClass}>
+                      <option value="MEMBER">Member (Standard Access)</option>
+                      <option value="ADMIN">Admin (Full Dashboard Management)</option>
+                    </select>
+                  </div>
+
+                  {/* Vertical Domain & Core Committee */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-bold text-slate-700 block mb-1.5">Vertical Domain</label>
+                      <select 
+                        value={editingUserVertical} 
+                        onChange={e => {
+                          setEditingUserVertical(e.target.value);
+                          setEditingUserCommittee('');
+                        }} 
+                        className={inputClass}
+                      >
+                        <option value="">None / Floating Member</option>
+                        {verticals.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-bold text-slate-700 block mb-1.5">Core Committee</label>
+                      <div className="flex gap-2">
+                        <select 
+                          value={editingUserCommittee} 
+                          onChange={e => setEditingUserCommittee(e.target.value)} 
+                          className={inputClass}
+                        >
+                          <option value="">None</option>
+                          {committees
+                            .filter(c => !editingUserVertical || c.verticalId === editingUserVertical || c.vertical_id === editingUserVertical)
+                            .map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                        </select>
+                        <button type="button" onClick={handleAddCommitteePrompt} className="px-3 border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 hover:text-[#CD0000] transition-colors flex items-center justify-center shrink-0" title="Create New Core Committee">
+                          <Plus size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Social Profiles */}
+                  <div className="pt-2">
+                    <p className="text-xs font-bold text-slate-700 mb-2">Social & External Profiles</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <input 
+                          type="url" 
+                          value={editingUserGithub}
+                          onChange={e => setEditingUserGithub(e.target.value)}
+                          className={inputClass} 
+                          placeholder="GitHub: https://github.com/username" 
+                        />
+                      </div>
+                      <div>
+                        <input 
+                          type="url" 
+                          value={editingUserLinkedin}
+                          onChange={e => setEditingUserLinkedin(e.target.value)}
+                          className={inputClass} 
+                          placeholder="LinkedIn: https://linkedin.com/in/username" 
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                {/* LinkedIn */}
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">LinkedIn URL</label>
-                  <input type="url" value={editingUserLinkedin}
-                    onChange={e => setEditingUserLinkedin(e.target.value)}
-                    className={inputClass} placeholder="https://linkedin.com/in/username" />
-                </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-5 border-t border-[#E5E7EB]">
-                <button type="button" onClick={() => setShowEditModal(false)} className="px-4 py-2 text-sm text-[#667085] hover:text-[#CD0000]">Cancel</button>
-                <button type="submit" className="px-5 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000] transition-colors shadow-xs">
-                  Save Changes
-                </button>
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t border-slate-100">
+                <p className="text-xs text-slate-400 italic">
+                  Changes save directly to Supabase & sync across all club dashboards.
+                </p>
+                <div className="flex gap-3 w-full sm:w-auto">
+                  <button 
+                    type="button" 
+                    onClick={() => setShowEditModal(false)} 
+                    className="flex-1 sm:flex-initial px-5 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="flex-1 sm:flex-initial px-7 py-2.5 bg-[#CD0000] hover:bg-[#A30000] text-white text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md hover:shadow-lg"
+                  >
+                    Save Member Changes
+                  </button>
+                </div>
               </div>
             </form>
           </div>
