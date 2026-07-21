@@ -20,7 +20,7 @@ import {
   dbGetCustomForms, dbGetCustomFormBySlug, dbAddCustomForm, dbUpdateCustomForm,
   dbDeleteCustomForm, dbDuplicateCustomForm, dbSubmitFormResponse, dbGetFormResponses,
   dbUpdateResponseStatus,
-  dbAddGalleryImage, dbUpdateGalleryImage, dbDeleteGalleryImage
+  dbGetGallery, dbAddGalleryImage, dbUpdateGalleryImage, dbDeleteGalleryImage
 } from '@/utils/db';
 
 export async function POST(req: NextRequest) {
@@ -179,9 +179,8 @@ export async function POST(req: NextRequest) {
       }
 
       case 'getGallery': {
-
-        const db = getLocalDb();
-        return NextResponse.json({ success: true, data: db.gallery || [] });
+        const gallery = await dbGetGallery();
+        return NextResponse.json({ success: true, data: gallery });
       }
 
       case 'addGalleryImage': {
@@ -645,6 +644,11 @@ export async function POST(req: NextRequest) {
     }
   } catch (error: any) {
     console.error('[API Router] Error executing sheet action:', error);
-    return NextResponse.json({ success: false, error: error.message || 'Internal server error.' }, { status: 500 });
+    const detail = error.cause ? ` (${error.cause.message || error.cause})` : '';
+    return NextResponse.json({ 
+      success: false, 
+      error: (error.message || 'Internal server error') + detail,
+      stack: error.stack
+    }, { status: 500 });
   }
 }

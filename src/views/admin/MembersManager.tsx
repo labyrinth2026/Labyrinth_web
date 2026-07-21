@@ -48,11 +48,208 @@ const uploadProfilePhoto = async (file: File, userId: string): Promise<string> =
   return response.url;
 };
 
+const uploadBase64Photo = async (base64: string, userId: string): Promise<string> => {
+  const response: any = await fetchFromSheet('uploadAvatar', {
+    base64,
+    userId
+  });
+  if (!response || !response.url) {
+    throw new Error(response?.error || 'Failed to upload photo to storage.');
+  }
+  return response.url;
+};
+
+interface ImageCropperModalProps {
+  imageSrc: string;
+  onClose: () => void;
+  onCrop: (croppedBase64: string) => void;
+}
+
+const ImageCropperModal: React.FC<ImageCropperModalProps> = ({ imageSrc, onClose, onCrop }) => {
+  const [zoom, setZoom] = useState(1);
+  const [rotation, setRotation] = useState(0);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [imgDims, setImgDims] = useState({ width: 0, height: 0 });
+  const imgRef = React.useRef<HTMLImageElement>(null);
+
+  const onImgLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const imgEl = e.currentTarget;
+    const w = imgEl.naturalWidth;
+    const h = imgEl.naturalHeight;
+    const ratio = w / h;
+    
+    let drawW = 200;
+    let drawH = 200;
+    if (ratio > 1) {
+      drawW = 200 * ratio;
+    } else {
+      drawH = 200 / ratio;
+    }
+    setImgDims({ width: drawW, height: drawH });
+    setPosition({ x: 0, y: 0 });
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setDragStart({ x: e.clientX - position.x, y: e.clientY - position.y });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    setPosition({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length !== 1) return;
+    setIsDragging(true);
+    setDragStart({ x: e.touches[0].clientX - position.x, y: e.touches[0].clientY - position.y });
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    setPosition({
+      x: e.touches[0].clientX - dragStart.x,
+      y: e.touches[0].clientY - dragStart.y
+    });
+  };
+
+  const rotate90 = () => {
+    setRotation(prev => (prev + 90) % 360);
+  };
+
+  const handleSave = () => {
+    const img = imgRef.current;
+    if (!img) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 300;
+    canvas.height = 300;
+    const ctx = canvas.getContext('2d');
+
+    if (ctx) {
+      ctx.clearRect(0, 0, 300, 300);
+      ctx.save();
+      ctx.translate(150, 150);
+      ctx.rotate((rotation * Math.PI) / 180);
+      ctx.scale(zoom, zoom);
+      ctx.translate(position.x * 1.5, position.y * 1.5);
+
+      const ratio = img.naturalWidth / img.naturalHeight;
+      let drawW = 300;
+      let drawH = 300;
+      if (ratio > 1) {
+        drawW = 300 * ratio;
+      } else {
+        drawH = 300 / ratio;
+      }
+
+      ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH);
+      ctx.restore();
+
+      const base64 = canvas.toDataURL('image/jpeg', 0.9);
+      onCrop(base64);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-sm overflow-hidden flex flex-col">
+        <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+          <h3 className="font-extrabold text-slate-800 text-sm uppercase tracking-wider">Crop & Resize Photo</h3>
+          <button type="button" onClick={onClose} className="p-1.5 hover:bg-slate-200 text-slate-400 hover:text-slate-600 rounded-lg transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+
+        <div className="p-6 flex flex-col items-center gap-6">
+          <div 
+            className="relative w-64 h-64 overflow-hidden bg-slate-900 border border-slate-700 rounded-2xl cursor-move select-none shadow-inner"
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleMouseUp}
+          >
+            <img
+              ref={imgRef}
+              src={imageSrc}
+              alt="Crop Source"
+              onLoad={onImgLoad}
+              draggable={false}
+              style={{
+                width: imgDims.width,
+                height: imgDims.height,
+                position: 'absolute',
+                left: '50%',
+                top: '50%',
+                marginLeft: -imgDims.width / 2,
+                marginTop: -imgDims.height / 2,
+                transform: `translate(${position.x}px, ${position.y}px) rotate(${rotation}deg) scale(${zoom})`,
+                transition: isDragging ? 'none' : 'transform 0.15s ease-out'
+              }}
+            />
+
+            <div className="absolute inset-0 pointer-events-none border-[28px] border-slate-950/70" />
+            <div className="absolute top-7 left-7 w-[200px] h-[200px] pointer-events-none border border-dashed border-white/50 rounded-full shadow-[0_0_0_9999px_rgba(15,23,42,0.15)]" />
+          </div>
+
+          <div className="w-full space-y-4">
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                <span>Zoom</span>
+                <span>{Math.round(zoom * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="1"
+                max="3"
+                step="0.05"
+                value={zoom}
+                onChange={e => setZoom(parseFloat(e.target.value))}
+                className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-[#CD0000]"
+              />
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <button
+                type="button"
+                onClick={rotate90}
+                className="flex-1 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <RefreshCw size={12} className="text-slate-600" /> Rotate 90°
+              </button>
+              <button
+                type="button"
+                onClick={handleSave}
+                className="flex-1 px-4 py-2.5 bg-[#CD0000] hover:bg-[#A30000] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-sm transition-all"
+              >
+                Crop & Upload
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function MembersManager() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'directory' | 'recruitment'>('directory');
   const [loading, setLoading] = useState(true);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [cropperImageSrc, setCropperImageSrc] = useState<string | null>(null);
   
   // Lists
   const [users, setUsers] = useState<any[]>([]);
@@ -775,19 +972,16 @@ export default function MembersManager() {
                         <input
                           type="file"
                           accept="image/*"
-                          onChange={async e => {
+                          onChange={e => {
                             const file = e.target.files?.[0];
                             if (!file) return;
-                            setIsUploadingPhoto(true);
-                            try {
-                              const url = await uploadProfilePhoto(file, editingUserId || 'member');
-                              setEditingUserPhoto(url);
-                              showToast('Photo uploaded!', 'success');
-                            } catch (err: any) {
-                              showToast('Photo upload failed: ' + (err.message || 'Unknown error'), 'error');
-                            } finally {
-                              setIsUploadingPhoto(false);
-                            }
+                            const reader = new FileReader();
+                            reader.onload = (ev) => {
+                              if (ev.target?.result) {
+                                setCropperImageSrc(ev.target.result as string);
+                              }
+                            };
+                            reader.readAsDataURL(file);
                           }}
                           className="hidden"
                         />
@@ -982,6 +1176,25 @@ export default function MembersManager() {
             </div>
           </div>
         </div>
+      )}
+      {cropperImageSrc && (
+        <ImageCropperModal
+          imageSrc={cropperImageSrc}
+          onClose={() => setCropperImageSrc(null)}
+          onCrop={async (croppedBase64) => {
+            setCropperImageSrc(null);
+            setIsUploadingPhoto(true);
+            try {
+              const url = await uploadBase64Photo(croppedBase64, editingUserId || 'member');
+              setEditingUserPhoto(url);
+              showToast('Photo cropped and uploaded!', 'success');
+            } catch (err: any) {
+              showToast('Upload failed: ' + (err.message || 'Unknown error'), 'error');
+            } finally {
+              setIsUploadingPhoto(false);
+            }
+          }}
+        />
       )}
     </div>
   );

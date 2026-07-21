@@ -23,7 +23,19 @@ function base64UrlToArrayBuffer(base64Url: string): ArrayBuffer {
   return bytes.buffer;
 }
 
-const JWT_SECRET = (process.env.JWT_SECRET || 'labyrinth-secret-key-32-chars-long-or-more').trim();
+const cleanEnvVar = (val: string | undefined): string => {
+  if (!val) return '';
+  let cleaned = val.trim();
+  if (cleaned.startsWith('"') && cleaned.endsWith('"')) {
+    cleaned = cleaned.substring(1, cleaned.length - 1);
+  }
+  if (cleaned.startsWith("'") && cleaned.endsWith("'")) {
+    cleaned = cleaned.substring(1, cleaned.length - 1);
+  }
+  return cleaned.trim();
+};
+
+const JWT_SECRET = cleanEnvVar(process.env.JWT_SECRET || 'labyrinth-secret-key-32-chars-long-or-more');
 
 async function getSigningKey() {
   return await crypto.subtle.importKey(

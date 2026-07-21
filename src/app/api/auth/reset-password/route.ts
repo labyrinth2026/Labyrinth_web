@@ -29,35 +29,32 @@ export async function POST(req: NextRequest) {
     let localMode = false;
 
     if (isSupabaseConfigured()) {
-      const adminClient = getSupabaseAdmin();
-      if (!adminClient) {
-        return NextResponse.json({ success: false, error: 'Supabase admin client not configured.' }, { status: 500 });
+      // 1. Fetch user profile from Supabase (including the password hash column)
+      const { data: profile, error: dbErr } = await supabase!
+        .from('profiles')
+        .select('*')
+        .eq('id', sessionUser.id)
+        .maybeSingle();
+
+      if (dbErr) {
+        return NextResponse.json({ success: false, error: dbErr.message }, { status: 500 });
+      }
+      if (!profile) {
+        return NextResponse.json({ success: false, error: 'User profile not found.' }, { status: 404 });
       }
 
-      // 1. Authenticate with current temporary credentials to verify currentPassword
-      const { data: authData, error: authError } = await supabase!.auth.signInWithPassword({
-        email: sessionUser.email,
-        password: currentPassword
-      });
-
-      if (authError) {
-        return NextResponse.json({ success: false, error: authError.message }, { status: 401 });
-      }
-      if (!authData.user) {
-        return NextResponse.json({ success: false, error: 'Authentication failed.' }, { status: 401 });
+      // 2. Verify current password
+      const isMatch = bcrypt.compareSync(currentPassword, profile.password || '');
+      if (!isMatch) {
+        return NextResponse.json({ success: false, error: 'Current password is incorrect.' }, { status: 401 });
       }
 
-      // 2. Change password in Supabase Auth
-      const { error: resetErr } = await adminClient.auth.admin.updateUserById(sessionUser.id, {
-        password: newPassword
-      });
+      // 3. Hash new password and update in public.profiles
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(newPassword, salt);
 
-      if (resetErr) {
-        return NextResponse.json({ success: false, error: resetErr.message }, { status: 500 });
-      }
-
-      // 3. Update public.profiles set first_login = false, password_changed_at = now()
       const { error: profErr } = await supabase!.from('profiles').update({
+        password: hash,
         first_login: false,
         password_changed_at: new Date().toISOString()
       }).eq('id', sessionUser.id);

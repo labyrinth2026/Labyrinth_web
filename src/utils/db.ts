@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import { supabase, isSupabaseConfigured, getSupabaseAdmin, getSupabaseOffline, setSupabaseOffline } from './supabase';
 
@@ -151,6 +152,9 @@ const initialSchema: DatabaseSchema = {
 // =====================================================================
 
 export function getLocalDb(): DatabaseSchema {
+  if (isSupabaseConfigured()) {
+    return initialSchema;
+  }
   try {
     if (!fs.existsSync(DB_FILE)) {
       initializeLocalDb();
@@ -163,6 +167,9 @@ export function getLocalDb(): DatabaseSchema {
 }
 
 export function saveLocalDb(db: DatabaseSchema): void {
+  if (isSupabaseConfigured()) {
+    return;
+  }
   try {
     const dir = path.dirname(DB_FILE);
     if (!fs.existsSync(dir)) {
@@ -180,29 +187,9 @@ export function initializeLocalDb(): void {
   saveLocalDb(db);
 }
 
-// Log actions helper
+// Log actions helper (disabled — not required)
 export async function logActivity(userId: string, action: string, details: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { error } = await supabase.from('activity_logs').insert({ user_id: userId, action, details });
-      if (error) throw error;
-      return;
-    } catch (err) {
-      console.error("Supabase logActivity failed:", err);
-      throw err;
-    }
-  }
-
-  const db = getLocalDb();
-  db.activityLogs.unshift({
-    id: `log-${Date.now()}`,
-    userId,
-    action,
-    details,
-    timestamp: new Date().toISOString()
-  });
-  if (db.activityLogs.length > 500) db.activityLogs = db.activityLogs.slice(0, 500);
-  saveLocalDb(db);
+  return;
 }
 
 // =====================================================================
@@ -238,6 +225,8 @@ export async function dbGetUserByEmail(email: string): Promise<any | null> {
       }
       return null;
     } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
       console.error("Supabase dbGetUserByEmail failed:", err);
       throw err;
     }
@@ -286,6 +275,8 @@ export async function dbGetRoles(): Promise<any[]> {
           createdAt: p.created_at
         }));
       } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
         console.error('Supabase dbGetRoles failed:', err);
         throw err;
       }
@@ -384,34 +375,26 @@ export async function dbCreateUser(name: string, email: string, role: string, co
     const adminClient = getSupabaseAdmin();
     if (!adminClient) throw new Error('Supabase Service Role credentials not configured.');
 
-    // 1. Create in Supabase Auth
-    const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
+    const newUserId = crypto.randomUUID();
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(defaultPassword, salt);
+
+    const { error: profErr } = await adminClient.from('profiles').insert({
+      id: newUserId,
       email: cleanEmail,
-      password: defaultPassword,
-      email_confirm: true,
-      user_metadata: {
-        full_name: name,
-        role,
-        created_by: adminUserId,
-        first_login: true,
-        committee_id: committeeId || null,
-        vertical_id: verticalId || null
-      }
-    });
-
-    if (authError) throw authError;
-    const userId = authData.user?.id;
-    if (!userId) throw new Error('User creation failed in Supabase Auth.');
-
-    const { error: profErr } = await adminClient.from('profiles').update({
-      created_by: adminUserId,
-      first_login: true,
+      full_name: name,
+      name: name,
       role: role as any,
+      status: 'active',
+      first_login: true,
+      password: hash,
+      created_by: adminUserId,
       committee_id: committeeId || null,
-      vertical_id: verticalId || null,
-      full_name: name
-    }).eq('id', userId);
-    if (profErr) console.warn('Could not update profile metadata:', profErr);
+      vertical_id: verticalId || null
+    });
+    if (profErr) {
+      throw profErr;
+    }
   } else {
     const db = getLocalDb();
     const existing = db.users.find(u => u.email.toLowerCase() === cleanEmail);
@@ -451,6 +434,8 @@ export async function dbUpdateUserStatus(userId: string, status: 'active' | 'ina
         if (error) throw error;
         return;
       } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
         console.error("Supabase dbUpdateUserStatus failed:", err);
         throw err;
       }
@@ -492,6 +477,8 @@ export async function dbUpdateUserDetails(
         if (error) throw error;
         return;
       } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
         console.error("Supabase dbUpdateUserDetails failed:", err);
         throw err;
       }
@@ -554,6 +541,8 @@ export async function dbGetVerticals(): Promise<any[]> {
         if (cErr) throw cErr;
         committees = cData || [];
       } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
         console.error('Supabase dbGetVerticals failed:', err);
         throw err;
       }
@@ -644,6 +633,8 @@ export async function dbGetCoreCommittees(): Promise<CoreCommittee[]> {
       if (error) throw error;
       return data || [];
     } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
       console.error("Supabase dbGetCoreCommittees failed:", err);
       throw err;
     }
@@ -741,6 +732,8 @@ export async function dbGetAssignments(): Promise<any> {
         }))
       };
     } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
       console.error('Supabase dbGetAssignments failed:', err);
       throw err;
     }
@@ -931,6 +924,8 @@ export async function dbGetEvents(): Promise<Event[]> {
       if (error) throw error;
       rawEvents = data || [];
     } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
       console.error('Supabase dbGetEvents failed:', err);
       throw err;
     }
@@ -1041,6 +1036,8 @@ export async function dbGetAnnouncements(): Promise<Announcement[]> {
         timestamp: a.created_at
       }));
     } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
       console.error("Supabase dbGetAnnouncements failed:", err);
       throw err;
     }
@@ -1101,6 +1098,8 @@ export async function dbGetCommitteeTasks(committeeId: string): Promise<Committe
         dueDate: t.due_date
       }));
     } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
       console.error("Supabase dbGetCommitteeTasks failed:", err);
       throw err;
     }
@@ -1181,6 +1180,8 @@ export async function dbGetCommitteeResources(committeeId: string): Promise<Comm
         url: r.url
       }));
     } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
       console.error("Supabase dbGetCommitteeResources failed:", err);
       throw err;
     }
@@ -1237,6 +1238,8 @@ export async function dbGetVerticalProjects(verticalId: string): Promise<Vertica
         url: p.url
       }));
     } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
       console.error("Supabase dbGetVerticalProjects failed:", err);
       throw err;
     }
@@ -1314,6 +1317,8 @@ export async function dbGetVerticalResources(verticalId: string): Promise<Vertic
         url: r.url
       }));
     } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
       console.error("Supabase dbGetVerticalResources failed:", err);
       throw err;
     }
@@ -1372,6 +1377,8 @@ export async function dbGetJoinRegistrations(): Promise<any[]> {
         timestamp: p.created_at
       }));
     } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
       console.error("Supabase dbGetJoinRegistrations failed:", err);
       throw err;
     }
@@ -1515,6 +1522,8 @@ export async function dbGetCustomForms(): Promise<CustomForm[]> {
         customFormsCache = { data: mapped, timestamp: now };
         return mapped;
       } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
         console.error("Supabase dbGetCustomForms failed:", err);
         throw err;
       }
@@ -1580,6 +1589,8 @@ export async function dbGetCustomFormBySlug(slug: string): Promise<{ form: Custo
           })
         };
       } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
         console.error("Supabase dbGetCustomFormBySlug failed:", err);
         throw err;
       }
@@ -1648,6 +1659,8 @@ export async function dbAddCustomForm(data: Partial<CustomForm>, fields: Partial
           if (fieldsErr) throw fieldsErr;
         }
       } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
         console.warn("Supabase dbAddCustomForm failed:", err);
         throw err;
       }
@@ -1746,6 +1759,8 @@ export async function dbUpdateCustomForm(id: string, data: Partial<CustomForm>, 
           if (fieldsErr) throw fieldsErr;
         }
       } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
         console.warn("Supabase dbUpdateCustomForm failed:", err);
         throw err;
       }
@@ -1796,6 +1811,8 @@ export async function dbDeleteCustomForm(id: string): Promise<void> {
         const { error } = await adminClient.from('forms').delete().eq('id', id);
         if (error) throw error;
       } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
         console.warn("Supabase dbDeleteCustomForm failed:", err);
         throw err;
       }
@@ -1865,6 +1882,8 @@ export async function dbDuplicateCustomForm(id: string): Promise<string> {
           if (insFieldsErr) throw insFieldsErr;
         }
       } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
         console.warn("Supabase dbDuplicateCustomForm failed:", err);
         throw err;
       }
@@ -1973,6 +1992,8 @@ export async function dbSubmitFormResponse(
         }
         return responseId;
       } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
         console.error("Supabase dbSubmitFormResponse failed:", err);
         throw err;
       }
@@ -2055,6 +2076,8 @@ export async function dbGetFormResponses(formId: string): Promise<CustomFormResp
           };
         });
       } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
         console.error("Supabase dbGetFormResponses failed:", err);
         throw err;
       }
@@ -2104,6 +2127,8 @@ export async function dbUpdateResponseStatus(responseId: string, status: string,
         if (error) throw error;
         return;
       } catch (err) {
+      if (isSupabaseConfigured()) throw err;
+
         console.error("Supabase dbUpdateResponseStatus failed:", err);
         throw err;
       }
@@ -2123,7 +2148,44 @@ export async function dbUpdateResponseStatus(responseId: string, status: string,
 }
 
 // --- GALLERY ACTIONS ---
+export async function dbGetGallery(): Promise<any[]> {
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { data, error } = await client.from('gallery').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        return data || [];
+      } catch (err) {
+        if (isSupabaseConfigured()) throw err;
+      }
+    }
+  }
+  const db = getLocalDb();
+  return db.gallery || [];
+}
+
 export async function dbAddGalleryImage(data: any): Promise<void> {
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client.from('gallery').insert({
+          title: data.title,
+          category: data.category,
+          description: data.description,
+          image: data.image,
+          date: data.date,
+          orientation: data.orientation || 'landscape',
+          rotation: data.rotation ?? 0
+        });
+        if (error) throw error;
+        return;
+      } catch (err) {
+        if (isSupabaseConfigured()) throw err;
+      }
+    }
+  }
   const db = getLocalDb();
   if (!db.gallery) db.gallery = [];
   db.gallery.push({
@@ -2140,6 +2202,26 @@ export async function dbAddGalleryImage(data: any): Promise<void> {
 }
 
 export async function dbUpdateGalleryImage(id: string, data: any): Promise<void> {
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client.from('gallery').update({
+          title: data.title,
+          category: data.category,
+          description: data.description,
+          image: data.image,
+          date: data.date,
+          orientation: data.orientation,
+          rotation: data.rotation
+        }).eq('id', id);
+        if (error) throw error;
+        return;
+      } catch (err) {
+        if (isSupabaseConfigured()) throw err;
+      }
+    }
+  }
   const db = getLocalDb();
   if (!db.gallery) db.gallery = [];
   const idx = db.gallery.findIndex(g => g.id === id);
@@ -2159,6 +2241,18 @@ export async function dbUpdateGalleryImage(id: string, data: any): Promise<void>
 }
 
 export async function dbDeleteGalleryImage(id: string): Promise<void> {
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client.from('gallery').delete().eq('id', id);
+        if (error) throw error;
+        return;
+      } catch (err) {
+        if (isSupabaseConfigured()) throw err;
+      }
+    }
+  }
   const db = getLocalDb();
   if (!db.gallery) db.gallery = [];
   db.gallery = db.gallery.filter(g => g.id !== id);
