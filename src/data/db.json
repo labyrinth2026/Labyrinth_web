@@ -688,6 +688,13 @@
   "tasks": [],
   "activityLogs": [
     {
+      "id": "log-1784563692008",
+      "userId": "u-1784558851639",
+      "action": "update_custom_form",
+      "details": "Updated custom form: Devzen Copy Test",
+      "timestamp": "2026-07-20T16:08:12.008Z"
+    },
+    {
       "id": "log-1784563308252",
       "userId": "u-1784558851639",
       "action": "update_custom_form",
@@ -2749,7 +2756,7 @@
     },
     {
       "id": "04cfba5e-7467-4288-934f-e598a433f2b2",
-      "title": "New Custom Form (Copy)",
+      "title": "Devzen Copy Test",
       "description": "Please describe the purpose of this form.",
       "slug": "form-1783061093573_copy_1783061118556",
       "status": "draft",
@@ -2758,30 +2765,10 @@
       "endDate": "",
       "createdBy": "u-suryachalam",
       "createdAt": "2026-07-03T06:45:18.555Z",
-      "updatedAt": "2026-07-03T06:45:18.555Z"
+      "updatedAt": "2026-07-20T16:08:12.000Z"
     }
   ],
   "formFields": [
-    {
-      "id": "b6c2405f-2ff5-46db-94f3-9eb5804264d4",
-      "formId": "04cfba5e-7467-4288-934f-e598a433f2b2",
-      "fieldType": "short_text",
-      "label": "Applicant Full Name",
-      "placeholder": "Enter your name",
-      "required": true,
-      "options": null,
-      "order": 0
-    },
-    {
-      "id": "29c22510-c86f-428f-b591-29be6a5f5e76",
-      "formId": "04cfba5e-7467-4288-934f-e598a433f2b2",
-      "fieldType": "email",
-      "label": "University Email Address",
-      "placeholder": "name@cs.christuniversity.in",
-      "required": true,
-      "options": null,
-      "order": 1
-    },
     {
       "id": "31dafa81-850c-47ff-93bd-96a12f459ec7",
       "formId": "df873988-bac6-4c2c-a859-451f46bf8072",
@@ -2795,6 +2782,26 @@
     {
       "id": "8c4544c2-497d-4039-8c52-0b56f04567af",
       "formId": "df873988-bac6-4c2c-a859-451f46bf8072",
+      "fieldType": "email",
+      "label": "University Email Address",
+      "placeholder": "name@cs.christuniversity.in",
+      "required": true,
+      "options": [],
+      "order": 1
+    },
+    {
+      "id": "b6c2405f-2ff5-46db-94f3-9eb5804264d4",
+      "formId": "04cfba5e-7467-4288-934f-e598a433f2b2",
+      "fieldType": "short_text",
+      "label": "Applicant Full Name",
+      "placeholder": "Enter your name",
+      "required": true,
+      "options": [],
+      "order": 0
+    },
+    {
+      "id": "29c22510-c86f-428f-b591-29be6a5f5e76",
+      "formId": "04cfba5e-7467-4288-934f-e598a433f2b2",
       "fieldType": "email",
       "label": "University Email Address",
       "placeholder": "name@cs.christuniversity.in",
