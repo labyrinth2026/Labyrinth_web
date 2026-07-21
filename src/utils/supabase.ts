@@ -1,79 +1,26 @@
 import { createClient } from '@supabase/supabase-js';
-import fs from 'fs';
-import path from 'path';
-import os from 'os';
-
-const STATUS_FILE = path.join(os.tmpdir(), 'supabase_status.json');
-
-const writeOfflineStatus = () => {
-  try {
-    fs.writeFileSync(STATUS_FILE, JSON.stringify({ offline: true, timestamp: Date.now() }), 'utf8');
-  } catch (e) {
-    // Ignore fs write errors in case of environment restrictions
-  }
-};
-
-const checkOfflineStatus = (): boolean => {
-  try {
-    if (fs.existsSync(STATUS_FILE)) {
-      const content = fs.readFileSync(STATUS_FILE, 'utf8');
-      const data = JSON.parse(content);
-      // Keep offline for 3 minutes (180000 ms) before trying to reconnect
-      if (Date.now() - data.timestamp < 180000) {
-        return true;
-      }
-    }
-  } catch (e) {
-    // Ignore read errors
-  }
-  return false;
-};
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
-// A mutable flag to bypass Supabase queries once a connection attempt fails/times out
 let isSupabaseOnline = true;
 let isSupabaseOfflineFlag = false;
 
 export const setSupabaseOffline = (val: boolean = true) => {
   isSupabaseOfflineFlag = val;
-  if (val) {
-    isSupabaseOnline = false;
-    if (typeof global !== 'undefined') {
-      (global as any).isSupabaseOffline = true;
-    }
-    writeOfflineStatus();
-  } else {
-    isSupabaseOnline = true;
-    if (typeof global !== 'undefined') {
-      (global as any).isSupabaseOffline = false;
-    }
-    try {
-      if (fs.existsSync(STATUS_FILE)) {
-        fs.unlinkSync(STATUS_FILE);
-      }
-    } catch (e) {}
-  }
+  isSupabaseOnline = !val;
 };
 
 export const getSupabaseStatus = () => {
-  if (typeof global !== 'undefined' && (global as any).isSupabaseOffline) {
-    return false;
-  }
-  return isSupabaseOnline;
+  return isSupabaseOnline && !isSupabaseOfflineFlag;
 };
 
 export const getSupabaseOffline = (): boolean => {
-  const isGlobalOffline = typeof global !== 'undefined' && (global as any).isSupabaseOffline;
-  if (isSupabaseOfflineFlag || !isSupabaseOnline || !!isGlobalOffline) {
-    return true;
-  }
-  return checkOfflineStatus();
+  return !getSupabaseStatus();
 };
 
-// Check if credentials are valid (non-placeholder) and Supabase is online
+// Check if credentials are valid (non-placeholder) and configured
 export const isSupabaseConfigured = (): boolean => {
   if (
     process.env.FORCE_LOCAL_DB === 'true' || 
@@ -82,13 +29,7 @@ export const isSupabaseConfigured = (): boolean => {
     return false;
   }
 
-  if (checkOfflineStatus()) {
-    return false;
-  }
-
-  const online = getSupabaseStatus();
   return (
-    online &&
     supabaseUrl.length > 0 &&
     !supabaseUrl.includes('YOUR_') &&
     supabaseAnonKey.length > 0 &&
@@ -96,10 +37,10 @@ export const isSupabaseConfigured = (): boolean => {
   );
 };
 
-// Custom fetch wrapper that times out after 2 seconds
+// Custom fetch wrapper with a generous 15-second timeout
 const fetchWithTimeout = async (url: string | URL | Request, options?: RequestInit): Promise<Response> => {
   const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), 2000);
+  const id = setTimeout(() => controller.abort(), 15000);
   try {
     const response = await fetch(url, {
       ...options,
@@ -109,8 +50,7 @@ const fetchWithTimeout = async (url: string | URL | Request, options?: RequestIn
     return response;
   } catch (error) {
     clearTimeout(id);
-    setSupabaseOffline();
-    console.warn("[Supabase Client] Network error or timeout. Falling back to local db.json.", error);
+    console.warn("[Supabase Client] Network error or timeout:", error);
     throw error;
   }
 };
@@ -124,7 +64,7 @@ export const supabase = isSupabaseConfigured()
     })
   : null;
 
-// Admin Client (Service Role) for administrative authentication actions (e.g. invite, change role on user metadata)
+// Admin Client (Service Role) for administrative database & auth operations
 export const getSupabaseAdmin = () => {
   if (isSupabaseConfigured() && serviceRoleKey && !serviceRoleKey.includes('YOUR_')) {
     return createClient(supabaseUrl, serviceRoleKey, {

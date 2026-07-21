@@ -1903,6 +1903,34 @@ export async function dbDuplicateCustomForm(id: string): Promise<string> {
   return newFormId;
 }
 
+async function resolveFormTargetIds(inputFormId: string): Promise<string[]> {
+  const idsSet = new Set<string>([inputFormId]);
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { data: matched } = await client
+          .from('forms')
+          .select('id, slug')
+          .or(`id.eq.${inputFormId},slug.eq.${inputFormId}`);
+        if (matched && matched.length > 0) {
+          matched.forEach((f: any) => {
+            if (f.id) idsSet.add(f.id);
+            if (f.slug) idsSet.add(f.slug);
+          });
+        }
+      } catch (_) {}
+    }
+  }
+  const db = getLocalDb();
+  const matchedLocal = (db.forms || []).find((f: any) => f.slug === inputFormId || f.id === inputFormId);
+  if (matchedLocal) {
+    if (matchedLocal.id) idsSet.add(matchedLocal.id);
+    if (matchedLocal.slug) idsSet.add(matchedLocal.slug);
+  }
+  return Array.from(idsSet);
+}
+
 export async function dbSubmitFormResponse(
   formId: string,
   applicantName: string,
@@ -1913,12 +1941,8 @@ export async function dbSubmitFormResponse(
   const timestamp = new Date().toISOString();
 
   // Ensure formId is resolved if a slug was passed
-  let validFormId = formId;
-  const db = getLocalDb();
-  const matchedForm = (db.forms || []).find((f: any) => f.slug === formId || f.id === formId);
-  if (matchedForm) {
-    validFormId = matchedForm.id;
-  }
+  const targetIds = await resolveFormTargetIds(formId);
+  const validFormId = targetIds.find(id => isUuid(id)) || targetIds[0] || formId;
 
   if (isSupabaseConfigured()) {
     const client = getSupabaseAdmin() || supabase;
@@ -1956,6 +1980,7 @@ export async function dbSubmitFormResponse(
   }
 
   // Local fallback (always sync!)
+  const db = getLocalDb();
   if (!db.formResponses) db.formResponses = [];
   if (!db.responseAnswers) db.responseAnswers = [];
 
@@ -1984,14 +2009,7 @@ export async function dbSubmitFormResponse(
 }
 
 export async function dbGetFormResponses(formId: string): Promise<CustomFormResponse[]> {
-  let validFormId = formId;
-  if (!isUuid(formId)) {
-    const db = getLocalDb();
-    const matchedForm = (db.forms || []).find((f: any) => f.slug === formId || f.id === formId);
-    if (matchedForm && isUuid(matchedForm.id)) {
-      validFormId = matchedForm.id;
-    }
-  }
+  const targetIds = await resolveFormTargetIds(formId);
 
   if (isSupabaseConfigured()) {
     const client = getSupabaseAdmin() || supabase;
@@ -2000,7 +2018,7 @@ export async function dbGetFormResponses(formId: string): Promise<CustomFormResp
         const { data: responses, error: respErr } = await client
           .from('form_responses')
           .select('*')
-          .eq('form_id', validFormId)
+          .in('form_id', targetIds)
           .order('submitted_at', { ascending: false });
         if (respErr) throw respErr;
 
@@ -2044,22 +2062,30 @@ export async function dbGetFormResponses(formId: string): Promise<CustomFormResp
 
   // Local fallback
   const db = getLocalDb();
-  const responses = (db.formResponses || []).filter((r: any) => r.formId === validFormId || r.formId === formId);
+  const responses = (db.formResponses || []).filter((r: any) => targetIds.includes(r.formId) || targetIds.includes(r.form_id));
+  const responseIds = responses.map((r: any) => r.id);
+  const answers = (db.responseAnswers || []).filter((a: any) => responseIds.includes(a.responseId) || responseIds.includes(a.response_id));
 
   return responses.map((r: any) => {
     const respAnswers: Record<string, any> = {};
-    (db.responseAnswers || [])
-      .filter((a: any) => a.responseId === r.id)
+    answers
+      .filter((a: any) => a.responseId === r.id || a.response_id === r.id)
       .forEach((a: any) => {
         let parsed = a.value;
         if (typeof a.value === 'string' && (a.value.startsWith('{') || a.value.startsWith('['))) {
           try { parsed = JSON.parse(a.value); } catch (_) {}
         }
-        respAnswers[a.fieldId] = parsed;
+        respAnswers[a.fieldId || a.field_id] = parsed;
       });
 
     return {
-      ...r,
+      id: r.id,
+      formId: r.formId || r.form_id,
+      applicantName: r.applicantName || r.applicant_name,
+      applicantEmail: r.applicantEmail || r.applicant_email,
+      status: r.status,
+      notes: r.notes,
+      submittedAt: r.submittedAt || r.submitted_at,
       answers: respAnswers
     };
   }).sort((a: any, b: any) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());

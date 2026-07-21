@@ -1252,6 +1252,13 @@
   "tasks": [],
   "activityLogs": [
     {
+      "id": "log-1784645081231",
+      "userId": "u-1784558851639",
+      "action": "update_custom_form",
+      "details": "Updated custom form: JOIN COMMUNITY FORM",
+      "timestamp": "2026-07-21T14:44:41.231Z"
+    },
+    {
       "id": "log-1784644780306",
       "userId": "u-1784558851639",
       "action": "update_user_details",
@@ -3904,7 +3911,7 @@
       "endDate": "",
       "createdBy": "u-suryachalam",
       "createdAt": "2026-07-21T14:17:36.360Z",
-      "updatedAt": "2026-07-21T14:17:36.361Z"
+      "updatedAt": "2026-07-21T14:44:41.200Z"
     },
     {
       "id": "df873988-bac6-4c2c-a859-451f46bf8072",
@@ -3979,8 +3986,8 @@
       "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
       "fieldType": "short_text",
       "label": "NAME",
-      "placeholder": "Enter your full name",
       "description": "Provide your full official name",
+      "placeholder": "Enter your full name",
       "required": true,
       "options": [],
       "order": 0
@@ -3990,8 +3997,8 @@
       "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
       "fieldType": "short_text",
       "label": "CLASS",
-      "placeholder": "e.g. 3BCA A / 5BScCS / 1MCA B",
       "description": "Enter your current class and section",
+      "placeholder": "e.g. 3BCA A / 5BScCS / 1MCA B",
       "required": true,
       "options": [],
       "order": 1
@@ -4001,8 +4008,8 @@
       "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
       "fieldType": "short_text",
       "label": "REGISTER NUMBER",
-      "placeholder": "e.g. 2541505",
       "description": "Your official 7-digit register number",
+      "placeholder": "e.g. 2541505",
       "required": true,
       "options": [],
       "order": 2
@@ -4012,8 +4019,8 @@
       "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
       "fieldType": "email",
       "label": "CHRIST EMAIL ID",
-      "placeholder": "student@cs.christuniversity.in",
       "description": "Your official university email address",
+      "placeholder": "student@cs.christuniversity.in",
       "required": true,
       "options": [],
       "order": 3
@@ -4023,8 +4030,8 @@
       "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
       "fieldType": "radio_buttons",
       "label": "Select the vertical you are interested in a being member(TECHNICAL)",
-      "placeholder": "Choose a technical vertical",
       "description": "Select your preferred technical domain",
+      "placeholder": "Choose a technical vertical",
       "required": true,
       "options": [
         "AI HUB (Artificial Intelligence)",
@@ -4039,8 +4046,8 @@
       "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
       "fieldType": "radio_buttons",
       "label": "Select the vertical you are interested in a being member(NON-TECHNICAL)",
-      "placeholder": "Choose a non-technical vertical",
       "description": "Select your preferred non-technical domain",
+      "placeholder": "Choose a non-technical vertical",
       "required": true,
       "options": [
         "FieldOps(Sports)",
@@ -4051,6 +4058,19 @@
         "Research Guidance"
       ],
       "order": 5
+    },
+    {
+      "id": "729cbe02-a4f2-4b3c-96b7-a52782355949",
+      "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
+      "fieldType": "short_text",
+      "label": "New Question",
+      "required": false,
+      "options": [
+        "Option 1",
+        "Option 2",
+        "Option 3"
+      ],
+      "order": 6
     }
   ],
   "formResponses": [
@@ -4077,6 +4097,14 @@
       "applicantEmail": "suryachalam18@gmail.com",
       "status": "pending",
       "submittedAt": "2026-07-06T07:53:34.094Z"
+    },
+    {
+      "id": "b1153f8e-6521-4424-871b-a1bff5a91b13",
+      "formId": "efd87ab1-5dea-4bce-b76d-368aa9f5ae3f",
+      "applicantName": "Krupa M",
+      "applicantEmail": "krupa.m@bsccsh.christuniversity.in",
+      "status": "pending",
+      "submittedAt": "2026-07-21T14:47:25.359Z"
     }
   ],
   "responseAnswers": [
@@ -4115,6 +4143,42 @@
       "responseId": "29d23695-04f1-4fe1-839b-49bc0648e2b1",
       "fieldId": "field_1783061093573_1",
       "value": "SDFSGFHJKLL"
+    },
+    {
+      "id": "43fe9682-6ae7-4d73-96f3-8ec61cc30982",
+      "responseId": "b1153f8e-6521-4424-871b-a1bff5a91b13",
+      "fieldId": "8157ebb3-7a68-45d0-9eb6-181d33c76ddf",
+      "value": "Krupa M"
+    },
+    {
+      "id": "628a90a6-00e3-44e0-81b9-239423b4f5cb",
+      "responseId": "b1153f8e-6521-4424-871b-a1bff5a91b13",
+      "fieldId": "d9ae4b48-4b9a-4905-a6ae-9d01c6cafc77",
+      "value": "5BScCS"
+    },
+    {
+      "id": "0ddd0227-349f-45a3-9131-7cb337eb6d09",
+      "responseId": "b1153f8e-6521-4424-871b-a1bff5a91b13",
+      "fieldId": "07e23494-56ac-4267-a8af-59e161bbe6dd",
+      "value": "2440251"
+    },
+    {
+      "id": "f6596ad4-05fe-4536-a830-0d3a64d6ecce",
+      "responseId": "b1153f8e-6521-4424-871b-a1bff5a91b13",
+      "fieldId": "9bd6c522-253e-4cf1-ba2a-363a92abf9a4",
+      "value": "krupa.m@bsccsh.christuniversity.in"
+    },
+    {
+      "id": "269b46d5-6e50-4656-9dde-4418294b87d1",
+      "responseId": "b1153f8e-6521-4424-871b-a1bff5a91b13",
+      "fieldId": "e3eeb111-a46c-4ee4-9c7a-0d2e62afc04f",
+      "value": "AI HUB (Artificial Intelligence)"
+    },
+    {
+      "id": "1810646b-efac-4da5-b595-bad57c57b6ef",
+      "responseId": "b1153f8e-6521-4424-871b-a1bff5a91b13",
+      "fieldId": "4bf47419-a0ae-45ea-9a5d-4add2809b01b",
+      "value": "Peer-to-Peer (Peer Learning)"
     }
   ],
   "gallery": [

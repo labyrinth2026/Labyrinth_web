@@ -489,139 +489,217 @@ export default function VerticalsManager() {
         </div>
       )}
 
-      {/* CREATE/EDIT MODAL */}
+      {/* CREATE/EDIT MODAL (Horizontal Multi-Column Layout) */}
       {showModal && editingItem && (
-        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto overscroll-contain">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-lg flex flex-col max-h-[85vh] my-auto overflow-hidden">
-            <div className="flex items-center justify-between p-5 border-b border-slate-100 shrink-0 bg-white z-10">
-              <h2 className="font-bold text-slate-800">{editingItem.id ? 'Edit Vertical' : 'Create Vertical'}</h2>
-              <button onClick={() => setShowModal(false)} className="text-[#8c97a8] hover:text-[#CD0000]"><X size={18} /></button>
+        <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6">
+          <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-4xl overflow-hidden max-h-[92vh] flex flex-col">
+            {/* Header with Top Save Action */}
+            <div className="flex justify-between items-center px-8 py-4 border-b border-slate-100 bg-slate-50/80 shrink-0">
+              <div>
+                <span className="inline-block px-2.5 py-0.5 rounded-full bg-red-50 border border-red-100 text-[#CD0000] text-[10px] font-black uppercase tracking-widest mb-0.5">
+                  Vertical Domain Configuration
+                </span>
+                <h3 className="font-extrabold text-xl text-slate-900 tracking-tight leading-none">
+                  {editingItem.id ? 'Edit Vertical Domain' : 'Create Vertical Domain'}
+                </h3>
+              </div>
+              <div className="flex items-center gap-3">
+                <button 
+                  type="button" 
+                  onClick={() => setShowModal(false)} 
+                  className="px-4 py-2 text-xs font-bold text-slate-500 hover:bg-slate-200/60 rounded-xl transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="button" 
+                  onClick={handleSave} 
+                  disabled={isSaving} 
+                  className="flex items-center gap-1.5 px-5 py-2 bg-[#CD0000] hover:bg-[#A30000] text-white text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md hover:shadow-lg disabled:opacity-50"
+                >
+                  {isSaving ? <RefreshCw size={14} className="animate-spin" /> : <Check size={14} />} Save Vertical Domain
+                </button>
+                <button 
+                  onClick={() => setShowModal(false)} 
+                  className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-xl transition-all ml-1"
+                  title="Close modal"
+                >
+                  <X size={18} />
+                </button>
+              </div>
             </div>
-            
-            <div className="p-5 overflow-y-auto space-y-4 flex-1 min-h-0 overscroll-contain pb-24">
-              <div>
-                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Name *</label>
-                <input type="text" value={editingItem.name || ''} onChange={e => setEditingItem({ ...editingItem, name: e.target.value })} className={inputClass} placeholder="e.g. AI Creator's Lab" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Category</label>
-                  <select value={editingItem.category || 'tech'} onChange={e => setEditingItem({ ...editingItem, category: e.target.value })} className={inputClass}>
-                    <option value="tech">Technical</option>
-                    <option value="non-tech">Non-Technical</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Icon</label>
-                  <select value={editingItem.icon || 'Brain'} onChange={e => setEditingItem({ ...editingItem, icon: e.target.value })} className={inputClass}>
-                    {ICON_OPTIONS.map(i => <option key={i} value={i}>{i}</option>)}
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Color Accent</label>
-                <div className="flex gap-1.5 flex-wrap items-center">
-                  {COLOR_PRESETS.map(c => (
-                    <button key={c} type="button" onClick={() => setEditingItem({ ...editingItem, color: c })} className={`w-6 h-6 rounded-md border ${editingItem.color === c ? 'border-slate-800 scale-105' : 'border-transparent'}`} style={{ backgroundColor: c }} />
-                  ))}
-                  <input type="color" value={editingItem.color || '#3b82f6'} onChange={e => setEditingItem({ ...editingItem, color: e.target.value })} className="w-6 h-6 border-0 p-0 cursor-pointer rounded-md shrink-0" />
-                </div>
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Description</label>
-                <textarea rows={3} value={editingItem.description || ''} onChange={e => setEditingItem({ ...editingItem, description: e.target.value })} className={inputClass} placeholder="Domain details..." />
-              </div>
 
-              {/* Leadership Assign */}
-              <div className="p-4 border border-slate-100 rounded-2xl bg-slate-50/50 space-y-4">
-                <PeoplePicker 
-                  label="Vertical Heads"
-                  icon={<Crown size={12} className="text-amber-500" />}
-                  accentClass="bg-amber-50 border-amber-200 text-amber-700"
-                  selected={selectedHeads}
-                  allUsers={allUsers}
-                  onAdd={p => setSelectedHeads(prev => [...prev, p])}
-                  onRemove={id => setSelectedHeads(prev => prev.filter(h => h.id !== id))}
-                />
-                <PeoplePicker 
-                  label="Vertical Sub-Heads"
-                  icon={<Star size={12} className="text-indigo-500" />}
-                  accentClass="bg-indigo-50 border-indigo-200 text-indigo-700"
-                  selected={selectedSubHeads}
-                  allUsers={allUsers}
-                  onAdd={p => setSelectedSubHeads(prev => [...prev, p])}
-                  onRemove={id => setSelectedSubHeads(prev => prev.filter(s => s.id !== id))}
-                />
-                <PeoplePicker 
-                  label="Core Committee Members"
-                  icon={<Users size={12} className="text-slate-500" />}
-                  accentClass="bg-slate-50 border-slate-200 text-slate-700"
-                  selected={selectedCoreCommittee}
-                  allUsers={allUsers}
-                  onAdd={p => setSelectedCoreCommittee(prev => [...prev, p])}
-                  onRemove={id => setSelectedCoreCommittee(prev => prev.filter(c => c.id !== id))}
-                />
+            {/* Content Body Form */}
+            <div className="p-8 overflow-y-auto flex-1 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                
+                {/* Left Column (Domain Metadata & Styling) */}
+                <div className="md:col-span-5 space-y-5 border-b md:border-b-0 md:border-r border-slate-100 pb-6 md:pb-0 md:pr-6">
+                  <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Domain Identity</p>
 
-                {/* Core Committees Hierarchy CRUD */}
-                {editingItem.id && (
-                  <div className="p-4 border border-slate-100 rounded-2xl bg-slate-50/50 space-y-3 mt-4 text-left">
-                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5 font-mono">
-                      <Users size={12} className="text-[#CD0000]" /> Core Committees List (CRUD)
-                    </label>
-                    
-                    <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
-                      {verticalCommittees.length === 0 ? (
-                        <p className="text-xs text-slate-400 italic">No core committees linked to this vertical.</p>
-                      ) : (
-                        verticalCommittees.map(c => (
-                          <div key={c.id} className="flex items-center justify-between bg-white border border-slate-200 rounded-xl px-3 py-2">
-                            {editingCommId === c.id ? (
-                              <div className="flex gap-2 items-center flex-1 mr-2">
-                                <input 
-                                  type="text" 
-                                  value={editingCommName} 
-                                  onChange={e => setEditingCommName(e.target.value)} 
-                                  className="flex-1 border border-slate-200 rounded-lg px-2 py-0.5 text-xs text-slate-800 focus:outline-none"
-                                />
-                                <button type="button" onClick={() => handleSaveEditingComm(c.id)} className="p-1 text-green-600 hover:bg-slate-50 rounded"><Check size={12} /></button>
-                                <button type="button" onClick={() => setEditingCommId(null)} className="p-1 text-slate-400 hover:bg-slate-50 rounded"><X size={12} /></button>
-                              </div>
-                            ) : (
-                              <>
-                                <span className="text-xs font-semibold text-slate-700">{c.name}</span>
-                                <div className="flex gap-1">
-                                  <button type="button" onClick={() => handleStartEditingComm(c.id, c.name)} className="p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded" title="Edit Name"><Edit2 size={12} /></button>
-                                  <button type="button" onClick={() => handleDeleteComm(c.id)} className="p-1 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded" title="Delete Committee"><Trash2 size={12} /></button>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        ))
-                      )}
+                  {/* Name */}
+                  <div>
+                    <label className="text-xs font-bold text-slate-700 block mb-1.5">Vertical Domain Name *</label>
+                    <input 
+                      type="text" 
+                      value={editingItem.name || ''} 
+                      onChange={e => setEditingItem({ ...editingItem, name: e.target.value })} 
+                      className={inputClass} 
+                      placeholder="e.g. AI HUB / DevZen" 
+                    />
+                  </div>
+
+                  {/* Category & Icon */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs font-bold text-slate-700 block mb-1.5">Category</label>
+                      <select 
+                        value={editingItem.category || 'tech'} 
+                        onChange={e => setEditingItem({ ...editingItem, category: e.target.value })} 
+                        className={inputClass}
+                      >
+                        <option value="tech">Technical</option>
+                        <option value="non-tech">Non-Technical</option>
+                      </select>
                     </div>
-
-                    <div className="flex gap-2 pt-2 border-t border-slate-100/50">
-                      <input 
-                        type="text" 
-                        value={newCommInput} 
-                        onChange={e => setNewCommInput(e.target.value)} 
-                        placeholder="New committee name..."
-                        className="flex-1 border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none"
-                      />
-                      <button type="button" onClick={handleInlineAddComm} className="px-3 py-1.5 bg-[#CD0000] text-white text-xs font-semibold rounded-xl hover:bg-[#A30000] flex items-center justify-center shrink-0">
-                        Add
-                      </button>
+                    <div>
+                      <label className="text-xs font-bold text-slate-700 block mb-1.5">Icon</label>
+                      <select 
+                        value={editingItem.icon || 'Brain'} 
+                        onChange={e => setEditingItem({ ...editingItem, icon: e.target.value })} 
+                        className={inputClass}
+                      >
+                        {ICON_OPTIONS.map(i => <option key={i} value={i}>{i}</option>)}
+                      </select>
                     </div>
                   </div>
-                )}
-              </div>
-            </div>
 
-            <div className="flex justify-end gap-3 p-5 border-t border-slate-100 shrink-0">
-              <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-[#667085] hover:text-[#CD0000]">Cancel</button>
-              <button type="button" onClick={handleSave} disabled={isSaving} className="flex items-center gap-1.5 px-5 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000]">
-                {isSaving ? <RefreshCw size={14} className="animate-spin" /> : <Check size={14} />} Save
-              </button>
+                  {/* Color Accent */}
+                  <div>
+                    <label className="text-xs font-bold text-slate-700 block mb-2">Theme Color Accent</label>
+                    <div className="flex gap-2 flex-wrap items-center bg-slate-50 border border-slate-100 rounded-2xl p-3">
+                      {COLOR_PRESETS.map(c => (
+                        <button 
+                          key={c} 
+                          type="button" 
+                          onClick={() => setEditingItem({ ...editingItem, color: c })} 
+                          className={`w-6 h-6 rounded-lg border transition-all ${editingItem.color === c ? 'border-slate-900 scale-110 shadow-xs ring-2 ring-slate-400/30' : 'border-transparent hover:scale-105'}`} 
+                          style={{ backgroundColor: c }} 
+                        />
+                      ))}
+                      <input 
+                        type="color" 
+                        value={editingItem.color || '#3b82f6'} 
+                        onChange={e => setEditingItem({ ...editingItem, color: e.target.value })} 
+                        className="w-6 h-6 border-0 p-0 cursor-pointer rounded-lg shrink-0 ml-1" 
+                      />
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <div>
+                    <label className="text-xs font-bold text-slate-700 block mb-1.5">Domain Description</label>
+                    <textarea 
+                      rows={4} 
+                      value={editingItem.description || ''} 
+                      onChange={e => setEditingItem({ ...editingItem, description: e.target.value })} 
+                      className={inputClass} 
+                      placeholder="Enter a brief summary describing this vertical's focus and objectives..." 
+                    />
+                  </div>
+                </div>
+
+                {/* Right Column (Leadership Assignments & Linked Committees) */}
+                <div className="md:col-span-7 space-y-5">
+                  <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Leadership & Structure</p>
+
+                  <div className="p-5 border border-slate-100 rounded-2xl bg-slate-50/50 space-y-4">
+                    <PeoplePicker 
+                      label="Vertical Heads"
+                      icon={<Crown size={13} className="text-amber-500" />}
+                      accentClass="bg-amber-50 border-amber-200 text-amber-700"
+                      selected={selectedHeads}
+                      allUsers={allUsers}
+                      onAdd={p => setSelectedHeads(prev => [...prev, p])}
+                      onRemove={id => setSelectedHeads(prev => prev.filter(h => h.id !== id))}
+                    />
+                    <PeoplePicker 
+                      label="Vertical Sub-Heads"
+                      icon={<Star size={13} className="text-indigo-500" />}
+                      accentClass="bg-indigo-50 border-indigo-200 text-indigo-700"
+                      selected={selectedSubHeads}
+                      allUsers={allUsers}
+                      onAdd={p => setSelectedSubHeads(prev => [...prev, p])}
+                      onRemove={id => setSelectedSubHeads(prev => prev.filter(s => s.id !== id))}
+                    />
+                    <PeoplePicker 
+                      label="Core Committee Members"
+                      icon={<Users size={13} className="text-slate-500" />}
+                      accentClass="bg-slate-50 border-slate-200 text-slate-700"
+                      selected={selectedCoreCommittee}
+                      allUsers={allUsers}
+                      onAdd={p => setSelectedCoreCommittee(prev => [...prev, p])}
+                      onRemove={id => setSelectedCoreCommittee(prev => prev.filter(c => c.id !== id))}
+                    />
+
+                    {/* Core Committees Hierarchy CRUD */}
+                    {editingItem.id && (
+                      <div className="p-4 border border-slate-100 rounded-2xl bg-white space-y-3 mt-4 text-left shadow-xs">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5 font-mono">
+                          <Users size={12} className="text-[#CD0000]" /> Core Committees List (CRUD)
+                        </label>
+                        
+                        <div className="space-y-2 max-h-36 overflow-y-auto pr-1">
+                          {verticalCommittees.length === 0 ? (
+                            <p className="text-xs text-slate-400 italic">No core committees linked to this vertical.</p>
+                          ) : (
+                            verticalCommittees.map(c => (
+                              <div key={c.id} className="flex items-center justify-between bg-slate-50/80 border border-slate-100 rounded-xl px-3 py-2">
+                                {editingCommId === c.id ? (
+                                  <div className="flex gap-2 items-center flex-1 mr-2">
+                                    <input 
+                                      type="text" 
+                                      value={editingCommName} 
+                                      onChange={e => setEditingCommName(e.target.value)} 
+                                      className="flex-1 border border-slate-200 rounded-lg px-2 py-0.5 text-xs text-slate-800 focus:outline-none"
+                                    />
+                                    <button type="button" onClick={() => handleSaveEditingComm(c.id)} className="p-1 text-emerald-600 hover:bg-white rounded"><Check size={12} /></button>
+                                    <button type="button" onClick={() => setEditingCommId(null)} className="p-1 text-slate-400 hover:bg-white rounded"><X size={12} /></button>
+                                  </div>
+                                ) : (
+                                  <>
+                                    <span className="text-xs font-semibold text-slate-700">{c.name}</span>
+                                    <div className="flex gap-1">
+                                      <button type="button" onClick={() => handleStartEditingComm(c.id, c.name)} className="p-1 text-slate-400 hover:text-slate-600 hover:bg-white rounded" title="Edit Name"><Edit2 size={12} /></button>
+                                      <button type="button" onClick={() => handleDeleteComm(c.id)} className="p-1 text-slate-400 hover:text-red-500 hover:bg-white rounded" title="Delete Committee"><Trash2 size={12} /></button>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            ))
+                          )}
+                        </div>
+
+                        <div className="flex gap-2 pt-2 border-t border-slate-100">
+                          <input 
+                            type="text" 
+                            value={newCommInput} 
+                            onChange={e => setNewCommInput(e.target.value)} 
+                            placeholder="New committee name..."
+                            className="flex-1 border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                          />
+                          <button type="button" onClick={handleInlineAddComm} className="px-3.5 py-1.5 bg-[#CD0000] text-white text-xs font-semibold rounded-xl hover:bg-[#A30000] flex items-center justify-center shrink-0 shadow-xs">
+                            Add Committee
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+              </div>
+
+
             </div>
           </div>
         </div>
