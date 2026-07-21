@@ -56,10 +56,9 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ success: false, error: resetErr.message }, { status: 500 });
       }
 
-      // 3. Update public.profiles set first_login = false, password_changed_at = now()
+      // 3. Update public.profiles set first_login = false
       const { error: profErr } = await supabase!.from('profiles').update({
-        first_login: false,
-        password_changed_at: new Date().toISOString()
+        first_login: false
       }).eq('id', sessionUser.id);
 
       if (profErr) {
