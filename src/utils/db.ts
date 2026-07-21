@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import { supabase, isSupabaseConfigured, getSupabaseAdmin, getSupabaseOffline, setSupabaseOffline } from './supabase';
 
@@ -394,34 +395,26 @@ export async function dbCreateUser(name: string, email: string, role: string, co
     const adminClient = getSupabaseAdmin();
     if (!adminClient) throw new Error('Supabase Service Role credentials not configured.');
 
-    // 1. Create in Supabase Auth
-    const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
+    const newUserId = crypto.randomUUID();
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(defaultPassword, salt);
+
+    const { error: profErr } = await adminClient.from('profiles').insert({
+      id: newUserId,
       email: cleanEmail,
-      password: defaultPassword,
-      email_confirm: true,
-      user_metadata: {
-        full_name: name,
-        role,
-        created_by: adminUserId,
-        first_login: true,
-        committee_id: committeeId || null,
-        vertical_id: verticalId || null
-      }
-    });
-
-    if (authError) throw authError;
-    const userId = authData.user?.id;
-    if (!userId) throw new Error('User creation failed in Supabase Auth.');
-
-    const { error: profErr } = await adminClient.from('profiles').update({
-      created_by: adminUserId,
-      first_login: true,
+      full_name: name,
+      name: name,
       role: role as any,
+      status: 'active',
+      first_login: true,
+      password: hash,
+      created_by: adminUserId,
       committee_id: committeeId || null,
-      vertical_id: verticalId || null,
-      full_name: name
-    }).eq('id', userId);
-    if (profErr) console.warn('Could not update profile metadata:', profErr);
+      vertical_id: verticalId || null
+    });
+    if (profErr) {
+      throw profErr;
+    }
   } else {
     const db = getLocalDb();
     const existing = db.users.find(u => u.email.toLowerCase() === cleanEmail);

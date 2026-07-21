@@ -17,24 +17,43 @@ export async function POST(req: NextRequest) {
 
     if (isSupabaseConfigured() && supabase) {
       try {
-        // 1. Authenticate with Supabase Auth
-        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-          email: email.toLowerCase().trim(),
-          password
-        });
+        // 1. Fetch user profile from Supabase (including the password hash column)
+        const { data: profile, error: dbErr } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('email', email.toLowerCase().trim())
+          .maybeSingle();
 
-        if (authError) {
-          return NextResponse.json({ success: false, error: authError.message }, { status: 401 });
-        }
-        if (!authData.user) {
-          return NextResponse.json({ success: false, error: 'User authentication failed.' }, { status: 401 });
+        if (dbErr) throw dbErr;
+        if (!profile) {
+          return NextResponse.json({ success: false, error: 'Invalid email or password.' }, { status: 401 });
         }
 
-        // 2. Fetch profile role & status details
-        userDetails = await dbGetUserByEmail(email);
-        if (!userDetails) {
-          return NextResponse.json({ success: false, error: 'User profile not found in database.' }, { status: 401 });
+        // 2. Verify password with bcrypt using the profiles table password column
+        const isMatch = bcrypt.compareSync(password, profile.password || '');
+        if (!isMatch) {
+          return NextResponse.json({ success: false, error: 'Invalid email or password.' }, { status: 401 });
         }
+
+        // 3. Map details
+        userDetails = {
+          id: profile.id,
+          email: profile.email,
+          name: profile.full_name || profile.name || profile.email.split('@')[0],
+          full_name: profile.full_name,
+          role: profile.role,
+          status: profile.status,
+          firstLogin: profile.first_login,
+          passwordChangedAt: profile.password_changed_at,
+          createdBy: profile.created_by,
+          lastLogin: profile.last_login,
+          committeeId: profile.committee_id,
+          verticalId: profile.vertical_id,
+          phone: profile.phone,
+          profilePhoto: profile.profile_photo,
+          designation: profile.designation,
+          department: profile.department
+        };
       } catch (err: any) {
         console.error("[Login API] Supabase authentication error:", err);
         return NextResponse.json({ success: false, error: err.message || 'Authentication error.' }, { status: 500 });
