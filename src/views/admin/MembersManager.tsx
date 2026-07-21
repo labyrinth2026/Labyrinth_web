@@ -3,59 +3,73 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { fetchFromSheet } from '@/services/api';
+import { createClient } from '@supabase/supabase-js';
+
 import { 
   Plus, Search, Shield, Ban, Check, Edit2, Trash2, 
   Users, RefreshCw, X, AlertTriangle, UserCheck, Inbox, Download, Upload,
-  ChevronLeft, ChevronRight, CheckCircle2
+  ChevronLeft, ChevronRight, CheckCircle2, Loader2
 } from 'lucide-react';
 
-const compressImage = (file: File, maxWidth = 300, maxHeight = 300, quality = 0.85): Promise<string> => {
-  return new Promise((resolve, reject) => {
+// Browser-side Supabase client (anon key — only for Storage uploads)
+const supabaseBrowser = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+);
+
+/**
+ * Compress + upload a profile photo to Supabase Storage.
+ * Returns the public CDN URL — never sends base64 to the API.
+ */
+const uploadProfilePhoto = async (file: File, userId: string): Promise<string> => {
+  const compressed = await new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
+        const maxW = 300, maxH = 300;
+        let w = img.width, h = img.height;
+        if (w > h) { if (w > maxW) { h = Math.round((h * maxW) / w); w = maxW; } }
+        else { if (h > maxH) { w = Math.round((w * maxH) / h); h = maxH; } }
         const canvas = document.createElement('canvas');
-        let width = img.width;
-        let height = img.height;
-
-        if (width > height) {
-          if (width > maxWidth) {
-            height = Math.round((height * maxWidth) / width);
-            width = maxWidth;
-          }
-        } else {
-          if (height > maxHeight) {
-            width = Math.round((width * maxHeight) / height);
-            height = maxHeight;
-          }
-        }
-
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = w; canvas.height = h;
         const ctx = canvas.getContext('2d');
-        if (ctx) {
-          ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', quality));
-        } else {
-          resolve(e.target?.result as string);
-        }
+        if (ctx) { ctx.drawImage(img, 0, 0, w, h); resolve(canvas.toDataURL('image/jpeg', 0.82)); }
+        else resolve(e.target?.result as string);
       };
-      img.onerror = () => reject(new Error("Failed to load image for compression"));
+      img.onerror = () => reject(new Error('Image load failed'));
       img.src = e.target?.result as string;
     };
-    reader.onerror = () => reject(new Error("Failed to read image file"));
+    reader.onerror = () => reject(new Error('File read failed'));
     reader.readAsDataURL(file);
   });
+
+  const base64Data = compressed.replace(/^data:image\/\w+;base64,/, '');
+  const byteChars = atob(base64Data);
+  const byteArr = new Uint8Array(byteChars.length);
+  for (let i = 0; i < byteChars.length; i++) byteArr[i] = byteChars.charCodeAt(i);
+  const blob = new Blob([byteArr], { type: 'image/jpeg' });
+
+  const fileName = `avatars/${userId}-${Date.now()}.jpg`;
+  const { error: upErr } = await supabaseBrowser.storage
+    .from('gallery')
+    .upload(fileName, blob, { contentType: 'image/jpeg', upsert: true });
+
+  if (upErr) throw new Error(upErr.message);
+
+  const { data } = supabaseBrowser.storage.from('gallery').getPublicUrl(fileName);
+  return data.publicUrl;
 };
 
 export default function MembersManager() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'directory' | 'recruitment'>('directory');
   const [loading, setLoading] = useState(true);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   
   // Lists
   const [users, setUsers] = useState<any[]>([]);
+
   const [registrations, setRegistrations] = useState<any[]>([]);
   const [committees, setCommittees] = useState<any[]>([]);
   const [verticals, setVerticals] = useState<any[]>([]);
@@ -716,9 +730,14 @@ export default function MembersManager() {
                 <button 
                   type="button" 
                   onClick={handleEditUser} 
-                  className="px-5 py-2 bg-[#CD0000] hover:bg-[#A30000] text-white text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md hover:shadow-lg"
+                   disabled={isUploadingPhoto}
+                   className={`px-5 py-2 text-white text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all shadow-md hover:shadow-lg ${
+                     isUploadingPhoto
+                       ? 'bg-slate-300 cursor-not-allowed'
+                       : 'bg-[#CD0000] hover:bg-[#A30000]'
+                   }`}
                 >
-                  Save Member Changes
+                  {isUploadingPhoto ? 'Uploading Photo...' : 'Save Member Changes'}
                 </button>
                 <button 
                   onClick={() => setShowEditModal(false)} 
@@ -752,22 +771,24 @@ export default function MembersManager() {
                     </div>
                     <div className="flex gap-2 justify-center">
                       <label className="px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer shadow-xs transition-all">
-                        <Upload size={12} className="text-[#CD0000]" /> Upload Image
+                        {isUploadingPhoto
+                          ? <><Loader2 size={12} className="animate-spin text-[#CD0000]" /> Uploading...</>
+                          : <><Upload size={12} className="text-[#CD0000]" /> Upload Image</>}
                         <input
                           type="file"
                           accept="image/*"
                           onChange={async e => {
                             const file = e.target.files?.[0];
                             if (!file) return;
+                            setIsUploadingPhoto(true);
                             try {
-                              const compressed = await compressImage(file);
-                              setEditingUserPhoto(compressed);
-                            } catch (err) {
-                              const reader = new FileReader();
-                              reader.onloadend = () => {
-                                setEditingUserPhoto(reader.result as string);
-                              };
-                              reader.readAsDataURL(file);
+                              const url = await uploadProfilePhoto(file, editingUserId || 'member');
+                              setEditingUserPhoto(url);
+                              showToast('Photo uploaded!', 'success');
+                            } catch (err: any) {
+                              showToast('Photo upload failed: ' + (err.message || 'Unknown error'), 'error');
+                            } finally {
+                              setIsUploadingPhoto(false);
                             }
                           }}
                           className="hidden"

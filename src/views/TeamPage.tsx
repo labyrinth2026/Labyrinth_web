@@ -124,25 +124,46 @@ const TeamPage: React.FC = () => {
   useEffect(() => {
     let isMounted = true;
 
-    // ── Stage 1: Mentors + Core Committee ──────────────────────────────────
+    const withTimeout = <T,>(promise: Promise<T>, ms: number, fallback: T): Promise<T> => {
+      const timer = new Promise<T>(resolve => setTimeout(() => resolve(fallback), ms));
+      return Promise.race([promise, timer]);
+    };
+
     const loadPrimary = async () => {
       try {
-        const result: any = await fetchFromSheet('getTeam').catch(() => null);
-        if (!isMounted || !result || Array.isArray(result)) return;
+        // 10-second timeout so skeleton always resolves even if Vercel is slow
+        const result: any = await withTimeout(
+          fetchFromSheet('getTeam').catch(() => null),
+          10000,
+          null
+        );
 
-        setCore(result.coreCommittee || []);
-        // Stash verticals too – render deferred
-        setVerticalHeads(result.verticalHeads || []);
-        setSubHeads(result.subHeads || []);
-        setLoadedStages(prev => new Set([...prev, 'mentors-core']));
+        if (isMounted) {
+          if (result && !Array.isArray(result)) {
+            setCore(result.coreCommittee || []);
+            setVerticalHeads(result.verticalHeads || []);
+            setSubHeads(result.subHeads || []);
+          }
+          // Always mark primary as loaded so skeleton resolves
+          setLoadedStages(prev => new Set([...prev, 'mentors-core']));
+        }
 
-        // ── Stage 2: Verticals metadata (not blocking above) ───────────────
-        const vertsResult: any = await fetchFromSheet('getVerticals').catch(() => []);
-        if (!isMounted) return;
-        if (Array.isArray(vertsResult)) setVerticalsData(vertsResult);
-        setLoadedStages(prev => new Set([...prev, 'verticals']));
+        // Stage 2: Verticals metadata
+        const vertsResult: any = await withTimeout(
+          fetchFromSheet('getVerticals').catch(() => []),
+          10000,
+          []
+        );
+        if (isMounted) {
+          if (Array.isArray(vertsResult)) setVerticalsData(vertsResult);
+          setLoadedStages(prev => new Set([...prev, 'verticals']));
+        }
       } catch (err) {
         console.error('TeamPage load error:', err);
+        // Even on error, stop the skeleton
+        if (isMounted) {
+          setLoadedStages(prev => new Set([...prev, 'mentors-core', 'verticals']));
+        }
       }
     };
 

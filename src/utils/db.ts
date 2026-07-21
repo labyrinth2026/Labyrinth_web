@@ -260,7 +260,10 @@ export async function dbGetRoles(): Promise<any[]> {
     const client = getSupabaseAdmin() || supabase;
     if (client) {
       try {
-        const { data, error } = await client.from('profiles').select('*');
+        // Select only columns actually used — avoids transferring large blobs
+        const { data, error } = await client
+          .from('profiles')
+          .select('id,email,full_name,name,role,status,first_login,committee_id,vertical_id,designation,department,profile_photo,reg_no,class_name,github,linkedin,created_at');
         if (error) throw error;
         return (data || []).map((p: any) => ({
           id: p.id,
@@ -270,20 +273,20 @@ export async function dbGetRoles(): Promise<any[]> {
           role: p.role,
           status: p.status,
           firstLogin: p.first_login,
-          passwordChangedAt: p.password_changed_at,
-          createdBy: p.created_by,
-          lastLogin: p.last_login,
           committeeId: p.committee_id,
+          committee_id: p.committee_id,
           verticalId: p.vertical_id,
-          isHead: p.is_head,
-          phone: p.phone,
+          vertical_id: p.vertical_id,
           profilePhoto: p.profile_photo,
+          profile_photo: p.profile_photo,
           designation: p.designation,
           department: p.department,
-          regNo: p.reg_no || p.regNo,
-          reg_no: p.reg_no || p.regNo,
-          class: p.class_name || p.class,
-          class_name: p.class_name || p.class,
+          regNo: p.reg_no,
+          reg_no: p.reg_no,
+          class: p.class_name,
+          class_name: p.class_name,
+          github: p.github,
+          linkedin: p.linkedin,
           createdAt: p.created_at
         }));
       } catch (err) {

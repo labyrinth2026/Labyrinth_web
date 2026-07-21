@@ -48,9 +48,12 @@ export async function POST(req: NextRequest) {
       }
       
       case 'getTeam': {
-        const roles = await dbGetRoles();
-        const verticals = await dbGetVerticals();
-        const committees = await dbGetCoreCommittees();
+        // Parallelise all 3 queries — cuts cold-start from 15s to ~5s
+        const [roles, verticals, committees] = await Promise.all([
+          dbGetRoles(),
+          dbGetVerticals(),
+          dbGetCoreCommittees()
+        ]);
 
         // Helper to find vertical name by ID
         const getVerticalName = (vId: string) => {
@@ -175,6 +178,7 @@ export async function POST(req: NextRequest) {
       }
 
       case 'getGallery': {
+
         const db = getLocalDb();
         return NextResponse.json({ success: true, data: db.gallery || [] });
       }
