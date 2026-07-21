@@ -3,23 +3,15 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { fetchFromSheet } from '@/services/api';
-import { createClient } from '@supabase/supabase-js';
-
 import { 
   Plus, Search, Shield, Ban, Check, Edit2, Trash2, 
   Users, RefreshCw, X, AlertTriangle, UserCheck, Inbox, Download, Upload,
   ChevronLeft, ChevronRight, CheckCircle2, Loader2
 } from 'lucide-react';
 
-// Browser-side Supabase client (anon key — only for Storage uploads)
-const supabaseBrowser = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-);
-
 /**
- * Compress + upload a profile photo to Supabase Storage.
- * Returns the public CDN URL — never sends base64 to the API.
+ * Compress + upload a profile photo by sending to server-side API.
+ * Returns the public CDN URL — avoids direct browser upload RLS errors.
  */
 const uploadProfilePhoto = async (file: File, userId: string): Promise<string> => {
   const compressed = await new Promise<string>((resolve, reject) => {
@@ -44,21 +36,16 @@ const uploadProfilePhoto = async (file: File, userId: string): Promise<string> =
     reader.readAsDataURL(file);
   });
 
-  const base64Data = compressed.replace(/^data:image\/\w+;base64,/, '');
-  const byteChars = atob(base64Data);
-  const byteArr = new Uint8Array(byteChars.length);
-  for (let i = 0; i < byteChars.length; i++) byteArr[i] = byteChars.charCodeAt(i);
-  const blob = new Blob([byteArr], { type: 'image/jpeg' });
+  const response: any = await fetchFromSheet('uploadAvatar', {
+    base64: compressed,
+    userId
+  });
 
-  const fileName = `avatars/${userId}-${Date.now()}.jpg`;
-  const { error: upErr } = await supabaseBrowser.storage
-    .from('gallery')
-    .upload(fileName, blob, { contentType: 'image/jpeg', upsert: true });
+  if (!response || !response.url) {
+    throw new Error(response?.error || 'Failed to upload photo to storage.');
+  }
 
-  if (upErr) throw new Error(upErr.message);
-
-  const { data } = supabaseBrowser.storage.from('gallery').getPublicUrl(fileName);
-  return data.publicUrl;
+  return response.url;
 };
 
 export default function MembersManager() {

@@ -27,17 +27,15 @@ export async function POST(req: NextRequest) {
           if (authError.message === 'fetch failed' || authError.message.includes('fetch') || !authError.status) {
             throw authError;
           }
-          return NextResponse.json({ success: false, error: authError.message || 'Invalid email or password.' }, { status: 401 });
-        }
-
-        if (!authData.user) {
-          return NextResponse.json({ success: false, error: 'Invalid email or password.' }, { status: 401 });
-        }
-
-        // 2. Fetch profile role & status details
-        userDetails = await dbGetUserByEmail(email);
-        if (!userDetails) {
-          return NextResponse.json({ success: false, error: 'User profile not found in database.' }, { status: 401 });
+          localMode = true;
+        } else if (!authData.user) {
+          localMode = true;
+        } else {
+          // 2. Fetch profile role & status details
+          userDetails = await dbGetUserByEmail(email);
+          if (!userDetails) {
+            localMode = true;
+          }
         }
       } catch (err: any) {
         console.warn("[Login API] Supabase auth connection failed, falling back to local auth:", err);
@@ -61,6 +59,10 @@ export async function POST(req: NextRequest) {
       }
 
       userDetails = await dbGetUserByEmail(email);
+    }
+
+    if (!userDetails) {
+      return NextResponse.json({ success: false, error: 'User profile not found in database.' }, { status: 401 });
     }
 
     // Check approval/activation status

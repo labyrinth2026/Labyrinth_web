@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 import { verifyJWT } from '@/utils/jwt';
+import { getSupabaseAdmin } from '@/utils/supabase';
 import {
   dbGetEvents, dbAddEvent, dbUpdateEvent, dbDeleteEvent,
   dbGetVerticals, dbAddVertical, dbUpdateVertical, dbDeleteVertical,
@@ -405,6 +406,38 @@ export async function POST(req: NextRequest) {
         await dbUpdateUserStatus(userId, status);
         await logActivity(sessionUser.id, 'update_user_status', `Updated status of user ${userId} to ${status}`);
         return NextResponse.json({ success: true });
+      }
+
+      case 'uploadAvatar': {
+        const { base64, userId } = payload;
+        if (!base64) {
+          return NextResponse.json({ success: false, error: 'No image data provided.' }, { status: 400 });
+        }
+
+        // 1. Decode base64 image data to a Buffer
+        const base64Data = base64.replace(/^data:image\/\w+;base64,/, '');
+        const buffer = Buffer.from(base64Data, 'base64');
+
+        // 2. Generate destination filename
+        const fileName = `avatars/${userId || 'member'}-${Date.now()}.jpg`;
+
+        const adminClient = getSupabaseAdmin();
+        if (adminClient) {
+          const { error: upErr } = await adminClient.storage
+            .from('gallery')
+            .upload(fileName, buffer, { contentType: 'image/jpeg', upsert: true });
+
+          if (upErr) {
+            console.error('[API uploadAvatar] Storage upload failed:', upErr.message);
+            return NextResponse.json({ success: false, error: upErr.message }, { status: 500 });
+          }
+
+          const { data } = adminClient.storage.from('gallery').getPublicUrl(fileName);
+          return NextResponse.json({ success: true, url: data.publicUrl });
+        } else {
+          // Fallback to echo base64 if Supabase is offline
+          return NextResponse.json({ success: true, url: base64 });
+        }
       }
 
       case 'updateUserDetails': {

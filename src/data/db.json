@@ -64,8 +64,8 @@
     {
       "id": "u-advaith-biju",
       "email": "advaith.biju@bcah.christuniversity.in",
-      "name": "Advaith Biju",
-      "full_name": "Advaith Biju",
+      "name": "Advaith Biju s",
+      "full_name": "Advaith Biju s",
       "passwordHash": "$2b$10$BN2loUrb6mDrgr9URTUcwuA23KIYMplDRI4GLsiSQB4c/CZsRIwKW",
       "role": "MEMBER",
       "status": "active",
@@ -75,11 +75,12 @@
       "department": "Department of Computer Science",
       "regNo": "2541605",
       "class": "3BCA B",
-      "committeeId": null,
       "committee_id": null,
       "verticalId": "v-ai-hub",
       "vertical_id": "v-ai-hub",
-      "createdAt": "2026-07-20T15:00:58.060Z"
+      "createdAt": "2026-07-20T15:00:58.060Z",
+      "reg_no": "2541605",
+      "class_name": "3BCA B"
     },
     {
       "id": "u-himanshi-kansal",
@@ -1251,6 +1252,13 @@
   "resources": [],
   "tasks": [],
   "activityLogs": [
+    {
+      "id": "log-1784650756826",
+      "userId": "u-1784558851639",
+      "action": "update_user_details",
+      "details": "Updated profile of user u-advaith-biju",
+      "timestamp": "2026-07-21T16:19:16.826Z"
+    },
     {
       "id": "log-1784645081231",
       "userId": "u-1784558851639",

@@ -26,6 +26,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'New password must be at least 6 characters long.' }, { status: 400 });
     }
 
+    let localMode = false;
+
     if (isSupabaseConfigured()) {
       const adminClient = getSupabaseAdmin();
       if (!adminClient) {
@@ -39,31 +41,34 @@ export async function POST(req: NextRequest) {
       });
 
       if (authError || !authData.user) {
-        return NextResponse.json({ success: false, error: 'Current password is incorrect.' }, { status: 401 });
-      }
+        localMode = true;
+      } else {
+        // 2. Change password in Supabase Auth
+        const { error: resetErr } = await adminClient.auth.admin.updateUserById(sessionUser.id, {
+          password: newPassword
+        });
 
-      // 2. Change password in Supabase Auth
-      const { error: resetErr } = await adminClient.auth.admin.updateUserById(sessionUser.id, {
-        password: newPassword
-      });
+        if (resetErr) {
+          return NextResponse.json({ success: false, error: resetErr.message }, { status: 500 });
+        }
 
-      if (resetErr) {
-        return NextResponse.json({ success: false, error: resetErr.message }, { status: 500 });
-      }
+        // 3. Update public.profiles set first_login = false, password_changed_at = now()
+        const { error: profErr } = await supabase!.from('profiles').update({
+          first_login: false,
+          password_changed_at: new Date().toISOString()
+        }).eq('id', sessionUser.id);
 
-      // 3. Update public.profiles set first_login = false, password_changed_at = now()
-      const { error: profErr } = await supabase!.from('profiles').update({
-        first_login: false,
-        password_changed_at: new Date().toISOString()
-      }).eq('id', sessionUser.id);
-
-      if (profErr) {
-        console.warn('Could not update profile fields:', profErr);
+        if (profErr) {
+          console.warn('Could not update profile fields:', profErr);
+        }
       }
     } else {
-      // Fallback local mode
+      localMode = true;
+    }
+
+    if (localMode) {
       const db = getLocalDb();
-      const localUser = db.users.find(u => u.id === sessionUser.id);
+      const localUser = db.users.find(u => u.id === sessionUser.id || u.email.toLowerCase() === sessionUser.email.toLowerCase());
       if (!localUser) {
         return NextResponse.json({ success: false, error: 'User record not found.' }, { status: 404 });
       }
