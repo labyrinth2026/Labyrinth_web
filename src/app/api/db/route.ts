@@ -99,11 +99,16 @@ export async function POST(req: NextRequest) {
           linkedin: u.linkedin || null
         }));
 
-        // 3. Core Committee: has committee_id, and is NOT faculty/mentor
+        // 3. Core Committee: has committee_id, and is NOT faculty/mentor/vertical-head
         const coreCommittee = roles.filter(u => 
           (u.committee_id || u.committeeId) && 
           !facultyCoordinators.some(f => f.id === u.id) &&
-          !mentors.some(m => m.id === u.id)
+          !mentors.some(m => m.id === u.id) &&
+          !(
+            u.designation && 
+            u.designation.toLowerCase().includes('head') && 
+            !u.designation.toLowerCase().includes('sub')
+          )
         ).map(u => {
           const cId = u.committee_id || u.committeeId;
           const commName = getCommitteeName(cId);
