@@ -31,31 +31,39 @@ const TeamPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
     const loadData = async () => {
       setLoading(true);
       try {
-        const teamResult: any = await fetchFromSheet('getTeam');
-        if (teamResult && !Array.isArray(teamResult)) {
-          setTeamData({
-            facultyCoordinators: teamResult.facultyCoordinators || [],
-            mentors: teamResult.mentors || [],
-            coreCommittee: teamResult.coreCommittee || [],
-            verticalHeads: teamResult.verticalHeads || [],
-            subHeads: teamResult.subHeads || []
-          });
-        }
-        
-        const verticalsResult: any = await fetchFromSheet('getVerticals');
-        if (Array.isArray(verticalsResult)) {
-          setVerticalsData(verticalsResult);
+        const [teamResult, verticalsResult]: any[] = await Promise.all([
+          fetchFromSheet('getTeam').catch(() => null),
+          fetchFromSheet('getVerticals').catch(() => [])
+        ]);
+
+        if (isMounted) {
+          if (teamResult && !Array.isArray(teamResult)) {
+            setTeamData({
+              facultyCoordinators: teamResult.facultyCoordinators || [],
+              mentors: teamResult.mentors || [],
+              coreCommittee: teamResult.coreCommittee || [],
+              verticalHeads: teamResult.verticalHeads || [],
+              subHeads: teamResult.subHeads || []
+            });
+          }
+          if (Array.isArray(verticalsResult)) {
+            setVerticalsData(verticalsResult);
+          }
         }
       } catch (err) {
-        console.error(err);
+        console.error("TeamPage loadData error:", err);
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
     loadData();
+    return () => { isMounted = false; };
   }, []);
 
   const filterMembers = (members: any[] = []) => {

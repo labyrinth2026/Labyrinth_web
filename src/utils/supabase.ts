@@ -37,31 +37,9 @@ export const isSupabaseConfigured = (): boolean => {
   );
 };
 
-// Custom fetch wrapper with a generous 15-second timeout
-const fetchWithTimeout = async (url: string | URL | Request, options?: RequestInit): Promise<Response> => {
-  const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), 15000);
-  try {
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal
-    });
-    clearTimeout(id);
-    return response;
-  } catch (error) {
-    clearTimeout(id);
-    console.warn("[Supabase Client] Network error or timeout:", error);
-    throw error;
-  }
-};
-
 // Client for standard browser or user operations
 export const supabase = isSupabaseConfigured()
-  ? createClient(supabaseUrl, supabaseAnonKey, {
-      global: {
-        fetch: fetchWithTimeout
-      }
-    })
+  ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
 
 // Admin Client (Service Role) for administrative database & auth operations
@@ -71,9 +49,6 @@ export const getSupabaseAdmin = () => {
       auth: {
         autoRefreshToken: false,
         persistSession: false
-      },
-      global: {
-        fetch: fetchWithTimeout
       }
     });
   }
