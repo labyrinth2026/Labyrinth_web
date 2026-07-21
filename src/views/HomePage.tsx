@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronRight, ChevronLeft, ArrowRight, Brain, Gamepad2, Code2, Shield, Users, Sparkles, Layers, CalendarCheck, MessageCircle } from 'lucide-react';
+import { ChevronRight, ChevronLeft, ArrowRight, Brain, Gamepad2, Code2, Shield, Users, Sparkles, Layers, CalendarCheck, MessageCircle, HeartPulse, BookOpen, TrendingUp, Cpu, Scale, Handshake } from 'lucide-react';
 import Image from 'next/image';
 import PageWrapper from '../components/layout/PageWrapper';
 import Button from '../components/ui/Button';
@@ -360,7 +360,7 @@ const HomePage: React.FC = () => {
                           transition={{ duration: 0.3 }}
                           className="absolute inset-0"
                         >
-                          <div className="w-full h-full flex flex-col justify-end p-8 md:p-12 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent rounded-2xl">
+                          <Link href="/events" className="w-full h-full flex flex-col justify-end p-8 md:p-12 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent rounded-2xl group/slide">
                             <div className="flex gap-2.5 mb-3">
                               <span className="px-2.5 py-0.5 rounded-full bg-[#CD0000] text-white text-[9px] font-bold uppercase tracking-wider">
                                 {featuredEvents[currentSlide].category}
@@ -369,7 +369,7 @@ const HomePage: React.FC = () => {
                                 {new Date(featuredEvents[currentSlide].date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                               </span>
                             </div>
-                            <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2 leading-tight tracking-tight">
+                            <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2 leading-tight tracking-tight group-hover/slide:text-[#CD0000] transition-colors">
                               {featuredEvents[currentSlide].title}
                             </h3>
                             <p className="text-slate-300 text-xs md:text-sm mb-5 max-w-2xl line-clamp-2 leading-relaxed">
@@ -378,7 +378,7 @@ const HomePage: React.FC = () => {
                             <div>
                               <Button variant="primary" size="sm" href="/events">Register Now</Button>
                             </div>
-                          </div>
+                          </Link>
                         </motion.div>
                       </AnimatePresence>
                     </div>
@@ -480,7 +480,96 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
+        {/* ── SDGs Supported by Labyrinth ── */}
+        <section className="py-24 bg-white border-t border-slate-100">
+          <div className="container mx-auto px-6 max-w-7xl">
+            <SectionHeading title="SDGs Supported by Labyrinth" subtitle="Global Impact" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <ScrollReveal stagger={0.07}>
+                {[
+                  {
+                    number: 3,
+                    title: 'Good Health & Well-being',
+                    color: '#4C9F38',
+                    hoverBg: 'group-hover:!bg-[#4C9F38]',
+                    desc: 'Promoting mental health awareness, ergonomic computing, and wellness through tech-driven community programs.',
+                    icon: HeartPulse
+                  },
+                  {
+                    number: 4,
+                    title: 'Quality Education',
+                    color: '#C5192D',
+                    hoverBg: 'group-hover:!bg-[#C5192D]',
+                    desc: 'Peer education sessions, workshops, and skill-building bootcamps making quality CS education accessible to all.',
+                    icon: BookOpen
+                  },
+                  {
+                    number: 8,
+                    title: 'Decent Work & Economic Growth',
+                    color: '#A21942',
+                    hoverBg: 'group-hover:!bg-[#A21942]',
+                    desc: 'Resume building workshops, career readiness sessions, and incubation partnerships preparing students for the workforce.',
+                    icon: TrendingUp
+                  },
+                  {
+                    number: 9,
+                    title: 'Industry, Innovation & Infrastructure',
+                    color: '#FD6925',
+                    hoverBg: 'group-hover:!bg-[#FD6925]',
+                    desc: 'Hackathons, innovation pitches, and R&D projects building the next generation of tech infrastructure.',
+                    icon: Cpu
+                  },
+                  {
+                    number: 16,
+                    title: 'Peace, Justice & Strong Institutions',
+                    color: '#00689D',
+                    hoverBg: 'group-hover:!bg-[#00689D]',
+                    desc: 'Constitution Day events and digital citizenship awareness fostering responsible use of technology.',
+                    icon: Scale
+                  },
+                  {
+                    number: 17,
+                    title: 'Partnerships for the Goals',
+                    color: '#19486A',
+                    hoverBg: 'group-hover:!bg-[#19486A]',
+                    desc: 'Collaborations with THWS, CHRIST Incubation Centre, and community outreach programs for shared impact.',
+                    icon: Handshake
+                  },
+                ].map((sdg) => {
+                  const Icon = sdg.icon;
+                  return (
+                    <div
+                      key={sdg.number}
+                      className="group bg-white border border-slate-200/80 rounded-2xl p-6 hover:scale-[1.025] hover:-translate-y-2 hover:shadow-lg transition-all duration-300 relative overflow-hidden"
+                    >
+                      {/* Accent top bar */}
+                      <div className="absolute top-0 left-0 right-0 h-1 transition-all duration-300" style={{ backgroundColor: sdg.color }} />
 
+                      <div className="flex items-start gap-4">
+                        <div
+                          className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${sdg.hoverBg} group-hover:!text-white`}
+                          style={{
+                            backgroundColor: `${sdg.color}15`,
+                            color: sdg.color
+                          }}
+                        >
+                          <Icon size={18} />
+                        </div>
+                        <div className="min-w-0">
+                          <h3 className="font-bold text-slate-800 text-sm mb-1.5 leading-tight group-hover:text-slate-900 transition-colors">
+                            SDG {sdg.number}
+                          </h3>
+                          <p className="text-xs font-semibold mb-2" style={{ color: sdg.color }}>{sdg.title}</p>
+                          <p className="text-xs text-slate-500 leading-relaxed">{sdg.desc}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </ScrollReveal>
+            </div>
+          </div>
+        </section>
 
         {/* ── CTA Banner ── */}
         <section id="contact" className="py-24 bg-white border-t border-slate-100">

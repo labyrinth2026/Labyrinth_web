@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronRight, ChevronLeft, MapPin, Calendar } from 'lucide-react';
+import { ChevronRight, ChevronLeft, MapPin, Calendar, X } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 import EventCard from '../components/ui/EventCard';
 import SearchFilter from '../components/ui/SearchFilter';
 import Button from '../components/ui/Button';
+import SectionHeading from '../components/ui/SectionHeading';
 import ScrollReveal from '../components/ui/ScrollReveal';
 
 import { fetchFromSheet } from '../services/api';
+import pastEventsData from '../data/pastEvents.json';
 
 const EventsPage: React.FC = () => {
   const [filter, setFilter] = useState('all');
@@ -18,12 +20,54 @@ const EventsPage: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [eventsData, setEventsData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedPoster, setSelectedPoster] = useState<string | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const data: any = await fetchFromSheet('getEvents');
-        if (Array.isArray(data)) setEventsData(data);
+        const dbEvents = Array.isArray(data) ? data : [];
+        
+        // Map pastEventsData to match the EventType structure
+        const mappedPastEvents = pastEventsData.map((e: any) => ({
+          id: e.id,
+          title: e.title,
+          description: e.summary,
+          date: e.date,
+          category: e.category,
+          status: 'past' as const,
+          location: e.location,
+          image: e.poster || null,
+          vertical: '',
+          featured: false
+        }));
+
+        // Combine and deduplicate by title, preferring the one with a poster image
+        const combined = [...dbEvents, ...mappedPastEvents];
+        const uniqueEvents: any[] = [];
+        const seenTitles = new Set();
+        
+        combined.forEach(event => {
+          const normTitle = (event.title || '')
+            .toLowerCase()
+            .replace(/[\u2013\u2014]/g, '-') // Normalize en-dashes/em-dashes to hyphens
+            .replace(/\s+/g, ' ')
+            .trim();
+          
+          if (!seenTitles.has(normTitle)) {
+            seenTitles.add(normTitle);
+            uniqueEvents.push(event);
+          } else {
+            const idx = uniqueEvents.findIndex(e => 
+              (e.title || '').toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim() === normTitle
+            );
+            if (idx !== -1 && !uniqueEvents[idx].image && event.image) {
+              uniqueEvents[idx] = event; // Swap with the one containing an image
+            }
+          }
+        });
+
+        setEventsData(uniqueEvents);
       } catch (err) {
         console.error(err);
       }
@@ -237,7 +281,11 @@ const EventsPage: React.FC = () => {
               <div key="grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <ScrollReveal key={`${filter}-${categoryFilter}-${search}`} stagger={0.06}>
                   {filteredEvents.map(event => (
-                    <EventCard key={event.id} event={event as any} />
+                    <EventCard 
+                      key={event.id} 
+                      event={event as any} 
+                      onPosterClick={setSelectedPoster} 
+                    />
                   ))}
                 </ScrollReveal>
               </div>
@@ -255,6 +303,42 @@ const EventsPage: React.FC = () => {
           </AnimatePresence>
         </div>
       </section>
+
+      {/* Lightbox / Popup Modal for Poster Images */}
+      <AnimatePresence>
+        {selectedPoster && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-slate-950/40 backdrop-blur-xs"
+            onClick={() => setSelectedPoster(null)}
+          >
+            <button
+              className="absolute top-5 right-5 text-slate-500 hover:text-slate-800 p-2.5 bg-white rounded-full transition-colors z-55 shadow-xs border border-slate-200/60"
+              onClick={(e) => { e.stopPropagation(); setSelectedPoster(null); }}
+              title="Close popup"
+            >
+              <X size={18} />
+            </button>
+
+            <motion.div
+              initial={{ scale: 0.97, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.97, opacity: 0 }}
+              transition={{ type: 'spring', damping: 30, stiffness: 400 }}
+              className="relative max-w-[90vw] max-h-[85vh] rounded-3xl overflow-hidden shadow-2xl flex items-center justify-center bg-transparent"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img 
+                src={selectedPoster} 
+                alt="Event Poster" 
+                className="max-w-full max-h-[85vh] object-contain rounded-3xl" 
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </PageWrapper>
   );
 };

@@ -90,10 +90,6 @@ const Navbar: React.FC = () => {
     if (pathname === '/') {
       let targetId = '';
       if (path === '/') targetId = '#hero';
-      else if (path === '/verticals') targetId = '#verticals';
-      else if (path === '/events') targetId = '#events';
-      else if (path === '/team') targetId = '#team';
-      else if (path === '/contact') targetId = '#contact';
 
       if (targetId) {
         const el = document.querySelector(targetId) as HTMLElement;

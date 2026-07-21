@@ -1214,28 +1214,6 @@
       "committee_id": null,
       "vertical_id": "ab000000-0000-0000-0000-000000000000",
       "createdAt": "2026-07-02T06:52:31.548Z"
-    },
-    {
-      "id": "e0000000-0000-0000-0000-000000000002",
-      "title": "Club Induction & Orientation",
-      "description": "Welcoming incoming computer science students to Labyrinth Club and introducing vertically structured activities.",
-      "date": "2026-07-20",
-      "time": "14:00:00",
-      "location": "Main Auditorium, Central Campus",
-      "bannerUrl": "/gallery/inauguration_audience.webp",
-      "committee_id": null,
-      "vertical_id": null,
-      "createdAt": "2026-07-02T06:52:31.548Z"
-    },
-    {
-      "id": "evt-1783166520185",
-      "title": "test",
-      "date": "2026-07-07T00:00:00.000Z",
-      "status": "completed",
-      "description": "sdasfx",
-      "banner": "",
-      "type": "tech",
-      "createdBy": "u-suryachalam"
     }
   ],
   "announcements": [

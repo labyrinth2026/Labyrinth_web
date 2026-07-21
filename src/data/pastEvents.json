@@ -1,0 +1,146 @@
+[
+  {
+    "id": "pe-1",
+    "title": "THWS–Labyrinth Media Team Collaboration",
+    "summary": "Inaugural collaboration with THWS media students featuring chief guests Dr Pronab Mohanty, IPS and Dr Manoj Kashyap.",
+    "date": "2025-07-21",
+    "category": "social",
+    "location": "Christ University Campus",
+    "poster": "/events/cellImage_0_0.jpg"
+  },
+  {
+    "id": "pe-2",
+    "title": "Peer Session Series – 1",
+    "summary": "First peer education session conducted by Ruchak Khatri (5BCA A) on fundamentals of programming.",
+    "date": "2025-09-03",
+    "category": "workshop",
+    "location": "CS Lab, Block III",
+    "poster": "/events/cellImage_0_1.jpg"
+  },
+  {
+    "id": "pe-3",
+    "title": "InnoPitch",
+    "summary": "Startup pitch competition in collaboration with CHRIST Incubation Centre — students pitched innovative business ideas.",
+    "date": "2025-11-04",
+    "category": "competition",
+    "location": "Central Auditorium",
+    "poster": "/events/cellImage_0_2.jpg"
+  },
+  {
+    "id": "pe-4",
+    "title": "Peer Session Series – 2",
+    "summary": "Peer session led by Chandresh Bisht (4BScCM) and Krupa M (4BScCM) covering web development essentials.",
+    "date": "2025-11-12",
+    "category": "workshop",
+    "location": "CS Lab, Block III",
+    "poster": "/events/cellImage_0_3.jpg"
+  },
+  {
+    "id": "pe-5",
+    "title": "Peer Session Series – 3",
+    "summary": "Advanced AI/ML session by Nejiya K S (2MSc AIML) exploring neural networks and deep learning concepts.",
+    "date": "2025-11-15",
+    "category": "workshop",
+    "location": "CS Lab, Block III",
+    "poster": "/events/cellImage_0_4.jpg"
+  },
+  {
+    "id": "pe-6",
+    "title": "Community Outreach Program",
+    "summary": "Outreach session at Franciscan Institute High School, Thavarakare — digital literacy workshop for school students.",
+    "date": "2025-11-10",
+    "category": "social",
+    "location": "Franciscan Institute High School, Thavarakare",
+    "poster": "/events/cellImage_0_5.jpg"
+  },
+  {
+    "id": "pe-7",
+    "title": "THWS–Labyrinth Media Collaboration – II",
+    "summary": "Second collaboration between THWS media students and the Labyrinth media team for content creation workshop.",
+    "date": "2025-11-25",
+    "category": "workshop",
+    "location": "Christ University Campus",
+    "poster": "/events/cellImage_0_6.jpg"
+  },
+  {
+    "id": "pe-8",
+    "title": "Constitution Day Celebration",
+    "summary": "Special event to mark Constitution Day — discussions on civic responsibility and digital citizenship.",
+    "date": "2025-11-26",
+    "category": "social",
+    "location": "Main Auditorium",
+    "poster": "/events/cellImage_0_7.jpg"
+  },
+  {
+    "id": "pe-9",
+    "title": "Resume Building Workshop – 1",
+    "summary": "Professional resume workshop led by Md Kamran, Praygya Jain and Utkarsh Thakur (6BScCS).",
+    "date": "2025-11-26",
+    "category": "workshop",
+    "location": "CS Lab, Block III",
+    "poster": "/events/cellImage_0_8.jpg"
+  },
+  {
+    "id": "pe-10",
+    "title": "Resume Building Workshop – 2",
+    "summary": "Follow-up resume workshop by KS Shreya and Anoop Rajesh (6BScCM) with hands-on portfolio reviews.",
+    "date": "2025-11-26",
+    "category": "workshop",
+    "location": "CS Lab, Block III",
+    "poster": "/events/cellImage_0_9.jpg"
+  },
+  {
+    "id": "pe-11",
+    "title": "World Computer Literacy Day",
+    "summary": "Awareness event featuring presentations on digital literacy and responsible tech use by CS students.",
+    "date": "2025-12-03",
+    "category": "social",
+    "location": "Central Block Seminar Hall",
+    "poster": "/events/cellImage_0_10.jpg"
+  },
+  {
+    "id": "pe-12",
+    "title": "Peer Session Series – 4 (Session A)",
+    "summary": "Hands-on session by Utkarsh Thakur (6BScCS) on Git, GitHub, and open source contribution.",
+    "date": "2026-01-25",
+    "category": "workshop",
+    "location": "CS Lab, Block III",
+    "poster": "/events/cellImage_0_11.jpg"
+  },
+  {
+    "id": "pe-13",
+    "title": "Peer Session Series – 4 (Session B)",
+    "summary": "Deep dive into data structures by Sherly Lance H (4BScCM) with problem-solving exercises.",
+    "date": "2026-01-28",
+    "category": "workshop",
+    "location": "CS Lab, Block III",
+    "poster": "/events/cellImage_0_12.jpg"
+  },
+  {
+    "id": "pe-14",
+    "title": "Peer Session Series – 5 (Session A)",
+    "summary": "Session by S Keerthana (4BScCS) covering database fundamentals and SQL query patterns.",
+    "date": "2026-01-31",
+    "category": "workshop",
+    "location": "CS Lab, Block III",
+    "poster": "/events/cellImage_0_13.jpg"
+  },
+  {
+    "id": "pe-15",
+    "title": "Labyrinth FieldOps – Sports Tournament",
+    "summary": "Week-long inter-departmental sports tournament organized by Labyrinth from 8th to 15th February.",
+    "date": "2026-02-08",
+    "category": "social",
+    "location": "Christ University Sports Ground",
+    "poster": "/events/cellImage_0_14.jpg"
+  },
+  {
+    "id": "pe-16",
+    "title": "Peer Session Series – 5 (Session B)",
+    "summary": "Cloud computing fundamentals presented by M Ashica and Pavitra M (4BScCM).",
+    "date": "2026-02-20",
+    "category": "workshop",
+    "location": "CS Lab, Block III",
+    "poster": "/events/cellImage_0_15.jpg"
+  }
+]
