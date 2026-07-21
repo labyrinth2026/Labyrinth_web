@@ -152,7 +152,7 @@ export default function EventsManager() {
               <button onClick={() => setShowModal(false)} className="text-[#8c97a8] hover:text-[#CD0000]"><X size={18} /></button>
             </div>
             
-            <div className="p-5 overflow-y-auto space-y-4">
+            <div className="p-5 overflow-y-auto space-y-4 flex-1 min-h-0">
               <div>
                 <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Event Title *</label>
                 <input type="text" value={editingItem.title || ''} onChange={e => setEditingItem({ ...editingItem, title: e.target.value })} className={inputClass} placeholder="Event name..." />

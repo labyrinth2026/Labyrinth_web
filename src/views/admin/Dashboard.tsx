@@ -1,17 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Activity, Users, Calendar, FileText, BookOpen, Shield, ArrowRight, Download } from 'lucide-react';
 import Link from 'next/link';
+import { fetchFromSheet } from '@/services/api';
 
 const Dashboard: React.FC = () => {
   const { user, can } = useAuth();
-
   const firstName = user?.name.split(' ')[0] || 'Admin';
 
+  const [totalMembers, setTotalMembers] = useState<number | null>(null);
+  const [upcomingEvents, setUpcomingEvents] = useState<number | null>(null);
+  const [newRegistrations, setNewRegistrations] = useState<number | null>(null);
+
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const [roles, events, regs] = await Promise.all([
+          fetchFromSheet<any[]>('getRoles'),
+          fetchFromSheet<any[]>('getEvents'),
+          fetchFromSheet<any[]>('getJoinRegistrations'),
+        ]);
+
+        const activeCount = Array.isArray(roles)
+          ? roles.filter((u: any) => u.status === 'active').length
+          : 0;
+        setTotalMembers(activeCount);
+
+        const upcomingCount = Array.isArray(events)
+          ? events.filter((e: any) => e.status === 'upcoming').length
+          : 0;
+        setUpcomingEvents(upcomingCount);
+
+        const pendingCount = Array.isArray(regs)
+          ? regs.filter((r: any) => r.status === 'pending').length
+          : 0;
+        setNewRegistrations(pendingCount);
+      } catch (err) {
+        console.error('Dashboard stats load error:', err);
+        setTotalMembers(0);
+        setUpcomingEvents(0);
+        setNewRegistrations(0);
+      }
+    };
+
+    loadStats();
+  }, []);
+
+  const fmt = (val: number | null) => (val === null ? '…' : val.toString());
+
   const stats = [
-    { label: 'Total Members', value: '142', icon: Users, color: '#CD0000', bg: 'rgba(205, 0, 0, 0.03)' },
-    { label: 'Upcoming Events', value: '3', icon: Calendar, color: '#16a34a', bg: '#F0FDF4' },
-    { label: 'New Registrations', value: '24', icon: Activity, color: '#7c3aed', bg: '#F5F3FF' },
+    { label: 'Total Members', value: fmt(totalMembers), icon: Users, color: '#CD0000', bg: 'rgba(205, 0, 0, 0.03)' },
+    { label: 'Upcoming Events', value: fmt(upcomingEvents), icon: Calendar, color: '#16a34a', bg: '#F0FDF4' },
+    { label: 'New Registrations', value: fmt(newRegistrations), icon: Activity, color: '#7c3aed', bg: '#F5F3FF' },
   ];
 
   const quickActions = [

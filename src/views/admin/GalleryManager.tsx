@@ -28,15 +28,15 @@ const GalleryManager: React.FC = () => {
   const [uploadPreview, setUploadPreview] = useState<string | null>(null);
 
   // ── Load ────────────────────────────────────────────────────────────────────
-  const loadGallery = async () => {
-    setIsLoading(true);
+  const loadGallery = async (silent = false) => {
+    if (!silent) setIsLoading(true);
     try {
       const data: any = await fetchFromSheet('getGallery');
       if (Array.isArray(data)) setGalleryItems(data);
     } catch (error) {
       console.error('Failed to load gallery:', error);
     } finally {
-      setIsLoading(false);
+      if (!silent) setIsLoading(false);
     }
   };
 
@@ -132,7 +132,7 @@ const GalleryManager: React.FC = () => {
         await fetchFromSheet('addGalleryImage', { data: editingItem });
       }
       setShowModal(false);
-      await loadGallery();
+      await loadGallery(true);
     } catch (e) {
       alert('Failed to save gallery item.');
     } finally {
@@ -141,11 +141,15 @@ const GalleryManager: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
+    const previousItems = galleryItems;
+    // Optimistic delete to prevent layout shift and scroll jump
+    setGalleryItems(prev => prev.filter(g => g.id !== id));
     try {
       await fetchFromSheet('deleteGalleryImage', { id });
-      await loadGallery();
+      await loadGallery(true);
     } catch {
       alert('Failed to delete gallery item.');
+      setGalleryItems(previousItems); // Rollback
     } finally {
       setDeleteConfirmId(null);
     }

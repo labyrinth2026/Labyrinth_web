@@ -14,7 +14,6 @@
       "department": "Department of Computer Science",
       "regNo": "2540146",
       "class": "3BScCM",
-      "committeeId": "cc-karline",
       "committee_id": "cc-karline",
       "verticalId": "v-devzen",
       "vertical_id": "v-devzen",
@@ -38,7 +37,7 @@
       "verticalId": "v-devzen",
       "vertical_id": "v-devzen",
       "createdAt": "2026-07-20T15:00:58.060Z",
-      "lastLogin": "2026-07-21T01:28:08.753Z"
+      "lastLogin": "2026-07-21T01:37:25.585Z"
     },
     {
       "id": "u-krupa-m",
@@ -437,15 +436,6 @@
       "vertical_id": "v-ai-hub"
     },
     {
-      "id": "cc-karline",
-      "name": "Karline",
-      "description": "Karline Core Committee",
-      "icon": "Users",
-      "createdAt": "2026-07-20T15:00:58.060Z",
-      "verticalId": "v-devzen",
-      "vertical_id": "v-devzen"
-    },
-    {
       "id": "cc-neo",
       "name": "Neo",
       "description": "Neo Core Committee",
@@ -687,6 +677,573 @@
   "resources": [],
   "tasks": [],
   "activityLogs": [
+    {
+      "id": "log-1784597817814",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-125",
+      "timestamp": "2026-07-21T01:36:57.814Z"
+    },
+    {
+      "id": "log-1784597810244",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-138",
+      "timestamp": "2026-07-21T01:36:50.244Z"
+    },
+    {
+      "id": "log-1784597808034",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-136",
+      "timestamp": "2026-07-21T01:36:48.034Z"
+    },
+    {
+      "id": "log-1784597805809",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-133",
+      "timestamp": "2026-07-21T01:36:45.809Z"
+    },
+    {
+      "id": "log-1784597803545",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-132",
+      "timestamp": "2026-07-21T01:36:43.545Z"
+    },
+    {
+      "id": "log-1784597800617",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-130",
+      "timestamp": "2026-07-21T01:36:40.617Z"
+    },
+    {
+      "id": "log-1784597799350",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-131",
+      "timestamp": "2026-07-21T01:36:39.350Z"
+    },
+    {
+      "id": "log-1784597796912",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-137",
+      "timestamp": "2026-07-21T01:36:36.912Z"
+    },
+    {
+      "id": "log-1784597792861",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-134",
+      "timestamp": "2026-07-21T01:36:32.861Z"
+    },
+    {
+      "id": "log-1784597790427",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-135",
+      "timestamp": "2026-07-21T01:36:30.427Z"
+    },
+    {
+      "id": "log-1784597785735",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-141",
+      "timestamp": "2026-07-21T01:36:25.735Z"
+    },
+    {
+      "id": "log-1784597783637",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-142",
+      "timestamp": "2026-07-21T01:36:23.637Z"
+    },
+    {
+      "id": "log-1784597780945",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-140",
+      "timestamp": "2026-07-21T01:36:20.945Z"
+    },
+    {
+      "id": "log-1784597778229",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-139",
+      "timestamp": "2026-07-21T01:36:18.229Z"
+    },
+    {
+      "id": "log-1784597775325",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-144",
+      "timestamp": "2026-07-21T01:36:15.325Z"
+    },
+    {
+      "id": "log-1784597773821",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-149",
+      "timestamp": "2026-07-21T01:36:13.821Z"
+    },
+    {
+      "id": "log-1784597770269",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-147",
+      "timestamp": "2026-07-21T01:36:10.269Z"
+    },
+    {
+      "id": "log-1784597768317",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-146",
+      "timestamp": "2026-07-21T01:36:08.317Z"
+    },
+    {
+      "id": "log-1784597765196",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-145",
+      "timestamp": "2026-07-21T01:36:05.196Z"
+    },
+    {
+      "id": "log-1784597762639",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-152",
+      "timestamp": "2026-07-21T01:36:02.639Z"
+    },
+    {
+      "id": "log-1784597759503",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-155",
+      "timestamp": "2026-07-21T01:35:59.503Z"
+    },
+    {
+      "id": "log-1784597757467",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-158",
+      "timestamp": "2026-07-21T01:35:57.467Z"
+    },
+    {
+      "id": "log-1784597755485",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-157",
+      "timestamp": "2026-07-21T01:35:55.485Z"
+    },
+    {
+      "id": "log-1784597753610",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-156",
+      "timestamp": "2026-07-21T01:35:53.610Z"
+    },
+    {
+      "id": "log-1784597749279",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-159",
+      "timestamp": "2026-07-21T01:35:49.279Z"
+    },
+    {
+      "id": "log-1784597746995",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-160",
+      "timestamp": "2026-07-21T01:35:46.995Z"
+    },
+    {
+      "id": "log-1784597740845",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-106",
+      "timestamp": "2026-07-21T01:35:40.845Z"
+    },
+    {
+      "id": "log-1784597738351",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-108",
+      "timestamp": "2026-07-21T01:35:38.351Z"
+    },
+    {
+      "id": "log-1784597734278",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-107",
+      "timestamp": "2026-07-21T01:35:34.278Z"
+    },
+    {
+      "id": "log-1784597731514",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-111",
+      "timestamp": "2026-07-21T01:35:31.514Z"
+    },
+    {
+      "id": "log-1784597729911",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-112",
+      "timestamp": "2026-07-21T01:35:29.911Z"
+    },
+    {
+      "id": "log-1784597728723",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-113",
+      "timestamp": "2026-07-21T01:35:28.723Z"
+    },
+    {
+      "id": "log-1784597727456",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-114",
+      "timestamp": "2026-07-21T01:35:27.456Z"
+    },
+    {
+      "id": "log-1784597726314",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-115",
+      "timestamp": "2026-07-21T01:35:26.314Z"
+    },
+    {
+      "id": "log-1784597724493",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-110",
+      "timestamp": "2026-07-21T01:35:24.493Z"
+    },
+    {
+      "id": "log-1784597723133",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-109",
+      "timestamp": "2026-07-21T01:35:23.133Z"
+    },
+    {
+      "id": "log-1784597719638",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-103",
+      "timestamp": "2026-07-21T01:35:19.638Z"
+    },
+    {
+      "id": "log-1784597718343",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-102",
+      "timestamp": "2026-07-21T01:35:18.343Z"
+    },
+    {
+      "id": "log-1784597716788",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-101",
+      "timestamp": "2026-07-21T01:35:16.788Z"
+    },
+    {
+      "id": "log-1784597713377",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-100",
+      "timestamp": "2026-07-21T01:35:13.377Z"
+    },
+    {
+      "id": "log-1784597710846",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-99",
+      "timestamp": "2026-07-21T01:35:10.846Z"
+    },
+    {
+      "id": "log-1784597707157",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-98",
+      "timestamp": "2026-07-21T01:35:07.157Z"
+    },
+    {
+      "id": "log-1784597705506",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-97",
+      "timestamp": "2026-07-21T01:35:05.506Z"
+    },
+    {
+      "id": "log-1784597703618",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-95",
+      "timestamp": "2026-07-21T01:35:03.618Z"
+    },
+    {
+      "id": "log-1784597702381",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-94",
+      "timestamp": "2026-07-21T01:35:02.381Z"
+    },
+    {
+      "id": "log-1784597701206",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-93",
+      "timestamp": "2026-07-21T01:35:01.206Z"
+    },
+    {
+      "id": "log-1784597700147",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-92",
+      "timestamp": "2026-07-21T01:35:00.147Z"
+    },
+    {
+      "id": "log-1784597699206",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-91",
+      "timestamp": "2026-07-21T01:34:59.206Z"
+    },
+    {
+      "id": "log-1784597695554",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-81",
+      "timestamp": "2026-07-21T01:34:55.554Z"
+    },
+    {
+      "id": "log-1784597693169",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-79",
+      "timestamp": "2026-07-21T01:34:53.169Z"
+    },
+    {
+      "id": "log-1784597690223",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-78",
+      "timestamp": "2026-07-21T01:34:50.223Z"
+    },
+    {
+      "id": "log-1784597684996",
+      "userId": "u-1784558851639",
+      "action": "update_gallery_image",
+      "details": "Updated gallery image ID: g-inaug-82",
+      "timestamp": "2026-07-21T01:34:44.996Z"
+    },
+    {
+      "id": "log-1784597682723",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-90",
+      "timestamp": "2026-07-21T01:34:42.723Z"
+    },
+    {
+      "id": "log-1784597680708",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-89",
+      "timestamp": "2026-07-21T01:34:40.708Z"
+    },
+    {
+      "id": "log-1784597678319",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-88",
+      "timestamp": "2026-07-21T01:34:38.319Z"
+    },
+    {
+      "id": "log-1784597676512",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-86",
+      "timestamp": "2026-07-21T01:34:36.512Z"
+    },
+    {
+      "id": "log-1784597674618",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-85",
+      "timestamp": "2026-07-21T01:34:34.618Z"
+    },
+    {
+      "id": "log-1784597672508",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-84",
+      "timestamp": "2026-07-21T01:34:32.508Z"
+    },
+    {
+      "id": "log-1784597670560",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-83",
+      "timestamp": "2026-07-21T01:34:30.560Z"
+    },
+    {
+      "id": "log-1784597667482",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-71",
+      "timestamp": "2026-07-21T01:34:27.482Z"
+    },
+    {
+      "id": "log-1784597665411",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-77",
+      "timestamp": "2026-07-21T01:34:25.411Z"
+    },
+    {
+      "id": "log-1784597663373",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-76",
+      "timestamp": "2026-07-21T01:34:23.373Z"
+    },
+    {
+      "id": "log-1784597661087",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-75",
+      "timestamp": "2026-07-21T01:34:21.088Z"
+    },
+    {
+      "id": "log-1784597659371",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-74",
+      "timestamp": "2026-07-21T01:34:19.371Z"
+    },
+    {
+      "id": "log-1784597657410",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-73",
+      "timestamp": "2026-07-21T01:34:17.410Z"
+    },
+    {
+      "id": "log-1784597653339",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-65",
+      "timestamp": "2026-07-21T01:34:13.339Z"
+    },
+    {
+      "id": "log-1784597649689",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-66",
+      "timestamp": "2026-07-21T01:34:09.689Z"
+    },
+    {
+      "id": "log-1784597647043",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-67",
+      "timestamp": "2026-07-21T01:34:07.043Z"
+    },
+    {
+      "id": "log-1784597644083",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-64",
+      "timestamp": "2026-07-21T01:34:04.083Z"
+    },
+    {
+      "id": "log-1784597638103",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-56",
+      "timestamp": "2026-07-21T01:33:58.103Z"
+    },
+    {
+      "id": "log-1784597634721",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-58",
+      "timestamp": "2026-07-21T01:33:54.721Z"
+    },
+    {
+      "id": "log-1784597630669",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-51",
+      "timestamp": "2026-07-21T01:33:50.669Z"
+    },
+    {
+      "id": "log-1784597628370",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-50",
+      "timestamp": "2026-07-21T01:33:48.370Z"
+    },
+    {
+      "id": "log-1784597625345",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-49",
+      "timestamp": "2026-07-21T01:33:45.345Z"
+    },
+    {
+      "id": "log-1784597622325",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-47",
+      "timestamp": "2026-07-21T01:33:42.325Z"
+    },
+    {
+      "id": "log-1784597619898",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-42",
+      "timestamp": "2026-07-21T01:33:39.898Z"
+    },
+    {
+      "id": "log-1784597614498",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-40",
+      "timestamp": "2026-07-21T01:33:34.498Z"
+    },
+    {
+      "id": "log-1784597611442",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-29",
+      "timestamp": "2026-07-21T01:33:31.442Z"
+    },
+    {
+      "id": "log-1784597606983",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-22",
+      "timestamp": "2026-07-21T01:33:26.983Z"
+    },
+    {
+      "id": "log-1784597484259",
+      "userId": "u-1784558851639",
+      "action": "delete_committee",
+      "details": "Deleted committee ID cc-karline",
+      "timestamp": "2026-07-21T01:31:24.259Z"
+    },
+    {
+      "id": "log-1784597361647",
+      "userId": "u-1784558851639",
+      "action": "delete_gallery_image",
+      "details": "Deleted gallery image ID: g-inaug-87",
+      "timestamp": "2026-07-21T01:29:21.647Z"
+    },
     {
       "id": "log-1784563692008",
       "userId": "u-1784558851639",
@@ -3348,16 +3905,6 @@
       "rotation": 270
     },
     {
-      "id": "g-inaug-22",
-      "title": "Labyrinth Inauguration #22",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_22.webp",
-      "date": "2025-07-28",
-      "orientation": "portrait",
-      "rotation": 270
-    },
-    {
       "id": "g-inaug-23",
       "title": "Labyrinth Inauguration #23",
       "category": "inauguration",
@@ -3413,16 +3960,6 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_28.webp",
-      "date": "2025-07-28",
-      "orientation": "portrait",
-      "rotation": 270
-    },
-    {
-      "id": "g-inaug-29",
-      "title": "Labyrinth Inauguration #29",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_29.webp",
       "date": "2025-07-28",
       "orientation": "portrait",
       "rotation": 270
@@ -3524,31 +4061,11 @@
       "rotation": 270
     },
     {
-      "id": "g-inaug-40",
-      "title": "Labyrinth Inauguration #40",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_40.webp",
-      "date": "2025-07-28",
-      "orientation": "portrait",
-      "rotation": 270
-    },
-    {
       "id": "g-inaug-41",
       "title": "Labyrinth Inauguration #41",
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_41.webp",
-      "date": "2025-07-28",
-      "orientation": "portrait",
-      "rotation": 270
-    },
-    {
-      "id": "g-inaug-42",
-      "title": "Labyrinth Inauguration #42",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_42.webp",
       "date": "2025-07-28",
       "orientation": "portrait",
       "rotation": 270
@@ -3593,45 +4110,11 @@
       "rotation": 270
     },
     {
-      "id": "g-inaug-47",
-      "title": "Labyrinth Inauguration #47",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_47.webp",
-      "date": "2025-07-28",
-      "orientation": "portrait",
-      "rotation": 270
-    },
-    {
       "id": "g-inaug-48",
       "title": "Labyrinth Inauguration #48",
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_48.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-49",
-      "title": "Labyrinth Inauguration #49",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_49.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-50",
-      "title": "Labyrinth Inauguration #50",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_50.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-51",
-      "title": "Labyrinth Inauguration #51",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_51.webp",
       "date": "2025-07-28"
     },
     {
@@ -3671,31 +4154,11 @@
       "rotation": 270
     },
     {
-      "id": "g-inaug-56",
-      "title": "Labyrinth Inauguration #56",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_56.webp",
-      "date": "2025-07-28",
-      "orientation": "portrait",
-      "rotation": 270
-    },
-    {
       "id": "g-inaug-57",
       "title": "Labyrinth Inauguration #57",
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_57.webp",
-      "date": "2025-07-28",
-      "orientation": "portrait",
-      "rotation": 270
-    },
-    {
-      "id": "g-inaug-58",
-      "title": "Labyrinth Inauguration #58",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_58.webp",
       "date": "2025-07-28",
       "orientation": "portrait",
       "rotation": 270
@@ -3751,42 +4214,6 @@
       "rotation": 270
     },
     {
-      "id": "g-inaug-64",
-      "title": "Labyrinth Inauguration #64",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_64.webp",
-      "date": "2025-07-28",
-      "orientation": "portrait",
-      "rotation": 270
-    },
-    {
-      "id": "g-inaug-65",
-      "title": "Labyrinth Inauguration #65",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_65.webp",
-      "date": "2025-07-28",
-      "orientation": "portrait",
-      "rotation": 270
-    },
-    {
-      "id": "g-inaug-66",
-      "title": "Labyrinth Inauguration #66",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_66.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-67",
-      "title": "Labyrinth Inauguration #67",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_67.webp",
-      "date": "2025-07-28"
-    },
-    {
       "id": "g-inaug-68",
       "title": "Labyrinth Inauguration #68",
       "category": "inauguration",
@@ -3811,74 +4238,14 @@
       "date": "2025-07-28"
     },
     {
-      "id": "g-inaug-71",
-      "title": "Labyrinth Inauguration #71",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_71.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-73",
-      "title": "Labyrinth Inauguration #73",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_73.webp",
-      "date": "2025-07-28",
-      "orientation": "portrait",
-      "rotation": 270
-    },
-    {
-      "id": "g-inaug-74",
-      "title": "Labyrinth Inauguration #74",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_74.webp",
-      "date": "2025-07-28",
-      "orientation": "portrait",
-      "rotation": 270
-    },
-    {
-      "id": "g-inaug-75",
-      "title": "Labyrinth Inauguration #75",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_75.webp",
-      "date": "2025-07-28",
-      "orientation": "portrait",
-      "rotation": 270
-    },
-    {
-      "id": "g-inaug-76",
-      "title": "Labyrinth Inauguration #76",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_76.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-77",
-      "title": "Labyrinth Inauguration #77",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_77.webp",
-      "date": "2025-07-28"
-    },
-    {
       "id": "g-inaug-78",
       "title": "Labyrinth Inauguration #78",
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_78.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-79",
-      "title": "Labyrinth Inauguration #79",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_79.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-80",
@@ -3894,7 +4261,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_81.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-82",
@@ -3902,71 +4271,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_82.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-83",
-      "title": "Labyrinth Inauguration #83",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_83.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-84",
-      "title": "Labyrinth Inauguration #84",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_84.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-85",
-      "title": "Labyrinth Inauguration #85",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_85.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-86",
-      "title": "Labyrinth Inauguration #86",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_86.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-87",
-      "title": "Labyrinth Inauguration #87",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_87.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-88",
-      "title": "Labyrinth Inauguration #88",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_88.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-89",
-      "title": "Labyrinth Inauguration #89",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_89.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-90",
-      "title": "Labyrinth Inauguration #90",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_90.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-91",
@@ -3974,7 +4281,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_91.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-92",
@@ -3982,7 +4291,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_92.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-93",
@@ -3990,7 +4301,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_93.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-94",
@@ -3998,7 +4311,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_94.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-95",
@@ -4006,7 +4321,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_95.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-96",
@@ -4022,7 +4339,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_97.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-98",
@@ -4030,7 +4349,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_98.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-99",
@@ -4038,7 +4359,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_99.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-100",
@@ -4046,7 +4369,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_100.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-101",
@@ -4054,7 +4379,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_101.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-102",
@@ -4062,7 +4389,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_102.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-103",
@@ -4070,7 +4399,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_103.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-104",
@@ -4089,36 +4420,14 @@
       "date": "2025-07-28"
     },
     {
-      "id": "g-inaug-106",
-      "title": "Labyrinth Inauguration #106",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_106.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-107",
-      "title": "Labyrinth Inauguration #107",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_107.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-108",
-      "title": "Labyrinth Inauguration #108",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_108.webp",
-      "date": "2025-07-28"
-    },
-    {
       "id": "g-inaug-109",
       "title": "Labyrinth Inauguration #109",
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_109.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-110",
@@ -4126,7 +4435,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_110.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-111",
@@ -4134,7 +4445,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_111.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-112",
@@ -4142,7 +4455,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_112.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-113",
@@ -4150,7 +4465,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_113.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-114",
@@ -4158,7 +4475,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_114.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-115",
@@ -4166,7 +4485,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_115.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-116",
@@ -4241,14 +4562,6 @@
       "date": "2025-07-28"
     },
     {
-      "id": "g-inaug-125",
-      "title": "Labyrinth Inauguration #125",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_125.webp",
-      "date": "2025-07-28"
-    },
-    {
       "id": "g-inaug-126",
       "title": "Labyrinth Inauguration #126",
       "category": "inauguration",
@@ -4286,7 +4599,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_130.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-131",
@@ -4294,63 +4609,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_131.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-132",
-      "title": "Labyrinth Inauguration #132",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_132.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-133",
-      "title": "Labyrinth Inauguration #133",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_133.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-134",
-      "title": "Labyrinth Inauguration #134",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_134.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-135",
-      "title": "Labyrinth Inauguration #135",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_135.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-136",
-      "title": "Labyrinth Inauguration #136",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_136.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-137",
-      "title": "Labyrinth Inauguration #137",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_137.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-138",
-      "title": "Labyrinth Inauguration #138",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_138.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-139",
@@ -4358,31 +4619,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_139.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-140",
-      "title": "Labyrinth Inauguration #140",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_140.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-141",
-      "title": "Labyrinth Inauguration #141",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_141.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-142",
-      "title": "Labyrinth Inauguration #142",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_142.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-143",
@@ -4398,7 +4637,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_144.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-145",
@@ -4406,23 +4647,9 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_145.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-146",
-      "title": "Labyrinth Inauguration #146",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_146.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-147",
-      "title": "Labyrinth Inauguration #147",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_147.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-inaug-148",
@@ -4430,14 +4657,6 @@
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_148.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-149",
-      "title": "Labyrinth Inauguration #149",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_149.webp",
       "date": "2025-07-28"
     },
     {
@@ -4457,14 +4676,6 @@
       "date": "2025-07-28"
     },
     {
-      "id": "g-inaug-152",
-      "title": "Labyrinth Inauguration #152",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_152.webp",
-      "date": "2025-07-28"
-    },
-    {
       "id": "g-inaug-153",
       "title": "Labyrinth Inauguration #153",
       "category": "inauguration",
@@ -4481,52 +4692,14 @@
       "date": "2025-07-28"
     },
     {
-      "id": "g-inaug-155",
-      "title": "Labyrinth Inauguration #155",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_155.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-156",
-      "title": "Labyrinth Inauguration #156",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_156.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-157",
-      "title": "Labyrinth Inauguration #157",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_157.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-158",
-      "title": "Labyrinth Inauguration #158",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_158.webp",
-      "date": "2025-07-28"
-    },
-    {
-      "id": "g-inaug-159",
-      "title": "Labyrinth Inauguration #159",
-      "category": "inauguration",
-      "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
-      "image": "/gallery/inauguration_all_159.webp",
-      "date": "2025-07-28"
-    },
-    {
       "id": "g-inaug-160",
       "title": "Labyrinth Inauguration #160",
       "category": "inauguration",
       "description": "Inaugural highlights and presentations from the grand opening on July 28, 2025.",
       "image": "/gallery/inauguration_all_160.webp",
-      "date": "2025-07-28"
+      "date": "2025-07-28",
+      "orientation": "portrait",
+      "rotation": 270
     },
     {
       "id": "g-peer-1",
