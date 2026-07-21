@@ -70,7 +70,7 @@
       "role": "MEMBER",
       "status": "active",
       "firstLogin": true,
-      "profilePhoto": "https://ui-avatars.com/api/?name=Advaith+Biju&background=CD0000&color=fff",
+      "profilePhoto": "https://paqpkdipiyvwdneeghin.supabase.co/storage/v1/object/public/gallery/avatars/u-advaith-biju-1784650982823.jpg",
       "designation": "Vertical Head",
       "department": "Department of Computer Science",
       "regNo": "2541605",
@@ -1265,6 +1265,13 @@
       "action": "update_user_details",
       "details": "Updated profile of user u-bhargav-g",
       "timestamp": "2026-07-21T16:30:02.362Z"
+    },
+    {
+      "id": "log-1784650997129",
+      "userId": "u-1784558851639",
+      "action": "update_user_details",
+      "details": "Updated profile of user u-advaith-biju",
+      "timestamp": "2026-07-21T16:23:17.129Z"
     },
     {
       "id": "log-1784650756826",
