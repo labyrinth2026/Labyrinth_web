@@ -108,19 +108,30 @@ export default function MembersManager() {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [uData, rData, cData, vData]: any[] = await Promise.all([
-        fetchFromSheet('getRoles'),
+      // 1. Fetch first page of users (10), registrations, committees, verticals in parallel (renders instantly!)
+      const [uDataPage1, rData, cData, vData]: any[] = await Promise.all([
+        fetchFromSheet('getRoles', { page: 1, limit: 10 }),
         fetchFromSheet('getJoinRegistrations'),
         fetchFromSheet('getCoreCommittees'),
         fetchFromSheet('getVerticals')
       ]);
-      setUsers(uData || []);
+
+      setUsers(uDataPage1 || []);
       setRegistrations(rData || []);
       setCommittees(cData || []);
       setVerticals(vData || []);
+      setLoading(false); // Stop loading skeleton immediately!
+
+      // 2. Fetch the remaining pages/users in the background (lazy load)
+      fetchFromSheet('getRoles').then((allUsers: any) => {
+        if (Array.isArray(allUsers)) {
+          setUsers(allUsers);
+        }
+      }).catch(err => {
+        console.warn('Failed to background load all users:', err);
+      });
     } catch (e) {
       console.error('Failed to load members data', e);
-    } finally {
       setLoading(false);
     }
   };

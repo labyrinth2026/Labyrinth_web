@@ -363,7 +363,14 @@ export async function POST(req: NextRequest) {
 
       // --- SYSTEM ROLES ---
       case 'getRoles': {
+        const { page, limit } = payload || {};
         const roles = await dbGetRoles();
+        if (page && limit) {
+          const startIndex = (page - 1) * limit;
+          const endIndex = startIndex + limit;
+          const paginatedRoles = roles.slice(startIndex, endIndex);
+          return NextResponse.json({ success: true, data: paginatedRoles });
+        }
         return NextResponse.json({ success: true, data: roles });
       }
 
