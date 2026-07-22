@@ -216,7 +216,7 @@ export async function POST(req: NextRequest) {
         const totalVerticals = verticals.length;
         
         const stats = [
-          { label: 'Active Members', value: activeUsersCount.toString(), suffix: '+' },
+          { label: 'Members', value: activeUsersCount.toString(), suffix: '+' },
           { label: 'Upcoming Events', value: upcomingEventsCount.toString(), suffix: '' },
           { label: 'Specialized Domains', value: totalVerticals.toString(), suffix: '' },
           { label: 'Years Active', value: '29', suffix: '+' }

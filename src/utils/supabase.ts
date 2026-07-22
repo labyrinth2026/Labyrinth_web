@@ -36,7 +36,8 @@ export const getSupabaseOffline = (): boolean => {
 export const isSupabaseConfigured = (): boolean => {
   if (
     process.env.FORCE_LOCAL_DB === 'true' || 
-    process.env.NEXT_PUBLIC_FORCE_LOCAL_DB === 'true'
+    process.env.NEXT_PUBLIC_FORCE_LOCAL_DB === 'true' ||
+    isSupabaseOfflineFlag
   ) {
     return false;
   }

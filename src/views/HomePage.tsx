@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronRight, ChevronLeft, ArrowRight, Brain, Gamepad2, Code2, Shield, Users, Sparkles, Layers, CalendarCheck, MessageCircle, HeartPulse, BookOpen, TrendingUp, Cpu, Scale, Handshake } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import Image from 'next/image';
 import PageWrapper from '../components/layout/PageWrapper';
 import Button from '../components/ui/Button';
@@ -29,6 +30,7 @@ const HERO_IMAGES = [
 
 const HomePage: React.FC = () => {
   const [eventsData, setEventsData] = useState<any[]>([]);
+  const [verticalsData, setVerticalsData] = useState<any[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const featuredEvents = eventsData.filter(e => e.featured);
@@ -98,6 +100,11 @@ const HomePage: React.FC = () => {
     fetchFromSheet('getEvents')
       .then((events: any) => { if (Array.isArray(events)) setEventsData(events); })
       .catch(console.error);
+
+    // Load verticals data dynamically
+    fetchFromSheet('getVerticals')
+      .then((verticals: any) => { if (Array.isArray(verticals)) setVerticalsData(verticals); })
+      .catch(console.error);
   }, []);
 
   useEffect(() => {
@@ -111,11 +118,13 @@ const HomePage: React.FC = () => {
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % featuredEvents.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + featuredEvents.length) % featuredEvents.length);
 
-  const verticals = [
-    { name: "AI Creator's Lab", icon: Brain, desc: "Machine Learning & AI" },
-    { name: "CodeCraft", icon: Code2, desc: "Competitive Programming" },
-    { name: "CipherGuard", icon: Shield, desc: "Cybersecurity" },
-    { name: "GameNova", icon: Gamepad2, desc: "Game Development" },
+  // Get up to 4 verticals to display on the home page as a preview.
+  // We specify the new verticals as initial fallbacks.
+  const displayVerticals = verticalsData.length > 0 ? verticalsData.slice(0, 4) : [
+    { name: "AI HUB", icon: "Brain", description: "Explore generative AI, machine learning, and intelligent systems." },
+    { name: "DevZen", icon: "Code2", description: "Full-stack development, open source, and software engineering." },
+    { name: "AutoBot", icon: "Cpu", description: "Robotics, IoT, and embedded systems engineering." },
+    { name: "InsightX", icon: "BarChart3", description: "Data analytics, data science, and visualization." }
   ];
 
   useGSAP(() => {
@@ -320,17 +329,21 @@ const HomePage: React.FC = () => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <ScrollReveal stagger={0.08}>
-                {verticals.map(({ name, icon: Icon, desc }) => (
-                  <Link key={name} href="/verticals" className="block group">
-                    <div className="bg-white border border-slate-200/80 rounded-2xl p-6 hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md hover:shadow-[#CD0000]/[0.02] transition-all duration-300">
-                      <div className="w-10 h-10 rounded-xl bg-[#CD0000]/5 flex items-center justify-center text-[#CD0000] mb-5 group-hover:bg-[#CD0000] group-hover:text-white transition-all duration-300">
-                        <Icon size={18} />
+                {displayVerticals.map((vert) => {
+                  const Icon = (LucideIcons as any)[vert.icon] || LucideIcons.Layers;
+                  const desc = vert.description || vert.desc || "";
+                  return (
+                    <Link key={vert.name} href="/verticals" className="block group">
+                      <div className="bg-white border border-slate-200/80 rounded-2xl p-6 hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md hover:shadow-[#CD0000]/[0.02] transition-all duration-300">
+                        <div className="w-10 h-10 rounded-xl bg-[#CD0000]/5 flex items-center justify-center text-[#CD0000] mb-5 group-hover:bg-[#CD0000] group-hover:text-white transition-all duration-300">
+                          <Icon size={18} />
+                        </div>
+                        <h3 className="font-bold text-slate-800 text-sm mb-1.5 group-hover:text-[#CD0000] transition-colors">{vert.name}</h3>
+                        <p className="text-xs text-slate-500 leading-relaxed">{desc}</p>
                       </div>
-                      <h3 className="font-bold text-slate-800 text-sm mb-1.5 group-hover:text-[#CD0000] transition-colors">{name}</h3>
-                      <p className="text-xs text-slate-500 leading-relaxed">{desc}</p>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  );
+                })}
               </ScrollReveal>
             </div>
           </div>

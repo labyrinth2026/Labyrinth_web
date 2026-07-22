@@ -241,7 +241,7 @@ export async function dbGetUserByEmail(email: string): Promise<any | null> {
 }
 
 export async function dbGetRoles(): Promise<any[]> {
-  if (isSupabaseConfigured()) {
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
     const client = getSupabaseAdmin() || supabase;
     if (client) {
       try {
@@ -275,10 +275,8 @@ export async function dbGetRoles(): Promise<any[]> {
           createdAt: p.created_at
         }));
       } catch (err) {
-      if (isSupabaseConfigured()) throw err;
-
-        console.error('Supabase dbGetRoles failed:', err);
-        throw err;
+        console.error('Supabase dbGetRoles failed, falling back to local DB:', err);
+        setSupabaseOffline(true);
       }
     }
   }
@@ -525,7 +523,7 @@ export async function dbGetVerticals(): Promise<any[]> {
   let users: any[] = [];
   let committees: any[] = [];
 
-  if (isSupabaseConfigured()) {
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
     const client = getSupabaseAdmin() || supabase;
     if (client) {
       try {
@@ -541,10 +539,12 @@ export async function dbGetVerticals(): Promise<any[]> {
         if (cErr) throw cErr;
         committees = cData || [];
       } catch (err) {
-      if (isSupabaseConfigured()) throw err;
-
-        console.error('Supabase dbGetVerticals failed:', err);
-        throw err;
+        console.error('Supabase dbGetVerticals failed, falling back to local DB:', err);
+        setSupabaseOffline(true);
+        const db = getLocalDb();
+        verticals = db.verticals || [];
+        users = db.users || [];
+        committees = db.coreCommittees || [];
       }
     }
   } else {
@@ -627,16 +627,15 @@ export async function dbDeleteVertical(id: string): Promise<void> {
 
 // --- CORE COMMITTEES ---
 export async function dbGetCoreCommittees(): Promise<CoreCommittee[]> {
-  if (isSupabaseConfigured() && supabase) {
+  if (isSupabaseConfigured() && !getSupabaseOffline() && supabase) {
     try {
       const { data, error } = await supabase.from('core_committees').select('*');
       if (error) throw error;
       return data || [];
     } catch (err) {
-      if (isSupabaseConfigured()) throw err;
-
-      console.error("Supabase dbGetCoreCommittees failed:", err);
-      throw err;
+      console.error("Supabase dbGetCoreCommittees failed, falling back to local DB:", err);
+      setSupabaseOffline(true);
+      return getLocalDb().coreCommittees;
     }
   } else {
     return getLocalDb().coreCommittees;
@@ -732,15 +731,12 @@ export async function dbGetAssignments(): Promise<any> {
         }))
       };
     } catch (err) {
-      if (isSupabaseConfigured()) throw err;
-
-      console.error('Supabase dbGetAssignments failed:', err);
-      throw err;
+      console.error('Supabase dbGetAssignments failed, falling back to local DB:', err);
+      setSupabaseOffline(true);
     }
-  } else {
-    const db = getLocalDb();
-    return getLocalAssignments(db);
   }
+  const db = getLocalDb();
+  return getLocalAssignments(db);
 }
 
 
@@ -924,10 +920,9 @@ export async function dbGetEvents(): Promise<Event[]> {
       if (error) throw error;
       rawEvents = data || [];
     } catch (err) {
-      if (isSupabaseConfigured()) throw err;
-
-      console.error('Supabase dbGetEvents failed:', err);
-      throw err;
+      console.error('Supabase dbGetEvents failed, falling back to local DB:', err);
+      setSupabaseOffline(true);
+      rawEvents = getLocalDb().events;
     }
   } else {
     rawEvents = getLocalDb().events;
