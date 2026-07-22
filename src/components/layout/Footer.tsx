@@ -96,9 +96,12 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-slate-800 font-bold mb-5 text-xs uppercase tracking-wider">Explore</h4>
             <ul className="space-y-2">
-              {['AI Creator\'s Lab', 'CodeCraft', 'CipherGuard', 'GameNova', 'BitOps', 'Startovate'].map(v => (
+              {['AI HUB', 'DevZen', 'AutoBot', 'InsightX', 'FieldOps', 'Debate', 'Startovate', 'InterVerse', 'Peer Sessions', 'Research Guidance', 'Design & Media'].map(v => (
                 <li key={v}>
-                  <Link href="/verticals" className="text-slate-500 hover:text-[#CD0000] text-xs font-semibold transition-colors inline-block">
+                  <Link
+                    href="/verticals"
+                    className="text-slate-500 hover:text-[#CD0000] text-xs font-semibold transition-colors inline-block"
+                  >
                     {v}
                   </Link>
                 </li>

@@ -1,82 +1,90 @@
 [
   {
-    "id": "ab000000-0000-0000-0000-000000000000",
-    "name": "AI Creator's Lab",
-    "description": "Where creativity meets intelligence! From building smart chatbots to designing websites, posters, and storytelling tools, this lab is your space to experiment with the magic of generative AI.",
+    "id": "v-ai-hub",
+    "name": "AI HUB",
+    "description": "Where artificial intelligence meets real-world application! From deep learning to generative AI, building smart models and intelligent systems.",
     "category": "tech",
     "icon": "Brain",
     "color": "#3b82f6"
   },
   {
-    "id": "ab000000-0000-0000-0000-000000000002",
-    "name": "GameNova",
-    "description": "For those who live to play and dream to create! GameNova is all about building games, hosting e-sports tournaments, and turning gaming passion into real experiences.",
-    "category": "tech",
-    "icon": "Gamepad2",
-    "color": "#ef4444"
-  },
-  {
-    "id": "ab000000-0000-0000-0000-000000000003",
-    "name": "CodeCraft",
-    "description": "Think. Code. Conquer. CODECRAFT is the arena for competitive programming, hackathons, and problem-solving challenges that sharpen your coding skills.",
+    "id": "v-devzen",
+    "name": "DevZen",
+    "description": "Full-stack web, app development, and software architecture. Master modern frameworks and turn ideas into production-ready software.",
     "category": "tech",
     "icon": "Code2",
     "color": "#10b981"
   },
   {
-    "id": "ab000000-0000-0000-0000-000000000004",
-    "name": "CipherGuard",
-    "description": "Step into the digital battlefield! CIPHERGUARD trains you in ethical hacking, system security, and CTFs to defend and outsmart cyber threats.",
+    "id": "v-autobot",
+    "name": "AutoBot",
+    "description": "Robotics, IoT, and hardware automation. Designing smart systems, embedded circuits, and autonomous tech.",
     "category": "tech",
-    "icon": "Shield",
-    "color": "#f59e0b"
+    "icon": "Cpu",
+    "color": "#ef4444"
   },
   {
-    "id": "ab000000-0000-0000-0000-000000000005",
-    "name": "BitOps",
-    "description": "From terminals to cloud, BITOPS is where code comes alive. Explore Linux, scripting, deployment tools, and CI/CD—taking projects from local to live.",
+    "id": "v-insightx",
+    "name": "InsightX",
+    "description": "Data analytics, machine learning visualization, and big data insights that decode patterns and drive data-backed decisions.",
     "category": "tech",
-    "icon": "Server",
+    "icon": "TrendingUp",
     "color": "#8b5cf6"
   },
   {
-    "id": "ab000000-0000-0000-0000-000000000006",
+    "id": "v-fieldops",
     "name": "FieldOps",
-    "description": "The energy hub of Labyrinth! FIELDOPS organizes matches, leads teams, and represents the department in sports, building team spirit both on and off the ground.",
+    "description": "The energy hub of Labyrinth! FieldOps manages event logistics, sports tournaments, and operational excellence.",
     "category": "non-tech",
     "icon": "MapPin",
     "color": "#06b6d4"
   },
   {
-    "id": "ab000000-0000-0000-0000-000000000007",
-    "name": "CrossCode",
-    "description": "Breaking barriers between branches! CROSSCODE helps non-CS students dive into tech through events, mentorship, and collaborations—because innovation has no boundaries.",
-    "category": "non-tech",
-    "icon": "Shuffle",
-    "color": "#ec4899"
-  },
-  {
-    "id": "ab000000-0000-0000-0000-000000000008",
-    "name": "The RoundTable",
-    "description": "Speak smart, think sharp! THE ROUNDTABLE is for debates, discussions, and idea battles where logic, voice, and confidence take center stage.",
+    "id": "v-debate",
+    "name": "Debate",
+    "description": "Speak smart, think sharp! The debate vertical fosters critical thinking, public speaking, discussions, and idea battles.",
     "category": "non-tech",
     "icon": "MessageCircle",
     "color": "#f97316"
   },
   {
-    "id": "ab000000-0000-0000-0000-000000000009",
-    "name": "The Aesthetic Lab",
-    "description": "The vibe-makers of Labyrinth! From media, design, and content to event branding and coordination, this vertical ensures creativity powers every move.",
-    "category": "non-tech",
-    "icon": "Palette",
-    "color": "#a855f7"
-  },
-  {
-    "id": "ab000000-0000-0000-0000-000000000010",
+    "id": "v-startovate",
     "name": "Startovate",
-    "description": "Dream. Build. Lead. STARTOVATE inspires startup culture, innovation talks, and trend-spotting sessions—where business ideas meet tech minds.",
+    "description": "Dream. Build. Lead. Startovate inspires startup culture, pitch deck creation, and incubation mentorship.",
     "category": "non-tech",
     "icon": "Rocket",
     "color": "#14b8a6"
+  },
+  {
+    "id": "v-interverse",
+    "name": "InterVerse",
+    "description": "Virtual reality, augmented reality, 3D modeling, and immersive digital experience design.",
+    "category": "tech",
+    "icon": "Layers",
+    "color": "#ec4899"
+  },
+  {
+    "id": "v-peer-sessions",
+    "name": "Peer Sessions",
+    "description": "Student-led peer teaching, workshops, and collaborative learning circles making knowledge sharing seamless.",
+    "category": "non-tech",
+    "icon": "Users",
+    "color": "#6366f1"
+  },
+  {
+    "id": "v-research-guidance",
+    "name": "Research Guidance",
+    "description": "Academic paper writing, research methodology, R&D innovation, and conference publication support.",
+    "category": "tech",
+    "icon": "BookOpen",
+    "color": "#059669"
+  },
+  {
+    "id": "v-design-media",
+    "name": "Design & Media",
+    "description": "Visual branding, UI/UX, video production, graphic design, and social media content creation.",
+    "category": "non-tech",
+    "icon": "Palette",
+    "color": "#a855f7"
   }
 ]

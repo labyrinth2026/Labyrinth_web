@@ -8,7 +8,7 @@
     "status": "upcoming",
     "location": "Main Campus Auditorium",
     "image": null,
-    "vertical": "CodeCraft",
+    "vertical": "DevZen",
     "featured": true
   },
   {
@@ -20,7 +20,7 @@
     "status": "upcoming",
     "location": "Lab Block, Room 402",
     "image": null,
-    "vertical": "AI Creator's Lab",
+    "vertical": "AI HUB",
     "featured": true
   },
   {
@@ -32,7 +32,7 @@
     "status": "upcoming",
     "location": "Online",
     "image": null,
-    "vertical": "CipherGuard",
+    "vertical": "InsightX",
     "featured": false
   },
   {
@@ -44,7 +44,7 @@
     "status": "upcoming",
     "location": "Innovation Center",
     "image": null,
-    "vertical": "GameNova",
+    "vertical": "AutoBot",
     "featured": false
   },
   {
@@ -56,7 +56,7 @@
     "status": "upcoming",
     "location": "Seminar Hall A",
     "image": null,
-    "vertical": "BitOps",
+    "vertical": "DevZen",
     "featured": true
   },
   {
@@ -80,7 +80,7 @@
     "status": "past",
     "location": "Online",
     "image": null,
-    "vertical": "CodeCraft",
+    "vertical": "DevZen",
     "featured": false
   },
   {
@@ -92,7 +92,7 @@
     "status": "past",
     "location": "Design Studio",
     "image": null,
-    "vertical": "The Aesthetic Lab",
+    "vertical": "Design & Media",
     "featured": false
   },
   {
@@ -104,7 +104,7 @@
     "status": "past",
     "location": "Main Auditorium",
     "image": null,
-    "vertical": "The RoundTable",
+    "vertical": "Debate",
     "featured": false
   },
   {
@@ -128,7 +128,7 @@
     "status": "past",
     "location": "Lab Block, Room 401",
     "image": null,
-    "vertical": "CodeCraft",
+    "vertical": "DevZen",
     "featured": false
   },
   {
@@ -152,7 +152,7 @@
     "status": "past",
     "location": "Christ University Campus",
     "image": null,
-    "vertical": "The Aesthetic Lab",
+    "vertical": "Design & Media",
     "featured": false
   },
   {
@@ -164,7 +164,7 @@
     "status": "past",
     "location": "Christ University Campus",
     "image": null,
-    "vertical": "GameNova",
+    "vertical": "AutoBot",
     "featured": false
   },
   {
@@ -188,7 +188,7 @@
     "status": "past",
     "location": "Christ University Campus",
     "image": null,
-    "vertical": "AI Creator's Lab",
+    "vertical": "AI HUB",
     "featured": false
   },
   {
@@ -200,7 +200,7 @@
     "status": "past",
     "location": "Christ University Campus",
     "image": null,
-    "vertical": "AI Creator's Lab",
+    "vertical": "AI HUB",
     "featured": false
   },
   {
@@ -224,7 +224,7 @@
     "status": "past",
     "location": "Christ University Campus",
     "image": null,
-    "vertical": "The Aesthetic Lab",
+    "vertical": "Design & Media",
     "featured": false
   },
   {
@@ -284,7 +284,7 @@
     "status": "past",
     "location": "Christ University Campus",
     "image": null,
-    "vertical": "CodeCraft",
+    "vertical": "DevZen",
     "featured": false
   },
   {
@@ -296,7 +296,7 @@
     "status": "past",
     "location": "Christ University Campus",
     "image": null,
-    "vertical": "CrossCode",
+    "vertical": "InterVerse",
     "featured": false
   },
   {
@@ -308,7 +308,7 @@
     "status": "past",
     "location": "Christ University Campus",
     "image": null,
-    "vertical": "CodeCraft",
+    "vertical": "DevZen",
     "featured": false
   },
   {
@@ -332,7 +332,7 @@
     "status": "past",
     "location": "Christ University Campus",
     "image": null,
-    "vertical": "CrossCode",
+    "vertical": "InterVerse",
     "featured": false
   }
 ]
