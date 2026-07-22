@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ExternalLink, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 
 export interface FacultyMember {
   id: string;
@@ -28,6 +27,29 @@ const getInitials = (name: string) => {
     .toUpperCase();
 };
 
+const AvatarImage: React.FC<{ avatar: string | null; name: string }> = ({ avatar, name }) => {
+  const [failed, setFailed] = useState(false);
+
+  if (avatar && !failed) {
+    return (
+      <div className="w-36 h-36 rounded-2xl overflow-hidden border border-slate-100 shadow-xs mb-5 flex-shrink-0 bg-slate-50">
+        <img
+          src={avatar}
+          alt={name}
+          onError={() => setFailed(true)}
+          className="w-full h-full object-cover object-top"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-36 h-36 rounded-full flex items-center justify-center bg-slate-100 text-slate-400 font-extrabold text-2xl select-none mb-5 flex-shrink-0 border border-slate-200/20 shadow-[inset_0_2px_4px_rgba(0,0,0,0.03)]">
+      {getInitials(name)}
+    </div>
+  );
+};
+
 const FacultyCard: React.FC<FacultyCardProps> = ({ faculty }) => {
   return (
     <motion.div
@@ -40,21 +62,7 @@ const FacultyCard: React.FC<FacultyCardProps> = ({ faculty }) => {
       className="bg-white border border-slate-200/60 rounded-[28px] shadow-[0_2px_8px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col h-full p-6 items-center text-center"
     >
       {/* Profile Image Section */}
-      {faculty.avatar ? (
-        <div className="relative w-36 h-36 rounded-2xl overflow-hidden border border-slate-100 shadow-xs mb-5 flex-shrink-0 bg-slate-50">
-          <Image 
-            src={faculty.avatar} 
-            alt={faculty.name} 
-            fill
-            sizes="(max-width: 768px) 150px, 150px"
-            className="object-cover object-top" 
-          />
-        </div>
-      ) : (
-        <div className="w-36 h-36 rounded-full flex items-center justify-center bg-slate-100 text-slate-400 font-extrabold text-2xl select-none mb-5 flex-shrink-0 border border-slate-200/20 shadow-[inset_0_2px_4px_rgba(0,0,0,0.03)]">
-          {getInitials(faculty.name)}
-        </div>
-      )}
+      <AvatarImage avatar={faculty.avatar} name={faculty.name} />
 
       {/* Info Body */}
       <div className="flex flex-col items-center flex-grow w-full">

@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 
 export interface TeamMember {
   id: string;
@@ -29,6 +28,29 @@ const getInitials = (name: string) => {
     .toUpperCase();
 };
 
+const AvatarImage: React.FC<{ avatar: string | null; name: string }> = ({ avatar, name }) => {
+  const [failed, setFailed] = useState(false);
+
+  if (avatar && !failed) {
+    return (
+      <div className="w-36 h-36 rounded-2xl overflow-hidden border border-slate-100 shadow-xs mb-5 flex-shrink-0 bg-slate-50">
+        <img
+          src={avatar}
+          alt={name}
+          onError={() => setFailed(true)}
+          className="w-full h-full object-cover object-top"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-36 h-36 rounded-full flex items-center justify-center bg-slate-100 text-slate-400 font-extrabold text-2xl select-none mb-5 flex-shrink-0 border border-slate-200/20 shadow-[inset_0_2px_4px_rgba(0,0,0,0.03)]">
+      {getInitials(name)}
+    </div>
+  );
+};
+
 const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
   return (
     <motion.div
@@ -41,21 +63,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
       className="bg-white border border-slate-200/60 rounded-[28px] shadow-[0_2px_8px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col h-full p-6 items-center text-center"
     >
       {/* Profile Image Section */}
-      {member.avatar ? (
-        <div className="relative w-36 h-36 rounded-2xl overflow-hidden border border-slate-100 shadow-xs mb-5 flex-shrink-0 bg-slate-50">
-          <Image 
-            src={member.avatar} 
-            alt={member.name} 
-            fill
-            sizes="(max-width: 768px) 150px, 150px"
-            className="object-cover" 
-          />
-        </div>
-      ) : (
-        <div className="w-36 h-36 rounded-full flex items-center justify-center bg-slate-100 text-slate-400 font-extrabold text-2xl select-none mb-5 flex-shrink-0 border border-slate-200/20 shadow-[inset_0_2px_4px_rgba(0,0,0,0.03)]">
-          {getInitials(member.name)}
-        </div>
-      )}
+      <AvatarImage avatar={member.avatar} name={member.name} />
 
       {/* Info Body */}
       <div className="flex flex-col items-center flex-grow w-full">
