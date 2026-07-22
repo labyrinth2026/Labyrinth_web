@@ -12,7 +12,6 @@ import Link from 'next/link';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import ScrollReveal from '../components/ui/ScrollReveal';
-import WorldMapDecor from '../components/ui/WorldMapDecor';
 import dynamic from 'next/dynamic';
 import { usePrefetchOnIdle } from '../hooks/usePrefetchOnIdle';
 
@@ -466,11 +465,8 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* ── SDG Projects Initiative ── */}
-        <section className="py-24 bg-slate-50/50 border-t border-slate-100 relative overflow-hidden">
-          {/* Decorative 3-Layer World Map Background */}
-          <WorldMapDecor className="z-0 top-0 right-0" />
-
-          <div className="container mx-auto px-6 max-w-7xl relative z-10">
+        <section className="py-24 bg-slate-50/50 border-t border-slate-100">
+          <div className="container mx-auto px-6 max-w-7xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* Text – left */}
               <ScrollReveal animation="slide-right">
