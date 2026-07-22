@@ -54,6 +54,7 @@ const Button: React.FC<ButtonProps> = ({
     }
     if (href && !isExternal) {
       e.preventDefault();
+      if (onClick) onClick();
       router.push(href);
     } else if (onClick) {
       onClick();

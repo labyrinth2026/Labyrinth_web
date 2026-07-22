@@ -87,6 +87,8 @@ const Navbar: React.FC = () => {
   }, [pathname]);
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
+    setMobileMenuOpen(false);
+
     if (pathname === '/') {
       let targetId = '';
       if (path === '/') targetId = '#hero';
@@ -97,7 +99,6 @@ const Navbar: React.FC = () => {
         if (el && lenis) {
           e.preventDefault();
           lenis.scrollTo(el, { offset: -80 });
-          setMobileMenuOpen(false);
         }
       }
     }
