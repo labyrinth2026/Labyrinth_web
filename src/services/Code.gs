@@ -267,6 +267,6 @@ function isAdmin(email) {
   } catch (e) {
     // If 'Roles' sheet doesn't exist yet, fallback to hardcoded
   }
-  const adminEmails = ['faculty@christ.edu', 'labyrinth@cs.christuniversity.in'];
+  const adminEmails = ['faculty@christ.edu', 'labyrinth.christ@christuniversity.in'];
   return adminEmails.includes(email);
 }

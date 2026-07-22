@@ -485,8 +485,8 @@ const HomePage: React.FC = () => {
                   </p>
                   <div className="bg-white border border-slate-200/80 rounded-2xl px-6 py-4 inline-block w-fit shadow-xs">
                     <p className="text-[10px] text-slate-400 font-bold mb-1 uppercase tracking-widest">Proposal Submission Email</p>
-                    <a href="mailto:labyrinth@cs.christuniversity.in" className="text-lg font-bold text-[#CD0000] hover:text-[#9E0000] transition-colors tracking-tight">
-                      labyrinth@cs.christuniversity.in
+                    <a href="mailto:labyrinth.christ@christuniversity.in" className="text-lg font-bold text-[#CD0000] hover:text-[#9E0000] transition-colors tracking-tight">
+                      labyrinth.christ@christuniversity.in
                     </a>
                   </div>
                 </div>
