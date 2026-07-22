@@ -34,17 +34,6 @@ const FACULTY_DATA = [
     linkedin: '#',
     avatar: '/binayak.jpg',
   },
-  {
-    id: 'fc3',
-    name: 'Dr. Syam Mohan E',
-    role: 'Faculty Coordinator',
-    designation: 'Assistant Professor',
-    department: 'Department of Computer Science',
-    email: 'syam.mohan@christuniversity.in',
-    profileUrl: 'https://christuniversity.in/computer-science/faculty-details/OTM1NA==/NjI=',
-    linkedin: '#',
-    avatar: '/syam.jpg',
-  },
 ];
 
 // ─── Skeleton Card ────────────────────────────────────────────────────────────
