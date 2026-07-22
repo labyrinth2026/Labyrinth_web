@@ -273,6 +273,12 @@ ON public.resources FOR ALL
 TO authenticated
 USING (public.get_user_role(auth.uid()) = 'ADMIN');
 
+-- Gallery Table Policies
+CREATE POLICY "Allow read access to gallery for all users"
+ON public.gallery FOR SELECT
+TO public
+USING (true);
+
 -- Activity Logs Table Policies
 CREATE POLICY "Allow ADMIN to view all logs"
 ON public.activity_logs FOR SELECT

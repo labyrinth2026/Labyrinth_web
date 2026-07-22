@@ -2234,7 +2234,7 @@ export async function dbGetGallery(): Promise<any[]> {
         if (error) throw error;
         return data || [];
       } catch (err) {
-        if (isSupabaseConfigured()) throw err;
+        console.error('Supabase dbGetGallery failed, falling back to local DB:', err);
       }
     }
   }
