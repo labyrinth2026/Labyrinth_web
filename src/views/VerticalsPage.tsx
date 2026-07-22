@@ -26,6 +26,7 @@ const VerticalsPage: React.FC = () => {
 
   const techVerticals = verticalsData.filter(v => v.category === 'tech');
   const nonTechVerticals = verticalsData.filter(v => v.category === 'non-tech');
+  const researchVerticals = verticalsData.filter(v => v.category === 'research' || v.id === 'v-research-guidance' || v.name?.toLowerCase().includes('research'));
 
   if (isLoading) {
     return (
@@ -62,7 +63,7 @@ const VerticalsPage: React.FC = () => {
               OUR <span className="text-[#CD0000]">VERTICALS</span>
             </h1>
             <p className="text-slate-600 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
-              Ten specialized domains. Endless possibilities. Find your niche and start building.
+              Specialized domains spanning Tech, Non-Tech, and Research. Find your niche and start building.
             </p>
           </ScrollReveal>
         </div>
@@ -85,7 +86,7 @@ const VerticalsPage: React.FC = () => {
               </div>
             )}
 
-            {/* Red section divider */}
+            {/* Non-Tech Section Divider */}
             {techVerticals.length > 0 && nonTechVerticals.length > 0 && (
               <div className="flex items-center gap-4 my-12">
                 <div className="flex-1 h-px bg-slate-200" />
@@ -98,7 +99,7 @@ const VerticalsPage: React.FC = () => {
 
             {/* Non-Tech Verticals */}
             {nonTechVerticals.length > 0 && (
-              <div id="non-technical-verticals" className="scroll-mt-24">
+              <div id="non-technical-verticals" className="mb-8 scroll-mt-24">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <ScrollReveal key="nontech-list" stagger={0.08}>
                     {nonTechVerticals.map(vertical => (
@@ -107,6 +108,28 @@ const VerticalsPage: React.FC = () => {
                   </ScrollReveal>
                 </div>
               </div>
+            )}
+
+            {/* Research Wing Divider */}
+            {researchVerticals.length > 0 && (
+              <>
+                <div className="flex items-center gap-4 my-12">
+                  <div className="flex-1 h-px bg-slate-200" />
+                  <span className="px-4 py-1.5 rounded-full bg-emerald-700 text-white text-[10px] font-bold uppercase tracking-widest">
+                    Research
+                  </span>
+                  <div className="flex-1 h-px bg-slate-200" />
+                </div>
+                <div id="research-verticals" className="scroll-mt-24">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <ScrollReveal key="research-list" stagger={0.08}>
+                      {researchVerticals.map(vertical => (
+                        <VerticalCard key={vertical.id} vertical={vertical as any} />
+                      ))}
+                    </ScrollReveal>
+                  </div>
+                </div>
+              </>
             )}
 
         </div>

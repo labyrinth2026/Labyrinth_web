@@ -190,8 +190,9 @@ const TeamPage: React.FC = () => {
   const primaryLoaded     = loadedStages.has('mentors-core');
   const verticalsLoaded   = loadedStages.has('verticals');
 
-  const techVerticals    = verticalsData.filter(v => v.category === 'tech');
-  const nonTechVerticals = verticalsData.filter(v => v.category === 'non-tech');
+  const techVerticals     = verticalsData.filter(v => v.category === 'tech');
+  const nonTechVerticals  = verticalsData.filter(v => v.category === 'non-tech');
+  const researchVerticals = verticalsData.filter(v => v.category === 'research' || v.id === 'v-research-guidance' || v.name?.toLowerCase().includes('research'));
 
   const renderVerticalSection = (verticalsList: any[]) =>
     verticalsList.map(vertical => {
@@ -342,10 +343,24 @@ const TeamPage: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
                       >
-                        <SectionHeading title="Technical Verticals" subtitle="Domain Teams" align="left" />
-                        <div className="mb-20">{renderVerticalSection(techVerticals)}</div>
-                        <SectionHeading title="Non-Technical Verticals" subtitle="Domain Teams" align="left" />
-                        <div className="mb-20">{renderVerticalSection(nonTechVerticals)}</div>
+                        {techVerticals.length > 0 && (
+                          <>
+                            <SectionHeading title="Technical Verticals" subtitle="Domain Teams" align="left" />
+                            <div className="mb-12">{renderVerticalSection(techVerticals)}</div>
+                          </>
+                        )}
+                        {nonTechVerticals.length > 0 && (
+                          <>
+                            <SectionHeading title="Non-Technical Verticals" subtitle="Domain Teams" align="left" />
+                            <div className="mb-12">{renderVerticalSection(nonTechVerticals)}</div>
+                          </>
+                        )}
+                        {researchVerticals.length > 0 && (
+                          <>
+                            <SectionHeading title="Research Wing" subtitle="Research & Publications" align="left" />
+                            <div className="mb-20">{renderVerticalSection(researchVerticals)}</div>
+                          </>
+                        )}
                       </motion.div>
                     ) : (
                       <SkeletonRow count={4} label="Verticals" />

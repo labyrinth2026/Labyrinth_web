@@ -59,7 +59,7 @@
     "id": "v-interverse",
     "name": "InterVerse",
     "description": "Virtual reality, augmented reality, 3D modeling, and immersive digital experience design.",
-    "category": "tech",
+    "category": "non-tech",
     "icon": "Layers",
     "color": "#ec4899"
   },
@@ -72,19 +72,19 @@
     "color": "#6366f1"
   },
   {
-    "id": "v-research-guidance",
-    "name": "Research Guidance",
-    "description": "Academic paper writing, research methodology, R&D innovation, and conference publication support.",
-    "category": "tech",
-    "icon": "BookOpen",
-    "color": "#059669"
-  },
-  {
     "id": "v-design-media",
     "name": "Design & Media",
     "description": "Visual branding, UI/UX, video production, graphic design, and social media content creation.",
     "category": "non-tech",
     "icon": "Palette",
     "color": "#a855f7"
+  },
+  {
+    "id": "v-research-guidance",
+    "name": "Research Wing",
+    "description": "Academic paper writing, research methodology, R&D innovation, and conference publication support.",
+    "category": "research",
+    "icon": "BookOpen",
+    "color": "#059669"
   }
 ]
