@@ -1,4 +1,4 @@
-﻿{
+{
     "users":  [
                   {
                       "id":  "u-suryachalam",
@@ -1178,7 +1178,7 @@
                           "id":  "v-peer-sessions",
                           "name":  "Peer Sessions",
                           "description":  "Peer learning and student mentoring wing.",
-                          "category":  "tech",
+                          "category":  "non-tech",
                           "icon":  "Users",
                           "color":  "#64748b",
                           "createdAt":  "2026-07-20T15:00:58.060Z"
@@ -1187,7 +1187,7 @@
                           "id":  "v-research-guidance",
                           "name":  "Research Guidance",
                           "description":  "Academic paper guidance, research, and papers.",
-                          "category":  "tech",
+                          "category":  "research",
                           "icon":  "BookOpen",
                           "color":  "#4f46e5",
                           "createdAt":  "2026-07-20T15:00:58.060Z"

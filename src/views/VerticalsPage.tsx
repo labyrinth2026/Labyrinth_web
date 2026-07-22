@@ -73,8 +73,9 @@ const VerticalsPage: React.FC = () => {
       <section className="pt-8 pb-24 bg-slate-50/50">
         <div className="container mx-auto px-6 max-w-7xl">
 
+            {/* 1. Technical Domains */}
             {techVerticals.length > 0 && (
-              <div id="technical-verticals" className="mb-8 scroll-mt-24">
+              <div id="technical-verticals" className="mb-16 scroll-mt-24">
                 <SectionHeading title="Technical Domains" align="left" />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <ScrollReveal key="tech-list" stagger={0.08}>
@@ -86,20 +87,10 @@ const VerticalsPage: React.FC = () => {
               </div>
             )}
 
-            {/* Non-Tech Section Divider */}
-            {techVerticals.length > 0 && nonTechVerticals.length > 0 && (
-              <div className="flex items-center gap-4 my-12">
-                <div className="flex-1 h-px bg-slate-200" />
-                <span className="px-4 py-1.5 rounded-full bg-[#CD0000] text-white text-[10px] font-bold uppercase tracking-widest">
-                  Management & Creative
-                </span>
-                <div className="flex-1 h-px bg-slate-200" />
-              </div>
-            )}
-
-            {/* Non-Tech Verticals */}
+            {/* 2. Non-Technical Domains */}
             {nonTechVerticals.length > 0 && (
-              <div id="non-technical-verticals" className="mb-8 scroll-mt-24">
+              <div id="non-technical-verticals" className="mb-16 scroll-mt-24">
+                <SectionHeading title="Non-Technical Domains" align="left" />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <ScrollReveal key="nontech-list" stagger={0.08}>
                     {nonTechVerticals.map(vertical => (
@@ -110,26 +101,18 @@ const VerticalsPage: React.FC = () => {
               </div>
             )}
 
-            {/* Research Wing Divider */}
+            {/* 3. Research Wing */}
             {researchVerticals.length > 0 && (
-              <>
-                <div className="flex items-center gap-4 my-12">
-                  <div className="flex-1 h-px bg-slate-200" />
-                  <span className="px-4 py-1.5 rounded-full bg-emerald-700 text-white text-[10px] font-bold uppercase tracking-widest">
-                    Research
-                  </span>
-                  <div className="flex-1 h-px bg-slate-200" />
+              <div id="research-verticals" className="mb-16 scroll-mt-24">
+                <SectionHeading title="Research Wing" align="left" />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <ScrollReveal key="research-list" stagger={0.08}>
+                    {researchVerticals.map(vertical => (
+                      <VerticalCard key={vertical.id} vertical={vertical as any} />
+                    ))}
+                  </ScrollReveal>
                 </div>
-                <div id="research-verticals" className="scroll-mt-24">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <ScrollReveal key="research-list" stagger={0.08}>
-                      {researchVerticals.map(vertical => (
-                        <VerticalCard key={vertical.id} vertical={vertical as any} />
-                      ))}
-                    </ScrollReveal>
-                  </div>
-                </div>
-              </>
+              </div>
             )}
 
         </div>
