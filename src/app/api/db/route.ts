@@ -474,9 +474,72 @@ export async function POST(req: NextRequest) {
           const { data } = adminClient.storage.from('gallery').getPublicUrl(fileName);
           return NextResponse.json({ success: true, data: { url: data.publicUrl } });
         } else {
-          // Fallback to echo base64 if Supabase is offline
-          return NextResponse.json({ success: true, data: { url: base64 } });
+          // Do NOT store base64 directly — it gets truncated in DB and breaks in production.
+          // Supabase admin must be configured for photo uploads to work.
+          return NextResponse.json({ 
+            success: false, 
+            error: 'Photo upload requires Supabase storage to be configured. Please check SUPABASE_SERVICE_ROLE_KEY.' 
+          }, { status: 500 });
         }
+      }
+
+      // One-time migration: re-upload base64 profile_photos to Supabase storage
+      case 'migrateAvatars': {
+        const adminClient = getSupabaseAdmin();
+        if (!adminClient) {
+          return NextResponse.json({ success: false, error: 'Supabase admin not configured.' }, { status: 500 });
+        }
+
+        // Fetch all profiles that have a base64 profile_photo
+        const { data: profiles, error: fetchErr } = await adminClient
+          .from('profiles')
+          .select('id, profile_photo')
+          .not('profile_photo', 'is', null);
+
+        if (fetchErr) throw fetchErr;
+
+        const base64Profiles = (profiles || []).filter(
+          (p: any) => p.profile_photo && p.profile_photo.startsWith('data:image')
+        );
+
+        const results: { id: string; status: string; url?: string; error?: string }[] = [];
+
+        for (const profile of base64Profiles) {
+          try {
+            const base64Data = profile.profile_photo.replace(/^data:image\/\w+;base64,/, '');
+            const buffer = Buffer.from(base64Data, 'base64');
+            const fileName = `avatars/${profile.id}-${Date.now()}.jpg`;
+
+            const { error: upErr } = await adminClient.storage
+              .from('gallery')
+              .upload(fileName, buffer, { contentType: 'image/jpeg', upsert: true });
+
+            if (upErr) throw upErr;
+
+            const { data } = adminClient.storage.from('gallery').getPublicUrl(fileName);
+            const publicUrl = data.publicUrl;
+
+            // Update the profile with the real CDN URL
+            const { error: updateErr } = await adminClient
+              .from('profiles')
+              .update({ profile_photo: publicUrl })
+              .eq('id', profile.id);
+
+            if (updateErr) throw updateErr;
+
+            results.push({ id: profile.id, status: 'migrated', url: publicUrl });
+          } catch (err: any) {
+            results.push({ id: profile.id, status: 'error', error: err.message });
+          }
+        }
+
+        return NextResponse.json({ 
+          success: true, 
+          data: { 
+            total: base64Profiles.length, 
+            results 
+          } 
+        });
       }
 
       case 'updateUserDetails': {
