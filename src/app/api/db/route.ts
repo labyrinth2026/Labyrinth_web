@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 import { verifyJWT } from '@/utils/jwt';
-import { getSupabaseAdmin } from '@/utils/supabase';
+import { getSupabaseAdmin, isSupabaseConfigured } from '@/utils/supabase';
 import {
   dbGetEvents, dbAddEvent, dbUpdateEvent, dbDeleteEvent,
   dbGetVerticals, dbAddVertical, dbUpdateVertical, dbDeleteVertical,
@@ -174,18 +174,7 @@ export async function POST(req: NextRequest) {
             mentors,
             coreCommittee,
             verticalHeads,
-            subHeads,
-            debug: {
-              rolesCount: roles.length,
-              verticalsCount: verticals.length,
-              committeesCount: committees.length,
-              hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
-              supabaseUrlLen: (process.env.NEXT_PUBLIC_SUPABASE_URL || '').length,
-              hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-              hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-              isConfigured: isSupabaseConfigured(),
-              sampleRole: roles[0] || null
-            }
+            subHeads
           }
         });
       }
