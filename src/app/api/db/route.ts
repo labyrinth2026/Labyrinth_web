@@ -429,6 +429,33 @@ export async function POST(req: NextRequest) {
 
         const adminClient = getSupabaseAdmin();
         if (adminClient) {
+          // List files in the 'avatars' folder and delete any starting with the userId to clean up obsolete images
+          try {
+            const cleanUserPrefix = (userId || 'member').trim();
+            console.log(`[uploadAvatar] Checking for old avatars to clean up for user prefix: ${cleanUserPrefix}`);
+            const { data: existingFiles, error: listErr } = await adminClient.storage
+              .from('gallery')
+              .list('avatars');
+              
+            if (!listErr && existingFiles && existingFiles.length > 0) {
+              const filesToDelete = existingFiles
+                .filter(f => f.name.startsWith(`${cleanUserPrefix}-`))
+                .map(f => `avatars/${f.name}`);
+                
+              if (filesToDelete.length > 0) {
+                console.log(`[uploadAvatar] Deleting old files from gallery bucket:`, filesToDelete);
+                const { error: delErr } = await adminClient.storage.from('gallery').remove(filesToDelete);
+                if (delErr) {
+                  console.warn(`[uploadAvatar] Failed to delete some old avatar files:`, delErr.message);
+                } else {
+                  console.log(`[uploadAvatar] Successfully deleted old avatar files.`);
+                }
+              }
+            }
+          } catch (cleanErr) {
+            console.warn('[uploadAvatar] Cleanup error occurred:', cleanErr);
+          }
+
           const { error: upErr } = await adminClient.storage
             .from('gallery')
             .upload(fileName, buffer, { contentType: 'image/jpeg', upsert: true });

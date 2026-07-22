@@ -424,17 +424,29 @@ export async function dbCreateUser(name: string, email: string, role: string, co
 }
 
 export async function dbUpdateUserStatus(userId: string, status: 'active' | 'inactive'): Promise<void> {
+  console.log(`[dbUpdateUserStatus] Called for user: ${userId}, status: ${status}`);
   if (isSupabaseConfigured()) {
     const client = getSupabaseAdmin() || supabase;
     if (client) {
       try {
-        const { error } = await client.from('profiles').update({ status }).or(`id.eq.${userId},email.eq.${userId}`);
+        let query = client.from('profiles').update({ status });
+        
+        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId);
+        if (isUUID) {
+          query = query.eq('id', userId);
+        } else if (userId.includes('@')) {
+          query = query.eq('email', userId);
+        } else {
+          query = query.eq('id', userId);
+        }
+        
+        const { error } = await query;
         if (error) throw error;
+        console.log(`[dbUpdateUserStatus] Status updated successfully in Supabase for user: ${userId}`);
         return;
       } catch (err) {
-      if (isSupabaseConfigured()) throw err;
-
         console.error("Supabase dbUpdateUserStatus failed:", err);
+        if (isSupabaseConfigured()) throw err;
         throw err;
       }
     }
@@ -444,6 +456,7 @@ export async function dbUpdateUserStatus(userId: string, status: 'active' | 'ina
   if (user) {
     user.status = status;
     saveLocalDb(db);
+    console.log(`[dbUpdateUserStatus] Status updated successfully in local DB for user: ${userId}`);
   }
 }
 
@@ -453,6 +466,7 @@ export async function dbUpdateUserDetails(
   designation?: string, profilePhoto?: string, github?: string, linkedin?: string,
   regNo?: string, className?: string
 ): Promise<void> {
+  console.log(`[dbUpdateUserDetails] Updating profile for: ${userId}, Name: ${name}, Photo: ${profilePhoto}`);
   if (isSupabaseConfigured()) {
     const client = getSupabaseAdmin() || supabase;
     if (client) {
@@ -471,13 +485,39 @@ export async function dbUpdateUserDetails(
         if (regNo !== undefined) updatePayload.reg_no = regNo || null;
         if (className !== undefined) updatePayload.class_name = className || null;
 
-        const { error } = await client.from('profiles').update(updatePayload).or(`id.eq.${userId},email.eq.${userId}`);
+        let query = client.from('profiles').update(updatePayload);
+        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId);
+        if (isUUID) {
+          query = query.eq('id', userId);
+        } else if (userId.includes('@')) {
+          query = query.eq('email', userId);
+        } else {
+          query = query.eq('id', userId);
+        }
+
+        const { error } = await query;
         if (error) throw error;
+        console.log(`[dbUpdateUserDetails] Profile updated successfully in profiles table for: ${userId}`);
+
+        // Sync with auth.users metadata if userId is a valid UUID
+        if (isUUID) {
+          try {
+            await client.auth.admin.updateUserById(userId, {
+              user_metadata: {
+                full_name: name,
+                name: name,
+                profile_photo: profilePhoto || null
+              }
+            });
+            console.log(`[dbUpdateUserDetails] Auth metadata synchronized successfully in auth.users for: ${userId}`);
+          } catch (authErr) {
+            console.warn(`[dbUpdateUserDetails] Auth metadata sync failed for: ${userId}`, authErr);
+          }
+        }
         return;
       } catch (err) {
-      if (isSupabaseConfigured()) throw err;
-
         console.error("Supabase dbUpdateUserDetails failed:", err);
+        if (isSupabaseConfigured()) throw err;
         throw err;
       }
     }
@@ -500,6 +540,7 @@ export async function dbUpdateUserDetails(
     if (regNo !== undefined) { user.regNo = regNo; user.reg_no = regNo; }
     if (className !== undefined) { user.class = className; user.class_name = className; }
     saveLocalDb(db);
+    console.log(`[dbUpdateUserDetails] Profile updated successfully in local DB for: ${userId}`);
   }
 }
 
