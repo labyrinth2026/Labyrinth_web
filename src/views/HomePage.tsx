@@ -519,48 +519,36 @@ const HomePage: React.FC = () => {
                   {
                     number: 3,
                     title: 'Good Health & Well-being',
-                    color: '#4C9F38',
-                    hoverBg: 'group-hover:!bg-[#4C9F38]',
                     desc: 'Promoting mental health awareness, ergonomic computing, and wellness through tech-driven community programs.',
                     icon: HeartPulse
                   },
                   {
                     number: 4,
                     title: 'Quality Education',
-                    color: '#C5192D',
-                    hoverBg: 'group-hover:!bg-[#C5192D]',
                     desc: 'Peer education sessions, workshops, and skill-building bootcamps making quality CS education accessible to all.',
                     icon: BookOpen
                   },
                   {
                     number: 8,
                     title: 'Decent Work & Economic Growth',
-                    color: '#A21942',
-                    hoverBg: 'group-hover:!bg-[#A21942]',
                     desc: 'Resume building workshops, career readiness sessions, and incubation partnerships preparing students for the workforce.',
                     icon: TrendingUp
                   },
                   {
                     number: 9,
                     title: 'Industry, Innovation & Infrastructure',
-                    color: '#FD6925',
-                    hoverBg: 'group-hover:!bg-[#FD6925]',
                     desc: 'Hackathons, innovation pitches, and R&D projects building the next generation of tech infrastructure.',
                     icon: Cpu
                   },
                   {
                     number: 16,
                     title: 'Peace, Justice & Strong Institutions',
-                    color: '#00689D',
-                    hoverBg: 'group-hover:!bg-[#00689D]',
                     desc: 'Constitution Day events and digital citizenship awareness fostering responsible use of technology.',
                     icon: Scale
                   },
                   {
                     number: 17,
                     title: 'Partnerships for the Goals',
-                    color: '#19486A',
-                    hoverBg: 'group-hover:!bg-[#19486A]',
                     desc: 'Collaborations with THWS, CHRIST Incubation Centre, and community outreach programs for shared impact.',
                     icon: Handshake
                   },
@@ -569,26 +557,24 @@ const HomePage: React.FC = () => {
                   return (
                     <div
                       key={sdg.number}
-                      className="group bg-white border border-slate-200/80 rounded-2xl p-6 hover:scale-[1.025] hover:-translate-y-2 hover:shadow-lg transition-all duration-300 relative overflow-hidden"
+                      className="group bg-white border border-slate-200/80 rounded-2xl p-6 hover:scale-[1.02] hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden shadow-xs hover:shadow-[0_10px_30px_rgba(205,0,0,0.12)] hover:border-[#CD0000]/30"
                     >
-                      {/* Accent top bar */}
-                      <div className="absolute top-0 left-0 right-0 h-1 transition-all duration-300" style={{ backgroundColor: sdg.color }} />
+                      {/* Ambient hover glow backdrop */}
+                      <div className="absolute -top-12 -right-12 w-28 h-28 bg-[#CD0000]/5 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                      <div className="flex items-start gap-4">
-                        <div
-                          className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${sdg.hoverBg} group-hover:!text-white`}
-                          style={{
-                            backgroundColor: `${sdg.color}15`,
-                            color: sdg.color
-                          }}
-                        >
+                      <div className="flex items-start gap-4 relative z-10">
+                        <div className="shrink-0 w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center transition-all duration-300 group-hover:bg-[#CD0000] group-hover:text-white group-hover:shadow-md group-hover:shadow-[#CD0000]/20">
                           <Icon size={18} />
                         </div>
                         <div className="min-w-0">
-                          <h3 className="font-bold text-slate-800 text-sm mb-1.5 leading-tight group-hover:text-slate-900 transition-colors">
-                            SDG {sdg.number}
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#CD0000] bg-[#CD0000]/8 px-2.5 py-0.5 rounded-full border border-[#CD0000]/15">
+                              SDG {sdg.number}
+                            </span>
+                          </div>
+                          <h3 className="font-bold text-slate-900 text-sm mb-2 leading-snug group-hover:text-[#CD0000] transition-colors">
+                            {sdg.title}
                           </h3>
-                          <p className="text-xs font-semibold mb-2" style={{ color: sdg.color }}>{sdg.title}</p>
                           <p className="text-xs text-slate-500 leading-relaxed">{sdg.desc}</p>
                         </div>
                       </div>
