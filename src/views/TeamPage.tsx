@@ -21,7 +21,7 @@ const FACULTY_DATA = [
     email: 'amrutha.k@christuniversity.in',
     profileUrl: 'https://christuniversity.in/computer-science/faculty-details/NzE0Mg==/NjI=',
     linkedin: '#',
-    avatar: null,
+    avatar: '/amrutha.jpg',
   },
   {
     id: 'fc2',
@@ -32,7 +32,7 @@ const FACULTY_DATA = [
     email: 'binayak.dutta@christuniversity.in',
     profileUrl: 'https://christuniversity.in/computer-science/faculty-details/ODc2OQ==/NjI=',
     linkedin: '#',
-    avatar: null,
+    avatar: '/binayak.jpg',
   },
   {
     id: 'fc3',
@@ -43,7 +43,7 @@ const FACULTY_DATA = [
     email: 'syam.mohan@christuniversity.in',
     profileUrl: 'https://christuniversity.in/computer-science/faculty-details/OTM1NA==/NjI=',
     linkedin: '#',
-    avatar: null,
+    avatar: '/syam.jpg',
   },
 ];
 

@@ -3,6 +3,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Activity, Users, Calendar, FileText, BookOpen, Shield, ArrowRight, Download } from 'lucide-react';
 import Link from 'next/link';
 import { fetchFromSheet } from '@/services/api';
+import { usePrefetchOnIdle } from '@/hooks/usePrefetchOnIdle';
 
 const Dashboard: React.FC = () => {
   const { user, can } = useAuth();
@@ -12,29 +13,24 @@ const Dashboard: React.FC = () => {
   const [upcomingEvents, setUpcomingEvents] = useState<number | null>(null);
   const [newRegistrations, setNewRegistrations] = useState<number | null>(null);
 
+  // Prefetch likely next routes in the background during idle time
+  usePrefetchOnIdle([
+    '/admin/members',
+    '/admin/verticals',
+    '/admin/events',
+    '/admin/gallery',
+    '/admin/forms',
+    '/admin/announcements',
+    '/admin/tasks'
+  ]);
+
   useEffect(() => {
     const loadStats = async () => {
       try {
-        const [roles, events, regs] = await Promise.all([
-          fetchFromSheet<any[]>('getRoles'),
-          fetchFromSheet<any[]>('getEvents'),
-          fetchFromSheet<any[]>('getJoinRegistrations'),
-        ]);
-
-        const activeCount = Array.isArray(roles)
-          ? roles.filter((u: any) => u.status === 'active').length
-          : 0;
-        setTotalMembers(activeCount);
-
-        const upcomingCount = Array.isArray(events)
-          ? events.filter((e: any) => e.status === 'upcoming').length
-          : 0;
-        setUpcomingEvents(upcomingCount);
-
-        const pendingCount = Array.isArray(regs)
-          ? regs.filter((r: any) => r.status === 'pending').length
-          : 0;
-        setNewRegistrations(pendingCount);
+        const stats = await fetchFromSheet<{ totalMembers: number; upcomingEvents: number; newRegistrations: number }>('getDashboardStats');
+        setTotalMembers(stats.totalMembers);
+        setUpcomingEvents(stats.upcomingEvents);
+        setNewRegistrations(stats.newRegistrations);
       } catch (err) {
         console.error('Dashboard stats load error:', err);
         setTotalMembers(0);

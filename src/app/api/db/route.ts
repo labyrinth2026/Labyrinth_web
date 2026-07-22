@@ -14,6 +14,7 @@ import {
   dbGetVerticalProjects, dbAddVerticalProject, dbUpdateVerticalProject, dbDeleteVerticalProject,
   dbGetVerticalResources, dbAddVerticalResource, dbDeleteVerticalResource,
   dbGetJoinRegistrations, dbApproveRegistration, dbRejectRegistration,
+  dbGetDashboardStats,
   dbGetRoles, dbAddRole, dbDeleteRole, dbDeleteUser, dbCreateUser, dbUpdateUserStatus, dbUpdateUserDetails,
   dbGetForms, dbUpdateForms,
   getLocalDb, saveLocalDb, logActivity,
@@ -86,7 +87,7 @@ export async function POST(req: NextRequest) {
             designation: 'Assistant Professor',
             department: 'Department of Computer Science',
             email: 'amrutha.s@christuniversity.in',
-            avatar: 'https://ui-avatars.com/api/?name=Amrutha+S&background=CD0000&color=fff&size=128'
+            avatar: '/amrutha.jpg'
           }
         ];
 
@@ -221,6 +222,11 @@ export async function POST(req: NextRequest) {
           { label: 'Specialized Domains', value: totalVerticals.toString(), suffix: '' },
           { label: 'Years Active', value: '29', suffix: '+' }
         ];
+        return NextResponse.json({ success: true, data: stats });
+      }
+
+      case 'getDashboardStats': {
+        const stats = await dbGetDashboardStats();
         return NextResponse.json({ success: true, data: stats });
       }
 

@@ -955,15 +955,18 @@ export async function dbAssignVerticalRole(userId: string, verticalId: string, d
 // --- EVENTS ---
 export async function dbGetEvents(): Promise<Event[]> {
   let rawEvents: any[] = [];
-  if (isSupabaseConfigured() && !getSupabaseOffline() && supabase) {
-    try {
-      const { data, error } = await supabase.from('events').select('*');
-      if (error) throw error;
-      rawEvents = data || [];
-    } catch (err) {
-      console.error('Supabase dbGetEvents failed, falling back to local DB:', err);
-      setSupabaseOffline(true);
-      rawEvents = getLocalDb().events;
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { data, error } = await client.from('events').select('*');
+        if (error) throw error;
+        rawEvents = data || [];
+      } catch (err) {
+        console.error('Supabase dbGetEvents failed, falling back to local DB:', err);
+        setSupabaseOffline(true);
+        rawEvents = getLocalDb().events;
+      }
     }
   } else {
     rawEvents = getLocalDb().events;
@@ -1396,41 +1399,85 @@ export async function dbDeleteVerticalResource(id: string): Promise<void> {
   }
 }
 
-// --- REGISTRATIONS ---
-export async function dbGetJoinRegistrations(): Promise<any[]> {
-  if (isSupabaseConfigured() && supabase) {
-    try {
-      const { data, error } = await supabase.from('profiles').select('*').eq('status', 'inactive').eq('role', 'MEMBER');
-      if (error) throw error;
-      return (data || []).map(p => ({
-        id: p.id,
-        name: p.full_name || 'Student Candidate',
-        email: p.email,
-        phone: p.phone || 'N/A',
-        course: 'Computer Science',
-        year: '1',
-        preferredVertical: 'General Inquiry',
-        timestamp: p.created_at
-      }));
-    } catch (err) {
-      if (isSupabaseConfigured()) throw err;
+export async function dbGetDashboardStats(): Promise<{ totalMembers: number; upcomingEvents: number; newRegistrations: number }> {
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const todayStr = today.toISOString().split('T')[0];
 
-      console.error("Supabase dbGetJoinRegistrations failed:", err);
-      throw err;
+        const [membersRes, eventsRes, regsRes] = await Promise.all([
+          client.from('profiles').select('id', { count: 'exact', head: true }).eq('status', 'active'),
+          client.from('events').select('id', { count: 'exact', head: true }).gte('date', todayStr),
+          client.from('profiles').select('id', { count: 'exact', head: true }).eq('status', 'inactive').eq('role', 'MEMBER')
+        ]);
+
+        if (membersRes.error) throw membersRes.error;
+        if (eventsRes.error) throw eventsRes.error;
+        if (regsRes.error) throw regsRes.error;
+
+        return {
+          totalMembers: membersRes.count || 0,
+          upcomingEvents: eventsRes.count || 0,
+          newRegistrations: regsRes.count || 0
+        };
+      } catch (err) {
+        console.error('Supabase dbGetDashboardStats failed, falling back to local DB:', err);
+        setSupabaseOffline(true);
+      }
     }
-  } else {
-    const db = getLocalDb();
-    return db.users.filter(u => u.status === 'inactive' && u.role === 'MEMBER').map(u => ({
-      id: u.id,
-      name: u.full_name || u.name,
-      email: u.email,
-      phone: u.phone || 'N/A',
-      course: 'Computer Science',
-      year: '1',
-      preferredVertical: 'General Inquiry',
-      timestamp: u.createdAt
-    }));
   }
+
+  // Fallback to local DB
+  const db = getLocalDb();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const totalMembers = db.users.filter(u => u.status === 'active').length;
+  const upcomingEvents = db.events.filter(e => new Date(e.date) >= today).length;
+  const newRegistrations = db.users.filter(u => u.status === 'inactive' && u.role === 'MEMBER').length;
+
+  return { totalMembers, upcomingEvents, newRegistrations };
+}
+
+export async function dbGetJoinRegistrations(): Promise<any[]> {
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { data, error } = await client.from('profiles').select('*').eq('status', 'inactive').eq('role', 'MEMBER');
+        if (error) throw error;
+        return (data || []).map(p => ({
+          id: p.id,
+          name: p.full_name || 'Student Candidate',
+          email: p.email,
+          phone: p.phone || 'N/A',
+          course: 'Computer Science',
+          year: '1',
+          preferredVertical: 'General Inquiry',
+          timestamp: p.created_at
+        }));
+      } catch (err) {
+        console.error("Supabase dbGetJoinRegistrations failed:", err);
+        if (isSupabaseConfigured()) throw err;
+        throw err;
+      }
+    }
+  }
+
+  const db = getLocalDb();
+  return db.users.filter(u => u.status === 'inactive' && u.role === 'MEMBER').map(u => ({
+    id: u.id,
+    name: u.full_name || u.name,
+    email: u.email,
+    phone: u.phone || 'N/A',
+    course: 'Computer Science',
+    year: '1',
+    preferredVertical: 'General Inquiry',
+    timestamp: u.createdAt
+  }));
 }
 
 export async function dbApproveRegistration(userId: string): Promise<void> {

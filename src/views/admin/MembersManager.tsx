@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { fetchFromSheet } from '@/services/api';
 import { 
@@ -244,6 +244,136 @@ const ImageCropperModal: React.FC<ImageCropperModalProps> = ({ imageSrc, onClose
   );
 };
 
+interface MemberRowProps {
+  user: any;
+  committees: any[];
+  verticals: any[];
+  onEdit: (u: any) => void;
+  onToggleStatus: (userId: string, currentStatus: string) => void;
+  onDeleteConfirm: (userId: string) => void;
+}
+
+const MemberRow: React.FC<MemberRowProps> = React.memo(({
+  user,
+  committees,
+  verticals,
+  onEdit,
+  onToggleStatus,
+  onDeleteConfirm
+}) => {
+  const commName = committees.find(c => c.id === user.committeeId || c.id === user.committee_id)?.name;
+  const vertName = verticals.find(v => v.id === user.verticalId || v.id === user.vertical_id)?.name;
+  const photoSrc = user.profilePhoto || user.profile_photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.full_name || 'U')}&background=CD0000&color=fff`;
+  const regNum = user.regNo || user.reg_no;
+  const className = user.class || user.class_name;
+
+  return (
+    <tr className="hover:bg-slate-50/50 transition-colors text-slate-700">
+      <td className="p-4">
+        <div className="flex items-center gap-3">
+          <img
+            src={photoSrc}
+            alt={user.name || user.full_name}
+            loading="lazy"
+            decoding="async"
+            className="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0"
+            onError={e => {
+              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.full_name || 'U')}&background=CD0000&color=fff`;
+            }}
+          />
+          <div>
+            <p className="text-slate-900 font-bold leading-tight">{user.name || user.full_name}</p>
+            {(regNum || className) && (
+              <p className="text-[10px] text-slate-400 font-semibold mt-0.5">
+                {regNum ? `Reg: ${regNum}` : ''}
+                {regNum && className ? ' · ' : ''}
+                {className ? `Class: ${className}` : ''}
+              </p>
+            )}
+          </div>
+        </div>
+      </td>
+      <td className="p-4 text-slate-500 font-semibold">{user.email}</td>
+      <td className="p-4">
+        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+          user.role === 'ADMIN' ? 'bg-[#CD0000]/5 border-[#CD0000]/15 text-[#CD0000]' : 'bg-slate-100 border-slate-200 text-slate-700'
+        }`}>
+          {user.role}
+        </span>
+      </td>
+      <td className="p-4">
+        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+          user.status === 'active' ? 'bg-green-50 border-green-150 text-green-600' : 'bg-red-50 border-red-150 text-red-500'
+        }`}>
+          {user.status}
+        </span>
+      </td>
+      <td className="p-4 text-xs font-bold text-slate-800">
+        {commName && <div className="text-[#CD0000]">{commName} (Comm)</div>}
+        {vertName && <div className="text-purple-600">{vertName} (Domain)</div>}
+        {!commName && !vertName && <span className="text-slate-400 italic font-normal">—</span>}
+      </td>
+      <td className="p-4 text-right">
+        <div className="flex justify-end gap-1.5">
+          <button onClick={() => onEdit(user)} className="p-1.5 text-slate-400 hover:text-[#CD0000] hover:bg-red-50 rounded-lg transition-colors" title="Edit"><Edit2 size={13} /></button>
+          <button onClick={() => onToggleStatus(user.id, user.status)} className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors" title={user.status === 'active' ? 'Deactivate' : 'Activate'}>
+            {user.status === 'active' ? <Ban size={13} /> : <Check size={13} />}
+          </button>
+          <button onClick={() => onDeleteConfirm(user.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Remove"><Trash2 size={13} /></button>
+        </div>
+      </td>
+    </tr>
+  );
+}, (prevProps, nextProps) => {
+  return (
+    prevProps.user === nextProps.user &&
+    prevProps.committees === nextProps.committees &&
+    prevProps.verticals === nextProps.verticals
+  );
+});
+MemberRow.displayName = 'MemberRow';
+
+const TableSkeleton = () => (
+  <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-xs space-y-4 animate-pulse">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="w-64 h-8 bg-slate-150 rounded-xl" />
+      <div className="w-32 h-4 bg-slate-150 rounded-md" />
+    </div>
+    <div className="overflow-x-auto border border-slate-100 rounded-xl">
+      <table className="w-full text-left text-sm">
+        <thead className="bg-slate-50 border-b border-slate-100">
+          <tr>
+            <th className="p-4"><div className="w-24 h-4 bg-slate-200 rounded-md" /></th>
+            <th className="p-4"><div className="w-20 h-4 bg-slate-200 rounded-md" /></th>
+            <th className="p-4"><div className="w-16 h-4 bg-slate-200 rounded-md" /></th>
+            <th className="p-4"><div className="w-16 h-4 bg-slate-200 rounded-md" /></th>
+            <th className="p-4"><div className="w-24 h-4 bg-slate-200 rounded-md" /></th>
+            <th className="p-4 text-right"><div className="w-16 h-4 bg-slate-200 rounded-md ml-auto" /></th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-100">
+          {Array.from({ length: 5 }).map((_, idx) => (
+            <tr key={idx} className="bg-white">
+              <td className="p-4 flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-slate-200 shrink-0" />
+                <div className="space-y-1.5 w-full">
+                  <div className="w-24 h-3.5 bg-slate-200 rounded-md" />
+                  <div className="w-16 h-2.5 bg-slate-150 rounded-md" />
+                </div>
+              </td>
+              <td className="p-4"><div className="w-36 h-3.5 bg-slate-200 rounded-md" /></td>
+              <td className="p-4"><div className="w-12 h-5 bg-slate-200 rounded-full" /></td>
+              <td className="p-4"><div className="w-12 h-5 bg-slate-200 rounded-full" /></td>
+              <td className="p-4"><div className="w-20 h-3.5 bg-slate-200 rounded-md" /></td>
+              <td className="p-4 text-right"><div className="w-16 h-6 bg-slate-200 rounded-md ml-auto" /></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+);
+
 export default function MembersManager() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'directory' | 'recruitment'>('directory');
@@ -356,7 +486,7 @@ export default function MembersManager() {
     };
   }, [showCreateModal, showEditModal, deleteConfirm, showNewCommitteeModal]);
 
-  const handleCreateUser = async (e: React.FormEvent) => {
+  const handleCreateUser = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newUserName || !newUserEmail) return;
 
@@ -367,6 +497,32 @@ export default function MembersManager() {
       return;
     }
 
+    const prevUsers = [...users];
+    const tempId = `temp-${Date.now()}`;
+    const newUser = {
+      id: tempId,
+      full_name: newUserName,
+      name: newUserName,
+      email: newUserEmail,
+      role: newUserRole,
+      status: 'active',
+      committee_id: newUserCommittee || null,
+      vertical_id: newUserVertical || null,
+      created_at: new Date().toISOString()
+    };
+
+    // Optimistic UI Update
+    setUsers(prev => [newUser, ...prev]);
+    setShowCreateModal(false);
+    showToast('New member added successfully!', 'success');
+
+    // Reset input states
+    setNewUserName('');
+    setNewUserEmail('');
+    setNewUserRole('MEMBER');
+    setNewUserCommittee('');
+    setNewUserVertical('');
+
     try {
       await fetchFromSheet('createUser', {
         name: newUserName,
@@ -375,21 +531,44 @@ export default function MembersManager() {
         committeeId: newUserCommittee || undefined,
         verticalId: newUserVertical || undefined
       });
-      setNewUserName('');
-      setNewUserEmail('');
-      setNewUserRole('MEMBER');
-      setNewUserCommittee('');
-      setNewUserVertical('');
-      setShowCreateModal(false);
-      await loadData();
-      showToast('New member added successfully!', 'success');
+      // Silent background revalidation
+      fetchFromSheet<any[]>('getRoles').then((allUsers) => {
+        if (Array.isArray(allUsers)) {
+          setUsers(allUsers);
+        }
+      }).catch(err => console.warn('Background sync failed:', err));
     } catch (err: any) {
+      // Rollback on failure
+      setUsers(prevUsers);
       showToast(err.message || 'Failed to create user.', 'error');
     }
-  };
+  }, [newUserName, newUserEmail, newUserRole, newUserCommittee, newUserVertical, users]);
 
-  const handleEditUser = async (e: React.FormEvent) => {
+  const handleEditUser = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
+    const prevUsers = [...users];
+    
+    // Optimistic user update payload matching form states
+    const updatedUser = {
+      ...users.find(u => u.id === editingUserId),
+      full_name: editingUserName,
+      name: editingUserName,
+      role: editingUserRole,
+      committee_id: editingUserCommittee || null,
+      vertical_id: editingUserVertical || null,
+      designation: editingUserDesignation || null,
+      profile_photo: editingUserPhoto || null,
+      reg_no: editingUserRegNo || null,
+      class_name: editingUserClass || null,
+      github: editingUserGithub || null,
+      linkedin: editingUserLinkedin || null
+    };
+
+    // Optimistic UI Update
+    setUsers(prev => prev.map(u => u.id === editingUserId ? updatedUser : u));
+    setShowEditModal(false);
+    showToast('Member details updated successfully!', 'success');
+
     try {
       await fetchFromSheet('updateUserDetails', {
         userId: editingUserId,
@@ -404,57 +583,133 @@ export default function MembersManager() {
         regNo: editingUserRegNo || undefined,
         class: editingUserClass || undefined
       });
-      setShowEditModal(false);
-      await loadData();
-      showToast('Member details updated successfully!', 'success');
+      // Silent background revalidation
+      fetchFromSheet<any[]>('getRoles').then((allUsers) => {
+        if (Array.isArray(allUsers)) {
+          setUsers(allUsers);
+        }
+      }).catch(err => console.warn('Background sync failed:', err));
     } catch (err: any) {
+      // Rollback on failure
+      setUsers(prevUsers);
       showToast(err.message || 'Failed to update user.', 'error');
     }
-  };
+  }, [
+    editingUserId, editingUserName, editingUserRole, editingUserCommittee, editingUserVertical,
+    editingUserDesignation, editingUserPhoto, editingUserGithub, editingUserLinkedin,
+    editingUserRegNo, editingUserClass, users
+  ]);
 
-  const handleToggleStatus = async (userId: string, currentStatus: string) => {
+  const handleToggleStatus = useCallback(async (userId: string, currentStatus: string) => {
+    const prevUsers = [...users];
     const nextStatus = currentStatus === 'active' ? 'inactive' : 'active';
+    
+    // Optimistic UI Update
+    setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: nextStatus } : u));
+    showToast(`Member status updated to ${nextStatus}.`, 'success');
+
     try {
       await fetchFromSheet('updateUserStatus', { userId, status: nextStatus });
-      await loadData();
-      showToast(`Member status updated to ${nextStatus}.`, 'success');
+      // Silent background revalidation
+      fetchFromSheet<any[]>('getRoles').then((allUsers) => {
+        if (Array.isArray(allUsers)) {
+          setUsers(allUsers);
+        }
+      }).catch(err => console.warn('Background sync failed:', err));
     } catch (err: any) {
+      // Rollback on failure
+      setUsers(prevUsers);
       showToast(err.message || 'Failed to update status.', 'error');
     }
-  };
+  }, [users]);
 
-  const handleDeleteUser = async (userId: string) => {
+  const handleDeleteUser = useCallback(async (userId: string) => {
+    const prevUsers = [...users];
+    
+    // Optimistic UI Update
+    setUsers(prev => prev.filter(u => u.id !== userId));
+    setDeleteConfirm(null);
+    showToast('Member removed from directory.', 'success');
+
     try {
       await fetchFromSheet('deleteUser', { id: userId });
-      await loadData();
-      showToast('Member removed from directory.', 'success');
+      // Silent background revalidation
+      fetchFromSheet<any[]>('getRoles').then((allUsers) => {
+        if (Array.isArray(allUsers)) {
+          setUsers(allUsers);
+        }
+      }).catch(err => console.warn('Background sync failed:', err));
     } catch (err: any) {
+      // Rollback on failure
+      setUsers(prevUsers);
       showToast(err.message || 'Failed to remove user.', 'error');
     }
-    setDeleteConfirm(null);
-  };
+  }, [users]);
 
-  const handleApproveRegistration = async (id: string) => {
+  const handleApproveRegistration = useCallback(async (id: string) => {
+    const prevRegs = [...registrations];
+    const prevUsers = [...users];
+    
+    const regToApprove = registrations.find(r => r.id === id);
+    if (!regToApprove) return;
+
+    // Optimistically remove from recruitment list and add to directory
+    setRegistrations(prev => prev.filter(r => r.id !== id));
+    setUsers(prev => [
+      {
+        id: regToApprove.id,
+        full_name: regToApprove.name,
+        name: regToApprove.name,
+        email: regToApprove.email,
+        role: 'MEMBER',
+        status: 'active',
+        created_at: new Date().toISOString()
+      },
+      ...prev
+    ]);
+    showToast('Registration application approved!', 'success');
+
     try {
       await fetchFromSheet('approveRegistration', { id });
-      await loadData();
-      showToast('Registration application approved!', 'success');
+      // Silent background revalidation
+      Promise.all([
+        fetchFromSheet<any[]>('getRoles'),
+        fetchFromSheet<any[]>('getJoinRegistrations')
+      ]).then(([allUsers, allRegs]) => {
+        if (Array.isArray(allUsers)) setUsers(allUsers);
+        if (Array.isArray(allRegs)) setRegistrations(allRegs);
+      }).catch(err => console.warn('Background sync failed:', err));
     } catch (e) {
+      // Rollback on failure
+      setRegistrations(prevRegs);
+      setUsers(prevUsers);
       showToast('Failed to approve registration.', 'error');
     }
-  };
+  }, [registrations, users]);
 
-  const handleRejectRegistration = async (id: string) => {
+  const handleRejectRegistration = useCallback(async (id: string) => {
+    const prevRegs = [...registrations];
+    
+    // Optimistic UI Update
+    setRegistrations(prev => prev.filter(r => r.id !== id));
+    showToast('Registration application rejected.', 'error');
+
     try {
       await fetchFromSheet('rejectRegistration', { id });
-      await loadData();
-      showToast('Registration application rejected.', 'error');
+      // Silent background revalidation
+      fetchFromSheet<any[]>('getJoinRegistrations').then((allRegs) => {
+        if (Array.isArray(allRegs)) {
+          setRegistrations(allRegs);
+        }
+      }).catch(err => console.warn('Background sync failed:', err));
     } catch (e) {
+      // Rollback on failure
+      setRegistrations(prevRegs);
       showToast('Failed to reject registration.', 'error');
     }
-  };
+  }, [registrations]);
 
-  const openEditUser = (u: any) => {
+  const openEditUser = useCallback((u: any) => {
     setEditingUserId(u.id);
     setEditingUserName(u.name || u.full_name || '');
     setEditingUserRole(u.role || 'MEMBER');
@@ -467,7 +722,7 @@ export default function MembersManager() {
     setEditingUserGithub(u.github || '');
     setEditingUserLinkedin(u.linkedin || '');
     setShowEditModal(true);
-  };
+  }, []);
 
   const handleAddCommitteePrompt = () => {
     setNewCommitteeName('');
@@ -608,10 +863,7 @@ export default function MembersManager() {
       </div>
 
       {loading ? (
-        <div className="bg-white border border-[#E5E7EB] rounded-2xl p-16 text-center text-slate-400">
-          <RefreshCw size={24} className="animate-spin text-[#CD0000] mx-auto mb-2" />
-          Loading workspace...
-        </div>
+        <TableSkeleton />
       ) : activeTab === 'directory' ? (
         /* Active Directory */
         <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-xs space-y-4">
@@ -634,7 +886,7 @@ export default function MembersManager() {
               </p>
             )}
           </div>
-
+ 
           <div className="overflow-x-auto border border-slate-100 rounded-xl">
             <table className="w-full text-left text-sm text-[#667085]">
               <thead className="bg-slate-50/80 border-b border-slate-100 text-xs font-bold text-[#8c97a8] uppercase tracking-wider">
@@ -648,71 +900,17 @@ export default function MembersManager() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#E5E7EB]">
-                {paginatedUsers.map(u => {
-                  const commName = committees.find(c => c.id === u.committeeId || c.id === u.committee_id)?.name;
-                  const vertName = verticals.find(v => v.id === u.verticalId || v.id === u.vertical_id)?.name;
-                  const photoSrc = u.profilePhoto || u.profile_photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name || u.full_name || 'U')}&background=CD0000&color=fff`;
-                  const regNum = u.regNo || u.reg_no;
-                  const className = u.class || u.class_name;
-
-                  return (
-                    <tr key={u.id} className="hover:bg-slate-50/50 transition-colors text-slate-700">
-                      <td className="p-4">
-                        <div className="flex items-center gap-3">
-                          <img
-                            src={photoSrc}
-                            alt={u.name || u.full_name}
-                            loading="lazy"
-                            decoding="async"
-                            className="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0"
-                            onError={e => {
-                              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(u.name || u.full_name || 'U')}&background=CD0000&color=fff`;
-                            }}
-                          />
-                          <div>
-                            <p className="text-slate-900 font-bold leading-tight">{u.name || u.full_name}</p>
-                            {(regNum || className) && (
-                              <p className="text-[10px] text-slate-400 font-semibold mt-0.5">
-                                {regNum ? `Reg: ${regNum}` : ''}
-                                {regNum && className ? ' · ' : ''}
-                                {className ? `Class: ${className}` : ''}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="p-4 text-slate-500 font-semibold">{u.email}</td>
-                      <td className="p-4">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
-                          u.role === 'ADMIN' ? 'bg-[#CD0000]/5 border-[#CD0000]/15 text-[#CD0000]' : 'bg-slate-100 border-slate-200 text-slate-700'
-                        }`}>
-                          {u.role}
-                        </span>
-                      </td>
-                      <td className="p-4">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
-                          u.status === 'active' ? 'bg-green-50 border-green-150 text-green-600' : 'bg-red-50 border-red-150 text-red-500'
-                        }`}>
-                          {u.status}
-                        </span>
-                      </td>
-                      <td className="p-4 text-xs font-bold text-slate-800">
-                        {commName && <div className="text-[#CD0000]">{commName} (Comm)</div>}
-                        {vertName && <div className="text-purple-600">{vertName} (Domain)</div>}
-                        {!commName && !vertName && <span className="text-slate-400 italic font-normal">—</span>}
-                      </td>
-                      <td className="p-4 text-right">
-                        <div className="flex justify-end gap-1.5">
-                          <button onClick={() => openEditUser(u)} className="p-1.5 text-slate-400 hover:text-[#CD0000] hover:bg-red-50 rounded-lg transition-colors" title="Edit"><Edit2 size={13} /></button>
-                          <button onClick={() => handleToggleStatus(u.id, u.status)} className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors" title={u.status === 'active' ? 'Deactivate' : 'Activate'}>
-                            {u.status === 'active' ? <Ban size={13} /> : <Check size={13} />}
-                          </button>
-                          <button onClick={() => setDeleteConfirm(u.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Remove"><Trash2 size={13} /></button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {paginatedUsers.map(u => (
+                  <MemberRow
+                    key={u.id}
+                    user={u}
+                    committees={committees}
+                    verticals={verticals}
+                    onEdit={openEditUser}
+                    onToggleStatus={handleToggleStatus}
+                    onDeleteConfirm={setDeleteConfirm}
+                  />
+                ))}
                 {filteredUsers.length === 0 && (
                   <tr><td colSpan={6} className="p-10 text-center text-slate-400">No members found matching your search.</td></tr>
                 )}

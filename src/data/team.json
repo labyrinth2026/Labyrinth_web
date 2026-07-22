@@ -1,8 +1,8 @@
 {
   "facultyCoordinators": [
-    { "id": "f1", "name": "Dr. Amrutha K", "role": "Faculty Coordinator", "designation": "Assistant Professor", "department": "Department of Computer Science", "email": "amrutha@cs.christuniversity.in", "profileUrl": "https://christuniversity.in/computer-science/faculty-details/NzE0Mg==/NjI=", "linkedin": "#", "avatar": null },
-    { "id": "f2", "name": "Dr. Binayak Dutta", "role": "Faculty Coordinator", "designation": "Assistant Professor", "department": "Department of Computer Science", "email": "binayak@cs.christuniversity.in", "profileUrl": "https://christuniversity.in/computer-science/faculty-details/ODc2OQ==/NjI=", "linkedin": "#", "avatar": null },
-    { "id": "f3", "name": "Dr. Syam Mohan E", "role": "Faculty Coordinator", "designation": "Assistant Professor", "department": "Department of Computer Science", "email": "syam@cs.christuniversity.in", "profileUrl": "https://christuniversity.in/computer-science/faculty-details/OTM1NA==/NjI=", "linkedin": "#", "avatar": null }
+    { "id": "f1", "name": "Dr. Amrutha K", "role": "Faculty Coordinator", "designation": "Assistant Professor", "department": "Department of Computer Science", "email": "amrutha@cs.christuniversity.in", "profileUrl": "https://christuniversity.in/computer-science/faculty-details/NzE0Mg==/NjI=", "linkedin": "#", "avatar": "/amrutha.jpg" },
+    { "id": "f2", "name": "Dr. Binayak Dutta", "role": "Faculty Coordinator", "designation": "Assistant Professor", "department": "Department of Computer Science", "email": "binayak@cs.christuniversity.in", "profileUrl": "https://christuniversity.in/computer-science/faculty-details/ODc2OQ==/NjI=", "linkedin": "#", "avatar": "/binayak.jpg" },
+    { "id": "f3", "name": "Dr. Syam Mohan E", "role": "Faculty Coordinator", "designation": "Assistant Professor", "department": "Department of Computer Science", "email": "syam@cs.christuniversity.in", "profileUrl": "https://christuniversity.in/computer-science/faculty-details/OTM1NA==/NjI=", "linkedin": "#", "avatar": "/syam.jpg" }
   ],
   "mentors": [
   ],
