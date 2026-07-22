@@ -174,7 +174,13 @@ export async function POST(req: NextRequest) {
             mentors,
             coreCommittee,
             verticalHeads,
-            subHeads
+            subHeads,
+            debug: {
+              rolesCount: roles.length,
+              verticalsCount: verticals.length,
+              committeesCount: committees.length,
+              sampleRole: roles[0] || null
+            }
           }
         });
       }
