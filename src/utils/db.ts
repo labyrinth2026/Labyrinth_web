@@ -348,15 +348,18 @@ export async function dbDeleteRole(userId: string): Promise<void> {
 export async function dbDeleteUser(userId: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
     const adminClient = getSupabaseAdmin();
-    if (adminClient) {
-      // Delete from Supabase Auth (cascades to profiles via RLS/trigger)
-      const { error: authErr } = await adminClient.auth.admin.deleteUser(userId);
-      if (authErr) throw authErr;
-    } else {
-      // Fallback: just delete the profile row
-      const { error } = await supabase.from('profiles').delete().eq('id', userId);
-      if (error) throw error;
+    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId);
+    if (adminClient && isUUID) {
+      try {
+        const { error: authErr } = await adminClient.auth.admin.deleteUser(userId);
+        if (authErr) console.warn('[dbDeleteUser] Supabase auth delete warning:', authErr);
+      } catch (authErr) {
+        console.warn('[dbDeleteUser] Supabase auth delete skipped:', authErr);
+      }
     }
+    const client = adminClient || supabase;
+    const { error } = await client.from('profiles').delete().eq('id', userId);
+    if (error) throw error;
   } else {
     const db = getLocalDb();
     db.users = db.users.filter((u: any) => u.id !== userId);
