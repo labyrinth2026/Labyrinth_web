@@ -13,6 +13,8 @@ import { usePrefetchOnIdle } from '../hooks/usePrefetchOnIdle';
 import { fetchFromSheet } from '../services/api';
 import pastEventsData from '../data/pastEvents.json';
 
+import WorldMapDecor from '../components/ui/WorldMapDecor';
+
 const EventsPage: React.FC = () => {
   usePrefetchOnIdle(['/gallery', '/contact']);
   const [filter, setFilter] = useState('all');
@@ -116,7 +118,7 @@ const EventsPage: React.FC = () => {
 
   return (
     <PageWrapper>
-      {/* Header with background image */}
+      {/* Header with background image and 3-Layer Decorative World Map */}
       <section className="relative bg-white border-b border-slate-100 overflow-hidden">
         <div className="absolute inset-0">
           <Image
@@ -129,6 +131,10 @@ const EventsPage: React.FC = () => {
           />
           <div className="absolute inset-0 bg-white/85" />
         </div>
+
+        {/* ── 3 Visual Layers Decorative World Map ── */}
+        <WorldMapDecor className="z-[2]" />
+
         <div className="container mx-auto px-6 max-w-7xl relative z-10 pt-24">
           <ScrollReveal animation="fade">
             <div className="text-center mb-16">

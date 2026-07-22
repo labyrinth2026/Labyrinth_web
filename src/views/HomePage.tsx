@@ -12,6 +12,7 @@ import Link from 'next/link';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import ScrollReveal from '../components/ui/ScrollReveal';
+import WorldMapDecor from '../components/ui/WorldMapDecor';
 import dynamic from 'next/dynamic';
 import { usePrefetchOnIdle } from '../hooks/usePrefetchOnIdle';
 
@@ -465,8 +466,11 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* ── SDG Projects Initiative ── */}
-        <section className="py-24 bg-slate-50/50 border-t border-slate-100">
-          <div className="container mx-auto px-6 max-w-7xl">
+        <section className="py-24 bg-slate-50/50 border-t border-slate-100 relative overflow-hidden">
+          {/* Decorative 3-Layer World Map Background */}
+          <WorldMapDecor className="z-0 top-0 right-0" />
+
+          <div className="container mx-auto px-6 max-w-7xl relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* Text – left */}
               <ScrollReveal animation="slide-right">
@@ -485,8 +489,8 @@ const HomePage: React.FC = () => {
                   </p>
                   <div className="bg-white border border-slate-200/80 rounded-2xl px-6 py-4 inline-block w-fit shadow-xs">
                     <p className="text-[10px] text-slate-400 font-bold mb-1 uppercase tracking-widest">Proposal Submission Email</p>
-                    <a href="mailto:labyrinth@cs.christuniversity.in" className="text-lg font-bold text-[#CD0000] hover:text-[#9E0000] transition-colors tracking-tight">
-                      labyrinth@cs.christuniversity.in
+                    <a href="mailto:labyrinth.christ@christuniversity.in" className="text-lg font-bold text-[#CD0000] hover:text-[#9E0000] transition-colors tracking-tight">
+                      labyrinth.christ@christuniversity.in
                     </a>
                   </div>
                 </div>
