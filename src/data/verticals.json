@@ -2,7 +2,7 @@
   {
     "id": "v-ai-hub",
     "name": "AI HUB",
-    "description": "Where artificial intelligence meets real-world application! From deep learning to generative AI, building smart models and intelligent systems.",
+    "description": "The Artificial Intelligence Vertical focuses on understanding and applying AI and Machine Learning concepts to solve real-world challenges. Members will explore AI tools, build intelligent applications, and gain exposure to emerging technologies shaping the future. Through workshops, hands-on projects, and discussions on ethical AI, students will develop both technical knowledge and an understanding of responsible innovation.",
     "category": "tech",
     "icon": "Brain",
     "color": "#3b82f6"
@@ -10,7 +10,7 @@
   {
     "id": "v-devzen",
     "name": "DevZen",
-    "description": "Full-stack web, app development, and software architecture. Master modern frameworks and turn ideas into production-ready software.",
+    "description": "The Development Vertical focuses on building innovative software solutions, websites, mobile applications, and technical projects that solve real-world problems. Members will collaborate on coding projects, participate in hackathons, and explore modern technologies through practical implementation. This vertical provides opportunities to strengthen programming skills, contribute to club initiatives, and gain hands-on experience in software development while working as a team.",
     "category": "tech",
     "icon": "Code2",
     "color": "#10b981"
@@ -18,7 +18,7 @@
   {
     "id": "v-autobot",
     "name": "AutoBot",
-    "description": "Robotics, IoT, and hardware automation. Designing smart systems, embedded circuits, and autonomous tech.",
+    "description": "The Robotics & IoT Vertical explores the exciting world of automation, robotics, embedded systems, and smart technologies. Members will participate in hands-on workshops, hardware-based projects, and competitions that combine both software and electronics. Whether you're a beginner or experienced, this vertical encourages innovation, experimentation, and building real-world solutions using modern technologies.",
     "category": "tech",
     "icon": "Cpu",
     "color": "#ef4444"
@@ -26,7 +26,7 @@
   {
     "id": "v-insightx",
     "name": "InsightX",
-    "description": "Data analytics, machine learning visualization, and big data insights that decode patterns and drive data-backed decisions.",
+    "description": "The Data Analytics Vertical introduces members to the process of collecting, analyzing, and visualizing data to make informed decisions. Students will learn tools such as Excel, SQL, Python, Power BI, and Tableau through practical workshops and real-world datasets. Members will also participate in analytics challenges, case studies, and collaborative projects that develop problem-solving and analytical thinking skills.",
     "category": "tech",
     "icon": "TrendingUp",
     "color": "#8b5cf6"
@@ -34,7 +34,7 @@
   {
     "id": "v-fieldops",
     "name": "FieldOps",
-    "description": "The energy hub of Labyrinth! FieldOps manages event logistics, sports tournaments, and operational excellence.",
+    "description": "The FieldOps Vertical is dedicated to promoting teamwork, leadership, and an active campus culture through engaging indoor and outdoor games, sports events, and recreational activities. Members will plan, organize, and manage tournaments, fun competitions, fitness challenges, and interactive sporting events for students. This vertical aims to encourage sportsmanship, collaboration, and student participation while creating enjoyable experiences that strengthen the Labyrinth community beyond technology.",
     "category": "non-tech",
     "icon": "MapPin",
     "color": "#06b6d4"
@@ -42,7 +42,7 @@
   {
     "id": "v-debate",
     "name": "Debate",
-    "description": "Speak smart, think sharp! The debate vertical fosters critical thinking, public speaking, discussions, and idea battles.",
+    "description": "The Debate Vertical provides a platform for students to develop confidence, public speaking, logical reasoning, and critical thinking. Members will participate in debates, panel discussions, mock sessions, and conversations on current affairs, technology, and innovation. The vertical encourages respectful discussions, diverse perspectives, and effective communication while helping members become confident speakers and leaders.",
     "category": "non-tech",
     "icon": "MessageCircle",
     "color": "#f97316"
@@ -50,7 +50,7 @@
   {
     "id": "v-startovate",
     "name": "Startovate",
-    "description": "Dream. Build. Lead. Startovate inspires startup culture, pitch deck creation, and incubation mentorship.",
+    "description": "The Entrepreneurship Vertical nurtures creativity, innovation, and leadership by encouraging students to transform ideas into impactful solutions. Members will participate in startup ideation sessions, founder interactions, business case competitions, and innovation challenges. The vertical aims to develop an entrepreneurial mindset while helping students understand business strategy, problem-solving, teamwork, and effective decision-making.",
     "category": "non-tech",
     "icon": "Rocket",
     "color": "#14b8a6"
@@ -58,7 +58,7 @@
   {
     "id": "v-interverse",
     "name": "InterVerse",
-    "description": "Virtual reality, augmented reality, 3D modeling, and immersive digital experience design.",
+    "description": "The Collaboration Vertical serves as the bridge between Labyrinth and the wider community by building meaningful partnerships with student clubs, universities, industry professionals, and organizations. Members will coordinate collaborative events, networking opportunities, and knowledge-sharing initiatives. This vertical helps students develop communication, relationship-building, and organizational skills while expanding the reach and impact of the club.",
     "category": "non-tech",
     "icon": "Layers",
     "color": "#ec4899"
@@ -66,23 +66,15 @@
   {
     "id": "v-peer-sessions",
     "name": "Peer Sessions",
-    "description": "Student-led peer teaching, workshops, and collaborative learning circles making knowledge sharing seamless.",
+    "description": "The Peer Learning Vertical focuses on creating a collaborative learning environment where students learn from and teach one another. Members will organize peer-led workshops, technical sessions, coding tutorials, project demonstrations, and skill-sharing activities across various domains. This vertical promotes continuous learning, effective communication, and teamwork by providing students with opportunities to share knowledge, strengthen their technical skills, and help others grow within the Labyrinth community.",
     "category": "non-tech",
     "icon": "Users",
     "color": "#6366f1"
   },
   {
-    "id": "v-design-media",
-    "name": "Design & Media",
-    "description": "Visual branding, UI/UX, video production, graphic design, and social media content creation.",
-    "category": "non-tech",
-    "icon": "Palette",
-    "color": "#a855f7"
-  },
-  {
     "id": "v-research-guidance",
     "name": "Research Wing",
-    "description": "Academic paper writing, research methodology, R&D innovation, and conference publication support.",
+    "description": "The Research Vertical encourages members to explore emerging technologies, innovative ideas, and current trends in the field of Computer Science. Members will engage in research discussions, paper reviews, faculty-guided sessions, and project exploration to develop a deeper understanding of various technical domains. This vertical aims to foster curiosity, critical thinking, and innovation by encouraging students to contribute to research projects, explore new technologies, and build solutions that have a meaningful impact.",
     "category": "research",
     "icon": "BookOpen",
     "color": "#059669"
