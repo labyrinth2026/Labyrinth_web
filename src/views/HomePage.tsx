@@ -506,90 +506,10 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* ── SDGs Supported by Labyrinth ── */}
-        <section className="py-24 bg-[#EFEDE6] border-t border-slate-100 relative overflow-hidden z-0">
-          {/* Scoped CSS for GPU accelerated radar ring animation */}
-          <style dangerouslySetInnerHTML={{ __html: `
-            @keyframes radar-pulse-grow {
-              0% {
-                transform: scale(0.25);
-                opacity: 0.8;
-              }
-              100% {
-                transform: scale(3.5);
-                opacity: 0;
-              }
-            }
-            .animate-radar-ring {
-              animation: radar-pulse-grow 3.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-              transform-origin: 600px 220px;
-            }
-          `}} />
-
-          {/* Dotted World Map Background */}
-          <div className="absolute top-0 right-0 w-[90%] md:w-[65%] lg:w-[48%] h-full pointer-events-none select-none z-0 opacity-[0.05] md:opacity-[0.07] lg:opacity-[0.09] blur-[0.5px] translate-x-16 lg:translate-x-8">
-            <svg
-              viewBox="0 0 1000 500"
-              className="w-full h-full object-contain object-right-top"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <defs>
-                <pattern id="world-dot-pattern" width="10" height="10" patternUnits="userSpaceOnUse">
-                  <circle cx="3" cy="3" r="1.5" fill="#5C5C5C" />
-                </pattern>
-              </defs>
-              {/* Continent Paths */}
-              <g fill="url(#world-dot-pattern)">
-                {/* North America */}
-                <path d="M 120 100 L 160 85 L 200 95 L 240 75 L 260 90 L 290 85 L 300 135 L 270 160 L 250 170 L 230 240 L 210 260 L 205 250 L 205 220 L 170 215 L 140 180 L 110 145 Z" />
-                {/* South America */}
-                <path d="M 230 270 L 250 280 L 275 320 L 280 345 L 260 400 L 235 440 L 230 450 L 225 440 L 210 405 L 195 365 L 195 320 L 215 285 Z" />
-                {/* Africa */}
-                <path d="M 420 220 L 460 230 L 485 240 L 520 260 L 530 290 L 525 315 L 515 345 L 490 380 L 475 415 L 470 420 L 460 410 L 450 365 L 435 340 L 400 310 L 390 280 L 395 250 L 410 230 Z" />
-                {/* Europe & Asia (Eurasia) */}
-                <path d="M 410 205 L 395 180 L 390 155 L 415 155 L 430 110 L 460 105 L 485 95 L 520 90 L 590 80 L 680 75 L 740 95 L 785 115 L 795 145 L 830 165 L 815 190 L 785 225 L 795 240 L 770 250 L 755 245 L 755 230 L 715 220 L 705 235 L 685 230 L 665 245 L 635 240 L 610 250 L 590 240 L 565 245 L 550 225 L 520 225 L 510 215 L 480 215 L 470 205 L 445 210 Z" />
-                {/* Australia */}
-                <path d="M 720 315 L 740 310 L 770 320 L 785 340 L 775 370 L 755 375 L 725 375 L 710 355 L 710 330 Z" />
-                {/* Greenland */}
-                <path d="M 320 50 L 350 55 L 360 70 L 340 90 L 320 85 L 310 70 Z" />
-              </g>
-
-              {/* Subtle connection lines from Bengaluru (600, 220) */}
-              <g fill="none" stroke="#5C5C5C" strokeWidth="1" strokeDasharray="3,4" opacity="0.4">
-                {/* To Europe */}
-                <path d="M 600,220 Q 520,180 440,160" />
-                {/* To North America */}
-                <path d="M 600,220 Q 400,100 180,140" />
-                {/* To East Asia */}
-                <path d="M 600,220 Q 690,190 780,160" />
-                {/* To Australia */}
-                <path d="M 600,220 Q 680,290 750,340" />
-                {/* To South Africa */}
-                <path d="M 600,220 Q 530,320 480,400" />
-              </g>
-
-              {/* Animated Radar Pulse Rings */}
-              <circle cx="600" cy="220" r="10" fill="none" stroke="#CD0000" strokeWidth="1.2" className="animate-radar-ring" style={{ animationDelay: '0s' }} />
-              <circle cx="600" cy="220" r="10" fill="none" stroke="#CD0000" strokeWidth="1.2" className="animate-radar-ring" style={{ animationDelay: '1.2s' }} />
-              <circle cx="600" cy="220" r="10" fill="none" stroke="#CD0000" strokeWidth="1.2" className="animate-radar-ring" style={{ animationDelay: '2.4s' }} />
-
-              {/* Location Marker - Bengaluru, India */}
-              <circle cx="600" cy="220" r="5" fill="#CD0000" filter="url(#glow-effect)" />
-              
-              <defs>
-                <filter id="glow-effect" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="1.5" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-            </svg>
-          </div>
-
-          <div className="container mx-auto px-6 max-w-7xl relative z-10">
+        <section className="py-24 bg-white border-t border-slate-100">
+          <div className="container mx-auto px-6 max-w-7xl">
             <SectionHeading title="SDGs Supported by Labyrinth" subtitle="Global Impact" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <ScrollReveal stagger={0.07}>
                 {[
                   {
