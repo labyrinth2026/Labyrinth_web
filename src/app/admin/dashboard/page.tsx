@@ -1,5 +1,16 @@
 "use client";
 
-import Dashboard from '../../../views/admin/Dashboard';
+import dynamic from 'next/dynamic';
 
-export default Dashboard;
+const Dashboard = dynamic(() => import('../../../views/admin/Dashboard'), {
+  loading: () => (
+    <div className="min-h-[400px] flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-[#CD0000] border-t-transparent rounded-full animate-spin" />
+    </div>
+  ),
+  ssr: false,
+});
+
+export default function Page() {
+  return <Dashboard />;
+}

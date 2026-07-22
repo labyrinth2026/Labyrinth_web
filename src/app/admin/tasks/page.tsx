@@ -1,5 +1,16 @@
 "use client";
 
-import TasksManager from '../../../views/admin/TasksManager';
+import dynamic from 'next/dynamic';
 
-export default TasksManager;
+const TasksManager = dynamic(() => import('../../../views/admin/TasksManager'), {
+  loading: () => (
+    <div className="min-h-[400px] flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-[#CD0000] border-t-transparent rounded-full animate-spin" />
+    </div>
+  ),
+  ssr: false,
+});
+
+export default function Page() {
+  return <TasksManager />;
+}

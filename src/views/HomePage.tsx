@@ -12,7 +12,17 @@ import Link from 'next/link';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import ScrollReveal from '../components/ui/ScrollReveal';
-import HomeVideoPlayer from '../components/ui/HomeVideoPlayer';
+import dynamic from 'next/dynamic';
+import { usePrefetchOnIdle } from '../hooks/usePrefetchOnIdle';
+
+const HomeVideoPlayer = dynamic(() => import('../components/ui/HomeVideoPlayer'), {
+  loading: () => (
+    <div className="w-full h-full bg-slate-900 animate-pulse flex items-center justify-center">
+      <span className="text-xs text-slate-500 font-bold uppercase tracking-wider">Loading Player...</span>
+    </div>
+  ),
+  ssr: false,
+});
 
 import { fetchFromSheet } from '../services/api';
 import statsData from '../data/stats.json';
@@ -32,6 +42,8 @@ const HomePage: React.FC = () => {
   const [eventsData, setEventsData] = useState<any[]>([]);
   const [verticalsData, setVerticalsData] = useState<any[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  usePrefetchOnIdle(['/about', '/verticals']);
 
   const featuredEvents = eventsData.filter(e => e.featured);
   const upcomingEvents = eventsData.filter(e => e.status === 'upcoming' && !e.featured).slice(0, 3);

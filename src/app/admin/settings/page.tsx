@@ -1,5 +1,16 @@
 "use client";
 
-import SettingsManager from '../../../views/admin/SettingsManager';
+import dynamic from 'next/dynamic';
 
-export default SettingsManager;
+const SettingsManager = dynamic(() => import('../../../views/admin/SettingsManager'), {
+  loading: () => (
+    <div className="min-h-[400px] flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-[#CD0000] border-t-transparent rounded-full animate-spin" />
+    </div>
+  ),
+  ssr: false,
+});
+
+export default function Page() {
+  return <SettingsManager />;
+}

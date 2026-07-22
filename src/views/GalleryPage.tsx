@@ -4,7 +4,16 @@ import { X, ZoomIn, Calendar, Images, ChevronLeft, ChevronRight } from 'lucide-r
 import PageWrapper from '../components/layout/PageWrapper';
 import SearchFilter from '../components/ui/SearchFilter';
 import ScrollReveal from '../components/ui/ScrollReveal';
-import MagicBento from '../components/ui/MagicBento';
+import dynamic from 'next/dynamic';
+
+const MagicBento = dynamic(() => import('../components/ui/MagicBento'), {
+  loading: () => (
+    <div className="w-full py-16 flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-[#CD0000] border-t-transparent rounded-full animate-spin" />
+    </div>
+  ),
+  ssr: false,
+});
 
 import { fetchFromSheet } from '../services/api';
 

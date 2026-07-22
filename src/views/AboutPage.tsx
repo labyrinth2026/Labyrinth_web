@@ -13,8 +13,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { usePrefetchOnIdle } from '../hooks/usePrefetchOnIdle';
 
 const AboutPage: React.FC = () => {
+  usePrefetchOnIdle(['/team', '/events']);
   const heroSectionRef = useRef<HTMLDivElement>(null);
   const photoStripRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);

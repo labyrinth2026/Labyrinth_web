@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export interface TeamMember {
   id: string;
@@ -42,12 +43,12 @@ const TeamCard: React.FC<TeamCardProps> = ({ member }) => {
       {/* Header Rectangular Image */}
       <div className="w-full aspect-[5/4] relative overflow-hidden bg-slate-50 border-b border-slate-100 flex items-center justify-center">
         {member.avatar ? (
-          <img 
+          <Image 
             src={member.avatar} 
             alt={member.name} 
-            loading="lazy" 
-            decoding="async" 
-            className="w-full h-full object-cover" 
+            fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
+            className="object-cover" 
           />
         ) : (
           <span className="text-3xl font-black text-slate-300 select-none">

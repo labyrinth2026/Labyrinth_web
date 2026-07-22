@@ -1,5 +1,16 @@
 "use client";
 
-import GalleryManager from '../../../views/admin/GalleryManager';
+import dynamic from 'next/dynamic';
 
-export default GalleryManager;
+const GalleryManager = dynamic(() => import('../../../views/admin/GalleryManager'), {
+  loading: () => (
+    <div className="min-h-[400px] flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-[#CD0000] border-t-transparent rounded-full animate-spin" />
+    </div>
+  ),
+  ssr: false,
+});
+
+export default function Page() {
+  return <GalleryManager />;
+}

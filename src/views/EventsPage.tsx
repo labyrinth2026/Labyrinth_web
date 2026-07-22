@@ -8,11 +8,13 @@ import SearchFilter from '../components/ui/SearchFilter';
 import Button from '../components/ui/Button';
 import SectionHeading from '../components/ui/SectionHeading';
 import ScrollReveal from '../components/ui/ScrollReveal';
+import { usePrefetchOnIdle } from '../hooks/usePrefetchOnIdle';
 
 import { fetchFromSheet } from '../services/api';
 import pastEventsData from '../data/pastEvents.json';
 
 const EventsPage: React.FC = () => {
+  usePrefetchOnIdle(['/gallery', '/contact']);
   const [filter, setFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [search, setSearch] = useState('');
