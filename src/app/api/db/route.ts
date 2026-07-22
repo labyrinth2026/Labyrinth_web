@@ -179,6 +179,11 @@ export async function POST(req: NextRequest) {
               rolesCount: roles.length,
               verticalsCount: verticals.length,
               committeesCount: committees.length,
+              hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+              supabaseUrlLen: (process.env.NEXT_PUBLIC_SUPABASE_URL || '').length,
+              hasAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+              hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+              isConfigured: isSupabaseConfigured(),
               sampleRole: roles[0] || null
             }
           }
