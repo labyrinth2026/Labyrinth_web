@@ -191,9 +191,9 @@ $$ LANGUAGE sql SECURITY DEFINER;
 -- --- PUBLIC ACCESS READ / ADMIN EDIT POLICIES ---
 
 -- Committees Table Policies
-CREATE POLICY "Allow read access to committees for authenticated users"
+CREATE POLICY "Allow read access to committees for all users"
 ON public.core_committees FOR SELECT
-TO authenticated
+TO public
 USING (true);
 
 CREATE POLICY "Allow ADMIN to manage committees"
@@ -202,9 +202,9 @@ TO authenticated
 USING (public.get_user_role(auth.uid()) = 'ADMIN');
 
 -- Verticals Table Policies
-CREATE POLICY "Allow read access to verticals for authenticated users"
+CREATE POLICY "Allow read access to verticals for all users"
 ON public.verticals FOR SELECT
-TO authenticated
+TO public
 USING (true);
 
 CREATE POLICY "Allow ADMIN to manage verticals"
@@ -213,9 +213,9 @@ TO authenticated
 USING (public.get_user_role(auth.uid()) = 'ADMIN');
 
 -- Profiles Table Policies
-CREATE POLICY "Allow profiles read access for authenticated users"
+CREATE POLICY "Allow profiles read access for all users"
 ON public.profiles FOR SELECT
-TO authenticated
+TO public
 USING (true);
 
 CREATE POLICY "Allow users to update their own profile fields"
@@ -230,9 +230,9 @@ TO authenticated
 USING (public.get_user_role(auth.uid()) = 'ADMIN');
 
 -- Events Table Policies
-CREATE POLICY "Allow read access to events for authenticated users"
+CREATE POLICY "Allow read access to events for all users"
 ON public.events FOR SELECT
-TO authenticated
+TO public
 USING (true);
 
 CREATE POLICY "Allow ADMIN to manage events"
@@ -241,9 +241,9 @@ TO authenticated
 USING (public.get_user_role(auth.uid()) = 'ADMIN');
 
 -- Announcements Table Policies
-CREATE POLICY "Allow read access to announcements for authenticated users"
+CREATE POLICY "Allow read access to announcements for all users"
 ON public.announcements FOR SELECT
-TO authenticated
+TO public
 USING (true);
 
 CREATE POLICY "Allow ADMIN to manage announcements"
@@ -252,9 +252,9 @@ TO authenticated
 USING (public.get_user_role(auth.uid()) = 'ADMIN');
 
 -- Tasks Table Policies
-CREATE POLICY "Allow read access to tasks for authenticated users"
+CREATE POLICY "Allow read access to tasks for all users"
 ON public.tasks FOR SELECT
-TO authenticated
+TO public
 USING (true);
 
 CREATE POLICY "Allow ADMIN to manage tasks"
@@ -263,9 +263,9 @@ TO authenticated
 USING (public.get_user_role(auth.uid()) = 'ADMIN');
 
 -- Resources Table Policies
-CREATE POLICY "Allow read access to resources for authenticated users"
+CREATE POLICY "Allow read access to resources for all users"
 ON public.resources FOR SELECT
-TO authenticated
+TO public
 USING (true);
 
 CREATE POLICY "Allow ADMIN to manage resources"

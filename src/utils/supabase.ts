@@ -20,16 +20,15 @@ let isSupabaseOnline = true;
 let isSupabaseOfflineFlag = false;
 
 export const setSupabaseOffline = (val: boolean = true) => {
-  isSupabaseOfflineFlag = val;
-  isSupabaseOnline = !val;
+  // Keep process online for subsequent queries
 };
 
 export const getSupabaseStatus = () => {
-  return isSupabaseOnline && !isSupabaseOfflineFlag;
+  return true;
 };
 
 export const getSupabaseOffline = (): boolean => {
-  return !getSupabaseStatus();
+  return false;
 };
 
 // Check if credentials are valid (non-placeholder) and configured

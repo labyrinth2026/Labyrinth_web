@@ -157,15 +157,19 @@ const HomePage: React.FC = () => {
       tl.fromTo(navbar, { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.1');
     }
 
-    tl.fromTo('.hero-title-word',
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.6, stagger: 0.07 },
-      '-=0.2'
-    )
-      .fromTo('.hero-subtitle', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.4')
-      .fromTo('.hero-desc', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.4')
-      .fromTo('.hero-cta', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.5 }, '-=0.3')
-      .fromTo('.hero-stat-item', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.07 }, '-=0.2');
+    const animTargets = [
+      { selector: '.hero-title-word', from: { opacity: 0, y: 30 }, to: { opacity: 1, y: 0, duration: 0.6, stagger: 0.07 }, pos: '-=0.2' },
+      { selector: '.hero-subtitle', from: { opacity: 0, y: 12 }, to: { opacity: 1, y: 0, duration: 0.5 }, pos: '-=0.4' },
+      { selector: '.hero-desc', from: { opacity: 0, y: 20 }, to: { opacity: 1, y: 0, duration: 0.5 }, pos: '-=0.4' },
+      { selector: '.hero-cta', from: { opacity: 0, scale: 0.95 }, to: { opacity: 1, scale: 1, duration: 0.5 }, pos: '-=0.3' },
+      { selector: '.hero-stat-item', from: { opacity: 0, y: 15 }, to: { opacity: 1, y: 0, duration: 0.5, stagger: 0.07 }, pos: '-=0.2' }
+    ];
+
+    animTargets.forEach(({ selector, from, to, pos }) => {
+      if (containerRef.current?.querySelector(selector)) {
+        tl.fromTo(selector, from, to, pos);
+      }
+    });
 
   }, { scope: containerRef, dependencies: [] });
 

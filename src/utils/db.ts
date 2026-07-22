@@ -276,7 +276,6 @@ export async function dbGetRoles(): Promise<any[]> {
         }));
       } catch (err) {
         console.error('Supabase dbGetRoles failed, falling back to local DB:', err);
-        setSupabaseOffline(true);
       }
     }
   }
@@ -581,7 +580,6 @@ export async function dbGetVerticals(): Promise<any[]> {
         committees = cData || [];
       } catch (err) {
         console.error('Supabase dbGetVerticals failed, falling back to local DB:', err);
-        setSupabaseOffline(true);
         const db = getLocalDb();
         verticals = db.verticals || [];
         users = db.users || [];
@@ -675,7 +673,6 @@ export async function dbGetCoreCommittees(): Promise<CoreCommittee[]> {
       return data || [];
     } catch (err) {
       console.error("Supabase dbGetCoreCommittees failed, falling back to local DB:", err);
-      setSupabaseOffline(true);
       return getLocalDb().coreCommittees;
     }
   } else {
@@ -773,7 +770,6 @@ export async function dbGetAssignments(): Promise<any> {
       };
     } catch (err) {
       console.error('Supabase dbGetAssignments failed, falling back to local DB:', err);
-      setSupabaseOffline(true);
     }
   }
   const db = getLocalDb();
@@ -964,7 +960,6 @@ export async function dbGetEvents(): Promise<Event[]> {
         rawEvents = data || [];
       } catch (err) {
         console.error('Supabase dbGetEvents failed, falling back to local DB:', err);
-        setSupabaseOffline(true);
         rawEvents = getLocalDb().events;
       }
     }
@@ -1425,7 +1420,6 @@ export async function dbGetDashboardStats(): Promise<{ totalMembers: number; upc
         };
       } catch (err) {
         console.error('Supabase dbGetDashboardStats failed, falling back to local DB:', err);
-        setSupabaseOffline(true);
       }
     }
   }
