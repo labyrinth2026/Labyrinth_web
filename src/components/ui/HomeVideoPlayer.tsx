@@ -69,6 +69,35 @@ const HomeVideoPlayer: React.FC<HomeVideoPlayerProps> = ({ mp4, webm }) => {
     };
   }, [scheduleHide]);
 
+  // IntersectionObserver for scroll-based autoplay/pause
+  useEffect(() => {
+    const el = containerRef.current;
+    const v = videoRef.current;
+    if (!el || !v) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          v.play().catch(() => {
+            // If unmuted playback is blocked by browser policy, retry muted
+            v.muted = true;
+            setMuted(true);
+            v.play().catch(err => console.log('Autoplay error:', err));
+          });
+        } else {
+          v.pause();
+        }
+      },
+      { threshold: 0.4 }
+    );
+
+    observer.observe(el);
+
+    return () => {
+      observer.unobserve(el);
+    };
+  }, []);
+
   const togglePlay = () => {
     const v = videoRef.current;
     if (!v) return;
