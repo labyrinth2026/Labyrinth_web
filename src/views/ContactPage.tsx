@@ -140,11 +140,11 @@ const ContactPage: React.FC = () => {
                 <div className="bg-white border border-slate-200/80 rounded-2xl p-8 shadow-xs flex-1 flex flex-col justify-center hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md hover:shadow-[#CD0000]/[0.01] transition-all duration-300">
                   <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-6 border-b border-slate-100 pb-3">Official Links &amp; Info</h4>
                   <div className="space-y-4">
-                    <a href="mailto:labyrinth@christ.edu" className="flex items-center gap-3.5 text-slate-600 hover:text-[#CD0000] font-bold text-xs transition-colors group">
+                    <a href={SOCIAL_LINKS.email} className="flex items-center gap-3.5 text-slate-600 hover:text-[#CD0000] font-bold text-xs transition-colors group">
                       <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200/40 flex items-center justify-center group-hover:bg-[#CD0000] group-hover:text-white transition-all">
                         <Mail size={14} />
                       </div>
-                      labyrinth@christ.edu
+                      labyrinth.christ@christuniversity.in
                     </a>
                     
                     <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noreferrer" className="flex items-center gap-3.5 text-slate-600 hover:text-[#CD0000] font-bold text-xs transition-colors group">
