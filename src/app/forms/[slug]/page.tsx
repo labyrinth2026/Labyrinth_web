@@ -333,9 +333,10 @@ export default function PublicFormPage() {
                       onChange={e => handleInputChange(f.id, e.target.value)}
                       className={`${inputBase} appearance-none pr-10`}>
                       <option value="">{f.placeholder || 'Select an option…'}</option>
-                      {(f.options || []).map((opt: string) => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
+                      {(f.options || []).map((opt: string) => {
+                        const cleanOpt = opt.replace(/^[\?\s\p{Emoji}\u200b-\u200d\uFE0F\uFFFD]+/gu, '').trim();
+                        return <option key={opt} value={cleanOpt}>{cleanOpt}</option>;
+                      })}
                     </select>
                     <ChevronDown size={15} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                   </div>
@@ -344,31 +345,37 @@ export default function PublicFormPage() {
                 {/* radio */}
                 {f.fieldType === 'radio_buttons' && (
                   <div className="space-y-2 pt-1">
-                    {(f.options || []).map((opt: string) => (
-                      <label key={opt} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 cursor-pointer hover:border-[#CD0000]/40 hover:bg-red-50/30 transition-all has-[:checked]:border-[#CD0000]/60 has-[:checked]:bg-red-50/50">
-                        <input type="radio" name={f.id}
-                          required={f.required && !formData[f.id]}
-                          checked={formData[f.id] === opt}
-                          onChange={() => handleInputChange(f.id, opt)}
-                          className="w-4 h-4 accent-[#CD0000]" />
-                        <span className="text-sm text-slate-700 font-medium">{opt}</span>
-                      </label>
-                    ))}
+                    {(f.options || []).map((opt: string) => {
+                      const cleanOpt = opt.replace(/^[\?\s\p{Emoji}\u200b-\u200d\uFE0F\uFFFD]+/gu, '').trim();
+                      return (
+                        <label key={opt} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 cursor-pointer hover:border-[#CD0000]/40 hover:bg-red-50/30 transition-all has-[:checked]:border-[#CD0000]/60 has-[:checked]:bg-red-50/50">
+                          <input type="radio" name={f.id}
+                            required={f.required && !formData[f.id]}
+                            checked={formData[f.id] === cleanOpt || formData[f.id] === opt}
+                            onChange={() => handleInputChange(f.id, cleanOpt)}
+                            className="w-4 h-4 accent-[#CD0000]" />
+                          <span className="text-sm text-slate-700 font-medium">{cleanOpt}</span>
+                        </label>
+                      );
+                    })}
                   </div>
                 )}
 
                 {/* checkboxes */}
                 {f.fieldType === 'checkboxes' && (
                   <div className="space-y-2 pt-1">
-                    {(f.options || []).map((opt: string) => (
-                      <label key={opt} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 cursor-pointer hover:border-[#CD0000]/40 hover:bg-red-50/30 transition-all has-[:checked]:border-[#CD0000]/60 has-[:checked]:bg-red-50/50">
-                        <input type="checkbox"
-                          checked={(formData[f.id] || []).includes(opt)}
-                          onChange={e => handleCheckboxChange(f.id, opt, e.target.checked)}
-                          className="w-4 h-4 accent-[#CD0000] rounded" />
-                        <span className="text-sm text-slate-700 font-medium">{opt}</span>
-                      </label>
-                    ))}
+                    {(f.options || []).map((opt: string) => {
+                      const cleanOpt = opt.replace(/^[\?\s\p{Emoji}\u200b-\u200d\uFE0F\uFFFD]+/gu, '').trim();
+                      return (
+                        <label key={opt} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 cursor-pointer hover:border-[#CD0000]/40 hover:bg-red-50/30 transition-all has-[:checked]:border-[#CD0000]/60 has-[:checked]:bg-red-50/50">
+                          <input type="checkbox"
+                            checked={(formData[f.id] || []).includes(cleanOpt) || (formData[f.id] || []).includes(opt)}
+                            onChange={e => handleCheckboxChange(f.id, cleanOpt, e.target.checked)}
+                            className="w-4 h-4 accent-[#CD0000] rounded" />
+                          <span className="text-sm text-slate-700 font-medium">{cleanOpt}</span>
+                        </label>
+                      );
+                    })}
                   </div>
                 )}
 
