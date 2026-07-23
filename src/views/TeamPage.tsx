@@ -333,14 +333,19 @@ const TeamPage: React.FC = () => {
                     transition={{ duration: 0.4 }}
                     className="mb-20"
                   >
-                    <div className="bg-slate-900 border border-slate-950 rounded-2xl px-6 py-5 mb-8 flex items-center gap-4 shadow-sm">
-                      <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                        <GraduationCap size={22} className="text-white" />
+                    <div className="bg-white border border-slate-200/80 rounded-2xl p-6 mb-8 shadow-xs flex items-center justify-between flex-wrap gap-4">
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center shrink-0">
+                          <GraduationCap size={20} className="text-[#CD0000]" />
+                        </div>
+                        <div>
+                          <h2 className="text-lg font-bold text-slate-900 tracking-tight">Faculty Coordinators</h2>
+                          <p className="text-slate-500 text-xs font-semibold">Christ University Department of Computer Science</p>
+                        </div>
                       </div>
-                      <div>
-                        <h2 className="text-lg font-bold text-white tracking-tight">Faculty Coordinators</h2>
-                        <p className="text-slate-400 text-xs font-medium">Christ University Department of Computer Science</p>
-                      </div>
+                      <span className="px-3 py-1 rounded-full bg-[#CD0000]/5 border border-[#CD0000]/15 text-[#CD0000] text-[10px] font-extrabold uppercase tracking-widest">
+                        Department Leadership
+                      </span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                       <ScrollReveal stagger={0.08}>
@@ -359,14 +364,19 @@ const TeamPage: React.FC = () => {
                     transition={{ duration: 0.4 }}
                     className="mb-20"
                   >
-                    <div className="bg-slate-900 border border-slate-950 rounded-2xl px-6 py-5 mb-8 flex items-center gap-4 shadow-sm">
-                      <div className="w-10 h-10 rounded-xl bg-[#CD0000]/20 border border-[#CD0000]/40 flex items-center justify-center">
-                        <Code2 size={22} className="text-[#CD0000]" />
+                    <div className="bg-white border border-slate-200/80 rounded-2xl p-6 mb-8 shadow-xs flex items-center justify-between flex-wrap gap-4">
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-center shrink-0">
+                          <Code2 size={20} className="text-[#CD0000]" />
+                        </div>
+                        <div>
+                          <h2 className="text-lg font-bold text-slate-900 tracking-tight">Website Designers &amp; Developers</h2>
+                          <p className="text-slate-500 text-xs font-semibold">System Design &amp; Full-Stack Platform Engineering</p>
+                        </div>
                       </div>
-                      <div>
-                        <h2 className="text-lg font-bold text-white tracking-tight">Website Designers &amp; Developers</h2>
-                        <p className="text-slate-400 text-xs font-medium">System Design &amp; Full-Stack Platform Engineering</p>
-                      </div>
+                      <span className="px-3 py-1 rounded-full bg-[#CD0000]/5 border border-[#CD0000]/15 text-[#CD0000] text-[10px] font-extrabold uppercase tracking-widest">
+                        System Engineers
+                      </span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                       <ScrollReveal stagger={0.08}>
