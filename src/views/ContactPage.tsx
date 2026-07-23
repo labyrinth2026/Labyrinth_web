@@ -12,23 +12,7 @@ const ContactPage: React.FC = () => {
   const [isLoadingForm, setIsLoadingForm] = useState(false);
 
   const handleJoinClick = async () => {
-    setIsLoadingForm(true);
-    try {
-      const data: any = await fetchFromSheet('getForms');
-      const formsArray = Object.values(data) as any[];
-      const joinForm = formsArray.find(f => f.id === 'join_community');
-      
-      if (joinForm && joinForm.active && joinForm.url) {
-        window.open(joinForm.url, '_blank', 'noopener,noreferrer');
-      } else {
-        window.open('https://forms.gle/vzHppHwu2C977eNA7', '_blank', 'noopener,noreferrer');
-      }
-    } catch (error) {
-      console.error('Failed to fetch forms', error);
-      window.open('https://forms.gle/vzHppHwu2C977eNA7', '_blank', 'noopener,noreferrer');
-    } finally {
-      setIsLoadingForm(false);
-    }
+    window.location.href = '/join';
   };
 
   return (

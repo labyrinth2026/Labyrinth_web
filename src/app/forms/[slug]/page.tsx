@@ -6,6 +6,7 @@ import {
   ShieldCheck, AlertCircle, ArrowLeft, CheckCircle2,
   Upload, Calendar, Clock, ChevronDown, Loader2
 } from 'lucide-react';
+import Stack from '@/components/ui/Stack';
 
 
 export default function PublicFormPage() {
@@ -186,7 +187,8 @@ export default function PublicFormPage() {
     );
   }
 
-  // ── Main Form ───────────────────────────────────────────────────────────────
+  const isJoinForm = slug === 'join_community' || slug === 'join-community' || slug === 'join' || form?.id === 'join_community';
+
   return (
     <div className="min-h-screen bg-[#F8F8FA] flex flex-col pt-20">
       {/* Cover image (optional) */}
@@ -197,16 +199,18 @@ export default function PublicFormPage() {
         </div>
       )}
 
-      <main className="flex-1 max-w-2xl w-full mx-auto px-4 py-10 space-y-5">
+      <main className="flex-1 max-w-3xl w-full mx-auto px-4 py-8 space-y-6">
         {/* ── Form identity card ── */}
         <div className="bg-white border border-slate-200/80 rounded-2xl shadow-xs overflow-hidden">
           <div className="h-1 w-full bg-[#CD0000]" />
           <div className="p-7 sm:p-8">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight mb-2">
               {form.title}
             </h1>
-            {form.description && (
-              <p className="text-slate-500 text-sm leading-relaxed whitespace-pre-line">{form.description}</p>
+            
+            {/* Show static description text ONLY for standard forms */}
+            {!isJoinForm && form.description && (
+              <p className="text-slate-500 text-sm leading-relaxed whitespace-pre-line mt-3">{form.description}</p>
             )}
 
             {/* Deadline / dates */}
@@ -228,6 +232,22 @@ export default function PublicFormPage() {
             )}
           </div>
         </div>
+
+        {/* ── Interactive Verticals Stack (Replaces static description inside the form) ── */}
+        {isJoinForm && (
+          <div className="py-2">
+            <div className="text-center pb-4">
+              <span className="text-xs font-mono text-slate-400 uppercase tracking-widest font-bold">Interactive Verticals Explorer</span>
+              <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-slate-900 mt-0.5">
+                Explore Club Domains
+              </h2>
+              <p className="text-slate-500 text-xs mt-1">
+                Scroll down to watch each vertical card slide up and overlay inside the form
+              </p>
+            </div>
+            <Stack />
+          </div>
+        )}
 
         {/* ── Fields ── */}
         <form onSubmit={handleSubmit} className="space-y-4">
