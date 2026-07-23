@@ -132,11 +132,11 @@ const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-slate-100 flex flex-col items-center gap-2.5">
-          <p className="text-slate-400 text-xs text-center">
+          <p className="text-slate-700 text-xs sm:text-sm font-bold text-center">
             © {new Date().getFullYear()} {CLUB_INFO.name} · {CLUB_INFO.university}. All rights reserved.
           </p>
-          <p className="text-slate-400/80 text-[10px] mt-0.5 text-center flex items-center gap-1.5 flex-wrap justify-center">
-            <span>System Design &amp; Development by Krupa M | Department of Computer Science</span>
+          <p className="text-slate-600 text-xs sm:text-sm font-bold mt-1 text-center flex items-center gap-1.5 flex-wrap justify-center">
+            <span>System Design &amp; Development by <span className="text-slate-900 font-extrabold">Suryachalam V M (3BScCM)</span>, <span className="text-slate-900 font-extrabold">Bhargav Shree Raj G (3BScCM)</span> &amp; <span className="text-slate-900 font-extrabold">Krupa M (5BScCS)</span> | Department of Computer Science</span>
           </p>
         </div>
       </div>

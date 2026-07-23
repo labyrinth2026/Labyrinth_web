@@ -1,20 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
-  Mail, MapPin, ExternalLink, GraduationCap, ArrowRight, Loader2
+  Mail, MapPin, ExternalLink, GraduationCap, ArrowRight
 } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 import { SOCIAL_LINKS, FACULTY_CONTACT } from '../utils/constants';
 import ScrollReveal from '../components/ui/ScrollReveal';
-import { fetchFromSheet } from '../services/api';
 
 const ContactPage: React.FC = () => {
-  const [isLoadingForm, setIsLoadingForm] = useState(false);
-
-  const handleJoinClick = async () => {
-    window.location.href = '/join';
-  };
-
   return (
     <PageWrapper>
       {/* Header with background image */}
@@ -61,17 +55,12 @@ const ContactPage: React.FC = () => {
                   <p className="text-slate-500 text-xs mb-8 max-w-sm mx-auto leading-relaxed">
                     Ready to be part of Christ University's premier Computer Science Club? Click below to fill out our official registration form.
                   </p>
-                  <button
-                    onClick={handleJoinClick}
-                    disabled={isLoadingForm}
-                    className="mx-auto flex items-center gap-2 px-6 py-3 bg-[#CD0000] text-white font-bold uppercase tracking-wider text-[10px] rounded-full hover:bg-[#9E0000] transition-all hover:scale-102 active:scale-98 disabled:opacity-75 shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CD0000] focus-visible:ring-offset-2"
+                  <Link
+                    href="/forms/join-community"
+                    className="mx-auto flex items-center gap-2 px-6 py-3 bg-[#CD0000] text-white font-bold uppercase tracking-wider text-[10px] rounded-full hover:bg-[#9E0000] transition-all hover:scale-102 active:scale-98 shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CD0000] focus-visible:ring-offset-2"
                   >
-                    {isLoadingForm ? (
-                      <><Loader2 className="animate-spin" size={13} /> Please wait...</>
-                    ) : (
-                      <>Apply to Join <ArrowRight size={13} /></>
-                    )}
-                  </button>
+                    Apply to Join <ArrowRight size={13} />
+                  </Link>
                 </div>
               </div>
             </ScrollReveal>

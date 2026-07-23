@@ -5,7 +5,7 @@ import SectionHeading from '../components/ui/SectionHeading';
 import TeamCard from '../components/ui/TeamCard';
 import FacultyCard from '../components/ui/FacultyCard';
 import SearchFilter from '../components/ui/SearchFilter';
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, Code2 } from 'lucide-react';
 import ScrollReveal from '../components/ui/ScrollReveal';
 
 import { fetchFromSheet } from '../services/api';
@@ -33,6 +33,31 @@ const FACULTY_DATA = [
     profileUrl: 'https://christuniversity.in/computer-science/faculty-details/ODc2OQ==/NjI=',
     linkedin: '#',
     avatar: '/binayak.jpg',
+  },
+];
+
+// ─── Hardcoded Website Designers & Developers (renders instantly) ───────────
+const WEBSITE_DESIGNERS_DATA = [
+  {
+    id: 'web-dev-1',
+    name: 'Suryachalam V M (3BScCM)',
+    role: 'Website Designer & Developer',
+    designation: 'System Design & Development',
+    department: 'Department of Computer Science',
+    email: 'suryachalam.vm@bsccmh.christuniversity.in',
+    linkedin: '#',
+    github: 'https://github.com/sgk18',
+    avatar: 'https://github.com/sgk18.png',
+  },
+  {
+    id: 'web-dev-2',
+    name: 'Bhargav Shree Raj G (3BScCM)',
+    role: 'Website Designer & Developer',
+    designation: 'System Design & Development',
+    department: 'Department of Computer Science',
+    email: 'bhargav.g@bsccmh.christuniversity.in',
+    linkedin: '#',
+    avatar: 'https://paqpkdipiyvwdneeghin.supabase.co/storage/v1/object/public/gallery/avatars/u-bhargav-g-1784697037114.jpg',
   },
 ];
 
@@ -177,13 +202,18 @@ const TeamPage: React.FC = () => {
   const filteredFaculty   = filterMembers(FACULTY_DATA.map(f => ({
     ...f, role: f.role, vertical: '', designation: f.designation, department: f.department
   })));
+  const filteredDesigners = filterMembers(WEBSITE_DESIGNERS_DATA.map(d => ({
+    ...d, role: d.role, vertical: '', designation: d.designation, department: d.department
+  })));
 
   const isFacultyActive   = filter === 'all' || filter === 'faculty';
+  const isWebActive       = filter === 'all' || filter === 'web' || filter === 'core';
   const isCoreActive      = filter === 'all' || filter === 'core';
   const isVerticalsActive = filter === 'all' || filter === 'verticals';
 
   const hasResults =
     (isFacultyActive && filteredFaculty.length > 0) ||
+    (isWebActive && filteredDesigners.length > 0) ||
     (isCoreActive && filteredCore.length > 0) ||
     (isVerticalsActive && (filteredHeads.length > 0 || filteredSubHeads.length > 0));
 
@@ -241,7 +271,7 @@ const TeamPage: React.FC = () => {
               OUR <span className="text-[#CD0000]">TEAM</span>
             </h1>
             <p className="text-slate-500 text-xs md:text-sm max-w-2xl mx-auto mb-10 leading-relaxed">
-              Meet the faculty coordinators, mentors, and passionate student leaders driving Labyrinth forward.
+              Meet the faculty coordinators, mentors, website designers, and passionate student leaders driving Labyrinth forward.
             </p>
             <div className="max-w-3xl mx-auto">
               <SearchFilter
@@ -253,6 +283,7 @@ const TeamPage: React.FC = () => {
                 filters={[
                   { label: 'Everyone', value: 'all' },
                   { label: 'Faculty',  value: 'faculty' },
+                  { label: 'Web Team', value: 'web' },
                   { label: 'Core',     value: 'core' },
                   { label: 'Verticals', value: 'verticals' },
                 ]}
@@ -303,6 +334,32 @@ const TeamPage: React.FC = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                       <ScrollReveal stagger={0.08}>
                         {FACULTY_DATA.map(member => <FacultyCard key={member.id} faculty={member} />)}
+                      </ScrollReveal>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* ── STAGE 0.5: Website Designers & Developers (instant – no API) ── */}
+                {isWebActive && filteredDesigners.length > 0 && (
+                  <motion.div
+                    key="web-designers"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="mb-20"
+                  >
+                    <div className="bg-slate-900 border border-slate-950 rounded-2xl px-6 py-5 mb-8 flex items-center gap-4 shadow-sm">
+                      <div className="w-10 h-10 rounded-xl bg-[#CD0000]/20 border border-[#CD0000]/40 flex items-center justify-center">
+                        <Code2 size={22} className="text-[#CD0000]" />
+                      </div>
+                      <div>
+                        <h2 className="text-lg font-bold text-white tracking-tight">Website Designers &amp; Developers</h2>
+                        <p className="text-slate-400 text-xs font-medium">System Design &amp; Full-Stack Platform Engineering</p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                      <ScrollReveal stagger={0.08}>
+                        {filteredDesigners.map(member => <TeamCard key={member.id} member={member} />)}
                       </ScrollReveal>
                     </div>
                   </motion.div>
