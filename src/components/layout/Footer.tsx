@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-white border-t border-slate-200/80 pt-16 pb-8 mt-20">
       <div className="container mx-auto px-6 max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
 
           {/* Brand Column */}
           <div className="space-y-4">
@@ -92,11 +92,28 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Verticals */}
+          {/* Tech Verticals */}
           <div>
-            <h4 className="text-slate-800 font-bold mb-5 text-xs uppercase tracking-wider">Explore</h4>
+            <h4 className="text-slate-800 font-bold mb-5 text-xs uppercase tracking-wider">Tech Domains</h4>
             <ul className="space-y-2">
-              {['AI HUB', 'DevZen', 'AutoBot', 'InsightX', 'FieldOps', 'Debate', 'Startovate', 'InterVerse', 'Peer Sessions', 'Research Guidance', 'Design & Media'].map(v => (
+              {['AI HUB', 'DevZen', 'AutoBot', 'InsightX', 'FieldOps'].map(v => (
+                <li key={v}>
+                  <Link
+                    href="/verticals"
+                    className="text-slate-500 hover:text-[#CD0000] text-xs font-semibold transition-colors inline-block"
+                  >
+                    {v}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Non-Tech Verticals */}
+          <div>
+            <h4 className="text-slate-800 font-bold mb-5 text-xs uppercase tracking-wider">Non-Tech Domains</h4>
+            <ul className="space-y-2">
+              {['Debate', 'Startovate', 'InterVerse', 'Peer Sessions', 'Research Guidance', 'Design & Media'].map(v => (
                 <li key={v}>
                   <Link
                     href="/verticals"
