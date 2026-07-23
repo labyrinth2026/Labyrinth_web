@@ -24,8 +24,26 @@ const HomeVideoPlayer = dynamic(() => import('../components/ui/HomeVideoPlayer')
   ssr: false,
 });
 
+import FlowingMenu from '../components/ui/FlowingMenu';
 import { fetchFromSheet } from '../services/api';
 import statsData from '../data/stats.json';
+
+const techVerticals = [
+  { name: "AI HUB", icon: "Brain", description: "Explore generative AI, machine learning, and intelligent systems." },
+  { name: "DevZen", icon: "Code2", description: "Full-stack development, open source, and software engineering." },
+  { name: "AutoBot", icon: "Cpu", description: "Robotics, IoT, and embedded systems engineering." },
+  { name: "InsightX", icon: "TrendingUp", description: "Data analytics, data science, and visualization." },
+  { name: "FieldOps", icon: "Shield", description: "Event operations, logistics, and field management." }
+];
+
+const nonTechVerticals = [
+  { name: "Debate", icon: "MessageCircle", description: "Voice, logic, structure, and debating matches." },
+  { name: "Startovate", icon: "Sparkles", description: "Entrepreneurship, startup ideas, and pitches." },
+  { name: "InterVerse", icon: "Gamepad2", description: "Department collaborations, networking, and outer club partnerships." },
+  { name: "Peer Sessions", icon: "Users", description: "Peer learning and student mentoring wing." },
+  { name: "Research Guidance", icon: "BookOpen", description: "Academic paper guidance, research, and papers." },
+  { name: "Design & Media", icon: "Layers", description: "Design, media, edits, and branding materials." }
+];
 
 const HERO_IMAGES = [
   '/gallery/inauguration_all_1.webp',
@@ -130,13 +148,19 @@ const HomePage: React.FC = () => {
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % featuredEvents.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + featuredEvents.length) % featuredEvents.length);
 
-  // Get up to 4 verticals to display on the home page as a preview.
-  // We specify the new verticals as initial fallbacks.
-  const displayVerticals = verticalsData.length > 0 ? verticalsData.slice(0, 4) : [
+  // Display all verticals on the homepage
+  const displayVerticals = verticalsData.length > 0 ? verticalsData : [
     { name: "AI HUB", icon: "Brain", description: "Explore generative AI, machine learning, and intelligent systems." },
     { name: "DevZen", icon: "Code2", description: "Full-stack development, open source, and software engineering." },
     { name: "AutoBot", icon: "Cpu", description: "Robotics, IoT, and embedded systems engineering." },
-    { name: "InsightX", icon: "BarChart3", description: "Data analytics, data science, and visualization." }
+    { name: "InsightX", icon: "TrendingUp", description: "Data analytics, data science, and visualization." },
+    { name: "FieldOps", icon: "Shield", description: "Event operations, logistics, and field management." },
+    { name: "Debate", icon: "MessageCircle", description: "Tech debates, public speaking, and critical thinking." },
+    { name: "Startovate", icon: "Sparkles", description: "Entrepreneurship, start-up ideas, and innovation." },
+    { name: "InterVerse", icon: "Gamepad2", description: "Virtual worlds, gaming, and immersive experiences." },
+    { name: "Peer Sessions", icon: "Users", description: "Peer-to-peer knowledge sharing and workshops." },
+    { name: "Research Guidance", icon: "BookOpen", description: "Academic research, paper publishing, and guidance." },
+    { name: "Design & Media", icon: "Layers", description: "Graphic design, content creation, and media production." }
   ];
 
   useGSAP(() => {
@@ -334,34 +358,109 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
-        {/* ── Verticals Preview ── */}
+        {/* ── Verticals Section: Technical & Non-Technical ── */}
         <section id="verticals" className="py-24 bg-slate-50/50 border-t border-slate-200/60">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
+          <div className="container mx-auto px-6 max-w-7xl space-y-16">
+            
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
               <SectionHeading title="Our Verticals" subtitle="What We Do" align="left" className="mb-0" />
               <Button variant="outline" size="sm" href="/verticals">
-                All Verticals <ArrowRight size={12} />
+                All Verticals Details <ArrowRight size={12} />
               </Button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <ScrollReveal stagger={0.08}>
-                {displayVerticals.map((vert) => {
-                  const Icon = (LucideIcons as any)[vert.icon] || LucideIcons.Layers;
-                  const desc = vert.description || vert.desc || "";
-                  return (
-                    <Link key={vert.name} href="/verticals" className="block group">
-                      <div className="bg-white border border-slate-200/80 rounded-2xl p-6 hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md hover:shadow-[#CD0000]/[0.02] transition-all duration-300">
-                        <div className="w-10 h-10 rounded-xl bg-[#CD0000]/5 flex items-center justify-center text-[#CD0000] mb-5 group-hover:bg-[#CD0000] group-hover:text-white transition-all duration-300">
-                          <Icon size={18} />
+
+            {/* 1. Technical Domains */}
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+                  Technical Domains
+                </h3>
+                <Link href="/verticals" className="text-[#CD0000] hover:text-[#A00000] text-xs font-bold flex items-center gap-1">
+                  Explore All Tech Verticals <ArrowRight size={12} />
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <ScrollReveal stagger={0.08}>
+                  {techVerticals.slice(0, 3).map((vert) => {
+                    const Icon = (LucideIcons as any)[vert.icon] || LucideIcons.Layers;
+                    return (
+                      <Link key={vert.name} href="/verticals" className="block group">
+                        <div className="bg-white border border-slate-200/80 rounded-2xl p-6 hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md transition-all duration-300 h-full flex flex-col justify-between">
+                          <div>
+                            <div className="flex items-center justify-between mb-5">
+                              <div className="w-10 h-10 rounded-xl bg-[#CD0000]/5 flex items-center justify-center text-[#CD0000] group-hover:bg-[#CD0000] group-hover:text-white transition-all duration-300">
+                                <Icon size={18} />
+                              </div>
+                              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200/60 text-slate-500 text-[10px] font-extrabold uppercase tracking-wider">
+                                TECH
+                              </span>
+                            </div>
+                            <h4 className="font-bold text-slate-800 text-base mb-1.5 group-hover:text-[#CD0000] transition-colors">
+                              {vert.name}
+                            </h4>
+                            <p className="text-xs text-slate-500 leading-relaxed">
+                              {vert.description}
+                            </p>
+                          </div>
                         </div>
-                        <h3 className="font-bold text-slate-800 text-sm mb-1.5 group-hover:text-[#CD0000] transition-colors">{vert.name}</h3>
-                        <p className="text-xs text-slate-500 leading-relaxed">{desc}</p>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </ScrollReveal>
+                      </Link>
+                    );
+                  })}
+                </ScrollReveal>
+              </div>
             </div>
+
+            {/* 2. Non-Technical Domains */}
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+                  Non-Technical Domains
+                </h3>
+                <Link href="/verticals" className="text-[#CD0000] hover:text-[#A00000] text-xs font-bold flex items-center gap-1">
+                  Explore All Non-Tech Verticals <ArrowRight size={12} />
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <ScrollReveal stagger={0.08}>
+                  {nonTechVerticals.slice(0, 3).map((vert) => {
+                    const Icon = (LucideIcons as any)[vert.icon] || LucideIcons.Layers;
+                    return (
+                      <Link key={vert.name} href="/verticals" className="block group">
+                        <div className="bg-white border border-slate-200/80 rounded-2xl p-6 hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md transition-all duration-300 h-full flex flex-col justify-between">
+                          <div>
+                            <div className="flex items-center justify-between mb-5">
+                              <div className="w-10 h-10 rounded-xl bg-[#CD0000]/5 flex items-center justify-center text-[#CD0000] group-hover:bg-[#CD0000] group-hover:text-white transition-all duration-300">
+                                <Icon size={18} />
+                              </div>
+                              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200/60 text-slate-500 text-[10px] font-extrabold uppercase tracking-wider">
+                                NON-TECH
+                              </span>
+                            </div>
+                            <h4 className="font-bold text-slate-800 text-base mb-1.5 group-hover:text-[#CD0000] transition-colors">
+                              {vert.name}
+                            </h4>
+                            <p className="text-xs text-slate-500 leading-relaxed">
+                              {vert.description}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </ScrollReveal>
+              </div>
+            </div>
+
+            {/* Bottom Global Explore Button */}
+            <div className="flex justify-center pt-2">
+              <Button variant="outline" size="md" href="/verticals">
+                Explore All 11 Verticals <ArrowRight size={14} />
+              </Button>
+            </div>
+
           </div>
         </section>
 
