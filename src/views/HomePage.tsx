@@ -258,7 +258,7 @@ const HomePage: React.FC = () => {
                 <Button variant="primary" size="md" href="/verticals">
                   Explore Verticals <ArrowRight size={14} />
                 </Button>
-                <Button variant="secondary" size="md" href="https://forms.gle/vzHppHwu2C977eNA7">
+                <Button variant="secondary" size="md" href="/forms/join-community">
                   Join Community
                 </Button>
               </div>
@@ -614,12 +614,12 @@ const HomePage: React.FC = () => {
                     </p>
                   </div>
                   <div className="shrink-0">
-                    <a
-                      href="https://forms.gle/vzHppHwu2C977eNA7"
+                    <Link
+                      href="/forms/join-community"
                       className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#CD0000] font-extrabold uppercase tracking-wider text-sm rounded-full hover:bg-slate-50 hover:scale-105 transition-all shadow-lg"
                     >
                       Apply to Join <ArrowRight size={16} />
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>

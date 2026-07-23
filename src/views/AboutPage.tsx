@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Target, Lightbulb, Users, BookOpen, Briefcase, Zap, Layers, CalendarCheck, MessageCircle, ArrowRight } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 import SectionHeading from '../components/ui/SectionHeading';
@@ -372,14 +373,12 @@ const AboutPage: React.FC = () => {
                 </p>
               </div>
               <div className="cta-el shrink-0">
-                <a
-                  href="https://forms.gle/vzHppHwu2C977eNA7"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/forms/join-community"
                   className="inline-flex items-center gap-2 px-8 py-4 bg-white text-[#CD0000] font-extrabold uppercase tracking-wider text-sm rounded-full hover:bg-slate-50 hover:scale-105 transition-all shadow-lg"
                 >
                   Apply to Join <ArrowRight size={16} />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
