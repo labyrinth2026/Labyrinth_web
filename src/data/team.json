@@ -14,7 +14,7 @@
   ],
   "verticalHeads": [
     { "id": "vh1", "name": "Rishi Raj (1 MCA B)", "role": "Head", "vertical": "AI HUB", "email": "rishi.raj@mca.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh2", "name": "Krupa (3 BSc CS)", "role": "Head", "vertical": "AI HUB", "email": "krupa.m@bsccsh.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh2", "name": "Krupa (3 BSc CS)", "role": "Mentor", "designation": "Mentor", "vertical": "AI HUB", "email": "krupa.m@bsccsh.christuniversity.in", "linkedin": "#", "avatar": null },
     { "id": "vh4", "name": "Ruchak Khatri (5 BCA A)", "role": "Head", "vertical": "AutoBot", "email": "ruchak.khatri@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
     { "id": "vh5", "name": "Joel Benedict (5 BCA B)", "role": "Head", "vertical": "AutoBot", "email": "joel.benedict@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
     { "id": "vh7", "name": "Kanika Jain (1 MCA)", "role": "Head", "vertical": "DevZen", "email": "kanika.jain@mca.christuniversity.in", "linkedin": "#", "avatar": null },

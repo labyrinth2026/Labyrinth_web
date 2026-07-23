@@ -128,18 +128,22 @@ export async function POST(req: NextRequest) {
           };
         });
 
-        // 4. Vertical Heads: has vertical_id and designation contains "Head" (but not Sub-Head)
-        const verticalHeads = roles.filter(u => 
-          (u.vertical_id || u.verticalId) && 
-          u.designation && 
-          u.designation.toLowerCase().includes('head') && 
-          !u.designation.toLowerCase().includes('sub')
-        ).map(u => {
+        // 4. Vertical Heads & Mentors: has vertical_id and designation contains "head" or "mentor" (and NOT "sub", "core committee", or "admin")
+        const verticalHeads = roles.filter(u => {
+          if (!u.vertical_id && !u.verticalId) return false;
+          if (u.role === 'ADMIN') return false;
+          const desigLower = (u.designation || '').toLowerCase();
+          if (desigLower.includes('sub') || desigLower.includes('core committee') || desigLower.includes('admin')) return false;
+          return desigLower.includes('head') || desigLower.includes('mentor');
+        }).map(u => {
           const vId = u.vertical_id || u.verticalId;
+          const desigLower = (u.designation || '').toLowerCase();
+          const isMentor = desigLower.includes('mentor');
           return {
             id: u.id,
             name: u.full_name || u.name,
-            role: 'Head',
+            role: isMentor ? (u.designation || 'Mentor') : 'Vertical Head',
+            designation: u.designation || (isMentor ? 'Mentor' : 'Vertical Head'),
             vertical: getVerticalName(vId),
             email: u.email,
             avatar: u.profilePhoto || u.profile_photo || null,

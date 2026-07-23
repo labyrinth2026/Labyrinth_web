@@ -226,7 +226,12 @@ const TeamPage: React.FC = () => {
 
   const renderVerticalSection = (verticalsList: any[]) =>
     verticalsList.map(vertical => {
-      const vHeads    = filteredHeads.filter(h => h.vertical === vertical.name);
+      const vHeads = filteredHeads.filter(h => {
+        if (h.vertical !== vertical.name) return false;
+        if (h.role === 'ADMIN') return false;
+        const d = `${h.designation || ''} ${h.role || ''}`.toLowerCase();
+        return !d.includes('core committee') && !d.includes('admin');
+      });
       const vSubHeads = filteredSubHeads.filter(sh => sh.vertical === vertical.name);
       if (vHeads.length === 0 && vSubHeads.length === 0) return null;
       return (
@@ -236,10 +241,16 @@ const TeamPage: React.FC = () => {
           </h4>
           {vHeads.length > 0 && (
             <div className="mb-6">
-              <h5 className="text-xs font-bold text-[#CD0000] mb-4 uppercase tracking-widest">Vertical Heads</h5>
+              <h5 className="text-xs font-bold text-[#CD0000] mb-4 uppercase tracking-widest">Vertical Heads &amp; Mentors</h5>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <ScrollReveal key={`${filter}-${vertical.id}-heads`} stagger={0.06}>
-                  {vHeads.map(member => <TeamCard key={member.id} member={member} />)}
+                  {vHeads.map(member => {
+                    const desigLower = (member.designation || '').toLowerCase();
+                    const roleLower = (member.role || '').toLowerCase();
+                    const isMentor = desigLower.includes('mentor') || roleLower.includes('mentor');
+                    const displayMember = isMentor ? { ...member, role: member.designation || 'Mentor' } : member;
+                    return <TeamCard key={displayMember.id} member={displayMember} />;
+                  })}
                 </ScrollReveal>
               </div>
             </div>
