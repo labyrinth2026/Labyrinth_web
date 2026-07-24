@@ -41,8 +41,7 @@ const nonTechVerticals = [
   { name: "Startovate", icon: "Sparkles", description: "Entrepreneurship, startup ideas, and pitches." },
   { name: "InterVerse", icon: "Gamepad2", description: "Department collaborations, networking, and outer club partnerships." },
   { name: "Peer Sessions", icon: "Users", description: "Peer learning and student mentoring wing." },
-  { name: "Research Guidance", icon: "BookOpen", description: "Academic paper guidance, research, and papers." },
-  { name: "Design & Media", icon: "Layers", description: "Design, media, edits, and branding materials." }
+  { name: "Research Guidance", icon: "BookOpen", description: "Academic paper guidance, research, and papers." }
 ];
 
 const HERO_IMAGES = [
@@ -159,8 +158,7 @@ const HomePage: React.FC = () => {
     { name: "Startovate", icon: "Sparkles", description: "Entrepreneurship, start-up ideas, and innovation." },
     { name: "InterVerse", icon: "Gamepad2", description: "Virtual worlds, gaming, and immersive experiences." },
     { name: "Peer Sessions", icon: "Users", description: "Peer-to-peer knowledge sharing and workshops." },
-    { name: "Research Guidance", icon: "BookOpen", description: "Academic research, paper publishing, and guidance." },
-    { name: "Design & Media", icon: "Layers", description: "Graphic design, content creation, and media production." }
+    { name: "Research Guidance", icon: "BookOpen", description: "Academic research, paper publishing, and guidance." }
   ];
 
   useGSAP(() => {
