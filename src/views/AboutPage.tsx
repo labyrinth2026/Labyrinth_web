@@ -165,7 +165,7 @@ const AboutPage: React.FC = () => {
                 ABOUT <span className="text-[#CD0000]">LABYRINTH</span>
               </h1>
               <p className="about-desc text-sm md:text-base text-slate-500 leading-relaxed mb-4 font-medium">
-                The Computer Science Department's Computer Academy has been active since 1997. Labyrinth was established as the official face of this academy and serves as the only Computer Science Club of Christ University.
+                Labyrinth was established as the official face and serves as the only Computer Science Club of Christ University.
               </p>
               <p className="about-desc text-sm md:text-base text-slate-500 leading-relaxed mb-4">
                 Labyrinth was created with the purpose of providing students a platform to showcase their talents, develop leadership skills, collaborate with peers, and explore diverse domains within Computer Science and engineering.
@@ -284,7 +284,7 @@ const AboutPage: React.FC = () => {
       <section className="py-24 bg-white border-b border-slate-100">
         <div className="container mx-auto px-6 max-w-6xl">
           <SectionHeading title="By The Numbers" subtitle="Our Impact" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {statsData.map((stat, i) => (
               <div 
                 key={i} 
@@ -295,7 +295,7 @@ const AboutPage: React.FC = () => {
                   value={stat.value}
                   label={stat.label}
                   suffix={stat.suffix}
-                  icon={i === 0 ? Layers : i === 1 ? Users : i === 2 ? CalendarCheck : MessageCircle}
+                  icon={i === 0 ? Layers : Users}
                 />
               </div>
             ))}

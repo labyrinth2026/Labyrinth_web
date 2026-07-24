@@ -93,7 +93,6 @@ const ContactPage: React.FC = () => {
                     {[
                       { name: 'Dr. Amrutha K', url: 'https://christuniversity.in/computer-science/faculty-details/NzE0Mg==/NjI=' },
                       { name: 'Dr. Binayak Dutta', url: 'https://christuniversity.in/computer-science/faculty-details/ODc2OQ==/NjI=' },
-                      { name: 'Dr. Syam Mohan E', url: 'https://christuniversity.in/computer-science/faculty-details/OTM1NA==/NjI=' },
                     ].map(({ name, url }) => (
                       <a
                         key={name}

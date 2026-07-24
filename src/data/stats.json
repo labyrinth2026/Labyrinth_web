@@ -1,6 +1,4 @@
 [
   { "value": 10, "label": "Specialized Verticals", "suffix": "", "icon": "Layers" },
-  { "value": 50, "label": "Members", "suffix": "+", "icon": "Users" },
-  { "value": 15, "label": "Events Conducted", "suffix": "+", "icon": "Calendar" },
-  { "value": 7, "label": "Peer Sessions", "suffix": "+", "icon": "BookOpen" }
+  { "value": 50, "label": "Students & Faculty In-Charges", "suffix": "+", "icon": "Users" }
 ]

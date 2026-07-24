@@ -21,7 +21,7 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: 'LABYRINTH - Computer Science Club',
-  description: "The official face of Christ University's Computer Academy, active since 1997.",
+  description: "The official Computer Science Club of Christ University.",
   icons: {
     icon: '/labyrinth-logo.png', // Fallback to logo as tab favicon
   }

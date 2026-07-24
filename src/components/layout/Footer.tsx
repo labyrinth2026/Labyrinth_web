@@ -138,10 +138,6 @@ const Footer: React.FC = () => {
                 <Mail size={13} className="shrink-0 text-slate-400" />
                 labyrinth.christ@christuniversity.in
               </a>
-              <div className="flex items-center gap-2 text-slate-500 text-xs">
-                <Mail size={13} className="shrink-0 text-slate-400" />
-                dept.cs@christuniversity.in
-              </div>
             </div>
           </div>
 

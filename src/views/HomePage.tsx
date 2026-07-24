@@ -263,7 +263,7 @@ const HomePage: React.FC = () => {
               </h1>
               <p className="hero-subtitle text-xs md:text-sm text-slate-300 font-bold uppercase tracking-widest mb-6">Christ University, Bengaluru</p>
               <p className="hero-desc text-sm md:text-base text-slate-200 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
-                The Computer Science Department's Computer Academy has been active since 1997. Labyrinth serves as the official Computer Science Club of Christ University, fostering research, engineering, and digital excellence.
+                Labyrinth serves as the official Computer Science Club of Christ University, fostering research, engineering, and digital excellence.
               </p>
             </div>
 
@@ -307,7 +307,7 @@ const HomePage: React.FC = () => {
         <section id="stats" className="py-24 bg-white border-t border-slate-100">
           <div className="container mx-auto px-6 max-w-7xl">
             <SectionHeading title="By The Numbers" subtitle="Our Impact" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
               <ScrollReveal stagger={0.08}>
                 {statsData.map((stat, i) => (
                   <StatCounter
@@ -315,7 +315,7 @@ const HomePage: React.FC = () => {
                     value={stat.value}
                     label={stat.label}
                     suffix={stat.suffix}
-                    icon={i === 0 ? Layers : i === 1 ? Users : i === 2 ? CalendarCheck : MessageCircle}
+                    icon={i === 0 ? Layers : Users}
                   />
                 ))}
               </ScrollReveal>
@@ -347,7 +347,7 @@ const HomePage: React.FC = () => {
                     The Official CS Club of <span className="text-[#CD0000]">Christ University</span>
                   </h2>
                   <p className="text-slate-500 text-sm leading-relaxed mb-4">
-                    The Computer Science Department's Computer Academy has been active since 1997. Labyrinth serves as its official face and is the only Computer Science Club of Christ University.
+                    Labyrinth serves as the official face and is the only Computer Science Club of Christ University.
                   </p>
                   <p className="text-slate-500 text-sm leading-relaxed mb-8">
                     Every semester we host coding competitions, hackathons, workshops, sports tournaments, and interdisciplinary events — giving every student a platform to discover their niche and grow.
@@ -457,7 +457,7 @@ const HomePage: React.FC = () => {
             {/* Bottom Global Explore Button */}
             <div className="flex justify-center pt-2">
               <Button variant="outline" size="md" href="/verticals">
-                Explore All 11 Verticals <ArrowRight size={14} />
+                Explore All 10 Verticals <ArrowRight size={14} />
               </Button>
             </div>
 

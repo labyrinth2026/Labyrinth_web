@@ -23,12 +23,11 @@ export const CLUB_INFO = {
   university: 'CHRIST (Deemed to be University)',
   location: 'Bengaluru, India',
   email: 'labyrinth.christ@christuniversity.in',
-  description: 'The Computer Science Department\'s Computer Academy has been active since 1997. Labyrinth was established as the official face of this academy and serves as the only Computer Science Club of Christ University.'
+  description: 'Labyrinth was established as the official face and serves as the only Computer Science Club of Christ University.'
 };
 
 export const FACULTY_CONTACT = {
   email: 'labyrinth.christ@christuniversity.in',
-  departmentEmail: 'dept.cs@christuniversity.in',
   location: 'Department of Computer Science, Christ University, Hosur Road, Bengaluru – 560029'
 };
 
