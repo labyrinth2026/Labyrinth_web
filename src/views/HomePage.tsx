@@ -345,10 +345,10 @@ const HomePage: React.FC = () => {
                     The Official CS Club of <span className="text-[#CD0000]">Christ University</span>
                   </h2>
                   <p className="text-slate-500 text-sm leading-relaxed mb-4">
-                    Labyrinth serves as the official face and is the only Computer Science Club of Christ University.
+                    Labyrinth is dedicated to fostering research, innovation, and digital excellence.
                   </p>
                   <p className="text-slate-500 text-sm leading-relaxed mb-8">
-                    Every semester we host coding competitions, hackathons, workshops, sports tournaments, and interdisciplinary events — giving every student a platform to discover their niche and grow.
+                    Every year, the club hosts coding competitions, hackathons, workshops, sports tournaments, and interdisciplinary events — giving every student a platform to discover their niche and grow.
                   </p>
                 </div>
               </ScrollReveal>
@@ -359,7 +359,7 @@ const HomePage: React.FC = () => {
         {/* ── Verticals Section: Technical & Non-Technical ── */}
         <section id="verticals" className="py-24 bg-slate-50/50 border-t border-slate-200/60">
           <div className="container mx-auto px-6 max-w-7xl space-y-16">
-            
+
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
               <SectionHeading title="Our Verticals" subtitle="What We Do" align="left" className="mb-0" />

@@ -164,14 +164,11 @@ const AboutPage: React.FC = () => {
               <h1 className="about-title text-4xl md:text-5xl font-extrabold mb-8 text-slate-900 tracking-tight leading-tight">
                 ABOUT <span className="text-[#CD0000]">LABYRINTH</span>
               </h1>
-              <p className="about-desc text-sm md:text-base text-slate-500 leading-relaxed mb-4 font-medium">
-                Labyrinth was established as the official face and serves as the only Computer Science Club of Christ University.
-              </p>
               <p className="about-desc text-sm md:text-base text-slate-500 leading-relaxed mb-4">
-                Labyrinth was created with the purpose of providing students a platform to showcase their talents, develop leadership skills, collaborate with peers, and explore diverse domains within Computer Science and engineering.
+                Labyrinth was created with the purpose of providing students a platform to showcase their talents, develop leadership skills, collaborate with peers, and explore diverse domains within Computer Science and beyond.
               </p>
               <p className="about-desc text-sm md:text-base text-slate-500 leading-relaxed mb-8">
-                Every semester, Labyrinth organizes a wide range of technical and non-technical events, including coding competitions, debugging challenges, logical puzzle contests, web development and design competitions, gaming tournaments, debates, sports activities, entrepreneurship initiatives, and interdisciplinary collaborations.
+                Every year, the club organizes a wide range of technical and non-technical events, including coding competitions, debugging challenges, logical puzzle contests, web development and design competitions, gaming tournaments, debates, sports activities, entrepreneurship initiatives, and interdisciplinary collaborations.
               </p>
               <p className="about-desc font-bold text-[#CD0000] uppercase tracking-wider text-xs">
                 Labyrinth is for the students, by the students.

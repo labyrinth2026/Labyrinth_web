@@ -22,8 +22,8 @@ export const VERTICALS_STACK_DATA: VerticalItemData[] = [
     subtitle: 'LABYRINTH 2026-27',
     category: 'Overview',
     description: [
-      'Labyrinth was created with the purpose of providing students a platform to showcase their talents, develop leadership skills, collaborate with peers, and explore diverse domains within Computer Science and engineering.',
-      'Every semester, Labyrinth organizes a wide range of technical and non-technical events, including coding competitions, debugging challenges, logical puzzle contests, web development and design competitions, gaming tournaments, debates, sports activities, entrepreneurship initiatives, and interdisciplinary collaborations.'
+      'Labyrinth was created with the purpose of providing students a platform to showcase their talents, develop leadership skills, collaborate with peers, and explore diverse domains within Computer Science and beyond.',
+      'Every year, the club organizes a wide range of technical and non-technical events, including coding competitions, debugging challenges, logical puzzle contests, web development and design competitions, gaming tournaments, debates, sports activities, entrepreneurship initiatives, and interdisciplinary collaborations.'
     ],
     solidBgClass: 'bg-[#18181B]',
     badgeClass: 'bg-[#CD0000] text-white border-transparent',

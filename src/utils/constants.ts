@@ -23,7 +23,7 @@ export const CLUB_INFO = {
   university: 'CHRIST (Deemed to be University)',
   location: 'Bengaluru, India',
   email: 'labyrinth.christ@christuniversity.in',
-  description: 'Labyrinth was established as the official face and serves as the only Computer Science Club of Christ University.'
+  description: 'Labyrinth provides students a platform to showcase their talents, develop leadership skills, collaborate with peers, and explore diverse domains within Computer Science and beyond.'
 };
 
 export const FACULTY_CONTACT = {
