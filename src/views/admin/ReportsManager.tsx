@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { fetchFromSheet } from '@/services/api';
-import { FileText, Download, FileDown, RefreshCw } from 'lucide-react';
+import { FileText, Download, FileDown, RefreshCw, FileCode, CheckCircle2, Layers, Users, Calendar } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import { Document, Packer, Paragraph, Table, TableRow, TableCell, TextRun, HeadingLevel, WidthType, ImageRun, AlignmentType, BorderStyle } from 'docx';
 import { saveAs } from 'file-saver';
+import { generateEventWordReport, generateSampleReportTemplate } from '@/utils/generateEventWordReport';
 
 const ReportsManager: React.FC = () => {
   const [reportType, setReportType] = useState<'events' | 'team' | 'verticals'>('events');
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [exportingEventId, setExportingEventId] = useState<string | null>(null);
 
   const loadData = async () => {
     setIsLoading(true);
@@ -27,8 +29,8 @@ const ReportsManager: React.FC = () => {
         const teamMembers = [
           ...(result.facultyCoordinators || []).map((m: any) => ({ ...m, role: 'Faculty' })),
           ...(result.mentors || []).map((m: any) => ({ ...m, role: 'Mentor' })),
-          ...(result.coreCommittee || []).map((m: any) => ({ ...m, role: 'Core' })),
-          ...(result.verticalHeads || []).map((m: any) => ({ ...m, role: 'Head' })),
+          ...(result.coreCommittee || []).map((m: any) => ({ ...m, role: 'Core Committee' })),
+          ...(result.verticalHeads || []).map((m: any) => ({ ...m, role: 'Vertical Head' })),
           ...(result.subHeads || []).map((m: any) => ({ ...m, role: 'Sub-Head' })),
         ];
         setData(teamMembers);
@@ -48,12 +50,12 @@ const ReportsManager: React.FC = () => {
     let body: string[][] = [];
 
     if (reportType === 'events') {
-      head = ['Title', 'Date', 'Status', 'Category'];
+      head = ['Title', 'Date', 'Status', 'Location'];
       body = data.map(e => [
         e.title || '',
-        e.date ? new Date(e.date).toLocaleDateString() : '',
-        e.status || '',
-        e.category || ''
+        e.date ? new Date(e.date).toLocaleDateString('en-GB') : '',
+        e.status || 'upcoming',
+        e.location || '—'
       ]);
     } else if (reportType === 'team') {
       head = ['Name', 'Role', 'Email', 'Position'];
@@ -125,26 +127,18 @@ const ReportsManager: React.FC = () => {
         headStyles: { fillColor: [205, 0, 0], textColor: 255, fontStyle: 'bold' },
         alternateRowStyles: { fillColor: [248, 249, 250] },
         didDrawPage: (data: any) => {
-          // Draw header logos and lines on every page
-          if (labLogo) {
-            doc.addImage(labLogo, 'PNG', 14, 8, 10, 10);
-          }
-          if (christLogo) {
-            doc.addImage(christLogo, 'PNG', 161, 8, 35, 10);
-          }
+          if (labLogo) doc.addImage(labLogo, 'PNG', 14, 8, 10, 10);
+          if (christLogo) doc.addImage(christLogo, 'PNG', 161, 8, 35, 10);
           
-          // Header text
           doc.setFontSize(8);
           doc.setTextColor(102, 112, 133);
           doc.setFont("helvetica", "bold");
           doc.text(`LABYRINTH COMPUTER ACADEMY | CHRIST UNIVERSITY`, 28, 14.5);
           
-          // Divider line
-          doc.setDrawColor(229, 231, 235); // Border gray
+          doc.setDrawColor(229, 231, 235);
           doc.setLineWidth(0.5);
           doc.line(14, 22, 196, 22);
           
-          // Footer
           const pageCount = doc.getNumberOfPages();
           const str = `Page ${pageCount}`;
           doc.setFontSize(8);
@@ -155,10 +149,9 @@ const ReportsManager: React.FC = () => {
         }
       });
 
-      // Draw title on page 1 above the table
       doc.setPage(1);
       doc.setFontSize(14);
-      doc.setTextColor(51, 65, 85); // Slate 700
+      doc.setTextColor(51, 65, 85);
       doc.setFont("helvetica", "bold");
       doc.text(title, 14, 32);
 
@@ -221,33 +214,19 @@ const ReportsManager: React.FC = () => {
         );
       }
 
-      const borderNone = {
-        style: BorderStyle.NONE,
-        size: 0,
-        color: "auto",
-      };
+      const borderNone = { style: BorderStyle.NONE, size: 0, color: "auto" };
 
       const headerTable = new Table({
         width: { size: 100, type: WidthType.PERCENTAGE },
         borders: {
-          top: borderNone,
-          bottom: borderNone,
-          left: borderNone,
-          right: borderNone,
-          insideHorizontal: borderNone,
-          insideVertical: borderNone,
+          top: borderNone, bottom: borderNone, left: borderNone, right: borderNone,
+          insideHorizontal: borderNone, insideVertical: borderNone,
         },
         rows: [
           new TableRow({
             children: [
-              new TableCell({
-                children: labCellChildren,
-                width: { size: 50, type: WidthType.PERCENTAGE }
-              }),
-              new TableCell({
-                children: christCellChildren,
-                width: { size: 50, type: WidthType.PERCENTAGE }
-              })
+              new TableCell({ children: labCellChildren, width: { size: 50, type: WidthType.PERCENTAGE } }),
+              new TableCell({ children: christCellChildren, width: { size: 50, type: WidthType.PERCENTAGE } })
             ]
           })
         ]
@@ -258,11 +237,7 @@ const ReportsManager: React.FC = () => {
         rows: [
           new TableRow({
             children: head.map(h => new TableCell({
-              children: [
-                new Paragraph({
-                  children: [new TextRun({ text: h, bold: true, color: "FFFFFF" })]
-                })
-              ],
+              children: [new Paragraph({ children: [new TextRun({ text: h, bold: true, color: "FFFFFF" })] })],
               shading: { fill: "CD0000" }
             }))
           }),
@@ -305,27 +280,15 @@ const ReportsManager: React.FC = () => {
     try {
       const { head, body } = getCleanTableData();
 
-      // Top title and metadata rows
       const titleRow1 = ["LABYRINTH - COMPUTER SCIENCE CLUB"];
       const titleRow2 = ["CHRIST (Deemed to be University), Bengaluru"];
       const titleRow3 = [`Official ${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report`];
       const titleRow4 = [`Generated: ${new Date().toLocaleString()}`];
-      const titleRow5: string[] = []; // Empty separator
+      const titleRow5: string[] = [];
 
-      // Build worksheet data array
-      const wsData = [
-        titleRow1,
-        titleRow2,
-        titleRow3,
-        titleRow4,
-        titleRow5,
-        head,
-        ...body
-      ];
-
+      const wsData = [titleRow1, titleRow2, titleRow3, titleRow4, titleRow5, head, ...body];
       const worksheet = XLSX.utils.aoa_to_sheet(wsData);
 
-      // Merge titles across table column width
       const colCount = head.length;
       worksheet['!merges'] = [
         { s: { r: 0, c: 0 }, e: { r: 0, c: Math.max(colCount - 1, 2) } },
@@ -334,13 +297,12 @@ const ReportsManager: React.FC = () => {
         { s: { r: 3, c: 0 }, e: { r: 3, c: Math.max(colCount - 1, 2) } }
       ];
 
-      // Auto-adjust column widths based on table content
       const wscols = head.map((h, i) => {
         let maxLen = h.length;
         body.forEach(row => {
           if (row[i]) maxLen = Math.max(maxLen, row[i].length);
         });
-        return { wch: Math.min(Math.max(maxLen + 2, 12), 40) }; // cap between 12 and 40 characters wide
+        return { wch: Math.min(Math.max(maxLen + 2, 12), 40) };
       });
       worksheet['!cols'] = wscols;
 
@@ -354,86 +316,241 @@ const ReportsManager: React.FC = () => {
     setIsExporting(false);
   };
 
+  const handleSingleEventReport = async (eventItem: any) => {
+    setExportingEventId(eventItem.id || 'current');
+    try {
+      await generateEventWordReport(eventItem);
+    } catch (e) {
+      alert('Failed to generate event report');
+    } finally {
+      setExportingEventId(null);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-sm p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      {/* Top Banner Header */}
+      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-xl font-bold font-grotesk text-[#CD0000]">Reports & Exports</h1>
-          <p className="text-[#667085] text-sm mt-0.5">Generate and download data reports in PDF, Excel, or Word.</p>
+          <h1 className="text-xl font-bold font-grotesk text-[#CD0000]">Reports & Document Extraction</h1>
+          <p className="text-slate-500 text-sm mt-0.5">Generate official CHRIST Department of Computer Science Activity Reports and data extracts.</p>
+        </div>
+        <div className="flex flex-wrap gap-2 w-full md:w-auto shrink-0">
+          <button 
+            onClick={() => generateSampleReportTemplate()}
+            className="flex items-center gap-2 px-4 py-2 bg-[#CD0000] text-white text-xs font-semibold rounded-xl hover:bg-[#A30000] transition-colors shadow-sm"
+          >
+            <FileDown size={14} /> Download Sample Report Structure (.docx)
+          </button>
         </div>
       </div>
 
-      <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-sm p-6">
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="w-full md:w-1/3 space-y-4">
-            <h2 className="text-sm font-bold text-[#CD0000]">Select Data Source</h2>
-            <div className="flex flex-col gap-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column: Data Source Selector & Export Options */}
+        <div className="space-y-6">
+          {/* Data Source Cards */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
+            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">1. Select Data Source</h2>
+            <div className="grid grid-cols-1 gap-2">
               {[
-                { id: 'events', label: 'Events Database' },
-                { id: 'team', label: 'Team Members' },
-                { id: 'verticals', label: 'Verticals & Domains' }
-              ].map(opt => (
-                <button
-                  key={opt.id}
-                  onClick={() => setReportType(opt.id as any)}
-                  className={`px-4 py-3 text-left rounded-xl text-sm font-semibold transition-colors border ${
-                    reportType === opt.id
-                      ? 'bg-[rgba(205, 0, 0, 0.03)] border-[#CD0000] text-[#CD0000]'
-                      : 'bg-white border-[#E5E7EB] text-[#667085] hover:border-[#CD0000]'
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-            
-            <div className="pt-4 border-t border-[#E5E7EB] space-y-3 mt-4">
-               <h2 className="text-sm font-bold text-[#CD0000]">Export As</h2>
-               <button onClick={generatePDF} disabled={isExporting || isLoading || data.length === 0} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 text-red-600 border border-red-200 rounded-xl hover:bg-red-100 transition-colors disabled:opacity-50 font-semibold text-sm">
-                  <FileText size={16} /> Export to PDF
-               </button>
-               <button onClick={generateWord} disabled={isExporting || isLoading || data.length === 0} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[rgba(205, 0, 0, 0.03)] text-blue-600 border border-[#E5E7EB] rounded-xl hover:bg-[rgba(205, 0, 0, 0.05)] transition-colors disabled:opacity-50 font-semibold text-sm">
-                  <FileText size={16} /> Export to Word (.docx)
-               </button>
-               <button onClick={generateExcel} disabled={isExporting || isLoading || data.length === 0} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-green-50 text-green-600 border border-green-200 rounded-xl hover:bg-green-100 transition-colors disabled:opacity-50 font-semibold text-sm">
-                  <FileDown size={16} /> Export to Excel
-               </button>
+                { id: 'events', label: 'Events Database', icon: Calendar, count: data.length },
+                { id: 'team', label: 'Team Members', icon: Users },
+                { id: 'verticals', label: 'Verticals & Domains', icon: Layers }
+              ].map(opt => {
+                const Icon = opt.icon;
+                const isActive = reportType === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    onClick={() => setReportType(opt.id as any)}
+                    className={`flex items-center justify-between p-3.5 rounded-xl text-xs font-semibold transition-all border text-left ${
+                      isActive
+                        ? 'bg-red-50/60 border-[#CD0000] text-[#CD0000] shadow-sm'
+                        : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <Icon size={16} className={isActive ? 'text-[#CD0000]' : 'text-slate-400'} />
+                      <span>{opt.label}</span>
+                    </div>
+                    {isActive && <CheckCircle2 size={15} className="text-[#CD0000]" />}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          <div className="w-full md:w-2/3">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-sm font-bold text-[#CD0000]">Data Preview ({data.length} records)</h2>
-              <button onClick={loadData} className="text-[#8c97a8] hover:text-[#CD0000]"><RefreshCw size={14} className={isLoading ? 'animate-spin' : ''} /></button>
+          {/* Official CHRIST Activity Report Options (If Events is selected) */}
+          {reportType === 'events' && (
+            <div className="bg-gradient-to-br from-blue-50/80 to-slate-50 border border-blue-100 rounded-2xl p-5 shadow-sm space-y-3">
+              <div>
+                <h2 className="text-xs font-bold text-blue-900 uppercase tracking-wider flex items-center gap-1.5">
+                  <FileDown size={14} className="text-blue-600" /> Official CHRIST Activity Reports
+                </h2>
+                <p className="text-[11px] text-blue-700 mt-1">Export formatted Word (.docx) documents following the official CHRIST Department format.</p>
+              </div>
+
+              <div className="space-y-2 pt-1">
+                <button
+                  onClick={() => generateSampleReportTemplate()}
+                  className="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-blue-200 text-blue-800 rounded-xl hover:bg-blue-100/60 transition-colors text-xs font-bold shadow-xs group"
+                >
+                  <span className="flex items-center gap-2">
+                    <FileDown size={14} className="text-blue-600 group-hover:scale-110 transition-transform" />
+                    Download Sample Structure (.docx)
+                  </span>
+                  <span className="text-[10px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded-md font-mono">Template</span>
+                </button>
+
+                <button
+                  onClick={async () => {
+                    setIsExporting(true);
+                    for (const evt of data) {
+                      await generateEventWordReport(evt);
+                    }
+                    setIsExporting(false);
+                  }}
+                  disabled={isExporting || isLoading || data.length === 0}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 text-xs font-bold shadow-sm"
+                >
+                  {isExporting ? <RefreshCw size={14} className="animate-spin" /> : <FileDown size={14} />}
+                  Batch Download All Event Word Reports ({data.length})
+                </button>
+              </div>
             </div>
-            
-            <div className="border border-[#E5E7EB] rounded-xl overflow-hidden bg-gray-50 h-[400px] overflow-y-auto">
+          )}
+
+          {/* Raw Table Export Options */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3">
+            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">2. Table Data Extracts</h2>
+            <div className="space-y-2">
+              <button
+                onClick={generatePDF}
+                disabled={isExporting || isLoading || data.length === 0}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 text-red-700 border border-red-200 rounded-xl hover:bg-red-100/60 transition-colors disabled:opacity-50 font-bold text-xs"
+              >
+                <FileText size={14} /> Export Table to PDF
+              </button>
+
+              <button
+                onClick={generateWord}
+                disabled={isExporting || isLoading || data.length === 0}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-50 text-slate-700 border border-slate-200 rounded-xl hover:bg-slate-100 transition-colors disabled:opacity-50 font-bold text-xs"
+              >
+                <FileText size={14} /> Export Table to Word (.docx)
+              </button>
+
+              <button
+                onClick={generateExcel}
+                disabled={isExporting || isLoading || data.length === 0}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl hover:bg-emerald-100/60 transition-colors disabled:opacity-50 font-bold text-xs"
+              >
+                <FileDown size={14} /> Export Table to Excel (.xlsx)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Data Preview & Individual Event Actions */}
+        <div className="lg:col-span-2">
+          <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full min-h-[520px]">
+            <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 shrink-0">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">Data Preview</span>
+                <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-200 text-slate-700">
+                  {data.length} records
+                </span>
+              </div>
+              <button 
+                onClick={loadData} 
+                className="p-1.5 text-slate-400 hover:text-[#CD0000] hover:bg-white rounded-lg transition-colors border border-transparent hover:border-slate-200"
+                title="Refresh Data"
+              >
+                <RefreshCw size={14} className={isLoading ? 'animate-spin' : ''} />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-x-auto overflow-y-auto min-h-0 bg-white">
               {isLoading ? (
-                <div className="flex flex-col items-center justify-center h-full text-[#8c97a8]">
-                   <RefreshCw size={24} className="animate-spin text-[#CD0000] mb-2" />
-                   <span className="text-sm">Loading data...</span>
+                <div className="flex flex-col items-center justify-center h-64 text-slate-400">
+                  <RefreshCw size={24} className="animate-spin text-[#CD0000] mb-2" />
+                  <span className="text-xs font-medium">Fetching dataset records...</span>
                 </div>
               ) : data.length === 0 ? (
-                <div className="flex items-center justify-center h-full text-[#8c97a8] text-sm">
-                   No data available.
+                <div className="flex flex-col items-center justify-center h-64 text-slate-400 text-xs font-medium">
+                  No records found in this dataset.
                 </div>
               ) : (
-                <table className="w-full text-left text-sm">
-                  <thead className="bg-[rgba(205, 0, 0, 0.03)] sticky top-0">
-                    <tr>
-                      {Object.keys(data[0]).slice(0, 4).map(key => (
-                         <th key={key} className="p-3 font-semibold text-[#CD0000] capitalize">{key}</th>
-                      ))}
-                    </tr>
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider sticky top-0 z-10">
+                    {reportType === 'events' ? (
+                      <tr>
+                        <th className="p-3.5 pl-4">Event Title</th>
+                        <th className="p-3.5">Date</th>
+                        <th className="p-3.5">Venue / Location</th>
+                        <th className="p-3.5">Status</th>
+                        <th className="p-3.5 pr-4 text-right">CHRIST Activity Report</th>
+                      </tr>
+                    ) : reportType === 'team' ? (
+                      <tr>
+                        <th className="p-3.5 pl-4">Name</th>
+                        <th className="p-3.5">Role</th>
+                        <th className="p-3.5">Email</th>
+                        <th className="p-3.5 pr-4">Designation</th>
+                      </tr>
+                    ) : (
+                      <tr>
+                        <th className="p-3.5 pl-4">Vertical Name</th>
+                        <th className="p-3.5">Category</th>
+                        <th className="p-3.5 pr-4">Description</th>
+                      </tr>
+                    )}
                   </thead>
-                  <tbody className="divide-y divide-[#E5E7EB] bg-white">
-                    {data.map((item, i) => (
-                      <tr key={i} className="hover:bg-[rgba(205, 0, 0, 0.03)]/30">
-                        {Object.keys(data[0]).slice(0, 4).map(key => (
-                           <td key={key} className="p-3 text-[#667085] truncate max-w-[150px]">
-                              {typeof item[key] === 'string' ? item[key] : JSON.stringify(item[key])}
-                           </td>
-                        ))}
+                  <tbody className="divide-y divide-slate-100 text-slate-700">
+                    {reportType === 'events' && data.map((item, i) => (
+                      <tr key={item.id || i} className="hover:bg-slate-50/70 transition-colors">
+                        <td className="p-3.5 pl-4 font-bold text-slate-900 max-w-[220px] truncate">{item.title || 'Untitled'}</td>
+                        <td className="p-3.5 text-slate-500 whitespace-nowrap">{item.date ? new Date(item.date).toLocaleDateString('en-GB') : '—'}</td>
+                        <td className="p-3.5 text-slate-500 max-w-[150px] truncate">{item.location || '—'}</td>
+                        <td className="p-3.5 whitespace-nowrap">
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase border ${
+                            item.status === 'upcoming' ? 'bg-emerald-50 border-emerald-200 text-emerald-600' : 'bg-slate-100 border-slate-200 text-slate-500'
+                          }`}>
+                            {item.status || 'upcoming'}
+                          </span>
+                        </td>
+                        <td className="p-3.5 pr-4 text-right whitespace-nowrap">
+                          <button
+                            onClick={() => handleSingleEventReport(item)}
+                            disabled={exportingEventId === item.id}
+                            className="px-3 py-1.5 text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors inline-flex items-center gap-1.5 shadow-xs"
+                            title="Download official Word Activity Report (.docx)"
+                          >
+                            {exportingEventId === item.id ? (
+                              <RefreshCw size={13} className="animate-spin text-blue-600" />
+                            ) : (
+                              <FileDown size={13} className="text-blue-600" />
+                            )}
+                            <span>Report (.docx)</span>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+
+                    {reportType === 'team' && data.map((item, i) => (
+                      <tr key={item.id || i} className="hover:bg-slate-50/70 transition-colors">
+                        <td className="p-3.5 pl-4 font-bold text-slate-900">{item.name || '—'}</td>
+                        <td className="p-3.5 text-slate-600">{item.role || '—'}</td>
+                        <td className="p-3.5 text-slate-500 font-mono text-[11px]">{item.email || '—'}</td>
+                        <td className="p-3.5 pr-4 text-slate-500">{item.position || item.designation || '—'}</td>
+                      </tr>
+                    ))}
+
+                    {reportType === 'verticals' && data.map((item, i) => (
+                      <tr key={item.id || i} className="hover:bg-slate-50/70 transition-colors">
+                        <td className="p-3.5 pl-4 font-bold text-slate-900">{item.name || '—'}</td>
+                        <td className="p-3.5 text-slate-600 uppercase font-semibold text-[10px]">{item.category || '—'}</td>
+                        <td className="p-3.5 pr-4 text-slate-500 max-w-[300px] truncate">{item.description || '—'}</td>
                       </tr>
                     ))}
                   </tbody>

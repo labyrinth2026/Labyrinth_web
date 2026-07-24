@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { fetchFromSheet } from '@/services/api';
-import { Plus, Edit2, Trash2, RefreshCw, Calendar, X, Check, AlertTriangle } from 'lucide-react';
+import { Plus, Edit2, Trash2, RefreshCw, Calendar, X, Check, AlertTriangle, FileDown, ChevronDown, ChevronUp } from 'lucide-react';
+import { generateEventWordReport, generateSampleReportTemplate } from '@/utils/generateEventWordReport';
 
 export default function EventsManager() {
   const { user } = useAuth();
@@ -43,13 +44,29 @@ export default function EventsManager() {
     };
   }, [showModal, deleteConfirm]);
 
+  const [exportingId, setExportingId] = useState<string | null>(null);
+  const [showReportFields, setShowReportFields] = useState(false);
+
+  const handleDownloadReport = async (item: any) => {
+    setExportingId(item.id || 'current');
+    try {
+      await generateEventWordReport(item);
+    } catch (err) {
+      alert('Failed to generate Activity Report document.');
+    } finally {
+      setExportingId(null);
+    }
+  };
+
   const openAddModal = () => {
     setEditingItem({ title: '', date: '', status: 'upcoming', description: '', banner: '', location: '' });
+    setShowReportFields(false);
     setShowModal(true);
   };
 
   const openEditModal = (item: any) => {
     setEditingItem({ ...item });
+    setShowReportFields(false);
     setShowModal(true);
   };
 
@@ -85,11 +102,18 @@ export default function EventsManager() {
       <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-sm p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-xl font-bold font-grotesk text-[#CD0000]">Club Events</h1>
-          <p className="text-slate-500 text-sm mt-0.5">Publish and manage community schedules, fests, and hackathons.</p>
+          <p className="text-slate-500 text-sm mt-0.5">Publish and manage community schedules, fests, and activity reports.</p>
         </div>
-        <div className="flex gap-2 w-full sm:w-auto">
-          <button onClick={loadData} className="p-2.5 text-slate-500 hover:text-[#CD0000] border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shrink-0">
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+          <button onClick={loadData} className="p-2.5 text-slate-500 hover:text-[#CD0000] border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shrink-0" title="Refresh">
             <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
+          </button>
+          <button 
+            onClick={() => generateSampleReportTemplate()}
+            className="flex items-center justify-center gap-1.5 px-3.5 py-2 bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold rounded-xl hover:bg-blue-100 transition-colors shadow-sm"
+            title="Download full sample report structure as reference"
+          >
+            <FileDown size={14} /> Sample Structure (.docx)
           </button>
           <button onClick={openAddModal} className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000] transition-colors shadow-sm">
             <Plus size={15} /> Add Event
@@ -127,9 +151,18 @@ export default function EventsManager() {
                       }`}>{item.status || 'upcoming'}</span>
                     </td>
                     <td className="p-4 text-right">
-                      <div className="flex justify-end gap-1.5">
-                        <button onClick={() => openEditModal(item)} className="p-1.5 text-slate-400 hover:text-[#CD0000] hover:bg-red-50 rounded-lg transition-colors"><Edit2 size={13} /></button>
-                        <button onClick={() => setDeleteConfirm(item.id)} className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"><Trash2 size={13} /></button>
+                      <div className="flex justify-end gap-1.5 items-center">
+                        <button 
+                          onClick={() => handleDownloadReport(item)} 
+                          disabled={exportingId === item.id}
+                          className="px-2.5 py-1 text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors flex items-center gap-1 text-xs font-medium"
+                          title="Download Word Activity Report (.docx)"
+                        >
+                          {exportingId === item.id ? <RefreshCw size={13} className="animate-spin" /> : <FileDown size={13} />}
+                          <span>Report (.docx)</span>
+                        </button>
+                        <button onClick={() => openEditModal(item)} className="p-1.5 text-slate-400 hover:text-[#CD0000] hover:bg-red-50 rounded-lg transition-colors" title="Edit Event"><Edit2 size={13} /></button>
+                        <button onClick={() => setDeleteConfirm(item.id)} className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Delete Event"><Trash2 size={13} /></button>
                       </div>
                     </td>
                   </tr>
@@ -146,9 +179,9 @@ export default function EventsManager() {
       {/* CREATE/EDIT MODAL */}
       {showModal && editingItem && (
         <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-lg flex flex-col max-h-[90vh]">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-2xl flex flex-col max-h-[90vh]">
             <div className="flex items-center justify-between p-5 border-b border-slate-100">
-              <h2 className="font-bold text-slate-800">{editingItem.id ? 'Edit Event' : 'Publish Event'}</h2>
+              <h2 className="font-bold text-slate-800">{editingItem.id ? 'Edit Event Details' : 'Publish Event'}</h2>
               <button onClick={() => setShowModal(false)} className="text-[#8c97a8] hover:text-[#CD0000]"><X size={18} /></button>
             </div>
             
@@ -170,25 +203,110 @@ export default function EventsManager() {
                   </select>
                 </div>
               </div>
-              <div>
-                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Location</label>
-                <input type="text" value={editingItem.location || ''} onChange={e => setEditingItem({ ...editingItem, location: e.target.value })} className={inputClass} placeholder="e.g. Auditorium / Block IV" />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Time</label>
+                  <input type="text" value={editingItem.time || ''} onChange={e => setEditingItem({ ...editingItem, time: e.target.value })} className={inputClass} placeholder="e.g. 10:00 AM - 12:00 PM" />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Location / Venue</label>
+                  <input type="text" value={editingItem.location || ''} onChange={e => setEditingItem({ ...editingItem, location: e.target.value })} className={inputClass} placeholder="e.g. Council Room, Central Block" />
+                </div>
               </div>
               <div>
                 <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Banner Image URL</label>
-                <input type="url" value={editingItem.banner || ''} onChange={e => setEditingItem({ ...editingItem, banner: e.target.value })} className={inputClass} placeholder="https://..." />
+                <input type="url" value={editingItem.banner || editingItem.bannerUrl || ''} onChange={e => setEditingItem({ ...editingItem, banner: e.target.value, bannerUrl: e.target.value })} className={inputClass} placeholder="https://..." />
               </div>
               <div>
-                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Description</label>
+                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Description / Summary</label>
                 <textarea rows={3} value={editingItem.description || ''} onChange={e => setEditingItem({ ...editingItem, description: e.target.value })} className={inputClass} placeholder="Short event details..." />
+              </div>
+
+              {/* Collapsible Activity Report Fields */}
+              <div className="border border-slate-200 rounded-xl overflow-hidden mt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowReportFields(!showReportFields)}
+                  className="w-full flex items-center justify-between p-3 bg-slate-50 text-left font-semibold text-xs text-slate-700 hover:bg-slate-100 transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <FileDown size={14} className="text-[#CD0000]" />
+                    CHRIST Official Activity Report Data (Optional)
+                  </span>
+                  {showReportFields ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                </button>
+
+                {showReportFields && (
+                  <div className="p-4 space-y-3 bg-white border-t border-slate-200">
+                    <div>
+                      <label className="text-[11px] font-semibold text-slate-500 block mb-1">Type of Activity</label>
+                      <textarea rows={2} value={editingItem.activityType || ''} onChange={e => setEditingItem({ ...editingItem, activityType: e.target.value })} className={inputClass} placeholder="1. Student Participation and Activities (5.3)..." />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-[11px] font-semibold text-slate-500 block mb-1">Type of Participants</label>
+                        <input type="text" value={editingItem.participantsType || ''} onChange={e => setEditingItem({ ...editingItem, participantsType: e.target.value })} className={inputClass} placeholder="e.g. Alumni, Faculty and students" />
+                      </div>
+                      <div>
+                        <label className="text-[11px] font-semibold text-slate-500 block mb-1">No. of Participants</label>
+                        <input type="number" value={editingItem.participantCount || ''} onChange={e => setEditingItem({ ...editingItem, participantCount: e.target.value })} className={inputClass} placeholder="e.g. 50" />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-semibold text-slate-500 block mb-1">Collaboration / Sponsor</label>
+                      <input type="text" value={editingItem.collaboration || ''} onChange={e => setEditingItem({ ...editingItem, collaboration: e.target.value })} className={inputClass} placeholder="Department of Computer Science..." />
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-semibold text-slate-500 block mb-1">Highlights (One per line)</label>
+                      <textarea rows={2} value={Array.isArray(editingItem.highlights) ? editingItem.highlights.join('\n') : (editingItem.highlights || '')} onChange={e => setEditingItem({ ...editingItem, highlights: e.target.value.split('\n') })} className={inputClass} placeholder="1. Participation of multi-batch alumni..." />
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-semibold text-slate-500 block mb-1">Key Takeaways (One per line)</label>
+                      <textarea rows={2} value={Array.isArray(editingItem.keyTakeaways) ? editingItem.keyTakeaways.join('\n') : (editingItem.keyTakeaways || '')} onChange={e => setEditingItem({ ...editingItem, keyTakeaways: e.target.value.split('\n') })} className={inputClass} placeholder="1. Strengthened Alumni Engagement..." />
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-semibold text-slate-500 block mb-1">Detailed Descriptive Report</label>
+                      <textarea rows={4} value={editingItem.descriptiveReport || ''} onChange={e => setEditingItem({ ...editingItem, descriptiveReport: e.target.value })} className={inputClass} placeholder="Full event description, speeches, welcome address, etc." />
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3">
+                      <div>
+                        <label className="text-[11px] font-semibold text-slate-500 block mb-1">Rapporteur Name</label>
+                        <input type="text" value={editingItem.rapporteurName || ''} onChange={e => setEditingItem({ ...editingItem, rapporteurName: e.target.value })} className={inputClass} placeholder="Dr. V. Vaidhehi" />
+                      </div>
+                      <div>
+                        <label className="text-[11px] font-semibold text-slate-500 block mb-1">Rapporteur Email</label>
+                        <input type="email" value={editingItem.rapporteurEmail || ''} onChange={e => setEditingItem({ ...editingItem, rapporteurEmail: e.target.value })} className={inputClass} placeholder="vaidhehi.v@christuniversity.in" />
+                      </div>
+                      <div>
+                        <label className="text-[11px] font-semibold text-slate-500 block mb-1">Rapporteur Contact</label>
+                        <input type="text" value={editingItem.rapporteurContact || ''} onChange={e => setEditingItem({ ...editingItem, rapporteurContact: e.target.value })} className={inputClass} placeholder="9845256910" />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 p-5 border-t border-slate-100 shrink-0">
-              <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-[#667085] hover:text-[#CD0000]">Cancel</button>
-              <button type="button" onClick={handleSave} disabled={isSaving} className="flex items-center gap-1.5 px-5 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000]">
-                {isSaving ? <RefreshCw size={14} className="animate-spin" /> : <Check size={14} />} Publish
+            <div className="flex items-center justify-between p-5 border-t border-slate-100 shrink-0">
+              <button 
+                type="button" 
+                onClick={() => handleDownloadReport(editingItem)}
+                className="flex items-center gap-1.5 px-4 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-100 text-xs font-semibold transition-colors"
+              >
+                <FileDown size={14} /> Download Word Report
               </button>
+              <div className="flex items-center gap-3">
+                <button type="button" onClick={() => setShowModal(false)} className="px-4 py-2 text-sm text-[#667085] hover:text-[#CD0000]">Cancel</button>
+                <button type="button" onClick={handleSave} disabled={isSaving} className="flex items-center gap-1.5 px-5 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000]">
+                  {isSaving ? <RefreshCw size={14} className="animate-spin" /> : <Check size={14} />} Save Event
+                </button>
+              </div>
             </div>
           </div>
         </div>
