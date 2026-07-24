@@ -261,7 +261,7 @@ const HomePage: React.FC = () => {
               </h1>
               <p className="hero-subtitle text-xs md:text-sm text-slate-300 font-bold uppercase tracking-widest mb-6">Christ University, Bengaluru</p>
               <p className="hero-desc text-sm md:text-base text-slate-200 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
-                Labyrinth serves as the official Computer Science Club of Christ University, fostering research, engineering, and digital excellence.
+                Labyrinth serves as the official Computer Science Club of Christ University, fostering research, innovation, and digital excellence.
               </p>
             </div>
 
