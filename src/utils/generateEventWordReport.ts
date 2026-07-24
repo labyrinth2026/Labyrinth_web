@@ -53,12 +53,6 @@ export const generateEventWordReport = async (event: EventReportData, customFile
       getArrayBufferFromUrl('/labyrinth-logo.png')
     ]);
 
-    const posterUrlToUse = event.posterUrl || event.banner || event.bannerUrl;
-    let posterBuf: ArrayBuffer | null = null;
-    if (posterUrlToUse && (posterUrlToUse.startsWith('http') || posterUrlToUse.startsWith('/'))) {
-      posterBuf = await getArrayBufferFromUrl(posterUrlToUse);
-    }
-
     // Format actual date or dash
     let formattedDate = '—';
     if (event.date) {
@@ -280,29 +274,12 @@ export const generateEventWordReport = async (event: EventReportData, customFile
       spacing: { before: 300, after: 120 }
     });
 
-    const posterParagraphs: Paragraph[] = [];
-    if (posterBuf) {
-      posterParagraphs.push(
-        new Paragraph({
-          children: [
-            new ImageRun({
-              data: posterBuf,
-              transformation: { width: 400, height: 550 },
-              type: 'png'
-            })
-          ],
-          alignment: AlignmentType.CENTER,
-          spacing: { after: 200 }
-        })
-      );
-    } else {
-      posterParagraphs.push(
-        new Paragraph({
-          children: [new TextRun({ text: "[ Official Event Poster Attached ]", italics: true, color: "64748B", size: 20 })],
-          spacing: { after: 200 }
-        })
-      );
-    }
+    const posterParagraphs: Paragraph[] = [
+      new Paragraph({
+        children: [new TextRun({ text: "[ Official Event Poster Attached ]", italics: true, color: "64748B", size: 20 })],
+        spacing: { after: 200 }
+      })
+    ];
 
     const universityTitle = new Paragraph({
       alignment: AlignmentType.CENTER,
