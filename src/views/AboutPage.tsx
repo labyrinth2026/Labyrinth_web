@@ -254,8 +254,8 @@ const AboutPage: React.FC = () => {
               <div className="w-12 h-12 rounded-xl bg-[#CD0000]/5 border border-[#CD0000]/10 flex items-center justify-center text-[#CD0000] mb-6">
                 <Target size={22} />
               </div>
-              <h2 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">Our Mission</h2>
-              <p className="text-slate-500 text-xs leading-relaxed font-medium">
+              <h2 className="text-2xl font-extrabold text-slate-900 mb-4 tracking-tight">Our Mission</h2>
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-medium">
                 To create a vibrant student community that promotes innovation, technical excellence, creativity, leadership, collaboration, and holistic development among students.
               </p>
             </div>
@@ -268,8 +268,8 @@ const AboutPage: React.FC = () => {
               <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-white mb-6">
                 <Lightbulb size={22} />
               </div>
-              <h2 className="text-xl font-bold text-white mb-3 tracking-tight">Our Vision</h2>
-              <p className="text-slate-300 text-xs leading-relaxed font-medium">
+              <h2 className="text-2xl font-extrabold text-white mb-4 tracking-tight">Our Vision</h2>
+              <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-medium">
                 To become a platform where students discover opportunities, build skills, showcase talents, and contribute meaningfully to the technology ecosystem and society.
               </p>
             </div>

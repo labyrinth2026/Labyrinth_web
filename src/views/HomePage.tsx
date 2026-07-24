@@ -33,15 +33,15 @@ const techVerticals = [
   { name: "DevZen", icon: "Code2", description: "Full-stack development, open source, and software engineering." },
   { name: "AutoBot", icon: "Cpu", description: "Robotics, IoT, and embedded systems engineering." },
   { name: "InsightX", icon: "TrendingUp", description: "Data analytics, data science, and visualization." },
-  { name: "FieldOps", icon: "Shield", description: "Event operations, logistics, and field management." }
+  { name: "Research Guidance", icon: "BookOpen", description: "Academic paper guidance, research, and papers." }
 ];
 
 const nonTechVerticals = [
+  { name: "FieldOps", icon: "Shield", description: "Event operations, sports, and field management." },
   { name: "Debate", icon: "MessageCircle", description: "Voice, logic, structure, and debating matches." },
   { name: "Startovate", icon: "Sparkles", description: "Entrepreneurship, startup ideas, and pitches." },
   { name: "InterVerse", icon: "Gamepad2", description: "Department collaborations, networking, and outer club partnerships." },
-  { name: "Peer Sessions", icon: "Users", description: "Peer learning and student mentoring wing." },
-  { name: "Research Guidance", icon: "BookOpen", description: "Academic paper guidance, research, and papers." }
+  { name: "Peer Sessions", icon: "Users", description: "Peer learning and student mentoring wing." }
 ];
 
 const HERO_IMAGES = [
