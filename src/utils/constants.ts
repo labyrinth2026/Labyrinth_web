@@ -10,7 +10,7 @@ export const NAV_LINKS = [
 
 export const SOCIAL_LINKS = {
   instagram: 'https://www.instagram.com/labyrinth_cu?igsh=aWZ6aWJ3cW1iZWZ5',
-  linkedin: 'https://www.linkedin.com/school/labyrinthcu/',
+  linkedin: 'https://www.linkedin.com/in/labyrinth-students-association-of-computer-science-7126b2424/',
   email: 'mailto:labyrinth.christ@christuniversity.in',
   github: 'https://github.com/labyrinth-christ',
   location: 'CHRIST (Deemed to be University), Central Campus, Hosur Road, Bengaluru - 560029',
