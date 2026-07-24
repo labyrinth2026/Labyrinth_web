@@ -113,7 +113,7 @@ const Navbar: React.FC = () => {
             : 'bg-transparent py-4 border-b border-transparent'
         }`}
       >
-        <div className="container mx-auto px-6 max-w-7xl flex items-center justify-between">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl flex items-center justify-between">
           {/* Left: Labyrinth Logo */}
           <Link href="/" className="flex items-center group relative z-50" onClick={(e) => handleLinkClick(e, '/')}>
             <img src="/labyrinth-logo.png" alt="Labyrinth Logo" className="h-10 object-contain" />
