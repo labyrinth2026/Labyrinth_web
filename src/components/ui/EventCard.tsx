@@ -1,6 +1,8 @@
 import React from 'react';
 import { Calendar, MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export interface EventType {
   id: string;
@@ -17,18 +19,19 @@ export interface EventType {
 
 interface EventCardProps {
   event: EventType;
+  onPosterClick?: (imageUrl: string) => void;
 }
 
 const categoryConfig: Record<string, { bg: string; text: string; label: string }> = {
-  hackathon: { bg: '#FEF2F2', text: '#dc2626', label: 'Hackathon' },
-  workshop:  { bg: '#EFF6FF', text: '#2563eb', label: 'Workshop' },
-  talk:      { bg: '#F5F3FF', text: '#7c3aed', label: 'Talk' },
-  competition: { bg: '#FFFBEB', text: '#d97706', label: 'Competition' },
-  social:    { bg: '#F0FDFA', text: '#0d9488', label: 'Social' },
+  hackathon: { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: 'Hackathon' },
+  workshop:  { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: 'Workshop' },
+  talk:      { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: 'Talk' },
+  competition: { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: 'Competition' },
+  social:    { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: 'Social' },
 };
 
-const EventCard: React.FC<EventCardProps> = ({ event }) => {
-  const catConfig = categoryConfig[event.category] || { bg: '#EAF4FF', text: '#005BAC', label: event.category };
+const EventCard: React.FC<EventCardProps> = ({ event, onPosterClick }) => {
+  const catConfig = categoryConfig[event.category] || { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: event.category };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -39,50 +42,74 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
   };
 
   return (
-    <motion.div
-      whileHover={{ y: -4, boxShadow: '0 16px 48px rgba(0, 91, 172, 0.12)' }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="bg-white border border-blue-100 rounded-2xl shadow-sm h-full flex flex-col relative overflow-hidden group"
-    >
-      {/* Category color top bar */}
-      <div className="h-1 w-full" style={{ backgroundColor: catConfig.text }} />
-
-      <div className="p-6 flex flex-col h-full flex-grow">
-        {/* Header */}
-        <div className="flex justify-between items-start mb-4">
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EAF4FF] border border-[#D6EBFF]">
-            <span className={`w-1.5 h-1.5 rounded-full ${event.status === 'upcoming' ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400'}`} />
-            <span className="text-xs font-semibold text-[#4b6080] capitalize">{event.status}</span>
-          </div>
-          <span
-            className="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider"
-            style={{ backgroundColor: catConfig.bg, color: catConfig.text }}
+    <Link href="/events" className="block group">
+      <motion.div
+        whileHover={{ 
+          y: -5, 
+          scale: 1.015,
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.06), 0 0 25px rgba(205, 0, 0, 0.02)' 
+        }}
+        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+        className="bg-white border border-slate-200/80 rounded-2xl shadow-xs flex flex-col relative overflow-hidden"
+      >
+        {event.image && (
+          <div 
+            className="relative w-full aspect-[3/4] bg-slate-100 overflow-hidden cursor-pointer"
+            onClick={(e) => {
+              if (onPosterClick) {
+                e.preventDefault();
+                e.stopPropagation();
+                onPosterClick(event.image!);
+              }
+            }}
           >
-            {catConfig.label}
-          </span>
-        </div>
-
-        {/* Content */}
-        <h3 className="font-grotesk text-lg font-bold text-[#1a2c4a] mb-2 group-hover:text-[#005BAC] transition-colors">
-          {event.title}
-        </h3>
-        <p className="text-[#4b6080] text-sm mb-4 line-clamp-2 flex-grow leading-relaxed">
-          {event.description}
-        </p>
-
-        {/* Footer */}
-        <div className="space-y-2 mt-auto pt-4 border-t border-blue-50">
-          <div className="flex items-center gap-2 text-sm text-[#4b6080]">
-            <Calendar size={14} className="text-[#005BAC] shrink-0" />
-            <span>{formatDate(event.date)}</span>
+            <Image
+              src={event.image}
+              alt={event.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/20 to-transparent" />
           </div>
-          <div className="flex items-center gap-2 text-sm text-[#4b6080]">
-            <MapPin size={14} className="text-[#005BAC] shrink-0" />
-            <span className="truncate">{event.location}</span>
+        )}
+
+        <div className="p-5 flex flex-col h-full flex-grow">
+          {/* Header */}
+          <div className="flex justify-between items-start mb-2.5">
+            <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-50 border border-slate-200/80">
+              <span className={`w-1.5 h-1.5 rounded-full ${event.status === 'upcoming' ? 'bg-[#CD0000] animate-pulse' : 'bg-slate-300'}`} />
+              <span className="text-[10px] font-bold text-slate-700 uppercase tracking-wider">{event.status}</span>
+            </div>
+            <span
+              className={`text-[9px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider border ${catConfig.bg} ${catConfig.text}`}
+            >
+              {catConfig.label}
+            </span>
+          </div>
+
+          {/* Content */}
+          <h3 className="text-base font-bold text-slate-900 mb-1 group-hover:text-[#CD0000] transition-colors leading-tight">
+            {event.title}
+          </h3>
+          <p className="text-slate-500 text-xs mb-2 line-clamp-2 leading-relaxed">
+            {event.description}
+          </p>
+
+          {/* Footer */}
+          <div className="space-y-1 pt-1.5 border-t border-slate-100">
+            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+              <Calendar size={13} className="text-slate-400 shrink-0" />
+              <span>{formatDate(event.date)}</span>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+              <MapPin size={13} className="text-slate-400 shrink-0" />
+              <span className="truncate">{event.location}</span>
+            </div>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </Link>
   );
 };
 

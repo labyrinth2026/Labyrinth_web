@@ -1,134 +1,121 @@
 @import 'tailwindcss';
 
 @theme {
-  /* Christ University Brand Colors */
-  --color-christ-blue: #005BAC;
-  --color-christ-blue-dark: #004a8f;
-  --color-christ-blue-light: #1a6fc0;
+  /* Brand Color Palette */
+  --color-primary: #CD0000; /* Cherry Red */
+  --color-primary-dark: #9E0000;
+  --color-primary-light: #F04438;
+
+  --color-accent: #CD0000;
 
   /* Background Colors */
-  --color-bg-primary: #FFFFFF;
-  --color-bg-secondary: #EAF4FF;
-  --color-bg-tertiary: #D6EBFF;
+  --color-bg-primary: #FAFAFA; /* Premium Off-White */
+  --color-bg-secondary: #FFFFFF; /* Pure White */
+  --color-bg-tertiary: #09090B; /* Dark Zinc */
+  
+  --color-dark: #09090B;
+  --color-dark-alt: #18181B;
+  --color-platinum: #E4E4E7; /* Light grey border */
 
   /* Text Colors */
-  --color-text-primary: #1a2c4a;
-  --color-text-secondary: #4b6080;
-  --color-text-muted: #7a90aa;
+  --color-text-primary: #09090B; /* High-contrast */
+  --color-text-secondary: #3F3F46; /* Slate gray */
+  --color-text-muted: #71717A; /* Muted gray */
 
-  /* Accent Colors (legacy compat) */
-  --color-accent-blue: #005BAC;
-  --color-accent-purple: #3b6db5;
-  --color-accent-cyan: #1a8fc4;
+  /* Borders */
+  --color-border: #E4E4E7;
 
   /* Fonts */
   --font-inter: 'Inter', sans-serif;
-  --font-grotesk: 'Space Grotesk', sans-serif;
+  --font-grotesk: 'Inter', sans-serif; /* Standardized to clean Inter for enterprise look */
 }
 
 @layer base {
   body {
     @apply bg-bg-primary text-text-primary font-inter antialiased overflow-x-hidden;
-    background-color: #ffffff;
-    color: #1a2c4a;
+    background-color: #FAFAFA;
+    color: #09090B;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
 
-  ::selection {
-    background: rgba(0, 91, 172, 0.15);
-    color: #005BAC;
-  }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Space Grotesk', sans-serif;
-    color: #1a2c4a;
+    font-family: 'Inter', sans-serif;
+    color: #09090B;
+    font-weight: 800;
+    letter-spacing: -0.025em;
   }
 
   a {
-    color: #005BAC;
+    color: #CD0000;
     text-decoration: none;
+    transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   a:hover {
-    color: #004a8f;
+    color: #9E0000;
   }
 }
 
 @layer utilities {
-  /* University Card */
+  /* Premium Glassmorphism Card (Exactly to user specs) */
   .glass-card {
-    @apply bg-white border border-blue-100 rounded-2xl shadow-sm;
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    border-radius: 24px;
   }
 
-  /* Christ Blue Gradient Text */
-  .gradient-text {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #005BAC 0%, #1a8fc4 100%);
+  /* Dark glass version for dark contexts or headers */
+  .glass-card-dark {
+    backdrop-filter: blur(20px);
+    background: rgba(9, 9, 11, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border-radius: 24px;
   }
 
-  /* Section Background Variants */
-  .section-light {
-    background-color: #ffffff;
+  /* Minimal Typography Styles */
+  .title-hero {
+    @apply font-inter text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1];
   }
 
-  .section-alt {
-    background-color: #EAF4FF;
+  .text-premium-body {
+    @apply font-inter text-base md:text-lg text-slate-600 leading-relaxed;
   }
 
-  .section-deep {
-    background-color: #D6EBFF;
+  /* Premium Dotted Grid Background */
+  .minimal-grid {
+    background-size: 32px 32px;
+    background-image: radial-gradient(circle, rgba(9, 9, 11, 0.04) 1px, transparent 1px);
+  }
+  
+  .minimal-grid-dark {
+    background-size: 32px 32px;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
   }
 
-  /* Subtle grid pattern */
-  .animated-grid {
-    background-size: 40px 40px;
-    background-image:
-      linear-gradient(to right, rgba(0, 91, 172, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 91, 172, 0.05) 1px, transparent 1px);
-    mask-image: linear-gradient(to bottom, transparent, black, transparent);
+  /* Premium buttons */
+  .btn-primary-new {
+    background-color: #CD0000;
+    color: #FFFFFF;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* Christ Blue button */
-  .btn-primary {
-    background-color: #005BAC;
-    color: white;
-    transition: background-color 0.2s, box-shadow 0.2s;
+  .btn-primary-new:hover {
+    background-color: #9E0000;
+    transform: translateY(-0.5px);
   }
 
-  .btn-primary:hover {
-    background-color: #004a8f;
-    box-shadow: 0 4px 16px rgba(0, 91, 172, 0.25);
+  /* Card elevation */
+  .card-hover-new {
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* Subtle blue glow for cards */
-  .card-hover {
-    transition: box-shadow 0.2s, transform 0.2s;
-  }
-
-  .card-hover:hover {
-    box-shadow: 0 8px 32px rgba(0, 91, 172, 0.12);
+  .card-hover-new:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
     transform: translateY(-2px);
-  }
-
-  /* Blue badge */
-  .badge-blue {
-    background-color: #EAF4FF;
-    color: #005BAC;
-    border: 1px solid #D6EBFF;
-    border-radius: 9999px;
-    padding: 2px 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
-  }
-
-  /* Divider */
-  .divider-blue {
-    height: 3px;
-    background: linear-gradient(90deg, #005BAC, #1a8fc4);
-    border-radius: 9999px;
   }
 }
 
@@ -138,34 +125,24 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #EAF4FF;
+  background: #FAFAFA;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 91, 172, 0.3);
-  border-radius: 4px;
+  background: rgba(9, 9, 11, 0.12);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 91, 172, 0.5);
+  background: rgba(9, 9, 11, 0.24);
 }
 
-/* Smooth pulse animation for hero elements */
-@keyframes pulse-slow {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.05); }
-}
-
-.animate-pulse-slow {
-  animation: pulse-slow 4s ease-in-out infinite;
-}
-
-/* Fade-in-up utility */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(24px); }
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out forwards;
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

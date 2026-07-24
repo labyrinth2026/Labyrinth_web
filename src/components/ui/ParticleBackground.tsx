@@ -17,7 +17,7 @@ const ParticleBackground: React.FC = () => {
     let particles: Particle[] = [];
     let animationFrameId: number;
 
-    const colors = ['#3b82f6', '#8b5cf6', '#06b6d4']; // blue, purple, cyan
+    const colors = ['#CD0000', '#B8B8B8', '#EFEDE6'];
 
     class Particle {
       x: number;

@@ -3,6 +3,8 @@ import { Inter, Space_Grotesk } from 'next/font/google';
 import { AuthProvider } from '../context/AuthContext';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
+import SmoothScroll from '../components/layout/SmoothScroll';
+import ScrollProgress from '../components/layout/ScrollProgress';
 import '../index.css';
 
 const inter = Inter({
@@ -19,7 +21,7 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: 'LABYRINTH - Computer Science Club',
-  description: "The official face of Christ University's Computer Academy, active since 1997.",
+  description: "The official Computer Science Club of Christ University.",
   icons: {
     icon: '/labyrinth-logo.png', // Fallback to logo as tab favicon
   }
@@ -31,12 +33,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} scroll-smooth`}>
-      <body className="flex flex-col min-h-screen relative bg-bg-primary text-text-primary font-inter antialiased overflow-x-hidden">
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+      <body className={`${inter.className} flex flex-col min-h-screen relative bg-bg-primary text-text-primary antialiased overflow-x-hidden`}>
         <AuthProvider>
-          <Navbar />
-          <main className="flex-grow">{children}</main>
-          <Footer />
+          <SmoothScroll>
+            <ScrollProgress />
+            <Navbar />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </SmoothScroll>
         </AuthProvider>
       </body>
     </html>

@@ -2,7 +2,7 @@
   "join_community": {
     "id": "join_community",
     "title": "Join Community",
-    "url": "https://forms.gle/placeholder",
+    "url": "/forms/join-community",
     "active": true
   },
   "event_registration": {

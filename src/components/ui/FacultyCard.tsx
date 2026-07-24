@@ -1,5 +1,5 @@
-import React from 'react';
-import { Mail, GraduationCap } from 'lucide-react';
+import React, { useState } from 'react';
+import { ExternalLink, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export interface FacultyMember {
@@ -9,6 +9,7 @@ export interface FacultyMember {
   designation?: string;
   department?: string;
   email: string;
+  profileUrl?: string;
   linkedin: string;
   avatar: string | null;
 }
@@ -26,65 +27,94 @@ const getInitials = (name: string) => {
     .toUpperCase();
 };
 
+const AvatarImage: React.FC<{ avatar: string | null; name: string }> = ({ avatar, name }) => {
+  const [failed, setFailed] = useState(false);
+
+  if (avatar && !failed) {
+    return (
+      <div className="w-36 h-36 rounded-2xl overflow-hidden border border-slate-100 shadow-xs mb-5 flex-shrink-0 bg-slate-50">
+        <img
+          src={avatar}
+          alt={name}
+          onError={() => setFailed(true)}
+          className="w-full h-full object-cover object-top"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-36 h-36 rounded-full flex items-center justify-center bg-slate-100 text-slate-400 font-extrabold text-2xl select-none mb-5 flex-shrink-0 border border-slate-200/20 shadow-[inset_0_2px_4px_rgba(0,0,0,0.03)]">
+      {getInitials(name)}
+    </div>
+  );
+};
+
 const FacultyCard: React.FC<FacultyCardProps> = ({ faculty }) => {
   return (
     <motion.div
-      whileHover={{ y: -4, boxShadow: '0 16px 48px rgba(0, 91, 172, 0.14)' }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      className="bg-white border border-blue-100 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full"
+      whileHover={{ 
+        y: -6, 
+        scale: 1.015,
+        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.06), 0 0 25px rgba(205, 0, 0, 0.01)' 
+      }}
+      transition={{ type: 'spring', stiffness: 450, damping: 25 }}
+      className="bg-white border border-slate-200/60 rounded-[28px] shadow-[0_2px_8px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col h-full p-6 items-center text-center"
     >
-      {/* Blue header bar */}
-      <div className="h-2 w-full bg-[#005BAC]" />
+      {/* Profile Image Section */}
+      <AvatarImage avatar={faculty.avatar} name={faculty.name} />
 
-      <div className="p-6 flex flex-col items-center text-center flex-grow">
-        {/* Avatar */}
-        <div className="relative mb-4 mt-2">
-          <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-[#EAF4FF] shadow-lg bg-[#005BAC] flex items-center justify-center">
-            {faculty.avatar ? (
-              <img src={faculty.avatar} alt={faculty.name} loading="lazy" className="w-full h-full object-cover" />
-            ) : (
-              <span className="text-2xl font-bold text-white">{getInitials(faculty.name)}</span>
-            )}
-          </div>
-          {/* Faculty Badge */}
-          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2">
-            <span className="inline-flex items-center gap-1 bg-[#005BAC] text-white text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap">
-              <GraduationCap size={9} /> FACULTY
-            </span>
-          </div>
-        </div>
-
-        {/* Name */}
-        <h3 className="text-lg font-bold text-[#1a2c4a] mt-3 mb-0.5">{faculty.name}</h3>
-
-        {/* Designation */}
+      {/* Info Body */}
+      <div className="flex flex-col items-center flex-grow w-full">
+        <h3 className="text-slate-900 font-extrabold text-base tracking-tight mb-2 flex items-center justify-center">
+          {faculty.name}
+        </h3>
+        
         {faculty.designation && (
-          <p className="text-[#005BAC] font-semibold text-sm mb-1">{faculty.designation}</p>
+          <p className="text-[#CD0000] font-extrabold text-[10px] sm:text-xs uppercase tracking-wider mb-2">
+            {faculty.designation}
+          </p>
         )}
-
-        {/* Role in club */}
-        <span className="inline-block text-xs bg-[#EAF4FF] text-[#005BAC] border border-[#D6EBFF] px-3 py-0.5 rounded-full font-medium mb-2">
+        
+        <p className="text-slate-400 text-[10px] font-semibold uppercase tracking-wider mb-1">
           {faculty.role}
-        </span>
+        </p>
 
-        {/* Department */}
         {faculty.department && (
-          <p className="text-[#7a90aa] text-xs leading-relaxed">{faculty.department}</p>
+          <p className="text-slate-400/85 text-[9px] font-medium uppercase tracking-wider mb-2">
+            {faculty.department}
+          </p>
         )}
 
-        {/* Spacer */}
+        {/* Spacer to push footer to bottom */}
         <div className="flex-grow" />
 
-        {/* Contact */}
-        <div className="flex justify-center gap-2 mt-4 pt-4 border-t border-blue-50 w-full">
+        {/* Divider Line */}
+        <div className="w-full border-t border-slate-100/90 my-4" />
+
+        {/* Footer Links */}
+        <div className="flex justify-center gap-4 w-full pb-1">
+          {/* Email */}
           <a
             href={`mailto:${faculty.email}`}
-            className="flex items-center gap-1.5 text-xs text-[#005BAC] hover:text-[#004a8f] font-medium transition-colors"
-            title={`Email ${faculty.name}`}
+            className="text-slate-400 hover:text-[#CD0000] transition-colors flex items-center justify-center p-1"
+            title={faculty.email}
           >
-            <Mail size={13} />
-            <span className="truncate max-w-[160px]">{faculty.email}</span>
+            <Mail size={16} className="stroke-[1.75]" />
           </a>
+
+          {/* Profile external link */}
+          {faculty.profileUrl && faculty.profileUrl !== '#' && (
+            <a
+              href={faculty.profileUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-slate-400 hover:text-[#CD0000] transition-colors flex items-center justify-center p-1"
+              title="View Profile"
+            >
+              <ExternalLink size={16} className="stroke-[1.75]" />
+            </a>
+          )}
         </div>
       </div>
     </motion.div>

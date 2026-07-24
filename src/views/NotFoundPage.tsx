@@ -10,30 +10,30 @@ const NotFoundPage: React.FC = () => {
       <section className="py-32 bg-white flex items-center justify-center min-h-[70vh]">
         <div className="container mx-auto px-6 max-w-3xl text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6 }}
             className="flex flex-col items-center"
           >
-            <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-8">
-              <AlertCircle size={48} className="text-[#005BAC]" />
+            <div className="w-16 h-16 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-center mb-8 shadow-xs">
+              <AlertCircle size={28} className="text-[#CD0000]" />
             </div>
             
-            <h1 className="font-grotesk text-6xl md:text-8xl font-bold text-[#1a2c4a] mb-4 tracking-tight">
+            <h1 className="text-6xl md:text-8xl font-extrabold text-[#CD0000] mb-4 tracking-tighter leading-none">
               404
             </h1>
             
-            <h2 className="text-2xl md:text-3xl font-bold text-[#005BAC] mb-6">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-5 tracking-tight">
               Page Not Found
             </h2>
             
-            <p className="text-lg text-[#4b6080] mb-10 max-w-xl mx-auto leading-relaxed">
+            <p className="text-xs md:text-sm text-slate-500 mb-8 max-w-md mx-auto leading-relaxed">
               The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
             </p>
             
             <Link 
               href="/"
-              className="inline-flex items-center justify-center px-8 py-3.5 bg-[#005BAC] text-white font-semibold rounded-full hover:bg-[#004a8f] transition-all shadow-md hover:shadow-lg active:scale-95"
+              className="inline-flex items-center justify-center px-6 py-3 bg-[#CD0000] text-white font-bold uppercase tracking-wider text-[10px] rounded-full hover:bg-[#9E0000] transition-all shadow-xs"
             >
               Return Home
             </Link>

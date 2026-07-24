@@ -1,16 +1,18 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import bcrypt from 'bcryptjs';
 
-export type Role = 'coordinator' | 'mentor' | 'core_committee' | 'developer' | 'user';
+// Simplified roles: ADMIN and MEMBER
+export type Role = 'ADMIN' | 'MEMBER';
 
 interface User {
+  id: string;
   email: string;
   name: string;
-  picture: string;
   role: Role;
-  expiresAt: number;
+  firstLogin?: boolean;
+  committeeId?: string;
+  verticalId?: string;
 }
 
 export type Permission = 
@@ -25,179 +27,92 @@ export type Permission =
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, pass: string, rememberDevice?: boolean) => Promise<{ success: boolean; error?: string }>;
-  logout: () => void;
+  login: (email: string, pass: string, portalType?: 'admin' | 'core' | 'vertical') => Promise<{ success: boolean; user?: User; mustReset?: boolean; error?: string }>;
+  logout: () => Promise<void>;
   isLoading: boolean;
   can: (action: Permission) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Predefined accounts with hashed passwords from environment variables
-const ACCOUNTS: Record<string, { hash: string; role: Role; name: string }> = {
-  'coordinator@labyrinth.club': { hash: process.env.NEXT_PUBLIC_COORD_HASH || '', role: 'coordinator', name: 'Faculty Coordinator' },
-  'mentor@labyrinth.club': { hash: process.env.NEXT_PUBLIC_MENTOR_HASH || '', role: 'mentor', name: 'Mentor' },
-  'core@labyrinth.club': { hash: process.env.NEXT_PUBLIC_CORE_HASH || '', role: 'core_committee', name: 'Core Committee' },
-  'admin@labyrinth.club': { hash: process.env.NEXT_PUBLIC_ADMIN_HASH || '', role: 'developer', name: 'System Admin' },
-};
-
-// Permission matrix mapping specific actions to roles
+// Simple permission mapping: ADMIN has all rights, MEMBER has none
 const PERMISSIONS: Record<Role, Permission[]> = {
-  coordinator: [
-    'manage_content', 
-    'manage_events', 
-    'manage_verticals', 
-    'manage_team', 
-    'view_registrations', 
+  ADMIN: [
+    'manage_content',
+    'manage_infrastructure',
+    'manage_events',
+    'manage_verticals',
+    'manage_team',
+    'view_registrations',
     'review_content',
     'manage_roles'
   ],
-  mentor: [
-    'manage_content', 
-    'manage_events', 
-    'manage_verticals', 
-    'manage_team', 
-    'view_registrations', 
-    'review_content'
-  ],
-  core_committee: [
-    'manage_content', 
-    'manage_events', 
-    'manage_verticals', 
-    'manage_team', 
-    'view_registrations', 
-    'review_content'
-  ],
-  developer: [
-    'manage_content', 
-    'manage_infrastructure', 
-    'manage_events', 
-    'manage_verticals', 
-    'manage_team', 
-    'view_registrations', 
-    'review_content',
-    'manage_roles'
-  ],
-  user: []
+  MEMBER: []
 };
-
-// Rate limiting constants
-const MAX_FAILED_ATTEMPTS = 5;
-const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // 15 minutes
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedUser = localStorage.getItem('labyrinth_admin_session');
-      if (savedUser) {
-        try {
-          const parsed: User = JSON.parse(savedUser);
-          if (parsed.expiresAt && Date.now() < parsed.expiresAt) {
-            setUser(parsed);
-          } else {
-            // Session expired
-            localStorage.removeItem('labyrinth_admin_session');
-          }
-        } catch {
-          localStorage.removeItem('labyrinth_admin_session');
-        }
+  // Fetch current session on load
+  const loadSession = async () => {
+    try {
+      const response = await fetch('/api/auth/session');
+      const data = await response.json();
+      if (data.success) {
+        setUser(data.user);
+      } else {
+        setUser(null);
       }
+    } catch (e) {
+      console.error('[AuthContext] Load session failed:', e);
+      setUser(null);
+    } finally {
       setIsLoading(false);
     }
+  };
+
+  useEffect(() => {
+    loadSession();
   }, []);
 
-  const getLockoutState = () => {
-    if (typeof window === 'undefined') return { attempts: 0, lockoutUntil: 0 };
-    const attempts = parseInt(localStorage.getItem('labyrinth_login_attempts') || '0', 10);
-    const lockoutUntil = parseInt(localStorage.getItem('labyrinth_lockout_until') || '0', 10);
-    return { attempts, lockoutUntil };
-  };
-
-  const login = async (email: string, pass: string, rememberDevice: boolean = false): Promise<{ success: boolean; error?: string }> => {
+  const login = async (email: string, pass: string, portalType?: 'admin' | 'core' | 'vertical'): Promise<{ success: boolean; user?: User; mustReset?: boolean; error?: string }> => {
     setIsLoading(true);
-    await new Promise(r => setTimeout(r, 600)); // Simulate network delay
-    
-    const { attempts, lockoutUntil } = getLockoutState();
-    
-    // Check if currently locked out
-    if (lockoutUntil > Date.now()) {
-      setIsLoading(false);
-      const minutesLeft = Math.ceil((lockoutUntil - Date.now()) / 60000);
-      return { success: false, error: `Account locked due to too many failed attempts. Try again in ${minutesLeft} minutes.` };
-    }
-
-    const account = ACCOUNTS[email];
-    if (!account) {
-      return handleFailedAttempt(attempts);
-    }
-
-    // Hash comparison or bypass for testing
-    const isMatch = pass === 'admin123' || bcrypt.compareSync(pass, account.hash);
-    if (!isMatch) {
-      return handleFailedAttempt(attempts);
-    }
-
-    // Success! Reset attempts
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('labyrinth_login_attempts');
-      localStorage.removeItem('labyrinth_lockout_until');
-    }
-
-    // Calculate session expiry
-    const sessionDurationMs = rememberDevice ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000;
-    
-    const userData: User = {
-      email,
-      name: account.name,
-      picture: `https://ui-avatars.com/api/?name=${encodeURIComponent(account.name)}&background=005BAC&color=fff`,
-      role: account.role,
-      expiresAt: Date.now() + sessionDurationMs
-    };
-    
-    setUser(userData);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('labyrinth_admin_session', JSON.stringify(userData));
-    }
-    setIsLoading(false);
-    return { success: true };
-  };
-
-  const handleFailedAttempt = (currentAttempts: number) => {
-    const newAttempts = currentAttempts + 1;
-    if (newAttempts >= MAX_FAILED_ATTEMPTS) {
-      const lockoutTime = Date.now() + LOCKOUT_DURATION_MS;
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('labyrinth_lockout_until', lockoutTime.toString());
-        localStorage.setItem('labyrinth_login_attempts', '0');
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: pass, portalType })
+      });
+      const data = await response.json();
+      if (data.success) {
+        setUser(data.user);
+        setIsLoading(false);
+        return { success: true, user: data.user, mustReset: data.mustReset };
+      } else {
+        setIsLoading(false);
+        return { success: false, error: data.error || 'Invalid credentials.' };
       }
+    } catch (e) {
       setIsLoading(false);
-      return { success: false, error: 'Too many failed login attempts. Account locked for 15 minutes.' };
-    } else {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('labyrinth_login_attempts', newAttempts.toString());
-      }
-      setIsLoading(false);
-      return { success: false, error: 'Invalid email or password.' };
+      return { success: false, error: 'Network error. Please try again.' };
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('labyrinth_admin_session');
+  const logout = async () => {
+    setIsLoading(true);
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      setUser(null);
+    } catch (e) {
+      console.error('[AuthContext] Logout failed:', e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const can = (action: Permission): boolean => {
     if (!user) return false;
-    // Check session expiry on every permission check to enforce strict timeout
-    if (user.expiresAt && Date.now() > user.expiresAt) {
-      logout();
-      return false;
-    }
     const perms = PERMISSIONS[user.role] || [];
     return perms.includes(action);
   };

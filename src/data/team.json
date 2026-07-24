@@ -1,45 +1,47 @@
 {
   "facultyCoordinators": [
-    { "id": "f1", "name": "Dr. Suresh Kumar", "role": "Head Coordinator", "designation": "Professor", "department": "Department of Computer Science", "email": "suresh@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "f2", "name": "Prof. Anjali Menon", "role": "Faculty Advisor", "designation": "Associate Professor", "department": "Department of Data Science", "email": "anjali@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "f3", "name": "Dr. Rajesh Rajan", "role": "Technical Advisor", "designation": "Assistant Professor", "department": "Department of Information Technology", "email": "rajesh@cs.christuniversity.in", "linkedin": "#", "avatar": null }
+    { "id": "f1", "name": "Dr. Amrutha K", "role": "Faculty Coordinator", "designation": "Assistant Professor", "department": "Department of Computer Science", "email": "amrutha@cs.christuniversity.in", "profileUrl": "https://christuniversity.in/computer-science/faculty-details/NzE0Mg==/NjI=", "linkedin": "#", "avatar": "/amrutha.jpg" },
+    { "id": "f2", "name": "Dr. Binayak Dutta", "role": "Faculty Coordinator", "designation": "Assistant Professor", "department": "Department of Computer Science", "email": "binayak@cs.christuniversity.in", "profileUrl": "https://christuniversity.in/computer-science/faculty-details/ODc2OQ==/NjI=", "linkedin": "#", "avatar": "/binayak.jpg" }
   ],
   "mentors": [
-    { "id": "m1", "name": "Mentor One", "role": "Senior Mentor", "email": "mentor1@labyrinth.club", "linkedin": "#", "avatar": null }
+  ],
+  "websiteDesigners": [
+    { "id": "wd1", "name": "Suryachalam V M (3BScCM)", "role": "Website Designer & Developer", "email": "suryachalam.vm@bsccmh.christuniversity.in", "linkedin": "#", "avatar": "https://github.com/sgk18.png" },
+    { "id": "wd2", "name": "Bhargav Shree Raj G (3BScCM)", "role": "Website Designer & Developer", "email": "bhargav.g@bsccmh.christuniversity.in", "linkedin": "#", "avatar": "https://paqpkdipiyvwdneeghin.supabase.co/storage/v1/object/public/gallery/avatars/u-bhargav-g-1784697037114.jpg" }
   ],
   "coreCommittee": [
     { "id": "c1", "name": "Core Member One", "role": "Technical Lead", "email": "core1@labyrinth.club", "linkedin": "#", "avatar": null }
   ],
   "verticalHeads": [
-    { "id": "vh1", "name": "Rishi Raj (1 MCA B)", "role": "Head", "vertical": "AI Creator's Lab", "email": "rishi@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh2", "name": "Krupa (3 BSc CS)", "role": "Head", "vertical": "AI Creator's Lab", "email": "krupa@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh4", "name": "Ruchak Khatri (5 BCA A)", "role": "Head", "vertical": "GameNova", "email": "ruchak@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh5", "name": "Joel Benedict (5 BCA B)", "role": "Head", "vertical": "GameNova", "email": "joel@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh7", "name": "Kanika Jain (1 MCA)", "role": "Head", "vertical": "CodeCraft", "email": "kanika@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh8", "name": "Vvedika (5 BSc CM)", "role": "Head", "vertical": "CodeCraft", "email": "vvedika@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh10", "name": "Daksh Sunil (5 BCA B)", "role": "Head", "vertical": "CipherGuard", "email": "daksh@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh12", "name": "Rida Zafar (5 BSc CS)", "role": "Head", "vertical": "BitOps", "email": "rida@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh13", "name": "Gautham S (3 BSc CS)", "role": "Head", "vertical": "FieldOps", "email": "gautham@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh14", "name": "Supal Porwal (5 BCA B)", "role": "Head", "vertical": "FieldOps", "email": "supal@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh16", "name": "Sandhya M (5 BCA A)", "role": "Head", "vertical": "CrossCode", "email": "sandhya@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh17", "name": "Sreeshma Chowdary Yetukuri (3 BCA A)", "role": "Head", "vertical": "CrossCode", "email": "sreeshma@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh19", "name": "Arush (3 BCA B)", "role": "Head", "vertical": "The RoundTable", "email": "arush@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh20", "name": "Purvi (3 BCA B)", "role": "Head", "vertical": "The RoundTable", "email": "purvi@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh22", "name": "Nidhi Anil (3 BSc CS)", "role": "Head", "vertical": "The Aesthetic Lab", "email": "nidhi@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh23", "name": "Alisha Sajeev (5 BCA B)", "role": "Head", "vertical": "The Aesthetic Lab", "email": "alisha@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh25", "name": "Ceyanne Dsouza (5 BCA B)", "role": "Head", "vertical": "Startovate", "email": "ceyanne@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "vh26", "name": "Khushal S (3 BCA)", "role": "Head", "vertical": "Startovate", "email": "khushal@cs.christuniversity.in", "linkedin": "#", "avatar": null }
+    { "id": "vh1", "name": "Rishi Raj (1 MCA B)", "role": "Head", "vertical": "AI HUB", "email": "rishi.raj@mca.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh2", "name": "Krupa (3 BSc CS)", "role": "Mentor", "designation": "Mentor", "vertical": "AI HUB", "email": "krupa.m@bsccsh.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh4", "name": "Ruchak Khatri (5 BCA A)", "role": "Head", "vertical": "AutoBot", "email": "ruchak.khatri@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh5", "name": "Joel Benedict (5 BCA B)", "role": "Head", "vertical": "AutoBot", "email": "joel.benedict@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh7", "name": "Kanika Jain (1 MCA)", "role": "Head", "vertical": "DevZen", "email": "kanika.jain@mca.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh8", "name": "Vvedika (5 BSc CM)", "role": "Head", "vertical": "DevZen", "email": "vvedika.m@bsccmh.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh10", "name": "Daksh Sunil (5 BCA B)", "role": "Head", "vertical": "InsightX", "email": "daksh.chandiramani@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh12", "name": "Rida Zafar (5 BSc CS)", "role": "Head", "vertical": "DevZen", "email": "rida.zafar@bsccsh.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh13", "name": "Gautham S (3 BSc CS)", "role": "Head", "vertical": "FieldOps", "email": "gautham.s@bsccsh.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh14", "name": "Supal Porwal (5 BCA B)", "role": "Head", "vertical": "FieldOps", "email": "supal.porwal@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh16", "name": "Sandhya M (5 BCA A)", "role": "Head", "vertical": "InterVerse", "email": "sandhya.m@christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh17", "name": "Sreeshma Chowdary Yetukuri (3 BCA A)", "role": "Head", "vertical": "InterVerse", "email": "sreeshma.yetukuri@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh19", "name": "Arush (3 BCA B)", "role": "Head", "vertical": "Debate", "email": "arush.chandra@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh20", "name": "Purvi (3 BCA B)", "role": "Head", "vertical": "Debate", "email": "purvi.chakarvarti@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh22", "name": "Nidhi Anil (3 BSc CS)", "role": "Head", "vertical": "Design & Media", "email": "nidhi.anil@bsccsh.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh23", "name": "Alisha Sajeev (5 BCA B)", "role": "Head", "vertical": "Design & Media", "email": "alisha.sajeev@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh25", "name": "Ceyanne Dsouza (5 BCA B)", "role": "Head", "vertical": "Startovate", "email": "ceyanne.dsouza@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "vh26", "name": "Khushal S (3 BCA)", "role": "Head", "vertical": "Startovate", "email": "s.khushal@bcah.christuniversity.in", "linkedin": "#", "avatar": null }
   ],
   "subHeads": [
-    { "id": "sh3", "name": "Kapil Maheswari (5 BCA A)", "role": "Sub-Head", "vertical": "AI Creator's Lab", "email": "kapil@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "sh6", "name": "Rahul T (5 BSc CS)", "role": "Sub-Head", "vertical": "GameNova", "email": "rahul@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "sh9", "name": "Himanshi Kansal (3 BCA B)", "role": "Sub-Head", "vertical": "CodeCraft", "email": "himanshi@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "sh11", "name": "Meet Garg (3 BCA B)", "role": "Sub-Head", "vertical": "CipherGuard", "email": "meet@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "sh15", "name": "Shreyas V (3 BSc CS)", "role": "Sub-Head", "vertical": "FieldOps", "email": "shreyas@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "sh18", "name": "U Prathiksha Kini (3 BCA A)", "role": "Sub-Head", "vertical": "CrossCode", "email": "prathiksha@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "sh21", "name": "Maanya (5 BSc CM)", "role": "Sub-Head", "vertical": "The RoundTable", "email": "maanya@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "sh24", "name": "Tejas Sujith (3 BCA B)", "role": "Sub-Head", "vertical": "The Aesthetic Lab", "email": "tejas@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "sh27", "name": "Prashanth (3 BCA)", "role": "Sub-Head", "vertical": "Startovate", "email": "prashanth@cs.christuniversity.in", "linkedin": "#", "avatar": null },
-    { "id": "sh28", "name": "Adit (5 BSc CS)", "role": "Sub-Head", "vertical": "Startovate", "email": "adit@cs.christuniversity.in", "linkedin": "#", "avatar": null }
+    { "id": "sh3", "name": "Kapil Maheswari (5 BCA A)", "role": "Sub-Head", "vertical": "AI HUB", "email": "kapil.maheshwari@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "sh6", "name": "Rahul T (5 BSc CS)", "role": "Sub-Head", "vertical": "AutoBot", "email": "rahul.t@bsccsh.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "sh9", "name": "Himanshi Kansal (3 BCA B)", "role": "Sub-Head", "vertical": "DevZen", "email": "himanshi.kansal@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "sh11", "name": "Meet Garg (3 BCA B)", "role": "Sub-Head", "vertical": "InsightX", "email": "meet.garg@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "sh15", "name": "Shreyas V (3 BSc CS)", "role": "Sub-Head", "vertical": "FieldOps", "email": "shreyas.v@bsccsh.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "sh18", "name": "U Prathiksha Kini (3 BCA A)", "role": "Sub-Head", "vertical": "InterVerse", "email": "u.prathikshakini@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "sh21", "name": "Maanya (5 BSc CM)", "role": "Sub-Head", "vertical": "Debate", "email": "maanya.singh@bsccmh.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "sh24", "name": "Tejas Sujith (3 BCA B)", "role": "Sub-Head", "vertical": "Design & Media", "email": "tejas.sujith@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "sh27", "name": "Prashanth (3 BCA)", "role": "Sub-Head", "vertical": "Startovate", "email": "prasanth.k@bcah.christuniversity.in", "linkedin": "#", "avatar": null },
+    { "id": "sh28", "name": "Adit (5 BSc CS)", "role": "Sub-Head", "vertical": "Startovate", "email": "adit.madan@bsccsh.christuniversity.in", "linkedin": "#", "avatar": null }
   ]
 }
