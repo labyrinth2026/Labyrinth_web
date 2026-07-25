@@ -153,15 +153,15 @@ const AboutPage: React.FC = () => {
   return (
     <PageWrapper>
       {/* Hero Banner: Text left, Image/CardSwap right */}
-      <section ref={heroSectionRef} className="relative py-24 bg-white overflow-hidden border-b border-slate-100">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section ref={heroSectionRef} className="relative py-16 sm:py-24 bg-white overflow-hidden border-b border-slate-100">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Text – left */}
             <div>
               <span className="about-subtitle inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
                 About Us
               </span>
-              <h1 className="about-title text-4xl md:text-5xl font-extrabold mb-8 text-slate-900 tracking-tight leading-tight">
+              <h1 className="about-title text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6 sm:mb-8 text-slate-900 tracking-tight leading-tight">
                 ABOUT <span className="text-[#CD0000]">LABYRINTH</span>
               </h1>
               <p className="about-desc text-sm md:text-base text-slate-500 leading-relaxed mb-4">
@@ -176,7 +176,7 @@ const AboutPage: React.FC = () => {
             </div>
 
             {/* Cards Slider – right */}
-            <div className="about-video-container relative w-full flex items-center justify-center min-h-[450px] lg:min-h-[550px] overflow-visible">
+            <div className="about-video-container relative w-full flex items-center justify-center min-h-[260px] sm:min-h-[450px] lg:min-h-[550px] overflow-visible">
               <CardSwap
                 width={420}
                 height={315}
@@ -254,8 +254,8 @@ const AboutPage: React.FC = () => {
               <div className="w-12 h-12 rounded-xl bg-[#CD0000]/5 border border-[#CD0000]/10 flex items-center justify-center text-[#CD0000] mb-6">
                 <Target size={22} />
               </div>
-              <h2 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">Our Mission</h2>
-              <p className="text-slate-500 text-xs leading-relaxed font-medium">
+              <h2 className="text-2xl font-extrabold text-slate-900 mb-4 tracking-tight">Our Mission</h2>
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-medium">
                 To create a vibrant student community that promotes innovation, technical excellence, creativity, leadership, collaboration, and holistic development among students.
               </p>
             </div>
@@ -268,8 +268,8 @@ const AboutPage: React.FC = () => {
               <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-white mb-6">
                 <Lightbulb size={22} />
               </div>
-              <h2 className="text-xl font-bold text-white mb-3 tracking-tight">Our Vision</h2>
-              <p className="text-slate-300 text-xs leading-relaxed font-medium">
+              <h2 className="text-2xl font-extrabold text-white mb-4 tracking-tight">Our Vision</h2>
+              <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-medium">
                 To become a platform where students discover opportunities, build skills, showcase talents, and contribute meaningfully to the technology ecosystem and society.
               </p>
             </div>

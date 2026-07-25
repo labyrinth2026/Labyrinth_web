@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="bg-white border-t border-slate-200/80 pt-16 pb-8 mt-20">
-      <div className="container mx-auto px-6 max-w-7xl">
+      <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
 
           {/* Brand Column */}
@@ -92,38 +92,41 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Tech Verticals */}
-          <div>
-            <h4 className="text-slate-800 font-bold mb-5 text-xs uppercase tracking-wider">Tech Domains</h4>
-            <ul className="space-y-2">
-              {['AI HUB', 'DevZen', 'AutoBot', 'InsightX', 'FieldOps'].map(v => (
-                <li key={v}>
-                  <Link
-                    href="/verticals"
-                    className="text-slate-500 hover:text-[#CD0000] text-xs font-semibold transition-colors inline-block"
-                  >
-                    {v}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Tech & Non-Tech Verticals Side-by-Side */}
+          <div className="grid grid-cols-2 gap-4 col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-2">
+            {/* Tech Verticals */}
+            <div>
+              <h4 className="text-slate-800 font-bold mb-5 text-xs uppercase tracking-wider">Tech Domains</h4>
+              <ul className="space-y-2">
+                {['AI HUB', 'DevZen', 'AutoBot', 'InsightX', 'Research Guidance'].map(v => (
+                  <li key={v}>
+                    <Link
+                      href="/verticals"
+                      className="text-slate-500 hover:text-[#CD0000] text-xs font-semibold transition-colors inline-block"
+                    >
+                      {v}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Non-Tech Verticals */}
-          <div>
-            <h4 className="text-slate-800 font-bold mb-5 text-xs uppercase tracking-wider">Non-Tech Domains</h4>
-            <ul className="space-y-2">
-              {['Debate', 'Startovate', 'InterVerse', 'Peer Sessions', 'Research Guidance'].map(v => (
-                <li key={v}>
-                  <Link
-                    href="/verticals"
-                    className="text-slate-500 hover:text-[#CD0000] text-xs font-semibold transition-colors inline-block"
-                  >
-                    {v}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {/* Non-Tech Verticals */}
+            <div>
+              <h4 className="text-slate-800 font-bold mb-5 text-xs uppercase tracking-wider">Non-Tech Domains</h4>
+              <ul className="space-y-2">
+                {['FieldOps', 'Debate', 'Startovate', 'InterVerse', 'Peer Sessions'].map(v => (
+                  <li key={v}>
+                    <Link
+                      href="/verticals"
+                      className="text-slate-500 hover:text-[#CD0000] text-xs font-semibold transition-colors inline-block"
+                    >
+                      {v}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           {/* Connect */}

@@ -1,5 +1,18 @@
 [
   {
+    "id": "e-inauguration-2026",
+    "title": "Inaugural Ceremony of Labyrinth 2026-27",
+    "description": "Department of Computer Science, Bangalore Central Campus cordially invites you to the Inaugural Ceremony of Labyrinth 2026-27. Chief Guest: Harinath Parameshwaran | Director: Dr Fr Jossy George (BGR Campus) | Alumni Representative: Sowmya Theodore.",
+    "date": "2026-07-27T09:30:00Z",
+    "time": "9:30 - 10:30 AM",
+    "category": "ceremony",
+    "status": "upcoming",
+    "location": "Main Auditorium, Central Campus",
+    "image": "/gallery/inauguration_all_1.webp",
+    "vertical": "InterVerse",
+    "featured": true
+  },
+  {
     "id": "e1",
     "title": "HackMatrix 2025",
     "description": "A 48-hour inter-college hackathon focusing on AI, Web3, and Open Innovation.",

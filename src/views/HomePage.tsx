@@ -33,15 +33,15 @@ const techVerticals = [
   { name: "DevZen", icon: "Code2", description: "Full-stack development, open source, and software engineering." },
   { name: "AutoBot", icon: "Cpu", description: "Robotics, IoT, and embedded systems engineering." },
   { name: "InsightX", icon: "TrendingUp", description: "Data analytics, data science, and visualization." },
-  { name: "FieldOps", icon: "Shield", description: "Event operations, logistics, and field management." }
+  { name: "Research Guidance", icon: "BookOpen", description: "Academic paper guidance, research, and papers." }
 ];
 
 const nonTechVerticals = [
+  { name: "FieldOps", icon: "Shield", description: "Event operations, sports, and field management." },
   { name: "Debate", icon: "MessageCircle", description: "Voice, logic, structure, and debating matches." },
-  { name: "Startovate", icon: "Sparkles", description: "Entrepreneurship, startup ideas, and pitches." },
   { name: "InterVerse", icon: "Gamepad2", description: "Department collaborations, networking, and outer club partnerships." },
-  { name: "Peer Sessions", icon: "Users", description: "Peer learning and student mentoring wing." },
-  { name: "Research Guidance", icon: "BookOpen", description: "Academic paper guidance, research, and papers." }
+  { name: "Startovate", icon: "Sparkles", description: "Entrepreneurship, startup ideas, and pitches." },
+  { name: "Peer Sessions", icon: "Users", description: "Peer learning and student mentoring wing." }
 ];
 
 const HERO_IMAGES = [
@@ -155,8 +155,8 @@ const HomePage: React.FC = () => {
     { name: "InsightX", icon: "TrendingUp", description: "Data analytics, data science, and visualization." },
     { name: "FieldOps", icon: "Shield", description: "Event operations, logistics, and field management." },
     { name: "Debate", icon: "MessageCircle", description: "Tech debates, public speaking, and critical thinking." },
-    { name: "Startovate", icon: "Sparkles", description: "Entrepreneurship, start-up ideas, and innovation." },
     { name: "InterVerse", icon: "Gamepad2", description: "Virtual worlds, gaming, and immersive experiences." },
+    { name: "Startovate", icon: "Sparkles", description: "Entrepreneurship, start-up ideas, and innovation." },
     { name: "Peer Sessions", icon: "Users", description: "Peer-to-peer knowledge sharing and workshops." },
     { name: "Research Guidance", icon: "BookOpen", description: "Academic research, paper publishing, and guidance." }
   ];
@@ -253,15 +253,15 @@ const HomePage: React.FC = () => {
             </button>
           </div>
 
-          <div className="container mx-auto px-6 relative z-10 text-center flex flex-col items-center pt-24 pb-16">
+          <div className="container mx-auto px-4 sm:px-6 relative z-10 text-center flex flex-col items-center pt-24 pb-16">
             <div className="flex flex-col items-center">
-              <h1 className="text-6xl md:text-8xl lg:text-[7.5rem] font-extrabold tracking-tighter mb-4 text-white leading-[1.05]">
+              <h1 className="text-4xl sm:text-7xl md:text-8xl lg:text-[7.5rem] font-extrabold tracking-tighter mb-4 text-white leading-[1.05]">
                 <span className="hero-title-word inline-block">LABY</span>
                 <span className="hero-title-word text-[#CD0000] inline-block">RINTH</span>
               </h1>
               <p className="hero-subtitle text-xs md:text-sm text-slate-300 font-bold uppercase tracking-widest mb-6">Christ University, Bengaluru</p>
               <p className="hero-desc text-sm md:text-base text-slate-200 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
-                Labyrinth serves as the official Computer Science Club of Christ University, fostering research, engineering, and digital excellence.
+                Labyrinth serves as the official Computer Science Club of Christ University, fostering research, innovation, and digital excellence.
               </p>
             </div>
 
@@ -302,8 +302,8 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* ── Stats Section ── */}
-        <section id="stats" className="py-24 bg-white border-t border-slate-100">
-          <div className="container mx-auto px-6 max-w-7xl">
+        <section id="stats" className="py-16 sm:py-24 bg-white border-t border-slate-100">
+          <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
             <SectionHeading title="By The Numbers" subtitle="Our Impact" />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
               <ScrollReveal stagger={0.08}>
@@ -322,8 +322,8 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* ── About Labyrinth Split Section ── */}
-        <section className="py-24 bg-white border-t border-slate-100">
-          <div className="container mx-auto px-6 max-w-7xl">
+        <section className="py-16 sm:py-24 bg-white border-t border-slate-100">
+          <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* Video – left */}
               <ScrollReveal animation="slide-right">
@@ -357,8 +357,8 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* ── Verticals Section: Technical & Non-Technical ── */}
-        <section id="verticals" className="py-24 bg-slate-50/50 border-t border-slate-200/60">
-          <div className="container mx-auto px-6 max-w-7xl space-y-16">
+        <section id="verticals" className="py-16 sm:py-24 bg-slate-50/50 border-t border-slate-200/60">
+          <div className="container mx-auto px-4 sm:px-6 max-w-7xl space-y-12 sm:space-y-16">
 
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
@@ -370,7 +370,7 @@ const HomePage: React.FC = () => {
 
             {/* 1. Technical Domains */}
             <div>
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-2">
                 <h3 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
                   Technical Domains
                 </h3>
@@ -412,7 +412,7 @@ const HomePage: React.FC = () => {
 
             {/* 2. Non-Technical Domains */}
             <div>
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-2">
                 <h3 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
                   Non-Technical Domains
                 </h3>
@@ -466,8 +466,8 @@ const HomePage: React.FC = () => {
         <div id="events" className="scroll-mt-20">
           {/* ── Featured Events Carousel ── */}
           {featuredEvents.length > 0 && (
-            <section className="py-24 bg-white border-t border-slate-100">
-              <div className="container mx-auto px-6 max-w-7xl">
+            <section className="py-16 sm:py-24 bg-white border-t border-slate-100">
+              <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
                 <SectionHeading title="Featured Events" subtitle="Don't Miss Out" />
 
                 <ScrollReveal animation="slide-up">
@@ -510,13 +510,13 @@ const HomePage: React.FC = () => {
                     </div>
 
                     {/* Nav Controls */}
-                    <div className="absolute top-1/2 -translate-y-1/2 left-3 md:-left-4">
-                      <button onClick={prevSlide} className="w-8 h-8 rounded-full bg-white border border-slate-200/80 shadow-xs flex items-center justify-center text-slate-700 hover:bg-slate-50 transition-all">
+                    <div className="absolute top-1/2 -translate-y-1/2 left-2 sm:left-3 md:-left-4 z-10">
+                      <button onClick={prevSlide} className="w-8 h-8 rounded-full bg-white/90 border border-slate-200/80 shadow-xs flex items-center justify-center text-slate-700 hover:bg-slate-50 transition-all">
                         <ChevronLeft size={16} />
                       </button>
                     </div>
-                    <div className="absolute top-1/2 -translate-y-1/2 right-3 md:-right-4">
-                      <button onClick={nextSlide} className="w-8 h-8 rounded-full bg-white border border-slate-200/80 shadow-xs flex items-center justify-center text-slate-700 hover:bg-slate-50 transition-all">
+                    <div className="absolute top-1/2 -translate-y-1/2 right-2 sm:right-3 md:-right-4 z-10">
+                      <button onClick={nextSlide} className="w-8 h-8 rounded-full bg-white/90 border border-slate-200/80 shadow-xs flex items-center justify-center text-slate-700 hover:bg-slate-50 transition-all">
                         <ChevronRight size={16} />
                       </button>
                     </div>
