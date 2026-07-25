@@ -39,8 +39,8 @@ const techVerticals = [
 const nonTechVerticals = [
   { name: "FieldOps", icon: "Shield", description: "Event operations, sports, and field management." },
   { name: "Debate", icon: "MessageCircle", description: "Voice, logic, structure, and debating matches." },
-  { name: "Startovate", icon: "Sparkles", description: "Entrepreneurship, startup ideas, and pitches." },
   { name: "InterVerse", icon: "Gamepad2", description: "Department collaborations, networking, and outer club partnerships." },
+  { name: "Startovate", icon: "Sparkles", description: "Entrepreneurship, startup ideas, and pitches." },
   { name: "Peer Sessions", icon: "Users", description: "Peer learning and student mentoring wing." }
 ];
 
@@ -155,8 +155,8 @@ const HomePage: React.FC = () => {
     { name: "InsightX", icon: "TrendingUp", description: "Data analytics, data science, and visualization." },
     { name: "FieldOps", icon: "Shield", description: "Event operations, logistics, and field management." },
     { name: "Debate", icon: "MessageCircle", description: "Tech debates, public speaking, and critical thinking." },
-    { name: "Startovate", icon: "Sparkles", description: "Entrepreneurship, start-up ideas, and innovation." },
     { name: "InterVerse", icon: "Gamepad2", description: "Virtual worlds, gaming, and immersive experiences." },
+    { name: "Startovate", icon: "Sparkles", description: "Entrepreneurship, start-up ideas, and innovation." },
     { name: "Peer Sessions", icon: "Users", description: "Peer-to-peer knowledge sharing and workshops." },
     { name: "Research Guidance", icon: "BookOpen", description: "Academic research, paper publishing, and guidance." }
   ];
