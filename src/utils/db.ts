@@ -996,13 +996,16 @@ export async function dbGetEvents(): Promise<Event[]> {
 
 export async function dbAddEvent(data: any, createdBy?: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('events').insert({
+    const client = getSupabaseAdmin() || supabase;
+    const { error } = await client.from('events').insert({
       title: data.title,
       description: data.description,
       date: data.date,
       time: data.time || null,
       location: data.location || null,
-      banner_url: data.bannerUrl || null,
+      banner_url: data.banner || data.bannerUrl || null,
+      category: data.category || null,
+      featured: data.featured || false,
       committee_id: data.committeeId || null,
       vertical_id: data.verticalId || null,
       created_by: createdBy || null
@@ -1021,6 +1024,7 @@ export async function dbAddEvent(data: any, createdBy?: string): Promise<void> {
 
 export async function dbUpdateEvent(id: string, data: any): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
+    const client = getSupabaseAdmin() || supabase;
     const mapped: any = {};
     if (data.title !== undefined) mapped.title = data.title;
     if (data.description !== undefined) mapped.description = data.description;
@@ -1028,10 +1032,13 @@ export async function dbUpdateEvent(id: string, data: any): Promise<void> {
     if (data.time !== undefined) mapped.time = data.time || null;
     if (data.location !== undefined) mapped.location = data.location || null;
     if (data.bannerUrl !== undefined) mapped.banner_url = data.bannerUrl || null;
+    if (data.banner !== undefined) mapped.banner_url = data.banner || null;
     if (data.committeeId !== undefined) mapped.committee_id = data.committeeId || null;
     if (data.verticalId !== undefined) mapped.vertical_id = data.verticalId || null;
+    if (data.featured !== undefined) mapped.featured = data.featured;
+    if (data.category !== undefined) mapped.category = data.category || null;
 
-    const { error } = await supabase.from('events').update(mapped).eq('id', id);
+    const { error } = await client.from('events').update(mapped).eq('id', id);
     if (error) throw error;
   } else {
     const db = getLocalDb();
@@ -1045,7 +1052,8 @@ export async function dbUpdateEvent(id: string, data: any): Promise<void> {
 
 export async function dbDeleteEvent(id: string): Promise<void> {
   if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('events').delete().eq('id', id);
+    const client = getSupabaseAdmin() || supabase;
+    const { error } = await client.from('events').delete().eq('id', id);
     if (error) throw error;
   } else {
     const db = getLocalDb();
