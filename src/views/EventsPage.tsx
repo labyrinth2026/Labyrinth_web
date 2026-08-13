@@ -130,7 +130,7 @@ const EventsPage: React.FC = () => {
           <div className="absolute inset-0 bg-white/85" />
         </div>
 
-        <div className="container mx-auto px-6 max-w-7xl relative z-10 pt-24">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10 pt-24">
           <ScrollReveal animation="fade">
             <div className="text-center mb-16">
               <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
@@ -167,7 +167,7 @@ const EventsPage: React.FC = () => {
                       <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(245,245,247,0.98) 0%, rgba(245,245,247,0.55) 55%, transparent 100%)' }} />
 
                       {/* Content */}
-                      <div className="relative z-10 p-8 md:p-12 w-full max-w-4xl">
+                      <div className="relative z-10 p-5 md:p-8 lg:p-12 w-full max-w-4xl">
                         <div className="flex flex-wrap gap-2.5 mb-3.5">
                           <span className="px-2.5 py-0.5 rounded-full bg-[#CD0000] text-white text-[9px] font-bold uppercase tracking-wider">
                             {carouselEvents[currentSlide].category}
@@ -229,8 +229,8 @@ const EventsPage: React.FC = () => {
       </section>
 
       {/* Events Grid (Section 2: Off-White) */}
-      <section className="py-24 bg-slate-50/50">
-        <div className="container mx-auto px-6 max-w-7xl">
+      <section className="py-16 sm:py-24 bg-slate-50/50">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
           {/* Filters */}
           <ScrollReveal animation="fade">
             <div className="bg-white border border-slate-200/80 rounded-2xl p-6 mb-12 shadow-xs">

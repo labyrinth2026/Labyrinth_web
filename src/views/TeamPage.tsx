@@ -273,7 +273,7 @@ const TeamPage: React.FC = () => {
     <PageWrapper>
       {/* ── HEADER ───────────────────────────────────────────────────────────── */}
       <section className="pt-24 pb-8 bg-white border-b border-slate-100">
-        <div className="container mx-auto px-6 max-w-7xl text-center">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl text-center">
           <ScrollReveal animation="fade">
             <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
               People
@@ -306,7 +306,7 @@ const TeamPage: React.FC = () => {
 
       {/* ── CONTENT ──────────────────────────────────────────────────────────── */}
       <section className="pt-8 pb-24 bg-slate-50/50">
-        <div className="container mx-auto px-6 max-w-7xl">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
           <AnimatePresence mode="wait">
             {!hasResults && primaryLoaded ? (
               /* No results state */

@@ -12,7 +12,7 @@ const ContactPage: React.FC = () => {
   return (
     <PageWrapper>
       {/* Header with background image */}
-      <section className="relative py-32 bg-white border-b border-slate-100 overflow-hidden">
+      <section className="relative py-20 sm:py-32 bg-white border-b border-slate-100 overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src="/gallery/inauguration_all_10.webp"
@@ -24,7 +24,7 @@ const ContactPage: React.FC = () => {
           />
           <div className="absolute inset-0 bg-white/80" />
         </div>
-        <div className="container mx-auto px-6 max-w-5xl text-center relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 max-w-5xl text-center relative z-10">
           <ScrollReveal animation="fade">
             <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
               Connect With Us
@@ -40,8 +40,8 @@ const ContactPage: React.FC = () => {
       </section>
 
       {/* Content Section (Section 2: Off-White) */}
-      <section className="py-24 bg-slate-50/50">
-        <div className="container mx-auto px-6 max-w-5xl">
+      <section className="py-16 sm:py-24 bg-slate-50/50">
+        <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
 
             {/* ── Left: Join Community Action ── */}
@@ -179,10 +179,10 @@ const ContactPage: React.FC = () => {
 
       {/* Community photo strip */}
       <section className="py-16 bg-white border-t border-slate-100">
-        <div className="container mx-auto px-6 max-w-7xl">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
           <ScrollReveal animation="fade">
             <p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-8">Life at Labyrinth</p>
-            <div className="grid grid-cols-3 gap-3 md:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
               {[
                 { src: '/gallery/20260212_181054.webp', alt: 'Sports event at Labyrinth' },
                 { src: '/gallery/inauguration_all_3.webp', alt: 'Labyrinth inauguration event' },

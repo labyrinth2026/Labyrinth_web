@@ -178,7 +178,7 @@ const GalleryPage: React.FC = () => {
     <PageWrapper>
       {/* Header with Featured Video Section */}
       <section className="pt-6 md:pt-12 pb-0 bg-white">
-        <div className="container mx-auto px-6 max-w-7xl text-center">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl text-center">
           <ScrollReveal animation="fade">
             <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
               Highlights
@@ -238,7 +238,7 @@ const GalleryPage: React.FC = () => {
 
       {/* Masonry Grid (Section 2: Off-White) */}
       <section ref={gridRef} id="gallery-grid" className="pt-10 pb-24 md:pt-14 bg-slate-50/50 scroll-mt-20">
-        <div className="container mx-auto px-6 max-w-7xl">
+        <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
           
           {/* Category Filter and Search Bar */}
           <div className="max-w-4xl mx-auto mb-12">
