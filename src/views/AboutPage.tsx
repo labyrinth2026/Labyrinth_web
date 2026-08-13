@@ -247,8 +247,8 @@ const AboutPage: React.FC = () => {
       </section>
 
       {/* Mission & Vision (Section 2: Clean Off-White) */}
-      <section className="py-24 bg-slate-50/50 border-b border-slate-200/60">
-        <div className="container mx-auto px-6 max-w-6xl">
+      <section className="py-16 sm:py-24 bg-slate-50/50 border-b border-slate-200/60">
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
           <div className="grid md:grid-cols-2 gap-8">
             <div 
               data-aos="fade-up"
@@ -282,8 +282,8 @@ const AboutPage: React.FC = () => {
       </section>
 
       {/* Statistics Section (Clean White) */}
-      <section className="py-24 bg-white border-b border-slate-100">
-        <div className="container mx-auto px-6 max-w-6xl">
+      <section className="py-16 sm:py-24 bg-white border-b border-slate-100">
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
           <SectionHeading title="By The Numbers" subtitle="Our Impact" />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {statsData.map((stat, i) => (
@@ -325,8 +325,8 @@ const AboutPage: React.FC = () => {
       </section>
 
       {/* Why Labyrinth? (Section 3: Pure White) */}
-      <section className="py-24 bg-white border-b border-slate-100">
-        <div className="container mx-auto px-6 max-w-6xl">
+      <section className="py-16 sm:py-24 bg-white border-b border-slate-100">
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
           <SectionHeading title="Why LABYRINTH?" subtitle="Benefits" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, i) => (
@@ -348,8 +348,8 @@ const AboutPage: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section ref={ctaRef} className="py-24 bg-slate-50/50">
-        <div className="container mx-auto px-6 max-w-6xl">
+      <section ref={ctaRef} className="py-16 sm:py-24 bg-slate-50/50">
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
           <div className="cta-container relative overflow-hidden rounded-3xl bg-[#CD0000] shadow-xl">
             {/* Background image with overlay */}
             <div className="absolute inset-0">
@@ -361,7 +361,7 @@ const AboutPage: React.FC = () => {
                 sizes="100vw"
               />
             </div>
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 px-10 py-14 md:px-16">
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 px-6 py-10 sm:px-10 sm:py-14 md:px-16">
               <div className="text-center md:text-left">
                 <span className="cta-el inline-block px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest mb-4">
                   Join Us

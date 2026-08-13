@@ -541,9 +541,9 @@ const HomePage: React.FC = () => {
 
           {/* ── Upcoming Events ── */}
           {upcomingEvents.length > 0 && (
-            <section className="py-24 bg-slate-50/50 border-t border-slate-200/60">
-              <div className="container mx-auto px-6 max-w-7xl">
-                <div className="flex justify-between items-end mb-16">
+            <section className="py-16 sm:py-24 bg-slate-50/50 border-t border-slate-200/60">
+              <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
+                <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 mb-10 sm:mb-16">
                   <SectionHeading title="Upcoming Events" align="left" className="mb-0" />
                   <Button variant="outline" size="sm" href="/events">
                     View All <ArrowRight size={12} />
@@ -562,8 +562,8 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* ── SDG Projects Initiative ── */}
-        <section className="py-24 bg-slate-50/50 border-t border-slate-100">
-          <div className="container mx-auto px-6 max-w-7xl">
+        <section className="py-16 sm:py-24 bg-slate-50/50 border-t border-slate-100">
+          <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* Text – left */}
               <ScrollReveal animation="slide-right">
@@ -607,8 +607,8 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* ── SDGs Supported by Labyrinth ── */}
-        <section className="py-24 bg-white border-t border-slate-100">
-          <div className="container mx-auto px-6 max-w-7xl">
+        <section className="py-16 sm:py-24 bg-white border-t border-slate-100">
+          <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
             <SectionHeading title="SDGs Supported by Labyrinth" subtitle="Global Impact" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <ScrollReveal stagger={0.07}>
@@ -684,8 +684,8 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* ── CTA Banner ── */}
-        <section id="contact" className="py-24 bg-white border-t border-slate-100">
-          <div className="container mx-auto px-6 max-w-7xl">
+        <section id="contact" className="py-16 sm:py-24 bg-white border-t border-slate-100">
+          <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
             <ScrollReveal animation="slide-up">
               <div className="relative overflow-hidden rounded-3xl bg-[#CD0000] shadow-xl">
                 {/* Background image with overlay */}
@@ -698,7 +698,7 @@ const HomePage: React.FC = () => {
                     sizes="100vw"
                   />
                 </div>
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 px-10 py-14 md:px-16">
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 px-6 py-10 sm:px-10 sm:py-14 md:px-16">
                   <div className="text-center md:text-left">
                     <span className="inline-block px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest mb-4">
                       Join Us
