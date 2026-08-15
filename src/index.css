@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@import 'react-big-calendar/lib/css/react-big-calendar.css';
+
 
 @theme {
   /* Brand Color Palette */
@@ -146,3 +148,147 @@
 .animate-fade-in {
   animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* ==========================================
+   react-big-calendar Theme Overrides
+   Matches Labyrinth site design system
+   ========================================== */
+.rbc-calendar {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  background: #FAFAFA;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.rbc-toolbar {
+  padding: 16px 20px;
+  background: #fff;
+  border-bottom: 1px solid #E4E4E7;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 0;
+}
+.rbc-toolbar .rbc-toolbar-label {
+  font-weight: 800;
+  font-size: 15px;
+  color: #09090B;
+  letter-spacing: -0.02em;
+}
+.rbc-toolbar button {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border: 1px solid #E4E4E7;
+  border-radius: 8px;
+  padding: 6px 14px;
+  color: #52525B;
+  background: #fff;
+  transition: all 0.15s ease;
+}
+.rbc-toolbar button:hover {
+  border-color: #A1A1AA;
+  color: #09090B;
+  background: #F4F4F5;
+}
+.rbc-toolbar button.rbc-active {
+  background: #CD0000;
+  border-color: #CD0000;
+  color: #fff;
+  box-shadow: none;
+}
+.rbc-toolbar button.rbc-active:hover {
+  background: #9E0000;
+  border-color: #9E0000;
+}
+.rbc-header {
+  background: #fff;
+  border-color: #E4E4E7;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #71717A;
+  padding: 10px 0;
+}
+.rbc-month-view,
+.rbc-time-view {
+  border-color: #E4E4E7;
+  background: #fff;
+}
+.rbc-day-bg {
+  background: #fff;
+  transition: background 0.1s ease;
+}
+.rbc-day-bg:hover {
+  background: #FAFAFA;
+}
+.rbc-today {
+  background: rgba(205, 0, 0, 0.03) !important;
+}
+.rbc-off-range-bg {
+  background: #F4F4F5;
+}
+.rbc-date-cell {
+  font-size: 12px;
+  font-weight: 600;
+  color: #3F3F46;
+  padding: 6px 8px;
+}
+.rbc-date-cell.rbc-now {
+  font-weight: 800;
+  color: #CD0000;
+}
+.rbc-event {
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  padding: 2px 7px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.1s ease, transform 0.1s ease;
+}
+.rbc-event:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+.rbc-event-label {
+  display: none;
+}
+.rbc-show-more {
+  font-size: 10px;
+  font-weight: 700;
+  color: #CD0000;
+  background: transparent;
+  padding: 2px 6px;
+}
+.rbc-month-row {
+  border-color: #E4E4E7;
+}
+.rbc-day-slot .rbc-time-slot {
+  border-color: #F4F4F5;
+}
+.rbc-agenda-view table.rbc-agenda-table {
+  border-color: #E4E4E7;
+  font-size: 13px;
+}
+.rbc-agenda-view table.rbc-agenda-table thead > tr > th {
+  background: #FAFAFA;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #71717A;
+  border-color: #E4E4E7;
+  padding: 10px 16px;
+}
+.rbc-agenda-view table.rbc-agenda-table tbody > tr > td {
+  border-color: #E4E4E7;
+  padding: 10px 16px;
+}
+.rbc-agenda-event-cell {
+  font-weight: 600;
+}
+

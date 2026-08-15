@@ -65,15 +65,23 @@ export interface Event {
   id: string;
   title: string;
   description: string;
-  date: string;
+  date: string | null;
+  endDate?: string | null;
+  dateLabel?: string | null;
   time?: string;
   location?: string;
   bannerUrl?: string;
+  image?: string | null;
+  category?: string;
+  vertical?: string | null;
   committeeId?: string;
   verticalId?: string;
   createdBy?: string;
   status: 'upcoming' | 'past';
   featured?: boolean;
+  highlights?: string[];
+  collab?: string | null;
+  type?: 'confirmed' | 'ytd' | 'concept' | 'initiative';
 }
 
 export interface Announcement {
@@ -1441,7 +1449,8 @@ export async function dbGetDashboardStats(): Promise<{ totalMembers: number; upc
   today.setHours(0, 0, 0, 0);
 
   const totalMembers = db.users.filter(u => u.status === 'active').length;
-  const upcomingEvents = db.events.filter(e => new Date(e.date) >= today).length;
+  const upcomingEvents = db.events.filter(e => e.date && new Date(e.date) >= today).length;
+
   const newRegistrations = db.users.filter(u => u.status === 'inactive' && u.role === 'MEMBER').length;
 
   return { totalMembers, upcomingEvents, newRegistrations };

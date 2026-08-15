@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import {
   LayoutDashboard, LogOut, BookOpen, Link as LinkIcon,
-  Download, Users, Shield, CheckSquare, Image, Megaphone, Settings, Layers, Calendar
+  Download, Users, Shield, CheckSquare, Image, Megaphone, Settings, Layers, Calendar, CalendarDays
 } from 'lucide-react';
 
 interface NavItem {
@@ -57,6 +57,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     members: { label: 'Members', path: '/admin/members', icon: Users },
     verticals: { label: 'Verticals', path: '/admin/verticals', icon: BookOpen },
     events: { label: 'Events', path: '/admin/events', icon: Calendar },
+    calendar: { label: 'Calendar Scheduler', path: '/admin/calendar', icon: CalendarDays },
     gallery: { label: 'Gallery Manager', path: '/admin/gallery', icon: Image },
     forms: { label: 'Forms', path: '/admin/forms', icon: LinkIcon },
     announcements: { label: 'Announcements', path: '/admin/announcements', icon: Megaphone },
@@ -66,7 +67,7 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   // Admin has access to all 9 panels
   const visibleItemKeys = [
-    'dashboard', 'members', 'verticals', 'events',
+    'dashboard', 'members', 'verticals', 'events', 'calendar',
     'gallery', 'forms', 'announcements', 'tasks', 'settings'
   ];
   const visibleItems = visibleItemKeys.map(key => allNavItems[key]).filter(Boolean);
