@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Labyrinth — Event Calendar 2026–27</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0d14;
+    --panel:#12151f;
+    --panel-alt:#171b28;
+    --line:#262b3c;
+    --text:#edeff5;
+    --muted:#8890a4;
+    --gold:#e8cf8e;
+    --gold-dim:#8a7538;
+
+    --v-aihub:#5ec8d8;
+    --v-devzen:#9b8cf2;
+    --v-synapse:#d8c34b;
+    --v-interverse:#f2789b;
+    --v-startovate:#7fd99a;
+    --v-research:#6e9bf2;
+    --v-fieldops:#f0824a;
+    --v-debate:#d97bd9;
+    --v-insightx:#b5e04b;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(232,207,142,0.06), transparent),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+
+  ::selection{background:var(--gold-dim);color:var(--text);}
+
+  .wrap{max-width:1100px;margin:0 auto;padding:56px 28px 120px;}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    display:flex;flex-direction:column;gap:18px;
+    padding-bottom:44px;margin-bottom:44px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold);
+  }
+  h1.title{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:clamp(42px,7vw,76px);
+    line-height:0.98;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  h1.title em{
+    font-style:italic;font-weight:500;color:var(--gold);
+  }
+  .sub{
+    max-width:560px;color:var(--muted);font-size:15.5px;line-height:1.6;
+  }
+  .legend{
+    display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;
+  }
+  .chip{
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.03em;
+    padding:6px 10px;border-radius:20px;
+    border:1px solid var(--line);background:var(--panel);
+    color:var(--muted);
+  }
+  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+  /* ---------- MONTH TABS ---------- */
+  nav.months{
+    display:flex;gap:6px;flex-wrap:wrap;
+    margin-bottom:28px;
+  }
+  nav.months button{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;letter-spacing:.05em;
+    background:transparent;border:1px solid var(--line);
+    color:var(--muted);padding:9px 16px;border-radius:8px;
+    cursor:pointer;transition:.15s ease;
+  }
+  nav.months button:hover{border-color:var(--gold-dim);color:var(--text);}
+  nav.months button.active{
+    background:var(--gold);border-color:var(--gold);color:#1a1608;font-weight:600;
+  }
+
+  /* ---------- CALENDAR ---------- */
+  .cal-shell{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:26px 26px 30px;
+    position:relative;
+    overflow:hidden;
+  }
+  .cal-shell::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:
+      linear-gradient(90deg, transparent 0, transparent 100%),
+      repeating-linear-gradient(90deg, rgba(232,207,142,0.02) 0 1px, transparent 1px 14.28%);
+  }
+  .cal-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    margin-bottom:18px;
+  }
+  .cal-head h2{
+    font-family:'Fraunces',serif;font-weight:600;font-size:26px;margin:0;
+  }
+  .cal-head span{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);
+  }
+  .weekdays{
+    display:grid;grid-template-columns:repeat(7,1fr);
+    margin-bottom:6px;
+  }
+  .weekdays div{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;
+    color:var(--muted);text-align:center;padding-bottom:6px;text-transform:uppercase;
+  }
+  .grid{
+    display:grid;grid-template-columns:repeat(7,1fr);
+    gap:5px;position:relative;z-index:1;
+  }
+  .cell{
+    aspect-ratio:1/0.82;
+    border-radius:9px;
+    border:1px solid transparent;
+    display:flex;flex-direction:column;justify-content:space-between;
+    padding:7px 8px;
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--muted);font-size:12px;
+    position:relative;
+  }
+  .cell.blank{visibility:hidden;}
+  .cell.plain{background:var(--panel-alt);}
+  .cell.active{
+    background:var(--panel-alt);
+    border:1px solid var(--vcolor,var(--gold));
+    cursor:pointer;
+    color:var(--text);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .cell.active:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 18px -6px rgba(0,0,0,.6);
+  }
+  .cell.active::after{
+    content:"";position:absolute;top:6px;right:6px;width:6px;height:6px;
+    border-radius:50%;background:var(--vcolor,var(--gold));
+  }
+  .cell .daynum{font-size:13px;}
+  .cell .label{
+    font-family:'Inter',sans-serif;font-size:10px;line-height:1.2;
+    color:var(--text);opacity:.85;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+
+  /* ---------- YET TO DECIDE (per month) ---------- */
+  .ytd{
+    margin-top:22px;padding-top:18px;border-top:1px dashed var(--line);
+    position:relative;z-index:1;
+  }
+  .ytd-head{
+    display:flex;align-items:center;gap:8px;margin-bottom:12px;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);
+  }
+  .ytd-head .pulse{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+  .ytd-list{display:grid;gap:8px;}
+  .ytd-card{
+    background:var(--panel-alt);border:1px solid var(--line);border-radius:9px;
+    padding:11px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.15s ease;
+  }
+  .ytd-card:hover{border-color:var(--vcolor,var(--gold-dim));}
+  .ytd-card .bar{width:3px;align-self:stretch;border-radius:3px;background:var(--vcolor,var(--gold));flex-shrink:0;}
+  .ytd-card .ytd-name{font-weight:600;font-size:13.5px;}
+  .ytd-card .ytd-meta{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);margin-top:2px;}
+  .ytd-card .ytd-vert{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--vcolor);
+    border:1px solid var(--vcolor);padding:3px 8px;border-radius:20px;flex-shrink:0;
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section.block{margin-top:64px;}
+  .block-head{
+    display:flex;align-items:baseline;gap:12px;margin-bottom:20px;
+  }
+  .block-head h3{
+    font-family:'Fraunces',serif;font-size:24px;font-weight:600;margin:0;
+  }
+  .block-head .n{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);
+  }
+  .block-note{color:var(--muted);font-size:13.5px;margin:-10px 0 22px;max-width:640px;line-height:1.6;}
+
+  .card-list{display:grid;gap:10px;}
+  .row-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:14px 16px;display:flex;align-items:center;gap:14px;
+    cursor:pointer;transition:.15s ease;
+  }
+  .row-card:hover{border-color:var(--vcolor,var(--gold-dim));background:var(--panel-alt);}
+  .row-card .bar{width:4px;align-self:stretch;border-radius:3px;background:var(--vcolor,var(--gold));flex-shrink:0;}
+  .row-card .rc-main{flex:1;min-width:0;}
+  .row-card .rc-name{font-weight:600;font-size:14.5px;}
+  .row-card .rc-meta{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);margin-top:3px;
+  }
+  .row-card .rc-vert{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--vcolor);
+    border:1px solid var(--vcolor);padding:3px 9px;border-radius:20px;flex-shrink:0;
+  }
+
+  .init-card{
+    background:linear-gradient(135deg, var(--panel-alt), var(--panel));
+    border:1px dashed var(--line);border-radius:12px;padding:20px 22px;
+  }
+  .init-card + .init-card{margin-top:12px;}
+  .init-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+  .init-top h4{font-family:'Fraunces',serif;font-size:19px;margin:0 0 4px;font-weight:600;}
+  .init-tag{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:#1a1608;background:var(--gold);padding:4px 9px;border-radius:20px;font-weight:600;
+  }
+  .init-cadence{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--vcolor);}
+  .init-card p{color:var(--muted);font-size:13.5px;line-height:1.6;margin:10px 0 0;}
+
+  /* ---------- INTERFACE CONCEPTS ---------- */
+  .concept-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  }
+  @media(max-width:860px){ .concept-grid{grid-template-columns:repeat(2,1fr);} }
+  .concept-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:20px 20px 22px;cursor:pointer;transition:.15s ease;
+    display:flex;flex-direction:column;
+  }
+  .concept-card:hover{border-color:var(--vcolor,var(--gold-dim));transform:translateY(-2px);background:var(--panel-alt);}
+  .cc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;}
+  .cc-name{font-family:'Fraunces',serif;font-weight:600;font-size:16.5px;line-height:1.25;margin:0;}
+  .cc-tag{
+    font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+    color:#1a1608;background:var(--gold);padding:4px 9px;border-radius:20px;font-weight:600;
+    white-space:nowrap;flex-shrink:0;
+  }
+  .cc-desc{font-size:13px;line-height:1.55;color:var(--muted);margin-bottom:12px;}
+  .cc-divider{border-top:1px dashed var(--line);margin:0 0 12px;}
+  .cc-hl{list-style:none;padding:0;margin:0 0 16px;display:grid;gap:6px;flex:1;}
+  .cc-hl li{
+    font-size:11.5px;color:var(--muted);padding-left:13px;position:relative;line-height:1.5;
+  }
+  .cc-hl li::before{
+    content:"";position:absolute;left:0;top:6px;width:4px;height:4px;
+    background:var(--vcolor,var(--gold));border-radius:50%;
+  }
+  .cc-vert{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--vcolor,var(--gold));
+    display:inline-flex;align-items:center;gap:6px;margin-top:auto;
+  }
+  .cc-vert .sq{width:7px;height:7px;background:var(--vcolor,var(--gold));flex-shrink:0;}
+  .concept-foot{
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+    margin-top:26px;padding-top:16px;border-top:1px solid var(--line);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);
+  }
+
+  footer{
+    margin-top:80px;padding-top:24px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:12px;font-family:'IBM Plex Mono',monospace;
+  }
+
+  /* ---------- DOSSIER PANEL ---------- */
+  .overlay{
+    position:fixed;inset:0;background:rgba(6,8,13,.65);
+    backdrop-filter:blur(2px);
+    opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:40;
+  }
+  .overlay.open{opacity:1;pointer-events:auto;}
+
+  .dossier{
+    position:fixed;top:0;right:0;height:100%;width:min(460px,100%);
+    background:var(--panel);border-left:1px solid var(--line);
+    transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+    z-index:50;overflow-y:auto;
+  }
+  .dossier.open{transform:translateX(0);}
+  .dossier-inner{padding:30px 28px 60px;}
+  .dossier-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;}
+  .close-btn{
+    background:transparent;border:1px solid var(--line);color:var(--muted);
+    width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:15px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .close-btn:hover{color:var(--text);border-color:var(--gold-dim);}
+  .d-vert{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--vcolor,var(--gold));
+    border:1px solid var(--vcolor,var(--gold));display:inline-block;padding:4px 10px;
+    border-radius:20px;margin-bottom:14px;
+  }
+  .d-name{font-family:'Fraunces',serif;font-size:28px;font-weight:600;line-height:1.15;margin:0 0 8px;}
+  .d-date{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--gold);margin-bottom:22px;}
+  .d-collab{
+    font-size:12px;color:var(--muted);border-left:2px solid var(--vcolor,var(--gold-dim));
+    padding-left:10px;margin-bottom:20px;font-style:italic;
+  }
+  .d-desc{font-size:14.5px;line-height:1.7;color:var(--text);opacity:.92;margin-bottom:24px;}
+  .d-hl-title{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:12px;
+  }
+  .d-hl-list{list-style:none;padding:0;margin:0;display:grid;gap:9px;}
+  .d-hl-list li{
+    font-size:13.5px;line-height:1.55;padding-left:16px;position:relative;color:var(--text);opacity:.9;
+  }
+  .d-hl-list li::before{
+    content:"";position:absolute;left:0;top:7px;width:6px;height:6px;
+    background:var(--vcolor,var(--gold));border-radius:1px;transform:rotate(45deg);
+  }
+
+  @media(max-width:620px){
+    .wrap{padding:36px 18px 90px;}
+    .grid{gap:4px;}
+    .cell{padding:5px 5px;border-radius:7px;}
+    .cell .label{display:none;}
+    .dossier{width:100%;}
+    .concept-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Labyrinth — Tech Club Event Log</div>
+    <h1 class="title">Find your way<br>through the <em>year</em>.</h1>
+    <p class="sub">Every workshop, hackathon, and conference across our nine verticals — AIHub, DevZen, Synapse, InterVerse, Startovate, Research, FieldOps, Debate Club, and InsightX — from August 2026 through February 2027. Click any highlighted date for the full brief.</p>
+    <div class="legend" id="legend"></div>
+  </header>
+
+  <nav class="months" id="monthNav"></nav>
+
+  <div class="cal-shell">
+    <div class="cal-head">
+      <h2 id="calTitle">—</h2>
+      <span id="calCount">—</span>
+    </div>
+    <div class="weekdays">
+      <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+    </div>
+    <div class="grid" id="calGrid"></div>
+    <div class="ytd" id="ytdBlock" style="display:none;">
+      <div class="ytd-head"><span class="pulse"></span><span id="ytdLabel">Yet to be decided this month</span></div>
+      <div class="ytd-list" id="ytdList"></div>
+    </div>
+  </div>
+
+  <section class="block" id="initBlock">
+    <div class="block-head"><h3>Ongoing initiatives</h3><span class="n">not single-date events</span></div>
+    <p class="block-note">These run continuously across the year rather than happening on one day — they don't live on the calendar above, but they're very much part of the program.</p>
+    <div id="initList"></div>
+  </section>
+
+  <section class="block" id="conceptBlock">
+    <div class="block-head"><h3>Interface concepts</h3><span class="n" id="conceptCount"></span></div>
+    <p class="block-note">Interactive booths, stalls, and one-off interface concepts pitched alongside the main event calendar — not yet slotted to a date, organized by owning vertical.</p>
+    <div class="concept-grid" id="conceptGrid"></div>
+    <div class="concept-foot">
+      <span id="conceptFootLeft">Labyrinth Events · generated from Events_Tentative_Dates.xlsx</span>
+      <span id="conceptFootRight"></span>
+    </div>
+  </section>
+
+  <footer>Labyrinth · Event Calendar · Aug 2026 – Feb 2027</footer>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<aside class="dossier" id="dossier">
+  <div class="dossier-inner">
+    <div class="dossier-top">
+      <div>
+        <div class="d-vert" id="dVert"></div>
+      </div>
+      <button class="close-btn" id="closeBtn">✕</button>
+    </div>
+    <h3 class="d-name" id="dName"></h3>
+    <div class="d-date" id="dDate"></div>
+    <div class="d-collab" id="dCollab" style="display:none;"></div>
+    <div class="d-desc" id="dDesc"></div>
+    <div id="dHlWrap">
+      <div class="d-hl-title">Key highlights</div>
+      <ul class="d-hl-list" id="dHl"></ul>
+    </div>
+  </div>
+</aside>
+
+<script>
+const VERTICALS = {
+  "AIHub":"var(--v-aihub)",
+  "DevZen":"var(--v-devzen)",
+  "Synapse":"var(--v-synapse)",
+  "InterVerse":"var(--v-interverse)",
+  "Startovate":"var(--v-startovate)",
+  "Research":"var(--v-research)",
+  "FieldOps":"var(--v-fieldops)",
+  "Debate Club":"var(--v-debate)",
+  "InsightX":"var(--v-insightx)"
+};
+
+const EVENTS = [
+  {name:"AI Quiz for First-Year Students", vertical:"AIHub", dates:["2026-08-22"],
+   desc:"An introductory quiz for first-year students covering fundamental AI concepts, designed to build early interest in the field.",
+   highlights:["Entry point event targeting first-years","Builds early interest in AI before deeper vertical events"]},
+
+  {name:"CODESPRINT-A: Five-Day Build, One Hour at a Time", vertical:"DevZen", dates:[], monthIndex:1, dateLabel:"September 2026 — exact date to be decided",
+   desc:"A 5-day guided development sprint where pairs of students commit to one hour of coding per day to build, refine, and ship a complete, functional project. Promotes sustained skill-building and structured daily progress over traditional all-night hackathons.",
+   highlights:["Mentorship pairings for technical collaboration & cross-cohort mentorship","Disciplined format: 5 consecutive days, 1 hour daily, one shipped project","Progress tracked on a leaderboard across 4 evaluation checkpoints","Judging on code understanding, execution quality, consistency & SDG alignment","Final showcase with live demos and team Q&A"]},
+
+  {name:"Vibe Coding Workshop", vertical:"DevZen", dates:["2026-09-05"],
+   desc:"A practical workshop introducing AI-assisted software development using modern tools.",
+   highlights:["Cursor","GitHub Copilot","Claude Code","ChatGPT","AI debugging","Rapid prototyping"]},
+
+  {name:"Robotics & IoT Learning Workshops", vertical:"Synapse", dates:["2026-09-12"],
+   desc:"Hands-on workshops covering Arduino, ESP32, sensors, motors, wireless communication, and rapid prototyping, with opportunities for expert talks from industry and academia.",
+   highlights:["Arduino & ESP32","Sensors & motors","Wireless communication","Rapid prototyping","Expert talks from industry & academia"]},
+
+  {name:"CampusQuest", vertical:"InterVerse", dates:["2026-09-25","2026-09-26"],
+   desc:"A campus-wide collaborative event that brings together students from various departments to solve logic, strategy, and puzzle-based challenges while encouraging teamwork and networking.",
+   highlights:["Inter-department participation","Team-based competition","Logic & strategy challenges","Problem-solving and collaboration","Grand finale"]},
+
+  {name:"Digital Literacy Outreach Program", vertical:"InterVerse", dates:[], monthIndex:1, dateLabel:"September 2026 — date to be decided",
+   desc:"A collaborative outreach initiative with CSA to provide children under the Child Sponsorship Program and students from government schools with basic computer skills, internet awareness, digital tools, and online safety through interactive, hands-on sessions.",
+   highlights:["Basic computer literacy & familiarization","Keyboard, mouse & typing skills","Introduction to internet and web browsing","Basic digital tools & applications (MS Office)","Creating & managing files and folders","Online safety, passwords & phishing awareness","Targeted at CSP children & government school students"]},
+
+  {name:"Portfolio Wars", vertical:"Startovate", dates:["2026-09-16"],
+   desc:"Each team gets a fixed amount of virtual funds to invest across trending products, sectors, or markets. Teams research the trends they invest in, build a case for why each pick will perform well, and predict their eventual profit or loss.",
+   highlights:["Virtual seed fund allocated to every team","Research across tech, consumer products, startups & markets","Live rebalancing rounds based on simulated market events","Profit/loss prediction backed by written reasoning","Final presentation defending the investment thesis"]},
+
+  {name:"The Forensic Hypothesis (The Murder Mystery)", vertical:"Research", dates:["2026-10-03"],
+   desc:"A high-energy analytical challenge where students step into the shoes of investigators to solve a simulated crime scene using core research frameworks instead of guesswork.",
+   highlights:["Interactive case files: raw evidence, witness statements & psychological profiles to analyze"]},
+
+  {name:"Robotics & IoT Learning Workshops", vertical:"Synapse", dates:["2026-10-26"],
+   desc:"A further round of hands-on workshops covering Arduino, ESP32, sensors, motors, wireless communication, and rapid prototyping, with expert talks from industry and academia.",
+   highlights:["Arduino & ESP32","Sensors & motors","Wireless communication","Rapid prototyping","Expert talks"]},
+
+  {name:"Ultimate Funathlon", vertical:"FieldOps", dates:["2026-10-24"],
+   desc:"A team-based sports festival inspired by The Amazing Race and Survivor. Participants compete across multiple zones featuring speed, teamwork, strategy, and precision challenges. The highest-scoring team is crowned the Labyrinth Champions.",
+   highlights:["Multi-zone team competition","Speed, teamwork, strategy & precision challenges","Points earned at each station","Crowns the Labyrinth Champions"]},
+
+  {name:"Asian Parliamentary Conference: Diplomacy & Deliberation", vertical:"Debate Club", dates:["2026-11-07"],
+   desc:"A one-day Model United Nations (PreMUN) conference introducing participants to the fundamentals of diplomacy, international relations, and policy-making, conducted through a single committee under a common agenda.",
+   highlights:["Diplomacy & international relations","Policy-making & country representation","Structured discussions & negotiation","Global issues & solution formulation","Leadership & communication skills"]},
+
+  {name:"Workshop on Explainable AI (XAI)", vertical:"AIHub", dates:["2026-11-14"],
+   desc:"A hands-on session helping students understand interpretable and trustworthy AI models, and why explainability matters in real-world deployment.",
+   highlights:["Hands-on with real tools (SHAP, LIME) rather than just theory"]},
+
+  {name:"Datathon", vertical:"InsightX", dates:["2026-11-21"],
+   desc:"A high-energy, 24–48 hour challenge where teams are handed a raw, messy real-world dataset and tasked with turning it into insights, a story, and a compelling dashboard — all under time pressure.",
+   highlights:["Focus on asking the right questions, not just writing code","Showcase event for Labyrinth's data analytics vertical","Strong potential to attract sponsors"]},
+
+  {name:"AI-Based Mini Hackathon", vertical:"AIHub", dates:["2026-12-05"],
+   desc:"A short-format hackathon where teams build AI-based solutions to a given real-world problem statement within a fixed time window.",
+   highlights:["Highest energy, most visible event of the vertical","Team-based & competitive","Time-boxed format"]},
+
+  {name:"Workshop on MLOps", vertical:"AIHub", dates:["2026-12-14"],
+   desc:"Covers the practical AI development lifecycle, including model deployment, monitoring, and versioning, aimed at bridging the gap between building and shipping models.",
+   highlights:["Bridges the 'build vs ship' gap","Model deployment","Monitoring & versioning"]},
+
+  {name:"UPSC Training Session", vertical:"InterVerse", dates:["2026-12-19"],
+   desc:"An introductory session providing insights into UPSC preparation, examination strategy, and opportunities in public service.",
+   highlights:["Understanding the UPSC examination structure","Prelims & Mains preparation strategy","Answer writing & examination approach","Resource & study planning","Career opportunities in public service"]},
+
+  {name:"Project Showcase", vertical:"AIHub", dates:["2026-12-26"], collab:"Collaborates with DevZen",
+   desc:"Students present their AI and machine learning projects to faculty and peers, demonstrating their work and receiving feedback.",
+   highlights:["Capstone event for real AI/ML projects","Judging panel + certificates for a formal, recognition-driven feel","Works well as a semester closer — needs prior events to generate material"]},
+
+  {name:"RoundTable", vertical:"Debate Club", dates:[], monthIndex:5, dateLabel:"January 2027 — date to be decided",
+   desc:"A 2-day conference with two committees: the Indian Committee and the United Nations (UN) Committee.",
+   highlights:["Diplomacy & public speaking","Negotiation & critical thinking","Leadership & teamwork","Research & analysis","Decision-making & communication","Conflict resolution"]},
+
+  {name:"Impact Analytics Challenge", vertical:"InsightX", dates:[], monthIndex:5, dateLabel:"January 2027 — date to be decided", collab:"Collaborates with all tech verticals",
+   desc:"Unlike generic student hackathons, this gives participants the chance to work with real stakeholders, understand real-world constraints, and deliver practical insights that create measurable impact. The partner organization sits on the judging panel and picks a 'most useful' winner.",
+   highlights:["2–3 partner organizations identified before the event","Each partner presents a 5-minute overview of their challenge","Teams select a partner and receive an anonymized dataset","Teams build dashboards, reports or recommendations","Partners evaluate on usefulness & practicality","Winning solutions handed over for implementation"]},
+
+  {name:"AI Short Film Challenge", vertical:"DevZen", dates:[], monthIndex:5, dateLabel:"January 2027 — date to be decided",
+   desc:"A creative AI competition where teams produce a short film using AI-powered tools.",
+   highlights:["Script generation","Storyboarding","Image generation","Video generation","AI voiceover","Editing"]},
+
+  {name:"Code vs AI Challenge", vertical:"DevZen", dates:[], monthIndex:6, dateLabel:"February 2027 — date to be decided", collab:"Collaborates with AIHub",
+   desc:"Participants build a web application under two different conditions, comparing hand-written development against AI-assisted development.",
+   highlights:["Demonstrates coding fundamentals","Compares productivity with AI assistance","Encourages responsible AI usage"]},
+
+  {name:"Line Gate", vertical:"Synapse", dates:[], monthIndex:6, dateLabel:"February 2027 — date to be decided", collab:"Collaborates with AIHub",
+   desc:"A practical robotics event where participants design, build, and program an autonomous line-following robot, introducing concepts such as sensor calibration, motor control, and embedded programming.",
+   highlights:["Autonomous line-following robot build","Sensor calibration","Motor control","Embedded programming"]},
+];
+
+const INTERFACE_CONCEPTS = [
+  {name:"Media Department – Hands-on Sessions", tag:"Hands-on Workshop", vertical:"InterVerse",
+   desc:"Students participate in practical media sessions focusing on creative tools, digital content creation, and industry practices.",
+   highlights:["Content Creation","Visual Storytelling","Editing Basics","Digital Media Tools"]},
+
+  {name:"MBA Department Collaboration", tag:"Hands-on Workshop", vertical:"InterVerse",
+   desc:"An interactive session introducing students to financial literacy and investment fundamentals.",
+   highlights:["Stock Market Basics","Personal Finance","Investing Fundamentals","Financial Planning"]},
+
+  {name:"Pop Culture Quiz", tag:"Community Outreach", vertical:"InterVerse",
+   desc:"A fun quiz conducted in-class helping students learn more about their common interests and hobbies.",
+   highlights:["Team building","Community building"]},
+
+  {name:"Code//Shift", tag:"Hands-on Event", vertical:"DevZen",
+   desc:"Webapp building event.",
+   highlights:["Phase 1: coding without AI","Phase 2: coding with AI to build a webapp"]},
+
+  {name:"Robotics & IoT Quiz and Games Interactive Stall", tag:"Interface Stall", vertical:"Synapse",
+   desc:"A stall with two interactive games built on an easy buzzer circuit and a vibe board, plus a short quiz and introduction to the vertical.",
+   highlights:["Community building","Interaction","Marketing"]},
+
+  {name:"Prompt Engineering Masterclass", tag:"Workshop", vertical:"AIHub",
+   desc:"A prompt engineering competition where participants solve real-world challenges using Generative AI by designing effective prompts.",
+   highlights:["Individual / team participation","Real-world AI challenges","Prompt design","AI output evaluation"]},
+
+  {name:"PromptWars", tag:"Event", vertical:"AIHub",
+   desc:"Students learn professional prompt engineering techniques through head-to-head challenges.",
+   highlights:["Students learn professional prompt engineering techniques"]},
+
+  {name:"Unplugged Battle Royale", tag:"Event", vertical:"InterVerse",
+   desc:"A large-scale, screen-free strategy and survival game where teams collect, trade, and craft resources while a shrinking safe zone forces faster negotiations and confrontation.",
+   highlights:["Teams of 4–6 members · 8–16 teams · 75–90 minutes","Resource collection and trading","Crafting items for points","Shrinking zone every 15 minutes","Live scoreboard","Final 10-minute central-hub showdown","Tests negotiation, teamwork & quick thinking"]},
+
+  {name:"Blind \u201cPseudo-Code\u201d Drawing", tag:"Event", vertical:"InterVerse",
+   desc:"A fast, fun drawing relay where one instructor gives precise, step-by-step verbal instructions while a blindfolded drawer attempts to sketch the hidden image without seeing it.",
+   highlights:["2 members per team (Instructor + Drawer) · 4–6 teams per heat","2–3 minutes per round · 3 rounds","Instructor cannot name the object or give vague hints","Blindfolded drawing with verbal-only communication","Judged on accuracy and creativity","Audience reveal creates the main comedy/highlight","Highest combined score wins"]},
+];
+
+const INITIATIVES = [
+  {name:"Technical Documentation Initiative", vertical:"Synapse", cadence:"Ongoing — January 2027 onward",
+   desc:"Promotes professional engineering practice by documenting every project through design notes, code, circuit diagrams, implementation details, and future improvements — building a lasting knowledge base for the vertical."},
+  {name:"Weekly Newsletter", vertical:"Synapse", cadence:"Every week, throughout the year", collab:"Collaborates with all tech verticals",
+   desc:"A recurring booklet / mini-magazine where students showcase their learning and publish quality material, including posters and publication papers, with support across the vertical."}
+];
+
+const MONTHS = [
+  {y:2026,m:7,label:"August 2026"},
+  {y:2026,m:8,label:"September 2026"},
+  {y:2026,m:9,label:"October 2026"},
+  {y:2026,m:10,label:"November 2026"},
+  {y:2026,m:11,label:"December 2026"},
+  {y:2027,m:0,label:"January 2027"},
+  {y:2027,m:1,label:"February 2027"},
+];
+
+// index dated events by 'YYYY-MM-DD'
+const byDate = {};
+EVENTS.forEach(ev=>{
+  (ev.dates||[]).forEach(d=>{
+    byDate[d] = byDate[d] || [];
+    byDate[d].push(ev);
+  });
+});
+
+let activeMonth = 0;
+
+function pad(n){return n<10?'0'+n:''+n;}
+
+function vColor(vertical){ return VERTICALS[vertical] || 'var(--gold)'; }
+
+function renderLegend(){
+  const el = document.getElementById('legend');
+  el.innerHTML = Object.keys(VERTICALS).map(v=>
+    `<span class="chip"><span class="dot" style="background:${VERTICALS[v]}"></span>${v}</span>`
+  ).join('');
+}
+
+function renderMonthNav(){
+  const nav = document.getElementById('monthNav');
+  nav.innerHTML = MONTHS.map((mo,i)=>
+    `<button data-i="${i}" class="${i===activeMonth?'active':''}">${mo.label.split(' ')[0].slice(0,3)} ${mo.y}</button>`
+  ).join('');
+  nav.querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      activeMonth = parseInt(btn.dataset.i,10);
+      renderMonthNav();
+      renderCalendar();
+    });
+  });
+}
+
+function renderCalendar(){
+  const mo = MONTHS[activeMonth];
+  document.getElementById('calTitle').textContent = mo.label;
+  const first = new Date(mo.y, mo.m, 1);
+  const startDow = first.getDay();
+  const daysInMonth = new Date(mo.y, mo.m+1, 0).getDate();
+
+  let activeCount = 0;
+  let cells = '';
+  for(let i=0;i<startDow;i++){ cells += `<div class="cell blank"></div>`; }
+  for(let d=1; d<=daysInMonth; d++){
+    const key = `${mo.y}-${pad(mo.m+1)}-${pad(d)}`;
+    const evs = byDate[key];
+    if(evs && evs.length){
+      activeCount++;
+      const ev = evs[0];
+      cells += `<div class="cell active" style="--vcolor:${vColor(ev.vertical)}" data-date="${key}">
+        <span class="daynum">${d}</span>
+        <span class="label">${ev.name}</span>
+      </div>`;
+    } else {
+      cells += `<div class="cell plain"><span class="daynum">${d}</span></div>`;
+    }
+  }
+  document.getElementById('calGrid').innerHTML = cells;
+
+  // Yet-to-decide events that belong to this month but have no fixed day
+  const ytd = EVENTS.filter(e => (!e.dates || e.dates.length===0) && e.monthIndex === activeMonth);
+  const ytdBlock = document.getElementById('ytdBlock');
+  if(ytd.length){
+    ytdBlock.style.display = 'block';
+    document.getElementById('ytdLabel').textContent =
+      `Yet to be decided this month · ${ytd.length} event${ytd.length===1?'':'s'}`;
+    document.getElementById('ytdList').innerHTML = ytd.map((ev,i)=>
+      `<div class="ytd-card" style="--vcolor:${vColor(ev.vertical)}" data-idx="${i}">
+        <div class="bar"></div>
+        <div style="flex:1;min-width:0;">
+          <div class="ytd-name">${ev.name}</div>
+          <div class="ytd-meta">${ev.dateLabel}</div>
+        </div>
+        <div class="ytd-vert" style="--vcolor:${vColor(ev.vertical)}">${ev.vertical}</div>
+      </div>`
+    ).join('');
+    document.querySelectorAll('#ytdList .ytd-card').forEach(card=>{
+      card.addEventListener('click', ()=> openDossier(ytd[parseInt(card.dataset.idx,10)]) );
+    });
+  } else {
+    ytdBlock.style.display = 'none';
+  }
+
+  document.getElementById('calCount').textContent =
+    `${activeCount} event${activeCount===1?'':'s'} this month` + (ytd.length ? ` · ${ytd.length} yet to decide` : '');
+
+  document.querySelectorAll('.cell.active').forEach(cell=>{
+    cell.addEventListener('click', ()=>{
+      const evs = byDate[cell.dataset.date];
+      openDossier(evs[0]);
+    });
+  });
+}
+
+function renderInitiatives(){
+  document.getElementById('initList').innerHTML = INITIATIVES.map(it=>`
+    <div class="init-card" style="--vcolor:${vColor(it.vertical)}">
+      <div class="init-top">
+        <div>
+          <h4>${it.name}</h4>
+          <span class="init-cadence">${it.cadence}</span>
+        </div>
+        <span class="init-tag">Initiative · ${it.vertical}</span>
+      </div>
+      <p>${it.desc}${it.collab ? `<br><em style="opacity:.75">${it.collab}</em>`:''}</p>
+    </div>
+  `).join('');
+}
+
+function openDossier(ev){
+  document.getElementById('dVert').textContent = ev.vertical;
+  document.getElementById('dVert').style.setProperty('--vcolor', vColor(ev.vertical));
+  document.getElementById('dName').textContent = ev.name;
+
+  let dateText;
+  if(ev.dates && ev.dates.length === 2){
+    dateText = formatRange(ev.dates[0], ev.dates[1]);
+  } else if(ev.dates && ev.dates.length === 1){
+    dateText = formatDate(ev.dates[0]);
+  } else {
+    dateText = ev.dateLabel || 'Date to be decided';
+  }
+  document.getElementById('dDate').textContent = dateText;
+
+  const collabEl = document.getElementById('dCollab');
+  if(ev.collab){ collabEl.style.display='block'; collabEl.textContent = ev.collab; }
+  else { collabEl.style.display='none'; }
+
+  document.getElementById('dDesc').textContent = ev.desc;
+
+  const hlWrap = document.getElementById('dHlWrap');
+  const hl = document.getElementById('dHl');
+  if(ev.highlights && ev.highlights.length){
+    hlWrap.style.display='block';
+    hl.innerHTML = ev.highlights.map(h=>`<li>${h}</li>`).join('');
+  } else {
+    hlWrap.style.display='none';
+  }
+
+  document.getElementById('dossier').style.setProperty('--vcolor', vColor(ev.vertical));
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('dossier').classList.add('open');
+}
+
+function closeDossier(){
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('dossier').classList.remove('open');
+}
+
+function formatDate(iso){
+  const [y,m,d] = iso.split('-').map(Number);
+  const dt = new Date(y, m-1, d);
+  return dt.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+}
+function formatRange(iso1, iso2){
+  const [y1,m1,d1] = iso1.split('-').map(Number);
+  const [,,d2] = iso2.split('-').map(Number);
+  const dt = new Date(y1, m1-1, d1);
+  const monthLabel = dt.toLocaleDateString('en-US',{month:'long'});
+  return `${monthLabel} ${d1}–${d2}, ${y1}`;
+}
+
+document.getElementById('overlay').addEventListener('click', closeDossier);
+document.getElementById('closeBtn').addEventListener('click', closeDossier);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeDossier(); });
+
+function renderConcepts(){
+  const wrap = document.getElementById('conceptGrid');
+  document.getElementById('conceptCount').textContent = `${INTERFACE_CONCEPTS.length} concepts`;
+  wrap.innerHTML = INTERFACE_CONCEPTS.map((c,i)=>`
+    <div class="concept-card" style="--vcolor:${vColor(c.vertical)}" data-idx="${i}">
+      <div class="cc-top">
+        <h4 class="cc-name">${c.name}</h4>
+        <span class="cc-tag">${c.tag}</span>
+      </div>
+      <p class="cc-desc">${c.desc}</p>
+      <div class="cc-divider"></div>
+      <ul class="cc-hl">${c.highlights.map(h=>`<li>${h}</li>`).join('')}</ul>
+      <span class="cc-vert" style="--vcolor:${vColor(c.vertical)}"><span class="sq"></span>${c.vertical}</span>
+    </div>
+  `).join('');
+  document.querySelectorAll('#conceptGrid .concept-card').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      const c = INTERFACE_CONCEPTS[parseInt(card.dataset.idx,10)];
+      openDossier({name:c.name, vertical:c.vertical, desc:c.desc, highlights:c.highlights,
+        dateLabel:`${c.tag} — interface concept, not yet scheduled`});
+    });
+  });
+  const vertsUsed = new Set(INTERFACE_CONCEPTS.map(c=>c.vertical)).size;
+  document.getElementById('conceptFootRight').textContent =
+    `${INTERFACE_CONCEPTS.length} interface ideas across ${vertsUsed} verticals`;
+}
+
+renderLegend();
+renderMonthNav();
+renderCalendar();
+renderInitiatives();
+renderConcepts();
+</script>
+
+</body>
+</html>
