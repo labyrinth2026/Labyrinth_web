@@ -187,16 +187,30 @@ function CalendarView({
     e.type === 'ytd' ||
     (e.dateLabel && /tbd|to be (decided|confirmed)/i.test(e.dateLabel));
 
+  const parseDate = (dStr: string) => {
+    if (!dStr) return new Date();
+    const parts = dStr.split('T')[0].split('-');
+    if (parts.length === 3) {
+      return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10), 9, 0, 0);
+    }
+    return new Date(dStr);
+  };
+
   const calEvents = filtered
     .filter(e => e.date)
-    .map(e => ({
-      id: e.id,
-      title: e.title,
-      start: new Date(e.date),
-      end: e.endDate ? new Date(e.endDate) : new Date(e.date),
-      resource: e,
-      isTBD: isTBDEvent(e),
-    }));
+    .map(e => {
+      const startDate = parseDate(e.date);
+      const endDate = e.endDate ? parseDate(e.endDate) : new Date(startDate.getTime() + 4 * 3600 * 1000);
+      return {
+        id: e.id,
+        title: e.title,
+        start: startDate,
+        end: endDate,
+        allDay: true,
+        resource: e,
+        isTBD: isTBDEvent(e),
+      };
+    });
 
   const tbdEvents = filtered.filter(e => isTBDEvent(e));
 

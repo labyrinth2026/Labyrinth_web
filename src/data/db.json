@@ -1122,11 +1122,11 @@
                       },
                       {
                           "id":  "v-autobot",
-                          "name":  "AutoBot",
+                          "name":  "Synapse",
                           "description":  "Robotics, IoT, and embedded systems engineering.",
                           "category":  "tech",
                           "icon":  "Cpu",
-                          "color":  "#10b981",
+                          "color":  "#d8c34b",
                           "createdAt":  "2026-07-20T15:00:58.060Z"
                       },
                       {

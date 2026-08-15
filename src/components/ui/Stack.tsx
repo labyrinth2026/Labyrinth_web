@@ -55,8 +55,8 @@ export const VERTICALS_DATA: VerticalCardData[] = [
     borderColorClass: 'border-emerald-400/40'
   },
   {
-    id: 'autobot',
-    name: 'AutoBot',
+    id: 'synapse',
+    name: 'Synapse',
     subtitle: 'Robotics & IoT',
     category: 'Technical',
     description: [

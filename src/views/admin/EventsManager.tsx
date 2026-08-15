@@ -70,6 +70,18 @@ export default function EventsManager() {
     setShowModal(true);
   };
 
+  const formatDateForInput = (d: any) => {
+    if (!d) return '';
+    if (typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
+    try {
+      const dateObj = new Date(d);
+      if (isNaN(dateObj.getTime())) return typeof d === 'string' ? d : '';
+      return dateObj.toISOString().split('T')[0];
+    } catch (e) {
+      return '';
+    }
+  };
+
   const handleSave = async () => {
     if (!editingItem) return;
     setIsSaving(true);
@@ -78,8 +90,9 @@ export default function EventsManager() {
       await fetchFromSheet(action, { id: editingItem.id, data: editingItem });
       setShowModal(false);
       await loadData();
-    } catch (e) {
-      alert('Failed to save event.');
+    } catch (e: any) {
+      console.error('[EventsManager] handleSave error:', e);
+      alert(e.message || 'Failed to save event.');
     }
     setIsSaving(false);
   };
@@ -88,8 +101,9 @@ export default function EventsManager() {
     try {
       await fetchFromSheet('deleteEvent', { id });
       await loadData();
-    } catch (e) {
-      alert('Failed to delete event.');
+    } catch (e: any) {
+      console.error('[EventsManager] handleDelete error:', e);
+      alert(e.message || 'Failed to delete event.');
     }
     setDeleteConfirm(null);
   };
@@ -108,75 +122,66 @@ export default function EventsManager() {
           <button onClick={loadData} className="p-2.5 text-slate-500 hover:text-[#CD0000] border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors shrink-0" title="Refresh">
             <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
           </button>
-          <button 
-            onClick={() => generateSampleReportTemplate()}
-            className="flex items-center justify-center gap-1.5 px-3.5 py-2 bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold rounded-xl hover:bg-blue-100 transition-colors shadow-sm"
-            title="Download full sample report structure as reference"
-          >
-            <FileDown size={14} /> Sample Structure (.docx)
-          </button>
-          <button onClick={openAddModal} className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 bg-[#CD0000] text-white text-sm font-semibold rounded-xl hover:bg-[#A30000] transition-colors shadow-sm">
-            <Plus size={15} /> Add Event
+          <button onClick={openAddModal} className="px-4 py-2 bg-[#CD0000] text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-[#A30000] transition-all flex items-center gap-2 shadow-xs">
+            <Plus size={14} /> Publish Event
           </button>
         </div>
       </div>
 
+      {/* Grid */}
       {loading ? (
-        <div className="bg-white border border-[#E5E7EB] rounded-2xl p-16 text-center text-slate-400">
-          <RefreshCw size={24} className="animate-spin text-[#CD0000] mx-auto mb-2" />
-          Fetching events...
+        <div className="flex items-center justify-center py-20">
+          <RefreshCw size={24} className="animate-spin text-[#CD0000]" />
+        </div>
+      ) : events.length === 0 ? (
+        <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center">
+          <Calendar size={36} className="mx-auto text-slate-300 mb-3" />
+          <h3 className="font-bold text-slate-700 mb-1">No Events Found</h3>
+          <p className="text-slate-500 text-xs mb-4">Get started by creating your first club event.</p>
+          <button onClick={openAddModal} className="px-4 py-2 bg-[#CD0000] text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-[#A30000] transition-all inline-flex items-center gap-2">
+            <Plus size={14} /> Publish Event
+          </button>
         </div>
       ) : (
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="bg-slate-50/80 border-b border-slate-100 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  <th className="p-4">Event Title</th>
-                  <th className="p-4">Location</th>
-                  <th className="p-4">Date</th>
-                  <th className="p-4">Status</th>
-                  <th className="p-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-sm text-slate-750">
-                {events.map(item => (
-                  <tr key={item.id} className="hover:bg-slate-50/40 transition-colors">
-                    <td className="p-4 font-bold text-slate-800">{item.title}</td>
-                    <td className="p-4 text-slate-500">{item.location || '—'}</td>
-                    <td className="p-4 text-slate-500">{item.date ? new Date(item.date).toLocaleDateString('en-GB') : '—'}</td>
-                    <td className="p-4">
-                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
-                        item.status === 'upcoming' ? 'bg-emerald-50 border-emerald-200 text-emerald-600' : 'bg-slate-100 border-slate-200 text-slate-500'
-                      }`}>{item.status || 'upcoming'}</span>
-                    </td>
-                    <td className="p-4 text-right">
-                      <div className="flex justify-end gap-1.5 items-center">
-                        <button 
-                          onClick={() => handleDownloadReport(item)} 
-                          disabled={exportingId === item.id}
-                          className="px-2.5 py-1 text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors flex items-center gap-1 text-xs font-medium"
-                          title="Download Word Activity Report (.docx)"
-                        >
-                          {exportingId === item.id ? <RefreshCw size={13} className="animate-spin" /> : <FileDown size={13} />}
-                          <span>Report (.docx)</span>
-                        </button>
-                        <button onClick={() => openEditModal(item)} className="p-1.5 text-slate-400 hover:text-[#CD0000] hover:bg-red-50 rounded-lg transition-colors" title="Edit Event"><Edit2 size={13} /></button>
-                        <button onClick={() => setDeleteConfirm(item.id)} className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Delete Event"><Trash2 size={13} /></button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-                {events.length === 0 && (
-                  <tr><td colSpan={5} className="p-10 text-center text-slate-400">No events published yet.</td></tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {events.map((item) => (
+            <div key={item.id || item.title} className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden flex flex-col justify-between group hover:border-slate-300 transition-all">
+              <div className="p-5 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                    item.status === 'upcoming'
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                      : 'bg-slate-100 text-slate-500 border-slate-200'
+                  }`}>
+                    {item.status || 'upcoming'}
+                  </span>
+                  <div className="flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => handleDownloadReport(item)} className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors" title="Download Word Activity Report">
+                      {exportingId === item.id ? <RefreshCw size={14} className="animate-spin text-[#CD0000]" /> : <FileDown size={14} />}
+                    </button>
+                    <button onClick={() => openEditModal(item)} className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors" title="Edit">
+                      <Edit2 size={14} />
+                    </button>
+                    <button onClick={() => setDeleteConfirm(item.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                <h3 className="font-bold text-slate-800 text-base line-clamp-1">{item.title}</h3>
+                <p className="text-slate-500 text-xs line-clamp-2 leading-relaxed">{item.description}</p>
+              </div>
+
+              <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+                <span className="font-semibold">{item.date || 'TBD'}</span>
+                <span>{item.location || 'Central Campus'}</span>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
-      {/* CREATE/EDIT MODAL */}
+      {/* Edit/Add Modal */}
       {showModal && editingItem && (
         <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-2xl flex flex-col max-h-[90vh]">
@@ -193,7 +198,7 @@ export default function EventsManager() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Date *</label>
-                  <input type="date" value={editingItem.date ? new Date(editingItem.date).toISOString().split('T')[0] : ''} onChange={e => setEditingItem({ ...editingItem, date: e.target.value })} className={inputClass} />
+                  <input type="date" value={formatDateForInput(editingItem.date)} onChange={e => setEditingItem({ ...editingItem, date: e.target.value })} className={inputClass} />
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Status</label>

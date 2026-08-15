@@ -391,8 +391,8 @@ export default function CalendarManager() {
   const [importStatus, setImportStatus] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
-  // Default calendar to Aug 2026
-  const defaultDate = new Date(2026, 7, 1);
+  // Controlled navigation state — keeps current month in state so NEXT/BACK/TODAY work
+  const [calDate, setCalDate] = useState(() => new Date(2026, 7, 1));
 
   const loadEvents = useCallback(async () => {
     setLoading(true);
@@ -407,21 +407,34 @@ export default function CalendarManager() {
 
   useEffect(() => { loadEvents(); }, [loadEvents]);
 
-  // Calendar events
   const filtered = verticalFilter === 'all'
     ? events
-    : events.filter(e => e.vertical === verticalFilter);
+    : events.filter((e: any) => e.vertical === verticalFilter);
 
-  const calEvents = filtered.filter(e => e.date).map(e => ({
-    id: e.id,
-    title: e.title,
-    start: new Date(e.date),
-    end: e.endDate ? new Date(e.endDate) : new Date(e.date),
-    resource: e,
-    isTBD: e.type === 'ytd',
-  }));
+  const parseDate = (dStr: string) => {
+    if (!dStr) return new Date();
+    const parts = dStr.split('T')[0].split('-');
+    if (parts.length === 3) {
+      return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10), 9, 0, 0);
+    }
+    return new Date(dStr);
+  };
 
-  const tbdEvents = filtered.filter(e => e.type === 'ytd');
+  const calEvents = filtered.filter((e: any) => e.date).map((e: any) => {
+    const startDate = parseDate(e.date);
+    const endDate = e.endDate ? parseDate(e.endDate) : new Date(startDate.getTime() + 4 * 3600 * 1000);
+    return {
+      id: e.id,
+      title: e.title,
+      start: startDate,
+      end: endDate,
+      allDay: true,
+      resource: e,
+      isTBD: e.type === 'ytd',
+    };
+  });
+
+  const tbdEvents = filtered.filter((e: any) => e.type === 'ytd');
 
   const eventStyleGetter = (event: any) => {
     const color = getVerticalColor(event.resource?.vertical);
@@ -635,7 +648,8 @@ export default function CalendarManager() {
             events={calEvents}
             defaultView="month"
             views={['month', 'agenda']}
-            defaultDate={defaultDate}
+            date={calDate}
+            onNavigate={(newDate: Date) => setCalDate(newDate)}
             style={{ height: 620 }}
             eventPropGetter={eventStyleGetter}
             onSelectEvent={handleSelectEvent}
@@ -657,7 +671,7 @@ export default function CalendarManager() {
             </span>
           </div>
           <div className="flex gap-3 overflow-x-auto pb-2">
-            {tbdEvents.map(ev => {
+            {tbdEvents.map((ev: any) => {
               const color = getVerticalColor(ev.vertical);
               return (
                 <button

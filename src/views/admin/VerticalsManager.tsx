@@ -319,8 +319,9 @@ export default function VerticalsManager() {
       }
       setShowModal(false);
       await loadData();
-    } catch (e) {
-      alert('Failed to save vertical.');
+    } catch (e: any) {
+      console.error('[VerticalsManager] handleSave error:', e);
+      alert(e.message || 'Failed to save vertical.');
     }
     setIsSaving(false);
   };
