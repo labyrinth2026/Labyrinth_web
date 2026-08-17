@@ -1068,6 +1068,9 @@ function normalizeDateString(dateStr?: string | null): string | null {
 // --- EVENTS ---
 export async function dbGetEvents(): Promise<Event[]> {
   let rawEvents: any[] = [];
+  const db = getLocalDb();
+  const deletedSet = new Set((db as any).deletedEventIds || []);
+
   if (isSupabaseConfigured() && !getSupabaseOffline()) {
     const client = getSupabaseAdmin() || supabase;
     if (client) {
@@ -1077,11 +1080,11 @@ export async function dbGetEvents(): Promise<Event[]> {
         rawEvents = data || [];
       } catch (err) {
         console.error('Supabase dbGetEvents failed, falling back to local DB:', err);
-        rawEvents = getLocalDb().events;
+        rawEvents = db.events || [];
       }
     }
   } else {
-    rawEvents = getLocalDb().events;
+    rawEvents = db.events || [];
   }
 
   // Always merge seeded events from events.json into rawEvents
@@ -1106,6 +1109,13 @@ export async function dbGetEvents(): Promise<Event[]> {
   } catch (e) {
     console.warn('Could not load fallback events.json:', e);
   }
+
+  // Filter out any deleted events
+  rawEvents = rawEvents.filter((e: any) => {
+    if (!e) return false;
+    const normTitle = (e.title || '').toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim();
+    return !deletedSet.has(e.id) && !deletedSet.has(normTitle);
+  });
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -1141,6 +1151,13 @@ export async function dbGetEvents(): Promise<Event[]> {
 export async function dbAddEvent(data: any, createdBy?: string): Promise<void> {
   const normDate = normalizeDateString(data.date);
   const normEndDate = normalizeDateString(data.endDate);
+  const db = getLocalDb();
+
+  // If re-adding a deleted event, remove from deletedSet
+  if ((db as any).deletedEventIds) {
+    const normTitle = (data.title || '').toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim();
+    (db as any).deletedEventIds = (db as any).deletedEventIds.filter((id: string) => id !== data.id && id !== normTitle);
+  }
 
   if (isSupabaseConfigured() && !getSupabaseOffline()) {
     const client = getSupabaseAdmin() || supabase;
@@ -1164,15 +1181,13 @@ export async function dbAddEvent(data: any, createdBy?: string): Promise<void> {
         const { error } = await client.from('events').insert(payload);
         if (error) {
           console.warn('Supabase dbAddEvent insert failed:', error.message);
-        } else {
-          return;
         }
       } catch (err) {
-        console.error('Supabase dbAddEvent failed, falling back to local DB:', err);
+        console.error('Supabase dbAddEvent failed:', err);
       }
     }
   }
-  const db = getLocalDb();
+
   const existingIdx = db.events.findIndex((e: any) => e.id === data.id);
   const newEvt = {
     id: data.id || `evt-${Date.now()}`,
@@ -1211,11 +1226,9 @@ export async function dbUpdateEvent(id: string, data: any): Promise<void> {
         if (data.featured !== undefined) mapped.featured = data.featured;
         if (data.category !== undefined) mapped.category = data.category || null;
 
-        const { error } = await client.from('events').update(mapped).eq('id', id);
-        if (error) throw error;
-        return;
+        await client.from('events').update(mapped).eq('id', id);
       } catch (err) {
-        console.error('Supabase dbUpdateEvent failed, falling back to local DB:', err);
+        console.error('Supabase dbUpdateEvent failed:', err);
       }
     }
   }
@@ -1233,21 +1246,59 @@ export async function dbUpdateEvent(id: string, data: any): Promise<void> {
 }
 
 export async function dbDeleteEvent(id: string): Promise<void> {
+  const db = getLocalDb();
+  if (!(db as any).deletedEventIds) {
+    (db as any).deletedEventIds = [];
+  }
+  const deletedSet = new Set<string>((db as any).deletedEventIds);
+
+  // Find target event to extract title
+  const targetEv = (db.events || []).find((e: any) => e.id === id);
+  const title = targetEv?.title || '';
+  const normTitle = title.toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim();
+
+  deletedSet.add(id);
+  if (normTitle) deletedSet.add(normTitle);
+  (db as any).deletedEventIds = Array.from(deletedSet);
+
+  // 1. Delete from localDb memory
+  db.events = (db.events || []).filter((e: any) => {
+    if (e.id === id) return false;
+    if (normTitle && (e.title || '').toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim() === normTitle) return false;
+    return true;
+  });
+  saveLocalDb(db);
+
+  // 2. Delete from events.json on disk
+  try {
+    const eventsJsonPath = path.join(process.cwd(), 'src/data/events.json');
+    if (fs.existsSync(eventsJsonPath)) {
+      const seeded = JSON.parse(fs.readFileSync(eventsJsonPath, 'utf8'));
+      const updatedSeeded = seeded.filter((e: any) => {
+        if (e.id === id) return false;
+        if (normTitle && (e.title || '').toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim() === normTitle) return false;
+        return true;
+      });
+      fs.writeFileSync(eventsJsonPath, JSON.stringify(updatedSeeded, null, 2), 'utf8');
+    }
+  } catch (e) {
+    console.warn('Could not rewrite events.json on delete:', e);
+  }
+
+  // 3. Delete from Supabase
   if (isSupabaseConfigured() && !getSupabaseOffline()) {
     const client = getSupabaseAdmin() || supabase;
     if (client) {
       try {
-        const { error } = await client.from('events').delete().eq('id', id);
-        if (error) throw error;
-        return;
+        await client.from('events').delete().eq('id', id);
+        if (title) {
+          await client.from('events').delete().eq('title', title);
+        }
       } catch (err) {
-        console.error('Supabase dbDeleteEvent failed, falling back to local DB:', err);
+        console.error('Supabase dbDeleteEvent error:', err);
       }
     }
   }
-  const db = getLocalDb();
-  db.events = db.events.filter(e => e.id !== id);
-  saveLocalDb(db);
 }
 
 // --- ANNOUNCEMENTS ---

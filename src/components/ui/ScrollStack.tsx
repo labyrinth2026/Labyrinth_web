@@ -11,7 +11,7 @@ export interface ScrollStackItemProps {
 
 export const ScrollStackItem: React.FC<ScrollStackItemProps> = ({ children, itemClassName = '' }) => (
   <div
-    className={`scroll-stack-card relative w-full min-h-[20rem] sm:min-h-[22rem] my-4 sm:my-6 p-6 sm:p-10 md:p-12 rounded-[28px] sm:rounded-[36px] shadow-[0_25px_60px_rgba(0,0,0,0.3)] box-border origin-top will-change-transform ${itemClassName}`.trim()}
+    className={`scroll-stack-card relative w-full min-h-[20rem] sm:min-h-[22rem] my-4 sm:my-6 p-4 sm:p-8 md:p-12 rounded-[28px] sm:rounded-[36px] shadow-[0_25px_60px_rgba(0,0,0,0.3)] box-border origin-top overflow-hidden will-change-transform ${itemClassName}`.trim()}
     style={{
       backfaceVisibility: 'hidden',
       transformStyle: 'preserve-3d'

@@ -13,18 +13,6 @@
     "featured": true
   },
   {
-    "id": "e1",
-    "title": "HackMatrix 2025",
-    "description": "A 48-hour inter-college hackathon focusing on AI, Web3, and Open Innovation.",
-    "date": "2025-08-15T09:00:00Z",
-    "category": "hackathon",
-    "status": "upcoming",
-    "location": "Main Campus Auditorium",
-    "image": null,
-    "vertical": "DevZen",
-    "featured": true
-  },
-  {
     "id": "e2",
     "title": "AI Workshop Series",
     "description": "Hands-on ML/AI workshops covering everything from linear regression to LLMs.",
@@ -360,7 +348,10 @@
     "image": null,
     "vertical": "AIHub",
     "featured": false,
-    "highlights": ["Entry point event targeting first-years", "Builds early interest in AI before deeper vertical events"],
+    "highlights": [
+      "Entry point event targeting first-years",
+      "Builds early interest in AI before deeper vertical events"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -376,7 +367,14 @@
     "image": null,
     "vertical": "DevZen",
     "featured": false,
-    "highlights": ["Cursor", "GitHub Copilot", "Claude Code", "ChatGPT", "AI debugging", "Rapid prototyping"],
+    "highlights": [
+      "Cursor",
+      "GitHub Copilot",
+      "Claude Code",
+      "ChatGPT",
+      "AI debugging",
+      "Rapid prototyping"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -392,7 +390,13 @@
     "image": null,
     "vertical": "Synapse",
     "featured": false,
-    "highlights": ["Arduino & ESP32", "Sensors & motors", "Wireless communication", "Rapid prototyping", "Expert talks from industry & academia"],
+    "highlights": [
+      "Arduino & ESP32",
+      "Sensors & motors",
+      "Wireless communication",
+      "Rapid prototyping",
+      "Expert talks from industry & academia"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -408,7 +412,13 @@
     "image": null,
     "vertical": "Startovate",
     "featured": true,
-    "highlights": ["Virtual seed fund allocated to every team", "Research across tech, consumer products, startups & markets", "Live rebalancing rounds", "Profit/loss prediction", "Final presentation defending investment thesis"],
+    "highlights": [
+      "Virtual seed fund allocated to every team",
+      "Research across tech, consumer products, startups & markets",
+      "Live rebalancing rounds",
+      "Profit/loss prediction",
+      "Final presentation defending investment thesis"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -425,7 +435,13 @@
     "image": null,
     "vertical": "InterVerse",
     "featured": true,
-    "highlights": ["Inter-department participation", "Team-based competition", "Logic & strategy challenges", "Problem-solving and collaboration", "Grand finale"],
+    "highlights": [
+      "Inter-department participation",
+      "Team-based competition",
+      "Logic & strategy challenges",
+      "Problem-solving and collaboration",
+      "Grand finale"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -441,7 +457,9 @@
     "image": null,
     "vertical": "Research",
     "featured": false,
-    "highlights": ["Interactive case files: raw evidence, witness statements & psychological profiles to analyze"],
+    "highlights": [
+      "Interactive case files: raw evidence, witness statements & psychological profiles to analyze"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -457,7 +475,12 @@
     "image": null,
     "vertical": "FieldOps",
     "featured": true,
-    "highlights": ["Multi-zone team competition", "Speed, teamwork, strategy & precision challenges", "Points earned at each station", "Crowns the Labyrinth Champions"],
+    "highlights": [
+      "Multi-zone team competition",
+      "Speed, teamwork, strategy & precision challenges",
+      "Points earned at each station",
+      "Crowns the Labyrinth Champions"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -473,7 +496,13 @@
     "image": null,
     "vertical": "Synapse",
     "featured": false,
-    "highlights": ["Arduino & ESP32", "Sensors & motors", "Wireless communication", "Rapid prototyping", "Expert talks"],
+    "highlights": [
+      "Arduino & ESP32",
+      "Sensors & motors",
+      "Wireless communication",
+      "Rapid prototyping",
+      "Expert talks"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -489,7 +518,13 @@
     "image": null,
     "vertical": "Debate Club",
     "featured": true,
-    "highlights": ["Diplomacy & international relations", "Policy-making & country representation", "Structured discussions & negotiation", "Global issues & solution formulation", "Leadership & communication skills"],
+    "highlights": [
+      "Diplomacy & international relations",
+      "Policy-making & country representation",
+      "Structured discussions & negotiation",
+      "Global issues & solution formulation",
+      "Leadership & communication skills"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -505,7 +540,9 @@
     "image": null,
     "vertical": "AIHub",
     "featured": false,
-    "highlights": ["Hands-on with real tools (SHAP, LIME) rather than just theory"],
+    "highlights": [
+      "Hands-on with real tools (SHAP, LIME) rather than just theory"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -521,7 +558,11 @@
     "image": null,
     "vertical": "InsightX",
     "featured": true,
-    "highlights": ["Focus on asking the right questions, not just writing code", "Showcase event for data analytics vertical", "Strong potential to attract sponsors"],
+    "highlights": [
+      "Focus on asking the right questions, not just writing code",
+      "Showcase event for data analytics vertical",
+      "Strong potential to attract sponsors"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -537,7 +578,11 @@
     "image": null,
     "vertical": "AIHub",
     "featured": true,
-    "highlights": ["Highest energy, most visible event of the vertical", "Team-based & competitive", "Time-boxed format"],
+    "highlights": [
+      "Highest energy, most visible event of the vertical",
+      "Team-based & competitive",
+      "Time-boxed format"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -553,7 +598,11 @@
     "image": null,
     "vertical": "AIHub",
     "featured": false,
-    "highlights": ["Bridges the build vs ship gap", "Model deployment", "Monitoring & versioning"],
+    "highlights": [
+      "Bridges the build vs ship gap",
+      "Model deployment",
+      "Monitoring & versioning"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -569,7 +618,13 @@
     "image": null,
     "vertical": "InterVerse",
     "featured": false,
-    "highlights": ["Understanding the UPSC examination structure", "Prelims & Mains preparation strategy", "Answer writing & examination approach", "Resource & study planning", "Career opportunities in public service"],
+    "highlights": [
+      "Understanding the UPSC examination structure",
+      "Prelims & Mains preparation strategy",
+      "Answer writing & examination approach",
+      "Resource & study planning",
+      "Career opportunities in public service"
+    ],
     "collab": null,
     "type": "confirmed"
   },
@@ -585,7 +640,11 @@
     "image": null,
     "vertical": "AIHub",
     "featured": true,
-    "highlights": ["Capstone event for real AI/ML projects", "Judging panel + certificates", "Works well as a semester closer"],
+    "highlights": [
+      "Capstone event for real AI/ML projects",
+      "Judging panel + certificates",
+      "Works well as a semester closer"
+    ],
     "collab": "DevZen",
     "type": "confirmed"
   },
@@ -601,7 +660,12 @@
     "image": null,
     "vertical": "DevZen",
     "featured": false,
-    "highlights": ["Mentorship pairings for cross-cohort collaboration", "5 consecutive days, 1 hour daily, one shipped project", "Leaderboard across 4 evaluation checkpoints", "Final showcase with live demos and team Q&A"],
+    "highlights": [
+      "Mentorship pairings for cross-cohort collaboration",
+      "5 consecutive days, 1 hour daily, one shipped project",
+      "Leaderboard across 4 evaluation checkpoints",
+      "Final showcase with live demos and team Q&A"
+    ],
     "collab": null,
     "type": "ytd"
   },
@@ -617,7 +681,12 @@
     "image": null,
     "vertical": "InterVerse",
     "featured": false,
-    "highlights": ["Basic computer literacy & familiarization", "Internet & web browsing", "MS Office & file management", "Online safety, passwords & phishing awareness"],
+    "highlights": [
+      "Basic computer literacy & familiarization",
+      "Internet & web browsing",
+      "MS Office & file management",
+      "Online safety, passwords & phishing awareness"
+    ],
     "collab": "CSA",
     "type": "ytd"
   },
@@ -633,7 +702,12 @@
     "image": null,
     "vertical": "Debate Club",
     "featured": false,
-    "highlights": ["Diplomacy & public speaking", "Negotiation & critical thinking", "Leadership & teamwork", "Conflict resolution"],
+    "highlights": [
+      "Diplomacy & public speaking",
+      "Negotiation & critical thinking",
+      "Leadership & teamwork",
+      "Conflict resolution"
+    ],
     "collab": null,
     "type": "ytd"
   },
@@ -649,7 +723,12 @@
     "image": null,
     "vertical": "InsightX",
     "featured": true,
-    "highlights": ["2-3 partner organizations", "Teams build dashboards, reports or recommendations", "Partners evaluate on usefulness & practicality", "Winning solutions handed over for implementation"],
+    "highlights": [
+      "2-3 partner organizations",
+      "Teams build dashboards, reports or recommendations",
+      "Partners evaluate on usefulness & practicality",
+      "Winning solutions handed over for implementation"
+    ],
     "collab": "All tech verticals",
     "type": "ytd"
   },
@@ -665,7 +744,13 @@
     "image": null,
     "vertical": "DevZen",
     "featured": false,
-    "highlights": ["Script generation", "Storyboarding", "Image & video generation", "AI voiceover", "Editing"],
+    "highlights": [
+      "Script generation",
+      "Storyboarding",
+      "Image & video generation",
+      "AI voiceover",
+      "Editing"
+    ],
     "collab": null,
     "type": "ytd"
   },
@@ -681,7 +766,11 @@
     "image": null,
     "vertical": "DevZen",
     "featured": false,
-    "highlights": ["Demonstrates coding fundamentals", "Compares productivity with AI assistance", "Encourages responsible AI usage"],
+    "highlights": [
+      "Demonstrates coding fundamentals",
+      "Compares productivity with AI assistance",
+      "Encourages responsible AI usage"
+    ],
     "collab": "AIHub",
     "type": "ytd"
   },
@@ -697,9 +786,13 @@
     "image": null,
     "vertical": "Synapse",
     "featured": false,
-    "highlights": ["Autonomous line-following robot build", "Sensor calibration", "Motor control", "Embedded programming"],
+    "highlights": [
+      "Autonomous line-following robot build",
+      "Sensor calibration",
+      "Motor control",
+      "Embedded programming"
+    ],
     "collab": "AIHub",
     "type": "ytd"
   }
 ]
-

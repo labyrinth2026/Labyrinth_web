@@ -308,20 +308,25 @@ const EventsPage: React.FC = () => {
     const loadData = async () => {
       try {
         const data: any = await fetchFromSheet('getEvents');
-        const dbEvents = Array.isArray(data) ? data : [];
+        const dbEvents = (Array.isArray(data) ? data : []).filter((e: any) => {
+          const hasImage = Boolean(e.image || e.bannerUrl || e.poster || e.banner_url);
+          return e.status !== 'past' || hasImage;
+        });
 
-        const mappedPastEvents = pastEventsData.map((e: any) => ({
-          id: e.id,
-          title: e.title,
-          description: e.summary,
-          date: e.date,
-          category: e.category,
-          status: 'past' as const,
-          location: e.location,
-          image: e.poster || null,
-          vertical: '',
-          featured: false
-        }));
+        const mappedPastEvents = pastEventsData
+          .filter((e: any) => Boolean(e.poster || e.image))
+          .map((e: any) => ({
+            id: e.id,
+            title: e.title,
+            description: e.summary,
+            date: e.date,
+            category: e.category,
+            status: 'past' as const,
+            location: e.location,
+            image: e.poster || null,
+            vertical: '',
+            featured: false
+          }));
 
         const combined = [...dbEvents, ...mappedPastEvents];
         const uniqueEvents: any[] = [];
@@ -371,6 +376,9 @@ const EventsPage: React.FC = () => {
 
   const filterEvents = useCallback(() => {
     return eventsData.filter(e => {
+      const hasImage = Boolean(e.image || e.bannerUrl || e.poster || e.banner_url);
+      if (e.status === 'past' && !hasImage) return false;
+
       const matchesSearch = (e.title || '').toLowerCase().includes(search.toLowerCase()) ||
         (e.description || '').toLowerCase().includes(search.toLowerCase()) ||
         (e.vertical || '').toLowerCase().includes(search.toLowerCase());
@@ -546,33 +554,23 @@ const EventsPage: React.FC = () => {
       <section className="py-16 sm:py-24 bg-slate-50/50">
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
 
-          {/* View Mode Toggle */}
+          {/* Page Header */}
           <ScrollReveal animation="fade">
             <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
               <div>
-                <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">All Events</h2>
-                <p className="text-slate-500 text-xs mt-0.5 font-medium">
-                  {filteredEvents.length} event{filteredEvents.length !== 1 ? 's' : ''} found
+                <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">Events &amp; Schedule</h2>
+                <p className="text-slate-500 text-xs mt-1 font-medium">
+                  Explore upcoming fests, past events, workshops, hackathons, and vertical initiatives.
                 </p>
               </div>
-              <div className="flex items-center bg-white border border-slate-200 rounded-xl p-1 shadow-xs">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-                    viewMode === 'grid' ? 'bg-slate-900 text-white' : 'text-slate-500 hover:text-slate-800'
-                  }`}
-                >
-                  <LayoutGrid size={13} /> Grid
-                </button>
+              {viewMode !== 'calendar' && (
                 <button
                   onClick={() => setViewMode('calendar')}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-                    viewMode === 'calendar' ? 'bg-slate-900 text-white' : 'text-slate-500 hover:text-slate-800'
-                  }`}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-[#CD0000] text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-[#A30000] transition-all shadow-xs"
                 >
-                  <CalendarDays size={13} /> Calendar
+                  <CalendarDays size={15} /> View Interactive Calendar
                 </button>
-              </div>
+              )}
             </div>
           </ScrollReveal>
 
@@ -664,7 +662,20 @@ const EventsPage: React.FC = () => {
           {/* Content */}
           <AnimatePresence mode="wait">
             {viewMode === 'calendar' ? (
-              <motion.div key="calendar" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+              <motion.div key="calendar" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-4">
+                <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex items-center justify-between shadow-xs">
+                  <div className="flex items-center gap-2 text-slate-800 font-bold text-sm">
+                    <CalendarDays size={16} className="text-[#CD0000]" />
+                    <span>Labyrinth Events Calendar View</span>
+                  </div>
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold uppercase tracking-wider transition-all"
+                    title="Dismiss Calendar View"
+                  >
+                    <X size={15} /> Dismiss
+                  </button>
+                </div>
                 <CalendarView
                   events={calendarEvents}
                   verticalFilter={verticalFilter}

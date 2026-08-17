@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { fetchFromSheet } from '@/services/api';
-import { Plus, Edit2, Trash2, RefreshCw, Calendar, X, Check, AlertTriangle, FileDown, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Edit2, Trash2, RefreshCw, Calendar, X, Check, AlertTriangle, FileDown, ChevronDown, ChevronUp, Upload } from 'lucide-react';
 import { generateEventWordReport, generateSampleReportTemplate } from '@/utils/generateEventWordReport';
 
 export default function EventsManager() {
@@ -15,6 +15,31 @@ export default function EventsManager() {
   const [editingItem, setEditingItem] = useState<any>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleBannerUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64 = reader.result as string;
+        try {
+          const res: any = await fetchFromSheet('uploadAvatar', { base64, userId: `event-${Date.now()}` });
+          const url = res?.url || res?.data?.url || base64;
+          setEditingItem((prev: any) => ({ ...prev, banner: url, bannerUrl: url, image: url }));
+        } catch {
+          setEditingItem((prev: any) => ({ ...prev, banner: base64, bannerUrl: base64, image: base64 }));
+        }
+        setIsUploading(false);
+      };
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.error(err);
+      setIsUploading(false);
+    }
+  };
 
   const loadData = async () => {
     setLoading(true);
@@ -219,8 +244,31 @@ export default function EventsManager() {
                 </div>
               </div>
               <div>
-                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Banner Image URL</label>
-                <input type="url" value={editingItem.banner || editingItem.bannerUrl || ''} onChange={e => setEditingItem({ ...editingItem, banner: e.target.value, bannerUrl: e.target.value })} className={inputClass} placeholder="https://..." />
+                <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Banner Image (URL or Upload)</label>
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="text"
+                    value={editingItem.banner || editingItem.bannerUrl || editingItem.image || ''}
+                    onChange={e => setEditingItem({ ...editingItem, banner: e.target.value, bannerUrl: e.target.value, image: e.target.value })}
+                    className={inputClass}
+                    placeholder="https://... or click Upload to select image"
+                  />
+                  <label className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl cursor-pointer transition-colors flex-shrink-0 border border-slate-200 shadow-xs">
+                    {isUploading ? <RefreshCw size={14} className="animate-spin text-[#CD0000]" /> : <Upload size={14} />}
+                    <span>{isUploading ? 'Uploading...' : 'Upload'}</span>
+                    <input type="file" accept="image/*" onChange={handleBannerUpload} className="hidden" />
+                  </label>
+                </div>
+                {(editingItem.banner || editingItem.bannerUrl || editingItem.image) && (
+                  <div className="mt-2.5 relative w-full h-28 rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                    <img
+                      src={editingItem.banner || editingItem.bannerUrl || editingItem.image}
+                      alt="Banner Preview"
+                      className="w-full h-full object-cover"
+                      onError={(e) => (e.currentTarget.style.display = 'none')}
+                    />
+                  </div>
+                )}
               </div>
               <div>
                 <label className="text-xs font-semibold text-[#8c97a8] block mb-1">Description / Summary</label>

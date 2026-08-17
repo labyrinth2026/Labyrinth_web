@@ -108,6 +108,31 @@ function EventModal({
   onDelete?: () => void;
 }) {
   const [newHighlight, setNewHighlight] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleBannerUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64 = reader.result as string;
+        try {
+          const res: any = await fetchFromSheet('uploadAvatar', { base64, userId: `event-${Date.now()}` });
+          const url = res?.url || res?.data?.url || base64;
+          setForm(f => ({ ...f, image: url }));
+        } catch {
+          setForm(f => ({ ...f, image: base64 }));
+        }
+        setIsUploading(false);
+      };
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.error(err);
+      setIsUploading(false);
+    }
+  };
 
   const addHighlight = () => {
     if (!newHighlight.trim()) return;
@@ -290,14 +315,31 @@ function EventModal({
             />
           </div>
 
-          {/* Image URL */}
+          {/* Image URL / Upload */}
           <div>
-            <label className={labelClass}>Image / Banner URL</label>
-            <input
-              type="text" value={form.image}
-              onChange={e => setForm(f => ({ ...f, image: e.target.value }))}
-              className={inputClass} placeholder="https://... or /gallery/image.webp"
-            />
+            <label className={labelClass}>Image / Banner (URL or Upload)</label>
+            <div className="flex gap-2 items-center">
+              <input
+                type="text" value={form.image}
+                onChange={e => setForm(f => ({ ...f, image: e.target.value }))}
+                className={inputClass} placeholder="https://... or click Upload to select image"
+              />
+              <label className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl cursor-pointer transition-colors flex-shrink-0 border border-slate-200 shadow-xs">
+                {isUploading ? <RefreshCw size={14} className="animate-spin text-[#CD0000]" /> : <Upload size={14} />}
+                <span>{isUploading ? 'Uploading...' : 'Upload'}</span>
+                <input type="file" accept="image/*" onChange={handleBannerUpload} className="hidden" />
+              </label>
+            </div>
+            {form.image && (
+              <div className="mt-2.5 relative w-full h-24 rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+                <img
+                  src={form.image}
+                  alt="Banner Preview"
+                  className="w-full h-full object-cover"
+                  onError={(e) => (e.currentTarget.style.display = 'none')}
+                />
+              </div>
+            )}
           </div>
 
           {/* Highlights */}
