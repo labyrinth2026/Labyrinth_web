@@ -81,7 +81,8 @@ function EventDossier({ event, onClose }: { event: any; onClose: () => void }) {
         animate={{ x: 0 }}
         exit={{ x: '100%' }}
         transition={{ type: 'spring', damping: 30, stiffness: 320 }}
-        className="fixed top-0 right-0 h-full w-full max-w-[460px] z-50 bg-white border-l border-slate-200 shadow-2xl overflow-y-auto"
+        data-lenis-prevent
+        className="fixed top-0 right-0 h-full w-full max-w-[460px] z-50 bg-white border-l border-slate-200 shadow-2xl overflow-y-auto scrollbar-thin"
       >
         <div className="p-7 pb-16">
           {/* Top row */}

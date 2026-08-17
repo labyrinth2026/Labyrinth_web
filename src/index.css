@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import 'lenis/dist/lenis.css';
 @import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 
@@ -121,23 +122,69 @@
   }
 }
 
-/* Custom Scrollbar */
+/* Global Scrollbar System (Webkit + Standard Firefox) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(9, 9, 11, 0.25) transparent;
+}
+
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
   background: #FAFAFA;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(9, 9, 11, 0.12);
-  border-radius: 3px;
+  background: rgba(9, 9, 11, 0.2);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(9, 9, 11, 0.24);
+  background: rgba(205, 0, 0, 0.7); /* Brand Cherry Red accent on hover */
 }
+
+/* Custom Scrollbar Utilities */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(9, 9, 11, 0.2);
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(205, 0, 0, 0.7);
+}
+
+.scrollbar-none,
+.no-scrollbar {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.scrollbar-none::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 
 /* Animations */
 @keyframes fadeIn {
