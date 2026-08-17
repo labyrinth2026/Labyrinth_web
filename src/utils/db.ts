@@ -65,15 +65,23 @@ export interface Event {
   id: string;
   title: string;
   description: string;
-  date: string;
+  date: string | null;
+  endDate?: string | null;
+  dateLabel?: string | null;
   time?: string;
   location?: string;
   bannerUrl?: string;
+  image?: string | null;
+  category?: string;
+  vertical?: string | null;
   committeeId?: string;
   verticalId?: string;
   createdBy?: string;
   status: 'upcoming' | 'past';
   featured?: boolean;
+  highlights?: string[];
+  collab?: string | null;
+  type?: 'confirmed' | 'ytd' | 'concept' | 'initiative';
 }
 
 export interface Announcement {
@@ -596,6 +604,13 @@ export async function dbGetVerticals(): Promise<any[]> {
     committees = db.coreCommittees || [];
   }
 
+  verticals = verticals.map(v => {
+    if (v.name === 'AutoBot' || v.name === 'Autobot') {
+      return { ...v, name: 'Synapse', color: '#d8c34b' };
+    }
+    return v;
+  });
+
   return verticals.map(v => {
     const verticalUsers = users.filter(u => u.verticalId === v.id || u.vertical_id === v.id);
     const heads = verticalUsers.filter(u => u.designation === 'Vertical Head');
@@ -619,59 +634,79 @@ export async function dbGetVerticals(): Promise<any[]> {
 }
 
 export async function dbAddVertical(name: string, description: string, category: 'tech' | 'non-tech', extra?: { icon?: string; color?: string; image?: string }): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('verticals').insert({ name, description, category, icon: extra?.icon, color: extra?.color });
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    db.verticals.push({
-      id: `v-${Date.now()}`,
-      name,
-      description,
-      category,
-      icon: extra?.icon || 'Brain',
-      color: extra?.color || '#CD0000',
-      image: extra?.image || ''
-    });
-    saveLocalDb(db);
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client.from('verticals').insert({ name, description, category, icon: extra?.icon, color: extra?.color });
+        if (error) throw error;
+        return;
+      } catch (err) {
+        console.error('Supabase dbAddVertical failed, falling back to local DB:', err);
+      }
+    }
   }
+  const db = getLocalDb();
+  db.verticals.push({
+    id: `v-${Date.now()}`,
+    name,
+    description,
+    category,
+    icon: extra?.icon || 'Brain',
+    color: extra?.color || '#CD0000',
+    image: extra?.image || ''
+  });
+  saveLocalDb(db);
 }
 
 export async function dbUpdateVertical(id: string, data: any): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('verticals').update(data).eq('id', id);
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    const idx = db.verticals.findIndex(v => v.id === id);
-    if (idx !== -1) {
-      db.verticals[idx] = { ...db.verticals[idx], ...data };
-      saveLocalDb(db);
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        await client.from('verticals').update(data).eq('id', id);
+      } catch (err) {
+        console.error('Supabase dbUpdateVertical failed:', err);
+      }
     }
+  }
+  const db = getLocalDb();
+  const idx = db.verticals.findIndex(v => v.id === id);
+  if (idx !== -1) {
+    db.verticals[idx] = { ...db.verticals[idx], ...data };
+    saveLocalDb(db);
   }
 }
 
 export async function dbDeleteVertical(id: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('verticals').delete().eq('id', id);
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    db.verticals = db.verticals.filter(v => v.id !== id);
-    db.users.forEach(u => {
-      if (u.verticalId === id) {
-        u.verticalId = undefined;
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client.from('verticals').delete().eq('id', id);
+        if (error) throw error;
+        return;
+      } catch (err) {
+        console.error('Supabase dbDeleteVertical failed, falling back to local DB:', err);
       }
-    });
-    saveLocalDb(db);
+    }
   }
+  const db = getLocalDb();
+  db.verticals = db.verticals.filter(v => v.id !== id);
+  db.users.forEach(u => {
+    if (u.verticalId === id) {
+      u.verticalId = undefined;
+    }
+  });
+  saveLocalDb(db);
 }
 
 // --- CORE COMMITTEES ---
 export async function dbGetCoreCommittees(): Promise<CoreCommittee[]> {
   if (isSupabaseConfigured() && !getSupabaseOffline() && supabase) {
     try {
-      const { data, error } = await supabase.from('core_committees').select('*');
+      const client = getSupabaseAdmin() || supabase;
+      const { data, error } = await client.from('core_committees').select('*');
       if (error) throw error;
       return data || [];
     } catch (err) {
@@ -684,59 +719,80 @@ export async function dbGetCoreCommittees(): Promise<CoreCommittee[]> {
 }
 
 export async function dbAddCoreCommittee(name: string, description: string, verticalId?: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('core_committees').insert({ name, description, vertical_id: verticalId });
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    db.coreCommittees.push({
-      id: `cc-${Date.now()}`,
-      name,
-      description,
-      verticalId,
-      vertical_id: verticalId || null,
-      icon: 'Users'
-    });
-    saveLocalDb(db);
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client.from('core_committees').insert({ name, description, vertical_id: verticalId });
+        if (error) throw error;
+        return;
+      } catch (err) {
+        console.error('Supabase dbAddCoreCommittee failed, falling back to local DB:', err);
+      }
+    }
   }
+  const db = getLocalDb();
+  db.coreCommittees.push({
+    id: `cc-${Date.now()}`,
+    name,
+    description,
+    verticalId,
+    vertical_id: verticalId || null,
+    icon: 'Users'
+  });
+  saveLocalDb(db);
 }
 
 export async function dbUpdateCoreCommittee(id: string, name: string, description?: string, verticalId?: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase
-      .from('core_committees')
-      .update({ name, description, vertical_id: verticalId })
-      .eq('id', id);
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    const comm = db.coreCommittees.find(c => c.id === id);
-    if (comm) {
-      comm.name = name;
-      if (description !== undefined) comm.description = description;
-      if (verticalId !== undefined) {
-        comm.verticalId = verticalId;
-        comm.vertical_id = verticalId || null;
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client
+          .from('core_committees')
+          .update({ name, description, vertical_id: verticalId })
+          .eq('id', id);
+        if (error) throw error;
+        return;
+      } catch (err) {
+        console.error('Supabase dbUpdateCoreCommittee failed, falling back to local DB:', err);
       }
-      saveLocalDb(db);
     }
+  }
+  const db = getLocalDb();
+  const comm = db.coreCommittees.find(c => c.id === id);
+  if (comm) {
+    comm.name = name;
+    if (description !== undefined) comm.description = description;
+    if (verticalId !== undefined) {
+      comm.verticalId = verticalId;
+      comm.vertical_id = verticalId || null;
+    }
+    saveLocalDb(db);
   }
 }
 
 export async function dbDeleteCoreCommittee(id: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase.from('core_committees').delete().eq('id', id);
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    db.coreCommittees = db.coreCommittees.filter(c => c.id !== id);
-    db.users.forEach(u => {
-      if (u.committeeId === id) {
-        u.committeeId = undefined;
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client.from('core_committees').delete().eq('id', id);
+        if (error) throw error;
+        return;
+      } catch (err) {
+        console.error('Supabase dbDeleteCoreCommittee failed, falling back to local DB:', err);
       }
-    });
-    saveLocalDb(db);
+    }
   }
+  const db = getLocalDb();
+  db.coreCommittees = db.coreCommittees.filter(c => c.id !== id);
+  db.users.forEach(u => {
+    if (u.committeeId === id) {
+      u.committeeId = undefined;
+    }
+  });
+  saveLocalDb(db);
 }
 
 // --- ASSIGNMENTS ---
@@ -812,148 +868,209 @@ function getLocalAssignments(db: DatabaseSchema) {
 
 export async function dbAssignCoreHead(email: string, committeeId: string): Promise<void> {
   const cleanEmail = email.toLowerCase().trim();
-  if (isSupabaseConfigured() && supabase) {
-    const { data: user, error: userErr } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('email', cleanEmail)
-      .maybeSingle();
-    if (userErr) throw userErr;
-    if (!user) throw new Error('User not found. Head must register first.');
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { data: profileUser, error: userErr } = await client
+          .from('profiles')
+          .select('id')
+          .eq('email', cleanEmail)
+          .maybeSingle();
+        if (userErr) throw userErr;
+        if (!profileUser) throw new Error('User not found. Head must register first.');
 
-    const { error: commErr } = await supabase
-      .from('core_committees')
-      .update({ head_id: user.id })
-      .eq('id', committeeId);
-    if (commErr) throw commErr;
+        const { error: commErr } = await client
+          .from('core_committees')
+          .update({ head_id: profileUser.id })
+          .eq('id', committeeId);
+        if (commErr) throw commErr;
 
-    await supabase.from('profiles').update({ committee_id: committeeId }).eq('id', user.id);
-  } else {
-    const db = getLocalDb();
-    const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
-    if (!user) throw new Error('User not found. Head must register first.');
-
-    const comm = db.coreCommittees.find(c => c.id === committeeId);
-    if (comm) comm.head_id = user.id;
-    user.committeeId = committeeId;
-    saveLocalDb(db);
+        await client.from('profiles').update({ committee_id: committeeId }).eq('id', profileUser.id);
+        return;
+      } catch (err) {
+        console.error('Supabase dbAssignCoreHead failed, falling back to local DB:', err);
+      }
+    }
   }
+  const db = getLocalDb();
+  const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
+  if (!user) throw new Error('User not found. Head must register first.');
+
+  const comm = db.coreCommittees.find(c => c.id === committeeId);
+  if (comm) comm.head_id = user.id;
+  user.committeeId = committeeId;
+  saveLocalDb(db);
 }
 
 export async function dbRemoveCoreAssignment(userId: string, committeeId?: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    let query = supabase.from('core_committees').update({ head_id: null });
-    if (committeeId) {
-      query = query.eq('id', committeeId);
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        let query = client.from('core_committees').update({ head_id: null });
+        if (committeeId) {
+          query = query.eq('id', committeeId);
+        }
+        const { error: commErr } = await query.eq('head_id', userId);
+        if (commErr) throw commErr;
+        return;
+      } catch (err) {
+        console.error('Supabase dbRemoveCoreAssignment failed, falling back to local DB:', err);
+      }
     }
-    const { error: commErr } = await query.eq('head_id', userId);
-    if (commErr) throw commErr;
-  } else {
-    const db = getLocalDb();
-    const comm = committeeId
-      ? db.coreCommittees.find(c => c.id === committeeId)
-      : db.coreCommittees.find(c => c.head_id === userId);
-    if (comm && comm.head_id === userId) {
-      comm.head_id = undefined;
-      saveLocalDb(db);
-    }
+  }
+  const db = getLocalDb();
+  const comm = committeeId
+    ? db.coreCommittees.find(c => c.id === committeeId)
+    : db.coreCommittees.find(c => c.head_id === userId);
+  if (comm && comm.head_id === userId) {
+    comm.head_id = undefined;
+    saveLocalDb(db);
   }
 }
 
 export async function dbAssignVerticalHead(email: string, verticalId: string): Promise<void> {
   const cleanEmail = email.toLowerCase().trim();
-  if (isSupabaseConfigured() && supabase) {
-    const { data: user, error: userErr } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('email', cleanEmail)
-      .maybeSingle();
-    if (userErr) throw userErr;
-    if (!user) throw new Error('User not found. Head must register first.');
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { data: user, error: userErr } = await client
+          .from('profiles')
+          .select('id')
+          .eq('email', cleanEmail)
+          .maybeSingle();
+        if (userErr) throw userErr;
+        if (!user) throw new Error('User not found. Head must register first.');
 
-    const { error: vertErr } = await supabase
-      .from('verticals')
-      .update({ head_id: user.id })
-      .eq('id', verticalId);
-    if (vertErr) throw vertErr;
+        const { error: vertErr } = await client
+          .from('verticals')
+          .update({ head_id: user.id })
+          .eq('id', verticalId);
+        if (vertErr) throw vertErr;
 
-    await supabase.from('profiles').update({ vertical_id: verticalId }).eq('id', user.id);
-  } else {
-    const db = getLocalDb();
-    const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
-    if (!user) throw new Error('User not found. Head must register first.');
-
-    const vert = db.verticals.find(v => v.id === verticalId);
-    if (vert) vert.head_id = user.id;
-    user.verticalId = verticalId;
-    saveLocalDb(db);
+        await client.from('profiles').update({ vertical_id: verticalId }).eq('id', user.id);
+        return;
+      } catch (err) {
+        console.error('Supabase dbAssignVerticalHead failed, falling back to local DB:', err);
+      }
+    }
   }
+  const db = getLocalDb();
+  const user = db.users.find(u => u.email.toLowerCase() === cleanEmail);
+  if (!user) throw new Error('User not found. Head must register first.');
+
+  const vert = db.verticals.find(v => v.id === verticalId);
+  if (vert) vert.head_id = user.id;
+  user.verticalId = verticalId;
+  saveLocalDb(db);
 }
 
 export async function dbRemoveVerticalAssignment(userId: string, verticalId?: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    let query = supabase.from('verticals').update({ head_id: null });
-    if (verticalId) {
-      query = query.eq('id', verticalId);
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        let query = client.from('verticals').update({ head_id: null });
+        if (verticalId) {
+          query = query.eq('id', verticalId);
+        }
+        const { error: vertErr } = await query.eq('head_id', userId);
+        if (vertErr) throw vertErr;
+        return;
+      } catch (err) {
+        console.error('Supabase dbRemoveVerticalAssignment failed, falling back to local DB:', err);
+      }
     }
-    const { error: vertErr } = await query.eq('head_id', userId);
-    if (vertErr) throw vertErr;
-  } else {
-    const db = getLocalDb();
-    const vert = verticalId
-      ? db.verticals.find(v => v.id === verticalId)
-      : db.verticals.find(v => v.head_id === userId);
-    if (vert && vert.head_id === userId) {
-      vert.head_id = undefined;
-      saveLocalDb(db);
-    }
+  }
+  const db = getLocalDb();
+  const vert = verticalId
+    ? db.verticals.find(v => v.id === verticalId)
+    : db.verticals.find(v => v.head_id === userId);
+  if (vert && vert.head_id === userId) {
+    vert.head_id = undefined;
+    saveLocalDb(db);
   }
 }
 
 // Remove a person from a vertical role (clears their verticalId + designation)
 export async function dbRemovePersonFromVertical(userId: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase
-      .from('profiles')
-      .update({ vertical_id: null, designation: null })
-      .eq('id', userId);
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    const user = db.users.find(u => u.id === userId);
-    if (user) {
-      user.verticalId = undefined;
-      (user as any).vertical_id = undefined;
-      user.designation = undefined;
-      saveLocalDb(db);
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client
+          .from('profiles')
+          .update({ vertical_id: null, designation: null })
+          .eq('id', userId);
+        if (error) throw error;
+        return;
+      } catch (err) {
+        console.error('Supabase dbRemovePersonFromVertical failed, falling back to local DB:', err);
+      }
     }
+  }
+  const db = getLocalDb();
+  const user = db.users.find(u => u.id === userId);
+  if (user) {
+    user.verticalId = undefined;
+    (user as any).vertical_id = undefined;
+    user.designation = undefined;
+    saveLocalDb(db);
   }
 }
 
 // Assign a vertical role (head, sub-head, or core committee) to a user
 export async function dbAssignVerticalRole(userId: string, verticalId: string, designation: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    const { error } = await supabase
-      .from('profiles')
-      .update({ vertical_id: verticalId, designation })
-      .eq('id', userId);
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    const user = db.users.find(u => u.id === userId);
-    if (user) {
-      user.verticalId = verticalId;
-      (user as any).vertical_id = verticalId;
-      user.designation = designation;
-      saveLocalDb(db);
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const { error } = await client
+          .from('profiles')
+          .update({ vertical_id: verticalId, designation })
+          .eq('id', userId);
+        if (error) throw error;
+        return;
+      } catch (err) {
+        console.error('Supabase dbAssignVerticalRole failed, falling back to local DB:', err);
+      }
     }
+  }
+  const db = getLocalDb();
+  const user = db.users.find(u => u.id === userId);
+  if (user) {
+    user.verticalId = verticalId;
+    (user as any).vertical_id = verticalId;
+    user.designation = designation;
+    saveLocalDb(db);
   }
 }
 
 
+function normalizeDateString(dateStr?: string | null): string | null {
+  if (!dateStr) return null;
+  const dmYMatch = dateStr.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+  if (dmYMatch) {
+    const [, d, m, y] = dmYMatch;
+    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  }
+  try {
+    const parsed = new Date(dateStr);
+    if (!isNaN(parsed.getTime())) {
+      return parsed.toISOString().split('T')[0];
+    }
+  } catch (e) {}
+  return dateStr;
+}
+
 // --- EVENTS ---
 export async function dbGetEvents(): Promise<Event[]> {
   let rawEvents: any[] = [];
+  const db = getLocalDb();
+  const deletedSet = new Set((db as any).deletedEventIds || []);
+
   if (isSupabaseConfigured() && !getSupabaseOffline()) {
     const client = getSupabaseAdmin() || supabase;
     if (client) {
@@ -963,102 +1080,224 @@ export async function dbGetEvents(): Promise<Event[]> {
         rawEvents = data || [];
       } catch (err) {
         console.error('Supabase dbGetEvents failed, falling back to local DB:', err);
-        rawEvents = getLocalDb().events;
+        rawEvents = db.events || [];
       }
     }
   } else {
-    rawEvents = getLocalDb().events;
+    rawEvents = db.events || [];
   }
+
+  // Always merge seeded events from events.json into rawEvents
+  try {
+    const eventsJsonPath = path.join(process.cwd(), 'src/data/events.json');
+    if (fs.existsSync(eventsJsonPath)) {
+      const seededEvents = JSON.parse(fs.readFileSync(eventsJsonPath, 'utf8'));
+      if (!rawEvents || rawEvents.length === 0) {
+        rawEvents = seededEvents;
+      } else {
+        const existingIds = new Set(rawEvents.map((e: any) => e.id));
+        const existingTitles = new Set(rawEvents.map((e: any) => (e.title || '').toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim()));
+
+        for (const seeded of seededEvents) {
+          const normTitle = (seeded.title || '').toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim();
+          if (!existingIds.has(seeded.id) && !existingTitles.has(normTitle)) {
+            rawEvents.push(seeded);
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('Could not load fallback events.json:', e);
+  }
+
+  // Filter out any deleted events
+  rawEvents = rawEvents.filter((e: any) => {
+    if (!e) return false;
+    const normTitle = (e.title || '').toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim();
+    return !deletedSet.has(e.id) && !deletedSet.has(normTitle);
+  });
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   return rawEvents.map((e: any) => {
-    const eventDate = new Date(e.date);
-    const status = eventDate >= today ? 'upcoming' : 'past';
+    const eventDate = e.date ? new Date(e.date) : null;
+    const status = e.status || (eventDate && eventDate >= today ? 'upcoming' : 'past');
     return {
       id: e.id,
       title: e.title,
       description: e.description,
       date: e.date,
+      endDate: e.endDate || e.end_date || null,
+      dateLabel: e.dateLabel || e.date_label || null,
       category: e.category,
       time: e.time,
       location: e.location,
-      bannerUrl: e.banner_url || e.bannerUrl,
+      bannerUrl: e.banner_url || e.bannerUrl || e.image || null,
+      image: e.image || e.banner_url || e.bannerUrl || null,
+      vertical: e.vertical || e.vertical_name || null,
       committeeId: e.committee_id || e.committeeId,
       verticalId: e.vertical_id || e.verticalId,
       createdBy: e.created_by || e.createdBy,
       status,
-      featured: e.featured === true
+      featured: e.featured === true,
+      highlights: e.highlights || [],
+      collab: e.collab || null,
+      type: e.type || (e.date ? 'confirmed' : 'ytd')
     };
   });
 }
 
 export async function dbAddEvent(data: any, createdBy?: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    const client = getSupabaseAdmin() || supabase;
-    const { error } = await client.from('events').insert({
-      title: data.title,
-      description: data.description,
-      date: data.date,
-      time: data.time || null,
-      location: data.location || null,
-      banner_url: data.banner || data.bannerUrl || null,
-      category: data.category || null,
-      featured: data.featured || false,
-      committee_id: data.committeeId || null,
-      vertical_id: data.verticalId || null,
-      created_by: createdBy || null
-    });
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    db.events.push({
-      id: `evt-${Date.now()}`,
-      ...data,
-      createdBy
-    });
-    saveLocalDb(db);
+  const normDate = normalizeDateString(data.date);
+  const normEndDate = normalizeDateString(data.endDate);
+  const db = getLocalDb();
+
+  // If re-adding a deleted event, remove from deletedSet
+  if ((db as any).deletedEventIds) {
+    const normTitle = (data.title || '').toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim();
+    (db as any).deletedEventIds = (db as any).deletedEventIds.filter((id: string) => id !== data.id && id !== normTitle);
   }
+
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const payload: any = {
+          title: data.title,
+          description: data.description,
+          date: normDate,
+          time: data.time || null,
+          location: data.location || null,
+          banner_url: data.banner || data.bannerUrl || data.image || null,
+          category: data.category || null,
+          featured: data.featured || false,
+          committee_id: data.committeeId || null,
+          vertical_id: data.verticalId || null,
+          created_by: createdBy || null
+        };
+        if (data.id) payload.id = data.id;
+
+        const { error } = await client.from('events').insert(payload);
+        if (error) {
+          console.warn('Supabase dbAddEvent insert failed:', error.message);
+        }
+      } catch (err) {
+        console.error('Supabase dbAddEvent failed:', err);
+      }
+    }
+  }
+
+  const existingIdx = db.events.findIndex((e: any) => e.id === data.id);
+  const newEvt = {
+    id: data.id || `evt-${Date.now()}`,
+    ...data,
+    date: normDate,
+    endDate: normEndDate,
+    createdBy
+  };
+  if (existingIdx !== -1) {
+    db.events[existingIdx] = newEvt;
+  } else {
+    db.events.push(newEvt);
+  }
+  saveLocalDb(db);
 }
 
 export async function dbUpdateEvent(id: string, data: any): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
-    const client = getSupabaseAdmin() || supabase;
-    const mapped: any = {};
-    if (data.title !== undefined) mapped.title = data.title;
-    if (data.description !== undefined) mapped.description = data.description;
-    if (data.date !== undefined) mapped.date = data.date;
-    if (data.time !== undefined) mapped.time = data.time || null;
-    if (data.location !== undefined) mapped.location = data.location || null;
-    if (data.bannerUrl !== undefined) mapped.banner_url = data.bannerUrl || null;
-    if (data.banner !== undefined) mapped.banner_url = data.banner || null;
-    if (data.committeeId !== undefined) mapped.committee_id = data.committeeId || null;
-    if (data.verticalId !== undefined) mapped.vertical_id = data.verticalId || null;
-    if (data.featured !== undefined) mapped.featured = data.featured;
-    if (data.category !== undefined) mapped.category = data.category || null;
+  const normDate = data.date !== undefined ? normalizeDateString(data.date) : undefined;
+  const normEndDate = data.endDate !== undefined ? normalizeDateString(data.endDate) : undefined;
 
-    const { error } = await client.from('events').update(mapped).eq('id', id);
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    const idx = db.events.findIndex(e => e.id === id);
-    if (idx !== -1) {
-      db.events[idx] = { ...db.events[idx], ...data };
-      saveLocalDb(db);
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        const mapped: any = {};
+        if (data.title !== undefined) mapped.title = data.title;
+        if (data.description !== undefined) mapped.description = data.description;
+        if (normDate !== undefined) mapped.date = normDate;
+        if (data.time !== undefined) mapped.time = data.time || null;
+        if (data.location !== undefined) mapped.location = data.location || null;
+        if (data.bannerUrl !== undefined || data.banner !== undefined || data.image !== undefined) {
+          mapped.banner_url = data.bannerUrl || data.banner || data.image || null;
+        }
+        if (data.committeeId !== undefined) mapped.committee_id = data.committeeId || null;
+        if (data.verticalId !== undefined) mapped.vertical_id = data.verticalId || null;
+        if (data.featured !== undefined) mapped.featured = data.featured;
+        if (data.category !== undefined) mapped.category = data.category || null;
+
+        await client.from('events').update(mapped).eq('id', id);
+      } catch (err) {
+        console.error('Supabase dbUpdateEvent failed:', err);
+      }
     }
+  }
+  const db = getLocalDb();
+  const idx = db.events.findIndex(e => e.id === id);
+  if (idx !== -1) {
+    db.events[idx] = {
+      ...db.events[idx],
+      ...data,
+      ...(normDate !== undefined ? { date: normDate } : {}),
+      ...(normEndDate !== undefined ? { endDate: normEndDate } : {})
+    };
+    saveLocalDb(db);
   }
 }
 
 export async function dbDeleteEvent(id: string): Promise<void> {
-  if (isSupabaseConfigured() && supabase) {
+  const db = getLocalDb();
+  if (!(db as any).deletedEventIds) {
+    (db as any).deletedEventIds = [];
+  }
+  const deletedSet = new Set<string>((db as any).deletedEventIds);
+
+  // Find target event to extract title
+  const targetEv = (db.events || []).find((e: any) => e.id === id);
+  const title = targetEv?.title || '';
+  const normTitle = title.toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim();
+
+  deletedSet.add(id);
+  if (normTitle) deletedSet.add(normTitle);
+  (db as any).deletedEventIds = Array.from(deletedSet);
+
+  // 1. Delete from localDb memory
+  db.events = (db.events || []).filter((e: any) => {
+    if (e.id === id) return false;
+    if (normTitle && (e.title || '').toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim() === normTitle) return false;
+    return true;
+  });
+  saveLocalDb(db);
+
+  // 2. Delete from events.json on disk
+  try {
+    const eventsJsonPath = path.join(process.cwd(), 'src/data/events.json');
+    if (fs.existsSync(eventsJsonPath)) {
+      const seeded = JSON.parse(fs.readFileSync(eventsJsonPath, 'utf8'));
+      const updatedSeeded = seeded.filter((e: any) => {
+        if (e.id === id) return false;
+        if (normTitle && (e.title || '').toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim() === normTitle) return false;
+        return true;
+      });
+      fs.writeFileSync(eventsJsonPath, JSON.stringify(updatedSeeded, null, 2), 'utf8');
+    }
+  } catch (e) {
+    console.warn('Could not rewrite events.json on delete:', e);
+  }
+
+  // 3. Delete from Supabase
+  if (isSupabaseConfigured() && !getSupabaseOffline()) {
     const client = getSupabaseAdmin() || supabase;
-    const { error } = await client.from('events').delete().eq('id', id);
-    if (error) throw error;
-  } else {
-    const db = getLocalDb();
-    db.events = db.events.filter(e => e.id !== id);
-    saveLocalDb(db);
+    if (client) {
+      try {
+        await client.from('events').delete().eq('id', id);
+        if (title) {
+          await client.from('events').delete().eq('title', title);
+        }
+      } catch (err) {
+        console.error('Supabase dbDeleteEvent error:', err);
+      }
+    }
   }
 }
 
@@ -1441,7 +1680,8 @@ export async function dbGetDashboardStats(): Promise<{ totalMembers: number; upc
   today.setHours(0, 0, 0, 0);
 
   const totalMembers = db.users.filter(u => u.status === 'active').length;
-  const upcomingEvents = db.events.filter(e => new Date(e.date) >= today).length;
+  const upcomingEvents = db.events.filter(e => e.date && new Date(e.date) >= today).length;
+
   const newRegistrations = db.users.filter(u => u.status === 'inactive' && u.role === 'MEMBER').length;
 
   return { totalMembers, upcomingEvents, newRegistrations };
@@ -1746,8 +1986,9 @@ export async function dbAddCustomForm(data: Partial<CustomForm>, fields: Partial
           const { error: fieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
           if (fieldsErr) throw fieldsErr;
         }
+        return formId;
       } catch (err) {
-      if (isSupabaseConfigured()) throw err;
+        if (isSupabaseConfigured()) throw err;
 
         console.warn("Supabase dbAddCustomForm failed:", err);
         throw err;
@@ -1846,8 +2087,9 @@ export async function dbUpdateCustomForm(id: string, data: Partial<CustomForm>, 
           const { error: fieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
           if (fieldsErr) throw fieldsErr;
         }
+        return;
       } catch (err) {
-      if (isSupabaseConfigured()) throw err;
+        if (isSupabaseConfigured()) throw err;
 
         console.warn("Supabase dbUpdateCustomForm failed:", err);
         throw err;
@@ -1898,8 +2140,9 @@ export async function dbDeleteCustomForm(id: string): Promise<void> {
       try {
         const { error } = await adminClient.from('forms').delete().eq('id', id);
         if (error) throw error;
+        return;
       } catch (err) {
-      if (isSupabaseConfigured()) throw err;
+        if (isSupabaseConfigured()) throw err;
 
         console.warn("Supabase dbDeleteCustomForm failed:", err);
         throw err;
@@ -1969,8 +2212,9 @@ export async function dbDuplicateCustomForm(id: string): Promise<string> {
           const { error: insFieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
           if (insFieldsErr) throw insFieldsErr;
         }
+        return newFormId;
       } catch (err) {
-      if (isSupabaseConfigured()) throw err;
+        if (isSupabaseConfigured()) throw err;
 
         console.warn("Supabase dbDuplicateCustomForm failed:", err);
         throw err;

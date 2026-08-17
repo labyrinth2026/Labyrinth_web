@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { Activity, Users, Calendar, FileText, BookOpen, Shield, ArrowRight, Download } from 'lucide-react';
+import { Activity, Users, Calendar, CalendarDays, FileText, BookOpen, Shield, ArrowRight, Download } from 'lucide-react';
 import Link from 'next/link';
 import { fetchFromSheet } from '@/services/api';
 import { usePrefetchOnIdle } from '@/hooks/usePrefetchOnIdle';
@@ -52,6 +52,7 @@ const Dashboard: React.FC = () => {
 
   const quickActions = [
     { label: 'Manage Events', path: '/admin/events', icon: Calendar, show: can('manage_events') },
+    { label: 'Calendar Scheduler', path: '/admin/calendar', icon: CalendarDays, show: can('manage_events') },
     { label: 'Team Members', path: '/admin/members', icon: Users, show: can('manage_team') },
     { label: 'View Registrations', path: '/admin/forms', icon: FileText, show: can('view_registrations') },
     { label: 'Review Content', path: '/admin/gallery', icon: BookOpen, show: can('review_content') },

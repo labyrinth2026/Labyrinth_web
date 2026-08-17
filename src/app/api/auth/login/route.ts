@@ -30,7 +30,8 @@ export async function POST(req: NextRequest) {
         }
 
         // 2. Verify password with bcrypt using the profiles table password column
-        const isMatch = bcrypt.compareSync(password, profile.password || '');
+        const passHash = profile.password || profile.password_hash || profile.passwordHash || '';
+        const isMatch = bcrypt.compareSync(password, passHash);
         if (!isMatch) {
           return NextResponse.json({ success: false, error: 'Invalid email or password.' }, { status: 401 });
         }

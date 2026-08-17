@@ -55,8 +55,8 @@ export const VERTICALS_DATA: VerticalCardData[] = [
     borderColorClass: 'border-emerald-400/40'
   },
   {
-    id: 'autobot',
-    name: 'AutoBot',
+    id: 'synapse',
+    name: 'Synapse',
     subtitle: 'Robotics & IoT',
     category: 'Technical',
     description: [
@@ -277,36 +277,36 @@ export default function Stack() {
             <div
               key={item.id}
               ref={(el) => { cardRefs.current[idx] = el; }}
-              className={`absolute inset-0 w-full h-full p-6 sm:p-10 rounded-[32px] border ${item.borderColorClass} ${item.solidBgClass} text-white shadow-2xl flex flex-col justify-between transition-opacity duration-150 will-change-transform`}
+              className={`absolute inset-0 w-full h-full p-4 sm:p-8 md:p-10 rounded-[32px] border ${item.borderColorClass} ${item.solidBgClass} text-white shadow-2xl flex flex-col justify-between overflow-hidden transition-opacity duration-150 will-change-transform`}
               style={{
                 backfaceVisibility: 'hidden',
                 WebkitBackfaceVisibility: 'hidden'
               }}
             >
               {/* Card Header */}
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-white leading-tight">
+              <div className="flex items-start justify-between gap-2 sm:gap-4 shrink-0">
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-white leading-tight break-words">
                     {item.name}
                   </h3>
                   {item.subtitle && (
-                    <p className="text-xs sm:text-sm font-bold text-slate-300 tracking-wider mt-1 uppercase">
+                    <p className="text-[11px] sm:text-sm font-bold text-slate-300 tracking-wider mt-0.5 sm:mt-1 uppercase truncate">
                       {item.subtitle}
                     </p>
                   )}
                 </div>
 
-                <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-[10px] sm:text-xs font-black uppercase tracking-wider ${item.badgeClass} shadow-md shrink-0`}>
-                  {item.category === 'Technical' && <Cpu size={13} />}
-                  {item.category === 'Non-Technical' && <Users size={13} />}
-                  {item.category === 'Research' && <BookOpen size={13} />}
-                  {item.category === 'Overview' && <Shield size={13} />}
+                <span className={`inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-md text-[9px] sm:text-xs font-black uppercase tracking-wider ${item.badgeClass} shadow-md shrink-0 whitespace-nowrap`}>
+                  {item.category === 'Technical' && <Cpu size={13} className="shrink-0" />}
+                  {item.category === 'Non-Technical' && <Users size={13} className="shrink-0" />}
+                  {item.category === 'Research' && <BookOpen size={13} className="shrink-0" />}
+                  {item.category === 'Overview' && <Shield size={13} className="shrink-0" />}
                   {item.category}
                 </span>
               </div>
 
               {/* Card Body Paragraphs */}
-              <div className="space-y-3 flex-1 my-3 overflow-hidden">
+              <div className="space-y-2 sm:space-y-3 flex-1 my-2 sm:my-3 overflow-y-auto">
                 {item.description.map((paragraph, pIdx) => (
                   <p
                     key={pIdx}
@@ -318,11 +318,11 @@ export default function Stack() {
               </div>
 
               {/* Card Footer */}
-              <div className="pt-3 border-t border-white/15 flex items-center justify-between text-[11px] text-slate-300 font-semibold">
-                <span className="font-bold uppercase tracking-wider text-slate-300">
+              <div className="pt-2 sm:pt-3 border-t border-white/15 flex items-center justify-between text-[10px] sm:text-[11px] text-slate-300 font-semibold shrink-0">
+                <span className="font-bold uppercase tracking-wider text-slate-300 truncate">
                   Labyrinth 2026-27 Domain
                 </span>
-                <span className="font-mono text-[10px] uppercase tracking-widest text-slate-400">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-slate-400 shrink-0 ml-2">
                   {item.category}
                 </span>
               </div>

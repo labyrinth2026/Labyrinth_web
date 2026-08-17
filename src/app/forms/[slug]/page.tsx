@@ -93,9 +93,16 @@ export default function PublicFormPage() {
     if (isSubmitting) return;
     for (const f of fields) {
       if (f.fieldType === 'section_divider') continue;
-      if (f.required && !formData[f.id]) {
-        alert(`"${f.label}" is required.`);
-        return;
+      const val = formData[f.id];
+      if (f.required) {
+        if (val === undefined || val === null || val === '' || (Array.isArray(val) && val.length === 0)) {
+          alert(`"${f.label}" is required.`);
+          return;
+        }
+        if (f.fieldType === 'checkboxes' && Array.isArray(f.options) && Array.isArray(val) && val.length < f.options.length) {
+          alert(`Please confirm all requirements under "${f.label}".`);
+          return;
+        }
       }
     }
     const nameField = fields.find(f => f.label.toLowerCase().trim() === 'name') || fields.find(f => f.label.toLowerCase().includes('name')) || fields.find(f => f.fieldType === 'short_text');
@@ -191,11 +198,13 @@ export default function PublicFormPage() {
 
   return (
     <div className="min-h-screen bg-[#F8F8FA] flex flex-col pt-20">
-      {/* Cover image (optional) */}
+      {/* Cover image / Banner (optional) */}
       {form.coverImage && (
-        <div className="w-full h-44 sm:h-56 overflow-hidden relative">
-          <img src={form.coverImage} alt="Form cover" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+        <div className="max-w-3xl w-full mx-auto px-4 pt-4">
+          <div className="w-full h-44 sm:h-60 rounded-3xl overflow-hidden relative border border-slate-200/80 shadow-xs">
+            <img src={form.coverImage} alt={form.title || "Form banner"} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+          </div>
         </div>
       )}
 

@@ -17,11 +17,11 @@
   },
   {
     "id": "v-autobot",
-    "name": "AutoBot",
-    "description": "The Robotics & IoT Vertical explores the exciting world of automation, robotics, embedded systems, and smart technologies. Members will participate in hands-on workshops, hardware-based projects, and competitions that combine both software and electronics. Whether you're a beginner or experienced, this vertical encourages innovation, experimentation, and building real-world solutions using modern technologies.",
+    "name": "Synapse",
+    "description": "Robotics, IoT, and embedded systems engineering.",
     "category": "tech",
     "icon": "Cpu",
-    "color": "#ef4444"
+    "color": "#d8c34b"
   },
   {
     "id": "v-insightx",

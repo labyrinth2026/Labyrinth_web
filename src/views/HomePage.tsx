@@ -31,7 +31,7 @@ import statsData from '../data/stats.json';
 const techVerticals = [
   { name: "AI HUB", icon: "Brain", description: "Explore generative AI, machine learning, and intelligent systems." },
   { name: "DevZen", icon: "Code2", description: "Full-stack development, open source, and software engineering." },
-  { name: "AutoBot", icon: "Cpu", description: "Robotics, IoT, and embedded systems engineering." },
+  { name: "Synapse", icon: "Cpu", description: "Robotics, IoT, and embedded systems engineering." },
   { name: "InsightX", icon: "TrendingUp", description: "Data analytics, data science, and visualization." },
   { name: "Research Guidance", icon: "BookOpen", description: "Academic paper guidance, research, and papers." }
 ];
@@ -151,7 +151,7 @@ const HomePage: React.FC = () => {
   const displayVerticals = verticalsData.length > 0 ? verticalsData : [
     { name: "AI HUB", icon: "Brain", description: "Explore generative AI, machine learning, and intelligent systems." },
     { name: "DevZen", icon: "Code2", description: "Full-stack development, open source, and software engineering." },
-    { name: "AutoBot", icon: "Cpu", description: "Robotics, IoT, and embedded systems engineering." },
+    { name: "Synapse", icon: "Cpu", description: "Robotics, IoT, and embedded systems engineering." },
     { name: "InsightX", icon: "TrendingUp", description: "Data analytics, data science, and visualization." },
     { name: "FieldOps", icon: "Shield", description: "Event operations, logistics, and field management." },
     { name: "Debate", icon: "MessageCircle", description: "Tech debates, public speaking, and critical thinking." },

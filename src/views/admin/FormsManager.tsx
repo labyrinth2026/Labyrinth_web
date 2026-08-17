@@ -855,17 +855,77 @@ export default function FormsManager() {
                 </div>
               </div>
 
-              <div>
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">
-                  Cover Image URL (Optional)
-                </label>
-                <input
-                  type="url"
-                  value={formMeta.coverImage || ''}
-                  onChange={(e) => setFormMeta({ ...formMeta, coverImage: e.target.value })}
-                  className={inputClass}
-                  placeholder="https://images.unsplash.com/..."
-                />
+              {/* Cover Image / Banner Upload & URL */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
+                    Form Cover Banner (Optional)
+                  </label>
+                  <span className="text-[9px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">
+                    Rec: 1200 × 400 px (3:1)
+                  </span>
+                </div>
+
+                {/* Banner Preview */}
+                {formMeta.coverImage ? (
+                  <div className="relative w-full h-32 rounded-xl overflow-hidden border border-slate-200 shadow-xs group/banner">
+                    <img
+                      src={formMeta.coverImage}
+                      alt="Form banner preview"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/banner:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setFormMeta({ ...formMeta, coverImage: '' })}
+                        className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-[10px] font-bold uppercase rounded-lg shadow-sm transition-all"
+                      >
+                        Remove Banner
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <label className="flex flex-col items-center justify-center gap-1.5 border-2 border-dashed border-slate-200 rounded-xl p-4 bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors text-center">
+                    <Upload size={18} className="text-slate-400" />
+                    <div>
+                      <p className="text-xs font-bold text-slate-700">Click to upload cover banner</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">Recommended size: 1200 × 400 px (PNG, JPG, WebP — max 5MB)</p>
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          if (file.size > 5 * 1024 * 1024) {
+                            alert('File size exceeds 5MB limit.');
+                            return;
+                          }
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setFormMeta({ ...formMeta, coverImage: reader.result as string });
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </label>
+                )}
+
+                {/* Direct Image URL input */}
+                <div>
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1">
+                    Or paste Image URL
+                  </span>
+                  <input
+                    type="url"
+                    value={formMeta.coverImage || ''}
+                    onChange={(e) => setFormMeta({ ...formMeta, coverImage: e.target.value })}
+                    className={inputClass}
+                    placeholder="https://images.unsplash.com/..."
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">

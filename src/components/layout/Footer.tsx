@@ -98,7 +98,7 @@ const Footer: React.FC = () => {
             <div>
               <h4 className="text-slate-800 font-bold mb-5 text-xs uppercase tracking-wider">Tech Domains</h4>
               <ul className="space-y-2">
-                {['AI HUB', 'DevZen', 'AutoBot', 'InsightX', 'Research Guidance'].map(v => (
+                {['AI HUB', 'DevZen', 'Synapse', 'InsightX', 'Research Guidance'].map(v => (
                   <li key={v}>
                     <Link
                       href="/verticals"
