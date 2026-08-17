@@ -22,5 +22,11 @@
     "title": "Project Proposal",
     "url": "https://forms.gle/placeholder",
     "active": false
+  },
+  "codeshift_registration": {
+    "id": "codeshift_registration",
+    "title": "CODE//SHIFT — Registration Form",
+    "url": "/forms/codeshift-registration",
+    "active": true
   }
 }
