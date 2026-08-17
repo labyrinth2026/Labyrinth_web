@@ -1986,8 +1986,9 @@ export async function dbAddCustomForm(data: Partial<CustomForm>, fields: Partial
           const { error: fieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
           if (fieldsErr) throw fieldsErr;
         }
+        return formId;
       } catch (err) {
-      if (isSupabaseConfigured()) throw err;
+        if (isSupabaseConfigured()) throw err;
 
         console.warn("Supabase dbAddCustomForm failed:", err);
         throw err;
@@ -2086,8 +2087,9 @@ export async function dbUpdateCustomForm(id: string, data: Partial<CustomForm>, 
           const { error: fieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
           if (fieldsErr) throw fieldsErr;
         }
+        return;
       } catch (err) {
-      if (isSupabaseConfigured()) throw err;
+        if (isSupabaseConfigured()) throw err;
 
         console.warn("Supabase dbUpdateCustomForm failed:", err);
         throw err;
@@ -2138,8 +2140,9 @@ export async function dbDeleteCustomForm(id: string): Promise<void> {
       try {
         const { error } = await adminClient.from('forms').delete().eq('id', id);
         if (error) throw error;
+        return;
       } catch (err) {
-      if (isSupabaseConfigured()) throw err;
+        if (isSupabaseConfigured()) throw err;
 
         console.warn("Supabase dbDeleteCustomForm failed:", err);
         throw err;
@@ -2209,8 +2212,9 @@ export async function dbDuplicateCustomForm(id: string): Promise<string> {
           const { error: insFieldsErr } = await adminClient.from('form_fields').insert(mappedFields);
           if (insFieldsErr) throw insFieldsErr;
         }
+        return newFormId;
       } catch (err) {
-      if (isSupabaseConfigured()) throw err;
+        if (isSupabaseConfigured()) throw err;
 
         console.warn("Supabase dbDuplicateCustomForm failed:", err);
         throw err;

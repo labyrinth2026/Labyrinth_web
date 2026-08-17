@@ -15,22 +15,15 @@ export default function AdminLoginPage() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // If user is already logged in as ADMIN, redirect to dashboard.
-  // If logged in but not ADMIN, force logout.
   useEffect(() => {
-    if (user && !isLoading) {
-      if (user.role === 'ADMIN') {
-        if (user.firstLogin) {
-          router.push('/auth/reset-password');
-        } else {
-          router.push('/admin/dashboard');
-        }
+    if (user && !isLoading && user.role === 'ADMIN') {
+      if (user.firstLogin) {
+        router.push('/auth/reset-password');
       } else {
-        // Force log out any non-admin who somehow bypasses
-        logout();
-        setError('Unauthorized Access');
+        router.push('/admin/dashboard');
       }
     }
-  }, [user, isLoading]);
+  }, [user, isLoading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

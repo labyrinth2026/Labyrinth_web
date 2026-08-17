@@ -15,6 +15,11 @@ const Navbar: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('');
   const pathname = usePathname();
 
+  // Hide public Navbar on admin routes and auth pages
+  if (pathname?.startsWith('/admin') || pathname?.startsWith('/auth')) {
+    return null;
+  }
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
@@ -116,7 +121,7 @@ const Navbar: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6 max-w-7xl flex items-center justify-between">
           {/* Left: Labyrinth Logo */}
           <Link href="/" className="flex items-center group relative z-50" onClick={(e) => handleLinkClick(e, '/')}>
-            <img src="/labyrinth-logo.png" alt="Labyrinth Logo" className="h-10 object-contain" />
+            <img src="/labyrinth-logo.png" alt="Labyrinth Logo" className="h-10 object-contain" style={{ maxHeight: '40px', width: 'auto' }} />
           </Link>
 
           {/* Center: Desktop Nav */}
@@ -149,12 +154,12 @@ const Navbar: React.FC = () => {
               Join Us
             </Link>
             <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
-            <img src="/christ-logo.png" alt="Christ University Logo" className="h-10 object-contain opacity-80" />
+            <img src="/christ-logo.png" alt="Christ University Logo" className="h-10 object-contain opacity-80" style={{ maxHeight: '40px', width: 'auto' }} />
           </div>
 
           {/* Mobile Menu Toggle & Right Logo (Mobile) */}
           <div className="md:hidden flex items-center gap-3 relative z-50">
-            <img src="/christ-logo.png" alt="Christ University Logo" className="h-8 object-contain opacity-80" />
+            <img src="/christ-logo.png" alt="Christ University Logo" className="h-8 object-contain opacity-80" style={{ maxHeight: '32px', width: 'auto' }} />
             <button
               className="text-slate-700 p-2 rounded-lg hover:bg-slate-900/5 transition-colors"
               onClick={() => setMobileMenuOpen(true)}
