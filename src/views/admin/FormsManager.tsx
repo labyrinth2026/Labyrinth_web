@@ -550,9 +550,19 @@ export default function FormsManager() {
 
   const handleDeleteSelected = async () => {
     if (!confirm(`Are you sure you want to remove ${selectedIds.length} candidate response(s)?`)) return;
-    // Optimistically update list
+    // Optimistic update
+    const previousResponses = responses;
     setResponses((prev) => prev.filter((r) => !selectedIds.includes(r.id)));
+    const deletedIds = [...selectedIds];
     setSelectedIds([]);
+    try {
+      await fetchFromSheet('deleteFormResponses', { ids: deletedIds });
+    } catch (err) {
+      console.error('Failed to delete form responses:', err);
+      // Roll back optimistic update on failure
+      setResponses(previousResponses);
+      alert('Failed to delete the selected responses. Please try again.');
+    }
   };
 
   // Email Sending Handler — opens Gmail compose in a new browser tab for each recipient
