@@ -20,7 +20,7 @@ import {
   getLocalDb, saveLocalDb, logActivity,
   dbGetCustomForms, dbGetCustomFormBySlug, dbAddCustomForm, dbUpdateCustomForm,
   dbDeleteCustomForm, dbDuplicateCustomForm, dbSubmitFormResponse, dbGetFormResponses,
-  dbUpdateResponseStatus,
+  dbUpdateResponseStatus, dbDeleteFormResponses,
   dbGetGallery, dbAddGalleryImage, dbUpdateGalleryImage, dbDeleteGalleryImage
 } from '@/utils/db';
 
@@ -735,6 +735,13 @@ export async function POST(req: NextRequest) {
       case 'updateResponseStatus': {
         await dbUpdateResponseStatus(payload.id, payload.status, payload.notes);
         await logActivity(sessionUser.id, 'update_response_status', `Updated response ID ${payload.id} status to ${payload.status}`);
+        return NextResponse.json({ success: true });
+      }
+
+      case 'deleteFormResponses': {
+        const ids: string[] = payload.ids || [];
+        await dbDeleteFormResponses(ids);
+        await logActivity(sessionUser.id, 'delete_form_responses', `Deleted ${ids.length} form response(s)`);
         return NextResponse.json({ success: true });
       }
 

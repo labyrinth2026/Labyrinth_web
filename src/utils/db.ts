@@ -2479,6 +2479,46 @@ export async function dbUpdateResponseStatus(responseId: string, status: string,
   }
 }
 
+export async function dbDeleteFormResponses(ids: string[]): Promise<void> {
+  if (ids.length === 0) return;
+
+  if (isSupabaseConfigured()) {
+    const client = getSupabaseAdmin() || supabase;
+    if (client) {
+      try {
+        // Delete associated response_answers first (child rows)
+        const { error: ansErr } = await client
+          .from('response_answers')
+          .delete()
+          .in('response_id', ids);
+        if (ansErr) throw ansErr;
+
+        // Delete the responses themselves
+        const { error: respErr } = await client
+          .from('form_responses')
+          .delete()
+          .in('id', ids);
+        if (respErr) throw respErr;
+        return;
+      } catch (err) {
+        if (isSupabaseConfigured()) throw err;
+        console.error("Supabase dbDeleteFormResponses failed:", err);
+        throw err;
+      }
+    }
+  }
+
+  // Local fallback
+  const db = getLocalDb();
+  db.responseAnswers = (db.responseAnswers || []).filter(
+    (a: any) => !ids.includes(a.responseId) && !ids.includes(a.response_id)
+  );
+  db.formResponses = (db.formResponses || []).filter(
+    (r: any) => !ids.includes(r.id)
+  );
+  saveLocalDb(db);
+}
+
 // --- GALLERY ACTIONS ---
 export async function dbGetGallery(): Promise<any[]> {
   if (isSupabaseConfigured()) {

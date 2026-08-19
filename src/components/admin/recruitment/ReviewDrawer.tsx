@@ -41,11 +41,14 @@ export const ReviewDrawer: React.FC<ReviewDrawerProps> = ({
   useEffect(() => {
     if (applicant) {
       document.body.style.overflow = 'hidden';
+      (window as any).lenisInstance?.stop();
     } else {
       document.body.style.overflow = '';
+      (window as any).lenisInstance?.start();
     }
     return () => {
       document.body.style.overflow = '';
+      (window as any).lenisInstance?.start();
     };
   }, [applicant]);
 
@@ -102,7 +105,7 @@ export const ReviewDrawer: React.FC<ReviewDrawerProps> = ({
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6 bg-slate-50/50">
+        <div data-lenis-prevent className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6 bg-slate-50/50 scrollbar-thin">
           {/* Candidate Profile Card */}
           <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs space-y-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
