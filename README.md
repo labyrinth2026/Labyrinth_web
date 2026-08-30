@@ -3,7 +3,6 @@
   <img src="./public/labyrinth-logo.png" alt="Labyrinth Logo" width="180" height="180" />
 
   # LABYRINTH
-
   **The Official Computer Science Club Portal of Christ University**
 
   [![Next.js](https://img.shields.io/badge/Next.js-16.2.9-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
