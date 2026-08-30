@@ -5,6 +5,8 @@ import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import SmoothScroll from '../components/layout/SmoothScroll';
 import ScrollProgress from '../components/layout/ScrollProgress';
+import 'lenis/dist/lenis.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../index.css';
 
 const inter = Inter({
