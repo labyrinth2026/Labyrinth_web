@@ -8,7 +8,8 @@ import { enUS } from 'date-fns/locale';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ChevronRight, ChevronLeft, MapPin, Calendar, X,
-  LayoutGrid, CalendarDays, Tag, Users, Sparkles, Clock
+  LayoutGrid, CalendarDays, Tag, Users, Sparkles, Clock,
+  FileDown, Download, Image as ImageIcon
 } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 import EventCard from '../components/ui/EventCard';
@@ -141,6 +142,45 @@ function EventDossier({ event, onClose }: { event: any; onClose: () => void }) {
 
           {/* Description */}
           <p className="text-sm text-slate-600 leading-relaxed mb-6">{event.description}</p>
+
+          {/* Download Report Card */}
+          {(event.reportDocx || event.reportUrl || event.hasReport || event.id?.includes('infographics')) && (
+            <div className="mb-6 p-4 rounded-2xl bg-red-50/80 border border-red-200/80 flex flex-col gap-2.5">
+              <div className="flex items-center gap-2 text-xs font-extrabold text-[#CD0000] uppercase tracking-wider">
+                <FileDown size={16} /> Official Session Report
+              </div>
+              <p className="text-xs text-slate-600 leading-snug">
+                Download the official CHRIST University activity report (.docx) detailing event highlights, speaker profiles, participant statistics, and session outcomes.
+              </p>
+              <a
+                href={event.reportDocx || event.reportUrl || "/documents/Infographics_Session_Report.docx"}
+                download="Infographics_Session_Report.docx"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#CD0000] hover:bg-[#A30000] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-xs"
+              >
+                <Download size={14} /> Download Report (.docx)
+              </a>
+            </div>
+          )}
+
+          {/* Event Photo Gallery */}
+          {((event.images && event.images.length > 0) || event.image) && (
+            <div className="mb-6">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-1.5">
+                <ImageIcon size={12} /> Event Photographs &amp; Infographics
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {(event.images || [event.image]).map((imgUrl: string, idx: number) => (
+                  <div key={idx} className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 bg-slate-100 group">
+                    <img
+                      src={imgUrl}
+                      alt={`${event.title} photo ${idx + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Highlights */}
           {event.highlights?.length > 0 && (

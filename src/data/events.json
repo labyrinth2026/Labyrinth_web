@@ -1,5 +1,37 @@
 [
   {
+    "id": "e-infographics-interface-2026",
+    "title": "Interface 2026: Student Engagement & Infographics Workshops",
+    "description": "As part of the Peer Education Series for Interface 2026, Labyrinth conducted an array of events for non-participating students, covering visual design, circuit simulation, prompt engineering, AI domain knowledge, and technical debate.",
+    "date": "2026-06-26T09:45:00Z",
+    "dateLabel": "Friday, June 26, 2026",
+    "time": "9:45 AM - 2:30 PM",
+    "category": "workshop",
+    "status": "past",
+    "location": "Main Auditorium & Central Block, CHRIST (Deemed to be University)",
+    "image": "/images/infographics_report/image1.jpg",
+    "vertical": "AIHub",
+    "featured": true,
+    "reportDocx": "/documents/Infographics_Session_Report.docx",
+    "reportUrl": "/documents/Infographics_Session_Report.docx",
+    "hasReport": true,
+    "images": [
+      "/images/infographics_report/image1.jpg",
+      "/images/infographics_report/image2.png",
+      "/images/infographics_report/image3.png",
+      "/images/infographics_report/image4.jpg"
+    ],
+    "highlights": [
+      "Activity 1: Cognify AI Quiz (350+ participants) - Timed 15-question challenge evaluating ML principles, NLP & CV (Speaker: Advaith).",
+      "Activity 2: AI Debate (350+ audience, 6 debaters) - Structured 8-min head-to-head debates on AI ethics & liability (Speaker: Kishore).",
+      "Activity 3: Tinkercad Workshop (42 participants) - Circuit simulation & 4-way highway traffic light system (Speaker: Suhan Krishna).",
+      "Activity 4: Prompt Engineering & Promptverse (139 participants) - Transformer architecture & live LLM prompt execution contest (Speaker: Nithin Satya).",
+      "Activity 5: Visual Infographics Workshop - Designing CS concept visual infographics using Canva."
+    ],
+    "collab": "AI Vertical, Debate Vertical & Robotics/IoT Vertical",
+    "rapporteur": "Akshat Saini (Core Member, Labyrinth 2026-27)"
+  },
+  {
     "id": "e-inauguration-2026",
     "title": "Inaugural Ceremony of Labyrinth 2026-27",
     "description": "Department of Computer Science, Bangalore Central Campus cordially invites you to the Inaugural Ceremony of Labyrinth 2026-27. Chief Guest: Harinath Parameshwaran | Director: Dr Fr Jossy George (BGR Campus) | Alumni Representative: Sowmya Theodore.",

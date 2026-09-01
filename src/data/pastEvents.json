@@ -1,5 +1,23 @@
 [
   {
+    "id": "pe-infographics-2026",
+    "title": "Interface 2026: Student Engagement & Infographics Workshops",
+    "summary": "As part of the Peer Education Series, Labyrinth conducted an array of events for non-participating students in Interface 2026 covering Cognify AI Quiz (350+ participants), AI Debate, 3D Tinkercad circuit prototyping (42 participants), Prompt Engineering (139 participants), and Infographics visual design.",
+    "date": "2026-06-26",
+    "category": "workshop",
+    "location": "Main Auditorium & Room 911 Central Block, CHRIST University",
+    "poster": "/images/infographics_report/image1.jpg",
+    "reportDocx": "/documents/Infographics_Session_Report.docx",
+    "reportUrl": "/documents/Infographics_Session_Report.docx",
+    "hasReport": true,
+    "images": [
+      "/images/infographics_report/image1.jpg",
+      "/images/infographics_report/image2.png",
+      "/images/infographics_report/image3.png",
+      "/images/infographics_report/image4.jpg"
+    ]
+  },
+  {
     "id": "pe-1",
     "title": "THWS–Labyrinth Media Team Collaboration",
     "summary": "Inaugural collaboration with THWS media students featuring chief guests Dr Pronab Mohanty, IPS and Dr Manoj Kashyap.",
