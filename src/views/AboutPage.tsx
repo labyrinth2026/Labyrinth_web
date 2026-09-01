@@ -268,13 +268,13 @@ const AboutPage: React.FC = () => {
             <div 
               data-aos="fade-up"
               data-aos-delay="150"
-              className="bg-slate-900 border border-slate-900 rounded-2xl shadow-sm p-8 h-full hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md hover:shadow-white/[0.01] transition-all duration-300"
+              className="bg-white border border-slate-200/80 rounded-2xl shadow-xs p-8 h-full hover:scale-[1.015] hover:-translate-y-1 hover:shadow-md hover:shadow-[#CD0000]/[0.02] transition-all duration-300"
             >
-              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-white mb-6">
+              <div className="w-12 h-12 rounded-xl bg-[#CD0000]/5 border border-[#CD0000]/10 flex items-center justify-center text-[#CD0000] mb-6">
                 <Lightbulb size={22} />
               </div>
-              <h2 className="text-2xl font-extrabold text-white mb-4 tracking-tight">Our Vision</h2>
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-medium">
+              <h2 className="text-2xl font-extrabold text-slate-900 mb-4 tracking-tight">Our Vision</h2>
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-medium">
                 To become a platform where students discover opportunities, build skills, showcase talents, and contribute meaningfully to the technology ecosystem and society.
               </p>
             </div>
@@ -349,42 +349,43 @@ const AboutPage: React.FC = () => {
       </section>
 
       {/* ── Featured Milestone: Interface 2026 Engagement & Infographics Workshops ── */}
-      <section className="py-16 sm:py-24 bg-slate-950 text-white relative overflow-hidden border-b border-slate-800">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-red-950/40 opacity-90" />
+      <section className="py-16 sm:py-24 bg-gradient-to-b from-slate-50/80 via-white to-slate-50/50 relative overflow-hidden border-b border-slate-200/80">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-red-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-red-500/5 rounded-full blur-3xl pointer-events-none" />
         <div className="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
             
             {/* Left Column: Details */}
             <div className="lg:w-1/2 space-y-6" data-aos="fade-right">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-[10px] font-bold uppercase tracking-widest">
-                <Award size={12} /> Key Event Highlight · June 26, 2026
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 border border-red-200 text-[#CD0000] text-[10px] font-bold uppercase tracking-widest shadow-xs">
+                <Award size={13} /> Key Event Highlight · June 26, 2026
               </span>
               
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
                 Interface 2026: <span className="text-[#CD0000]">Student Engagement</span> &amp; Infographics Workshops
               </h2>
 
-              <p className="text-slate-300 text-sm md:text-base leading-relaxed">
+              <p className="text-slate-600 text-sm md:text-base leading-relaxed font-medium">
                 As part of the Peer Education Series for Interface 2026, Labyrinth conducted a comprehensive symposium for non-participating attendees to ensure active hands-on learning across 3D modeling, prompt engineering, AI domain quizzes, visual infographics design, and structured debating.
               </p>
 
               {/* Grid of activities */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-                  <span className="text-[#CD0000] font-bold block mb-1">Cognify AI Quiz</span>
-                  <p className="text-slate-400">15-question timed ML &amp; NLP challenge with 350+ participants.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+                <div className="bg-white border border-slate-200/80 p-4 rounded-2xl shadow-xs hover:border-[#CD0000]/40 hover:shadow-md transition-all duration-300">
+                  <span className="text-[#CD0000] font-extrabold block mb-1 text-sm">Cognify AI Quiz</span>
+                  <p className="text-slate-500 font-medium leading-relaxed">15-question timed ML &amp; NLP challenge with 350+ participants.</p>
                 </div>
-                <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-                  <span className="text-[#CD0000] font-bold block mb-1">AI Ethics Debate</span>
-                  <p className="text-slate-400">Head-to-head debaters discussing AI liability &amp; job displacement.</p>
+                <div className="bg-white border border-slate-200/80 p-4 rounded-2xl shadow-xs hover:border-[#CD0000]/40 hover:shadow-md transition-all duration-300">
+                  <span className="text-[#CD0000] font-extrabold block mb-1 text-sm">AI Ethics Debate</span>
+                  <p className="text-slate-500 font-medium leading-relaxed">Head-to-head debaters discussing AI liability &amp; job displacement.</p>
                 </div>
-                <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-                  <span className="text-[#CD0000] font-bold block mb-1">Tinkercad Workshop</span>
-                  <p className="text-slate-400">Virtual circuit simulation &amp; 4-way highway traffic logic with 42 students.</p>
+                <div className="bg-white border border-slate-200/80 p-4 rounded-2xl shadow-xs hover:border-[#CD0000]/40 hover:shadow-md transition-all duration-300">
+                  <span className="text-[#CD0000] font-extrabold block mb-1 text-sm">Tinkercad Workshop</span>
+                  <p className="text-slate-500 font-medium leading-relaxed">Virtual circuit simulation &amp; 4-way highway traffic logic with 42 students.</p>
                 </div>
-                <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-                  <span className="text-[#CD0000] font-bold block mb-1">Promptverse Contest</span>
-                  <p className="text-slate-400">LLM Transformer mechanics &amp; live prompt engineering with 139 participants.</p>
+                <div className="bg-white border border-slate-200/80 p-4 rounded-2xl shadow-xs hover:border-[#CD0000]/40 hover:shadow-md transition-all duration-300">
+                  <span className="text-[#CD0000] font-extrabold block mb-1 text-sm">Promptverse Contest</span>
+                  <p className="text-slate-500 font-medium leading-relaxed">LLM Transformer mechanics &amp; live prompt engineering with 139 participants.</p>
                 </div>
               </div>
 
@@ -393,7 +394,7 @@ const AboutPage: React.FC = () => {
                 <a
                   href="/documents/Infographics_Session_Report.docx"
                   download="Infographics_Session_Report.docx"
-                  className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#CD0000] hover:bg-[#A30000] text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg hover:scale-105"
+                  className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-[#CD0000] hover:bg-[#A30000] text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md hover:shadow-lg shadow-[#CD0000]/20 hover:scale-105"
                 >
                   <FileDown size={16} /> Download Official Session Report (.docx)
                 </a>
@@ -401,9 +402,9 @@ const AboutPage: React.FC = () => {
             </div>
 
             {/* Right Column: Image Grid */}
-            <div className="lg:w-1/2 grid grid-cols-2 gap-3.5" data-aos="fade-left">
-              <div className="space-y-3.5">
-                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-slate-800 shadow-2xl group">
+            <div className="lg:w-1/2 grid grid-cols-2 gap-4" data-aos="fade-left">
+              <div className="space-y-4">
+                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border-2 border-white shadow-xl shadow-slate-200/60 group">
                   <Image
                     src="/images/infographics_report/image1.jpg"
                     alt="Interface 2026 Student Engagement Session"
@@ -412,7 +413,7 @@ const AboutPage: React.FC = () => {
                     sizes="(max-width: 768px) 50vw, 25vw"
                   />
                 </div>
-                <div className="relative aspect-square rounded-2xl overflow-hidden border border-slate-800 shadow-2xl group">
+                <div className="relative aspect-square rounded-2xl overflow-hidden border-2 border-white shadow-xl shadow-slate-200/60 group">
                   <Image
                     src="/images/infographics_report/image2.png"
                     alt="Infographics & Cognify AI Quiz"
@@ -422,8 +423,8 @@ const AboutPage: React.FC = () => {
                   />
                 </div>
               </div>
-              <div className="space-y-3.5 pt-6">
-                <div className="relative aspect-square rounded-2xl overflow-hidden border border-slate-800 shadow-2xl group">
+              <div className="space-y-4 pt-6">
+                <div className="relative aspect-square rounded-2xl overflow-hidden border-2 border-white shadow-xl shadow-slate-200/60 group">
                   <Image
                     src="/images/infographics_report/image3.png"
                     alt="Tinkercad Workshop & Prompt Engineering"
@@ -432,7 +433,7 @@ const AboutPage: React.FC = () => {
                     sizes="(max-width: 768px) 50vw, 25vw"
                   />
                 </div>
-                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-slate-800 shadow-2xl group">
+                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border-2 border-white shadow-xl shadow-slate-200/60 group">
                   <Image
                     src="/images/infographics_report/image4.jpg"
                     alt="AI Debate & Speaker Session"
