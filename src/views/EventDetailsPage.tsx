@@ -93,6 +93,61 @@ const EventDetailsPage: React.FC = () => {
     }
   };
 
+function getEventAcademicYear(evt: any): string {
+  if (!evt) return '2026-27';
+  const dStr = evt.date || '';
+  const title = (evt.title || '').toLowerCase();
+
+  if (title.includes('2026-27') || title.includes('2026-2027')) return '2026-27';
+  if (title.includes('2025-26') || title.includes('2025-2026')) return '2025-26';
+  if (title.includes('2024-25') || title.includes('2024-2025')) return '2024-25';
+
+  if (!dStr) return '2026-27';
+
+  const parts = dStr.split('T')[0].split('-');
+  if (parts.length >= 2) {
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10);
+
+    if (!isNaN(year)) {
+      if (year > 2026) return '2026-27';
+      if (year === 2026) {
+        return month >= 6 ? '2026-27' : '2025-26';
+      }
+      if (year === 2025) {
+        return month >= 6 ? '2025-26' : '2024-25';
+      }
+      if (year <= 2024) {
+        return '2024-25';
+      }
+    }
+  }
+
+  return '2026-27';
+}
+
+  const handleBack = () => {
+    if (typeof window !== 'undefined') {
+      const searchParams = new URLSearchParams(window.location.search);
+      const queryYear = searchParams.get('year');
+      if (queryYear) {
+        router.push(`/events/${queryYear}`);
+        return;
+      }
+
+      if (document.referrer && document.referrer.includes('/events/')) {
+        const match = document.referrer.match(/\/events\/(20\d{2}-\d{2})/);
+        if (match && match[1]) {
+          router.push(`/events/${match[1]}`);
+          return;
+        }
+      }
+    }
+
+    const fallbackYear = getEventAcademicYear(event);
+    router.push(`/events/${fallbackYear}`);
+  };
+
   if (isLoading) {
     return (
       <PageWrapper>
@@ -110,9 +165,12 @@ const EventDetailsPage: React.FC = () => {
         <div className="min-h-[60vh] flex flex-col items-center justify-center bg-slate-50 p-6 text-center">
           <h2 className="text-2xl font-extrabold text-slate-900 mb-2">Event Not Found</h2>
           <p className="text-sm text-slate-500 mb-6 max-w-md">The requested event details could not be loaded or the URL may be invalid.</p>
-          <Link href="/events" className="px-6 py-3 bg-[#CD0000] text-white font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-[#A30000] transition-all">
+          <button
+            onClick={handleBack}
+            className="px-6 py-3 bg-[#CD0000] text-white font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-[#A30000] transition-all cursor-pointer"
+          >
             Return to Events
-          </Link>
+          </button>
         </div>
       </PageWrapper>
     );
@@ -135,12 +193,12 @@ const EventDetailsPage: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10">
           {/* Back button */}
           <div className="flex items-center justify-between mb-8">
-            <Link
-              href="/events"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all backdrop-blur-xs"
+            <button
+              onClick={handleBack}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all backdrop-blur-xs cursor-pointer"
             >
-              <ChevronLeft size={16} /> All Events
-            </Link>
+              <ChevronLeft size={16} /> Back to Events
+            </button>
             
             <button
               onClick={handleShare}

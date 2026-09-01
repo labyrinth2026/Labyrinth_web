@@ -1,5 +1,5 @@
-"use client";
+import { redirect } from 'next/navigation';
 
-import EventsPage from '../../views/EventsPage';
-
-export default EventsPage;
+export default function EventsRootPage() {
+  redirect('/events/2026-27');
+}
