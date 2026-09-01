@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   ChevronRight, ChevronLeft, MapPin, Calendar, X,
   LayoutGrid, CalendarDays, Tag, Users, Sparkles, Clock,
-  FileDown, Download, Image as ImageIcon
+  FileDown, Download, Image as ImageIcon, ExternalLink
 } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 import EventCard from '../components/ui/EventCard';
@@ -94,12 +94,23 @@ function EventDossier({ event, onClose }: { event: any; onClose: () => void }) {
             >
               {event.vertical || 'Labyrinth'}
             </span>
-            <button
-              onClick={onClose}
-              className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 transition-colors"
-            >
-              <X size={15} />
-            </button>
+            <div className="flex items-center gap-2">
+              <a
+                href={`/events/${event.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 hover:bg-[#CD0000] hover:text-white text-slate-700 rounded-full text-[10px] font-extrabold uppercase tracking-wider transition-colors"
+                title="Open Event Details in New Tab"
+              >
+                Open in New Tab <ExternalLink size={12} />
+              </a>
+              <button
+                onClick={onClose}
+                className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 transition-colors"
+              >
+                <X size={15} />
+              </button>
+            </div>
           </div>
 
           {/* TBD badge */}
@@ -559,9 +570,14 @@ const EventsPage: React.FC = () => {
                             <span>{carouselEvents[currentSlide].location}</span>
                           </div>
                         </div>
-                        <Button variant="secondary" size="sm" href="/contact">
-                          {carouselEvents[currentSlide].status === 'upcoming' ? 'Register Now' : 'View Details'}
-                        </Button>
+                        <a
+                          href={`/events/${carouselEvents[currentSlide].id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#CD0000] text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-[#A30000] transition-all shadow-xs"
+                        >
+                          {carouselEvents[currentSlide].status === 'upcoming' ? 'Register Now' : 'View Details'} <ExternalLink size={13} />
+                        </a>
                       </div>
                     </div>
                   </motion.div>

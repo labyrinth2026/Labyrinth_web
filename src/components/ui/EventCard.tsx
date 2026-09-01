@@ -42,7 +42,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, onPosterClick }) => {
   };
 
   return (
-    <Link href="/events" className="block group">
+    <Link href={`/events/${event.id}`} target="_blank" rel="noopener noreferrer" className="block group">
       <motion.div
         whileHover={{ 
           y: -5, 
