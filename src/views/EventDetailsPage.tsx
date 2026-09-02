@@ -188,9 +188,9 @@ function getEventAcademicYear(evt: any): string {
   return (
     <PageWrapper>
       {/* Top Banner Navigation with React Bits WebGL Red Threads Background */}
-      <section className="bg-white text-slate-900 pt-28 pb-14 relative overflow-hidden border-b border-slate-200/90 min-h-[340px]">
+      <section className="bg-white text-slate-900 pt-24 sm:pt-28 pb-10 sm:pb-14 relative overflow-hidden border-b border-slate-200/90 min-h-[300px] sm:min-h-[340px]">
         {/* Threads background canvas */}
-        <div className="absolute inset-0 pointer-events-none z-0">
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
           <Threads
             color="#CD0000"
             amplitude={1}
@@ -200,25 +200,25 @@ function getEventAcademicYear(evt: any): string {
         </div>
 
         <div className="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10">
-          {/* Back button */}
-          <div className="flex items-center justify-between mb-8">
+          {/* Back & Share Navigation */}
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-6 sm:mb-8">
             <button
               onClick={handleBack}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-slate-100 text-slate-800 border border-slate-200/80 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs backdrop-blur-xs cursor-pointer"
+              className="inline-flex items-center gap-2 px-3.5 py-2 bg-white/90 hover:bg-slate-100 text-slate-800 border border-slate-200/80 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs backdrop-blur-xs cursor-pointer active:scale-95"
             >
               <ChevronLeft size={16} /> Back to Events
             </button>
 
             <button
               onClick={handleShare}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-slate-100 text-slate-800 border border-slate-200/80 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs backdrop-blur-xs cursor-pointer"
+              className="inline-flex items-center gap-2 px-3.5 py-2 bg-white/90 hover:bg-slate-100 text-slate-800 border border-slate-200/80 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs backdrop-blur-xs cursor-pointer active:scale-95"
             >
               <Share2 size={15} /> {copied ? 'Link Copied!' : 'Share Event'}
             </button>
           </div>
 
           {/* Badges */}
-          <div className="flex flex-wrap gap-2.5 mb-4">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 mb-4">
             <span
               className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest border shadow-2xs"
               style={{ color: verticalColor, borderColor: verticalColor + '60', background: verticalColor + '18' }}
@@ -242,34 +242,34 @@ function getEventAcademicYear(evt: any): string {
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-5 sm:mb-6">
             {event.title}
           </h1>
 
           {/* Metadata Bar */}
-          <div className="flex flex-wrap gap-6 text-xs sm:text-sm text-slate-600 font-semibold pt-4 border-t border-slate-200/80">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-6 text-xs sm:text-sm text-slate-600 font-semibold pt-4 border-t border-slate-200/80">
             <div className="flex items-center gap-2">
-              <Calendar size={16} className="text-[#CD0000]" />
+              <Calendar size={16} className="text-[#CD0000] shrink-0" />
               <span>{formattedDate}</span>
             </div>
 
             {event.time && (
               <div className="flex items-center gap-2">
-                <Clock size={16} className="text-[#CD0000]" />
+                <Clock size={16} className="text-[#CD0000] shrink-0" />
                 <span>{event.time}</span>
               </div>
             )}
 
             {event.location && (
               <div className="flex items-center gap-2">
-                <MapPin size={16} className="text-[#CD0000]" />
+                <MapPin size={16} className="text-[#CD0000] shrink-0" />
                 <span>{event.location}</span>
               </div>
             )}
 
             {(event.resourcePerson || event.collab) && (
               <div className="flex items-center gap-2 text-slate-500">
-                <Users size={16} className="text-[#CD0000]" />
+                <Users size={16} className="text-[#CD0000] shrink-0" />
                 <span>Resource Person / Collab: {event.resourcePerson || event.collab}</span>
               </div>
             )}
