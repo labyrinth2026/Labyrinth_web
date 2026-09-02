@@ -5,6 +5,28 @@ import bcrypt from 'bcryptjs';
 import { supabase, isSupabaseConfigured, getSupabaseAdmin, getSupabaseOffline, setSupabaseOffline } from './supabase';
 
 const DB_FILE = path.join(process.cwd(), 'src/data/db.json');
+const DELETED_EVENTS_FILE = path.join(process.cwd(), 'src/data/deleted_events.json');
+
+// Persistent deleted event IDs — works regardless of Supabase config
+function getDeletedEventIds(): Set<string> {
+  try {
+    if (fs.existsSync(DELETED_EVENTS_FILE)) {
+      const data = JSON.parse(fs.readFileSync(DELETED_EVENTS_FILE, 'utf8'));
+      if (Array.isArray(data)) return new Set<string>(data);
+    }
+  } catch (e) {
+    console.warn('Could not read deleted_events.json:', e);
+  }
+  return new Set<string>();
+}
+
+function saveDeletedEventIds(ids: Set<string>): void {
+  try {
+    fs.writeFileSync(DELETED_EVENTS_FILE, JSON.stringify(Array.from(ids), null, 2), 'utf8');
+  } catch (e) {
+    console.warn('Could not write deleted_events.json:', e);
+  }
+}
 
 // Interface structures
 export interface User {
@@ -1068,8 +1090,11 @@ function normalizeDateString(dateStr?: string | null): string | null {
 // --- EVENTS ---
 export async function dbGetEvents(): Promise<Event[]> {
   let rawEvents: any[] = [];
+  // Use the persistent deleted events file (works with or without Supabase)
+  const deletedSet = getDeletedEventIds();
+  // Also merge from local db for non-Supabase mode
   const db = getLocalDb();
-  const deletedSet = new Set((db as any).deletedEventIds || []);
+  ((db as any).deletedEventIds || []).forEach((id: string) => deletedSet.add(id));
 
   if (isSupabaseConfigured() && !getSupabaseOffline()) {
     const client = getSupabaseAdmin() || supabase;
@@ -1246,22 +1271,43 @@ export async function dbUpdateEvent(id: string, data: any): Promise<void> {
 }
 
 export async function dbDeleteEvent(id: string): Promise<void> {
-  const db = getLocalDb();
-  if (!(db as any).deletedEventIds) {
-    (db as any).deletedEventIds = [];
-  }
-  const deletedSet = new Set<string>((db as any).deletedEventIds);
+  // 1. Persist the deleted ID immediately so it's always filtered out
+  const deletedSet = getDeletedEventIds();
 
-  // Find target event to extract title
-  const targetEv = (db.events || []).find((e: any) => e.id === id);
-  const title = targetEv?.title || '';
-  const normTitle = title.toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim();
+  // Find event title from events.json (needed for title-based dedup filter)
+  let title = '';
+  let normTitle = '';
+  try {
+    const eventsJsonPath = path.join(process.cwd(), 'src/data/events.json');
+    if (fs.existsSync(eventsJsonPath)) {
+      const seeded = JSON.parse(fs.readFileSync(eventsJsonPath, 'utf8'));
+      const targetEv = seeded.find((e: any) => e.id === id);
+      if (targetEv) {
+        title = targetEv.title || '';
+        normTitle = title.toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim();
+      }
+    }
+  } catch (e) { /* ignore */ }
+
+  // Also check local db events for title
+  if (!title) {
+    const db = getLocalDb();
+    const targetEv = (db.events || []).find((e: any) => e.id === id);
+    if (targetEv) {
+      title = targetEv.title || '';
+      normTitle = title.toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim();
+    }
+  }
 
   deletedSet.add(id);
   if (normTitle) deletedSet.add(normTitle);
-  (db as any).deletedEventIds = Array.from(deletedSet);
+  // Persist deleted IDs to disk — works with or without Supabase
+  saveDeletedEventIds(deletedSet);
 
-  // 1. Delete from localDb memory
+  // 2. Also update local db if in non-Supabase mode
+  const db = getLocalDb();
+  if (!(db as any).deletedEventIds) (db as any).deletedEventIds = [];
+  (db as any).deletedEventIds = Array.from(deletedSet);
   db.events = (db.events || []).filter((e: any) => {
     if (e.id === id) return false;
     if (normTitle && (e.title || '').toLowerCase().replace(/[\u2013\u2014]/g, '-').replace(/\s+/g, ' ').trim() === normTitle) return false;
@@ -1269,7 +1315,7 @@ export async function dbDeleteEvent(id: string): Promise<void> {
   });
   saveLocalDb(db);
 
-  // 2. Delete from events.json on disk
+  // 3. Delete from events.json on disk
   try {
     const eventsJsonPath = path.join(process.cwd(), 'src/data/events.json');
     if (fs.existsSync(eventsJsonPath)) {
@@ -1285,14 +1331,16 @@ export async function dbDeleteEvent(id: string): Promise<void> {
     console.warn('Could not rewrite events.json on delete:', e);
   }
 
-  // 3. Delete from Supabase
+  // 4. Delete from Supabase
   if (isSupabaseConfigured() && !getSupabaseOffline()) {
     const client = getSupabaseAdmin() || supabase;
     if (client) {
       try {
-        await client.from('events').delete().eq('id', id);
+        const { error } = await client.from('events').delete().eq('id', id);
+        if (error) console.error('Supabase dbDeleteEvent error (by id):', error);
         if (title) {
-          await client.from('events').delete().eq('title', title);
+          const { error: err2 } = await client.from('events').delete().eq('title', title);
+          if (err2) console.warn('Supabase dbDeleteEvent warning (by title):', err2);
         }
       } catch (err) {
         console.error('Supabase dbDeleteEvent error:', err);
