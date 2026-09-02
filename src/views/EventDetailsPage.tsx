@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 import Button from '../components/ui/Button';
+import Threads from '../components/ui/Threads';
 import pastEventsData from '../data/pastEvents.json';
 import fallbackEvents from '../data/events.json';
 import { fetchFromSheet } from '../services/api';
@@ -186,23 +187,31 @@ function getEventAcademicYear(evt: any): string {
 
   return (
     <PageWrapper>
-      {/* Top Banner Navigation */}
-      <section className="bg-slate-900 text-white pt-24 pb-12 relative overflow-hidden border-b border-slate-800">
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900 to-red-950/30 opacity-90" />
-        
+      {/* Top Banner Navigation with React Bits WebGL Red Threads Background */}
+      <section className="bg-white text-slate-900 pt-28 pb-14 relative overflow-hidden border-b border-slate-200/90 min-h-[340px]">
+        {/* Threads background canvas */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <Threads
+            color="#CD0000"
+            amplitude={1}
+            distance={0}
+            enableMouseInteraction={true}
+          />
+        </div>
+
         <div className="container mx-auto px-4 sm:px-6 max-w-6xl relative z-10">
           {/* Back button */}
           <div className="flex items-center justify-between mb-8">
             <button
               onClick={handleBack}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all backdrop-blur-xs cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-slate-100 text-slate-800 border border-slate-200/80 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs backdrop-blur-xs cursor-pointer"
             >
               <ChevronLeft size={16} /> Back to Events
             </button>
-            
+
             <button
               onClick={handleShare}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all backdrop-blur-xs"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white/90 hover:bg-slate-100 text-slate-800 border border-slate-200/80 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-xs backdrop-blur-xs cursor-pointer"
             >
               <Share2 size={15} /> {copied ? 'Link Copied!' : 'Share Event'}
             </button>
@@ -211,39 +220,39 @@ function getEventAcademicYear(evt: any): string {
           {/* Badges */}
           <div className="flex flex-wrap gap-2.5 mb-4">
             <span
-              className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest border"
+              className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest border shadow-2xs"
               style={{ color: verticalColor, borderColor: verticalColor + '60', background: verticalColor + '18' }}
             >
               {event.vertical || 'Labyrinth Event'}
             </span>
-            
-            <span className={`px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest border ${
-              event.status === 'upcoming' 
-                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' 
-                : 'bg-slate-800 text-slate-300 border-slate-700'
+
+            <span className={`px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest border shadow-2xs ${
+              event.status === 'upcoming'
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                : 'bg-slate-100 text-slate-700 border-slate-200'
             }`}>
               {event.status || 'Past Event'}
             </span>
 
             {event.category && (
-              <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest bg-white/10 border border-white/20 text-white">
+              <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest bg-slate-100 border border-slate-200 text-slate-700 shadow-2xs">
                 {event.category}
               </span>
             )}
           </div>
 
           {/* Title */}
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-6">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
             {event.title}
           </h1>
 
           {/* Metadata Bar */}
-          <div className="flex flex-wrap gap-6 text-xs sm:text-sm text-slate-300 font-semibold pt-4 border-t border-slate-800">
+          <div className="flex flex-wrap gap-6 text-xs sm:text-sm text-slate-600 font-semibold pt-4 border-t border-slate-200/80">
             <div className="flex items-center gap-2">
               <Calendar size={16} className="text-[#CD0000]" />
               <span>{formattedDate}</span>
             </div>
-            
+
             {event.time && (
               <div className="flex items-center gap-2">
                 <Clock size={16} className="text-[#CD0000]" />
@@ -259,7 +268,7 @@ function getEventAcademicYear(evt: any): string {
             )}
 
             {(event.resourcePerson || event.collab) && (
-              <div className="flex items-center gap-2 text-slate-400">
+              <div className="flex items-center gap-2 text-slate-500">
                 <Users size={16} className="text-[#CD0000]" />
                 <span>Resource Person / Collab: {event.resourcePerson || event.collab}</span>
               </div>
