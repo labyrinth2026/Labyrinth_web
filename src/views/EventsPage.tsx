@@ -153,7 +153,7 @@ function EventDossier({ event, onClose }: { event: any; onClose: () => void }) {
           )}
 
           {/* Description */}
-          <p className="text-sm text-slate-600 leading-relaxed mb-6">{event.description}</p>
+          <p className="text-sm text-slate-600 leading-relaxed mb-6">{event.description || event.summary}</p>
 
           {/* Download Report Card */}
           {(event.reportDocx || event.reportUrl || event.hasReport || event.id?.includes('infographics')) && (
@@ -399,14 +399,19 @@ const EventsPage: React.FC<EventsPageProps> = ({ yearFilter }) => {
           .map((e: any) => ({
             id: e.id,
             title: e.title,
-            description: e.summary,
+            description: e.summary || e.description,
             date: e.date,
+            endDate: e.endDate || null,
+            dateLabel: e.dateLabel || null,
             category: e.category,
             status: 'past' as const,
             location: e.location,
-            image: e.poster || null,
-            vertical: '',
-            featured: false
+            image: e.poster || e.image || null,
+            vertical: e.vertical || '',
+            featured: false,
+            resourcePerson: e.resourcePerson || null,
+            collab: e.collab || e.resourcePerson || null,
+            highlights: e.highlights || []
           }));
 
         const combined = [...dbEvents, ...mappedPastEvents];

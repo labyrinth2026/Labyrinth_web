@@ -258,10 +258,10 @@ function getEventAcademicYear(evt: any): string {
               </div>
             )}
 
-            {event.collab && (
+            {(event.resourcePerson || event.collab) && (
               <div className="flex items-center gap-2 text-slate-400">
                 <Users size={16} className="text-[#CD0000]" />
-                <span>Collab: {event.collab}</span>
+                <span>Resource Person / Collab: {event.resourcePerson || event.collab}</span>
               </div>
             )}
           </div>
@@ -322,7 +322,7 @@ function getEventAcademicYear(evt: any): string {
               <div className="bg-white border border-slate-200/80 rounded-3xl p-8 shadow-xs space-y-4">
                 <h3 className="text-lg font-extrabold text-slate-900 tracking-tight">About the Event</h3>
                 <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line font-medium">
-                  {event.description}
+                  {event.description || event.summary}
                 </p>
               </div>
 
@@ -422,6 +422,18 @@ function getEventAcademicYear(evt: any): string {
                       <div>
                         <span className="text-[10px] font-bold text-slate-400 uppercase block">Organizing Vertical</span>
                         <span className="text-slate-900 font-extrabold">{event.vertical}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {(event.resourcePerson || event.collab) && (
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-xl bg-red-50 text-[#CD0000] flex items-center justify-center shrink-0">
+                        <Users size={15} />
+                      </div>
+                      <div>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase block">Resource Person / Participants</span>
+                        <span className="text-slate-900">{event.resourcePerson || event.collab}</span>
                       </div>
                     </div>
                   )}
