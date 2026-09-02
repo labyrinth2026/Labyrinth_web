@@ -486,7 +486,7 @@ const HomePage: React.FC = () => {
                           transition={{ duration: 0.3 }}
                           className="absolute inset-0"
                         >
-                          <Link href="/events" className="w-full h-full flex flex-col justify-end p-8 md:p-12 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent rounded-2xl group/slide">
+                          <Link href="/events/2026-27" className="w-full h-full flex flex-col justify-end p-8 md:p-12 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent rounded-2xl group/slide">
                             <div className="flex gap-2.5 mb-3">
                               <span className="px-2.5 py-0.5 rounded-full bg-[#CD0000] text-white text-[9px] font-bold uppercase tracking-wider">
                                 {featuredEvents[currentSlide].category}
@@ -502,7 +502,7 @@ const HomePage: React.FC = () => {
                               {featuredEvents[currentSlide].description}
                             </p>
                             <div>
-                              <Button variant="primary" size="sm" href="/events">Register Now</Button>
+                              <Button variant="primary" size="sm" href="/events/2026-27">Register Now</Button>
                             </div>
                           </Link>
                         </motion.div>
@@ -545,7 +545,7 @@ const HomePage: React.FC = () => {
               <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
                 <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-4 mb-10 sm:mb-16">
                   <SectionHeading title="Upcoming Events" align="left" className="mb-0" />
-                  <Button variant="outline" size="sm" href="/events">
+                  <Button variant="outline" size="sm" href="/events/2026-27">
                     View All <ArrowRight size={12} />
                   </Button>
                 </div>

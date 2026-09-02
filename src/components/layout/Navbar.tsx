@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { NAV_LINKS } from '../../utils/constants';
+import EventsDropdown from './EventsDropdown';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -127,6 +128,9 @@ const Navbar: React.FC = () => {
           {/* Center: Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1 absolute left-1/2 transform -translate-x-1/2">
             {NAV_LINKS.map((link) => {
+              if (link.label === 'Events') {
+                return <EventsDropdown key={link.path} />;
+              }
               const isActive = pathname === link.path || (pathname === '/' && activeSection === link.path);
               return (
                 <Link
@@ -217,6 +221,18 @@ const Navbar: React.FC = () => {
             {/* Drawer Navigation Links */}
             <nav className="flex flex-col gap-1 p-4 shrink-0">
               {NAV_LINKS.map((link, i) => {
+                if (link.label === 'Events') {
+                  return (
+                    <motion.div
+                      key={link.path}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.04 }}
+                    >
+                      <EventsDropdown isMobile onSelect={() => setMobileMenuOpen(false)} />
+                    </motion.div>
+                  );
+                }
                 const isActive = pathname === link.path || (pathname === '/' && activeSection === link.path);
                 return (
                   <motion.div
