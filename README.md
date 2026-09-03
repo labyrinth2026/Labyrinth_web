@@ -14,7 +14,6 @@
   [![Framer Motion](https://img.shields.io/badge/Framer_Motion-12.41-0055FF?style=for-the-badge&logo=framer)](https://www.framer.com/motion/)
 </div>
 ---
-
 ## Overview
 
 **Labyrinth** is the official digital infrastructure and web platform for the Department of Computer Science Club at Christ University. Engineered with modern web technologies, Labyrinth bridges public outreach, student engagement, dynamic recruitment, technical laboratory showcases, and administrative governance under a unified platform.
