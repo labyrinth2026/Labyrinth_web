@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { dateFnsLocalizer } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
@@ -8,7 +9,8 @@ import { enUS } from 'date-fns/locale';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ChevronRight, ChevronLeft, MapPin, Calendar, X,
-  LayoutGrid, CalendarDays, Tag, Users, Sparkles, Clock
+  LayoutGrid, CalendarDays, Tag, Users, Sparkles, Clock,
+  FileDown, Download, Image as ImageIcon, ExternalLink
 } from 'lucide-react';
 import PageWrapper from '../components/layout/PageWrapper';
 import EventCard from '../components/ui/EventCard';
@@ -93,12 +95,23 @@ function EventDossier({ event, onClose }: { event: any; onClose: () => void }) {
             >
               {event.vertical || 'Labyrinth'}
             </span>
-            <button
-              onClick={onClose}
-              className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 transition-colors"
-            >
-              <X size={15} />
-            </button>
+            <div className="flex items-center gap-2">
+              <a
+                href={`/events/${event.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 hover:bg-[#CD0000] hover:text-white text-slate-700 rounded-full text-[10px] font-extrabold uppercase tracking-wider transition-colors"
+                title="Open Event Details in New Tab"
+              >
+                Open in New Tab <ExternalLink size={12} />
+              </a>
+              <button
+                onClick={onClose}
+                className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:border-slate-300 transition-colors"
+              >
+                <X size={15} />
+              </button>
+            </div>
           </div>
 
           {/* TBD badge */}
@@ -140,7 +153,46 @@ function EventDossier({ event, onClose }: { event: any; onClose: () => void }) {
           )}
 
           {/* Description */}
-          <p className="text-sm text-slate-600 leading-relaxed mb-6">{event.description}</p>
+          <p className="text-sm text-slate-600 leading-relaxed mb-6">{event.description || event.summary}</p>
+
+          {/* Download Report Card */}
+          {(event.reportDocx || event.reportUrl || event.hasReport || event.id?.includes('infographics')) && (
+            <div className="mb-6 p-4 rounded-2xl bg-red-50/80 border border-red-200/80 flex flex-col gap-2.5">
+              <div className="flex items-center gap-2 text-xs font-extrabold text-[#CD0000] uppercase tracking-wider">
+                <FileDown size={16} /> Official Session Report
+              </div>
+              <p className="text-xs text-slate-600 leading-snug">
+                Download the official CHRIST University activity report (.docx) detailing event highlights, speaker profiles, participant statistics, and session outcomes.
+              </p>
+              <a
+                href={event.reportDocx || event.reportUrl || "/documents/Infographics_Session_Report.docx"}
+                download="Infographics_Session_Report.docx"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#CD0000] hover:bg-[#A30000] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-xs"
+              >
+                <Download size={14} /> Download Report (.docx)
+              </a>
+            </div>
+          )}
+
+          {/* Event Photo Gallery */}
+          {((event.images && event.images.length > 0) || event.image) && (
+            <div className="mb-6">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-1.5">
+                <ImageIcon size={12} /> Event Photographs &amp; Infographics
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {(event.images || [event.image]).map((imgUrl: string, idx: number) => (
+                  <div key={idx} className="relative aspect-video rounded-xl overflow-hidden border border-slate-200 bg-slate-100 group">
+                    <img
+                      src={imgUrl}
+                      alt={`${event.title} photo ${idx + 1}`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Highlights */}
           {event.highlights?.length > 0 && (
@@ -171,23 +223,14 @@ function EventDossier({ event, onClose }: { event: any; onClose: () => void }) {
 function CalendarView({
   events,
   verticalFilter,
+  targetYear = '2026-27',
   onSelectEvent
 }: {
   events: any[];
   verticalFilter: string;
+  targetYear?: string;
   onSelectEvent: (ev: any) => void;
 }) {
-  // Controlled navigation — keeps the date in state so NEXT/BACK/TODAY work
-  const [calDate, setCalDate] = useState(() => new Date(2026, 7, 1));
-
-  const filtered = verticalFilter === 'all'
-    ? events
-    : events.filter(e => e.vertical === verticalFilter);
-
-  const isTBDEvent = (e: any) =>
-    e.type === 'ytd' ||
-    (e.dateLabel && /tbd|to be (decided|confirmed)/i.test(e.dateLabel));
-
   const parseDate = (dStr: string) => {
     if (!dStr) return new Date();
     const parts = dStr.split('T')[0].split('-');
@@ -196,6 +239,39 @@ function CalendarView({
     }
     return new Date(dStr);
   };
+
+  const getInitialCalendarDate = (eventList: any[], yearStr?: string) => {
+    // For current academic year 2026-27, default to present day
+    if (yearStr === '2026-27' || !yearStr) {
+      return new Date();
+    }
+
+    // For past academic years, default to the month of the earliest event
+    const dates = eventList
+      .map(e => e.date ? parseDate(e.date) : null)
+      .filter((d): d is Date => d !== null && !isNaN(d.getTime()))
+      .sort((a, b) => a.getTime() - b.getTime());
+
+    if (dates.length > 0) {
+      return new Date(dates[0].getFullYear(), dates[0].getMonth(), 1);
+    }
+    return new Date();
+  };
+
+  // Controlled navigation — initialized to present day for 2026-27 or starting month for past years
+  const [calDate, setCalDate] = useState(() => getInitialCalendarDate(events, targetYear));
+
+  useEffect(() => {
+    setCalDate(getInitialCalendarDate(events, targetYear));
+  }, [events, targetYear]);
+
+  const filtered = verticalFilter === 'all'
+    ? events
+    : events.filter(e => e.vertical === verticalFilter);
+
+  const isTBDEvent = (e: any) =>
+    e.type === 'ytd' ||
+    (e.dateLabel && /tbd|to be (decided|confirmed)/i.test(e.dateLabel));
 
   const calEvents = filtered
     .filter(e => e.date)
@@ -291,7 +367,11 @@ function CalendarView({
 }
 
 // ─── Main Page ───────────────────────────────────────────────────────────
-const EventsPage: React.FC = () => {
+interface EventsPageProps {
+  yearFilter?: string;
+}
+
+const EventsPage: React.FC<EventsPageProps> = ({ yearFilter }) => {
   usePrefetchOnIdle(['/gallery', '/contact']);
   const [filter, setFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -319,14 +399,19 @@ const EventsPage: React.FC = () => {
           .map((e: any) => ({
             id: e.id,
             title: e.title,
-            description: e.summary,
+            description: e.summary || e.description,
             date: e.date,
+            endDate: e.endDate || null,
+            dateLabel: e.dateLabel || null,
             category: e.category,
             status: 'past' as const,
             location: e.location,
-            image: e.poster || null,
-            vertical: '',
-            featured: false
+            image: e.poster || e.image || null,
+            vertical: e.vertical || '',
+            featured: false,
+            resourcePerson: e.resourcePerson || null,
+            collab: e.collab || e.resourcePerson || null,
+            highlights: e.highlights || []
           }));
 
         const combined = [...dbEvents, ...mappedPastEvents];
@@ -375,10 +460,44 @@ const EventsPage: React.FC = () => {
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % carouselEvents.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + carouselEvents.length) % carouselEvents.length);
 
+function getAcademicYear(event: any): string {
+  const dStr = event.date || '';
+  const title = (event.title || '').toLowerCase();
+
+  if (title.includes('2026-27') || title.includes('2026-2027')) return '2026-27';
+  if (title.includes('2025-26') || title.includes('2025-2026')) return '2025-26';
+  if (title.includes('2024-25') || title.includes('2024-2025')) return '2024-25';
+
+  if (!dStr) return '2026-27';
+
+  const parts = dStr.split('T')[0].split('-');
+  if (parts.length >= 2) {
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10);
+
+    if (!isNaN(year)) {
+      if (year > 2026) return '2026-27';
+      if (year === 2026) {
+        return month >= 6 ? '2026-27' : '2025-26';
+      }
+      if (year === 2025) {
+        return month >= 6 ? '2025-26' : '2024-25';
+      }
+      if (year <= 2024) {
+        return '2024-25';
+      }
+    }
+  }
+
+  return '2026-27';
+}
+
+  const targetYear = yearFilter || '2026-27';
+
   const filterEvents = useCallback(() => {
     return eventsData.filter(e => {
-      const hasImage = Boolean(e.image || e.bannerUrl || e.poster || e.banner_url);
-      if (e.status === 'past' && !hasImage) return false;
+      const eventYear = getAcademicYear(e);
+      if (eventYear !== targetYear) return false;
 
       const matchesSearch = (e.title || '').toLowerCase().includes(search.toLowerCase()) ||
         (e.description || '').toLowerCase().includes(search.toLowerCase()) ||
@@ -388,12 +507,13 @@ const EventsPage: React.FC = () => {
       const matchesVertical = verticalFilter === 'all' || e.vertical === verticalFilter;
       return matchesSearch && matchesStatus && matchesCategory && matchesVertical;
     });
-  }, [eventsData, search, filter, categoryFilter, verticalFilter]);
+  }, [eventsData, search, filter, categoryFilter, verticalFilter, targetYear]);
 
   const filteredEvents = filterEvents();
-  // For calendar view: show all events that have a date (ignore status filter so upcoming+past both show,
-  // but respect vertical/category/search so the chips still work)
+
   const calendarEvents = eventsData.filter(e => {
+    const eventYear = getAcademicYear(e);
+    if (eventYear !== targetYear) return false;
     const matchesSearch = !search || (e.title || '').toLowerCase().includes(search.toLowerCase()) ||
       (e.vertical || '').toLowerCase().includes(search.toLowerCase());
     const matchesCategory = categoryFilter === 'all' || e.category === categoryFilter;
@@ -431,15 +551,32 @@ const EventsPage: React.FC = () => {
           <ScrollReveal animation="fade">
             <div className="text-center mb-16">
               <span className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6">
-                Calendar
+                {yearFilter ? `Academic Year ${yearFilter}` : 'Calendar'}
               </span>
               <h1 className="text-4xl md:text-6xl font-extrabold mb-6 text-slate-900 tracking-tight leading-tight">
                 EVENTS &amp; <span className="text-[#CD0000]">HACKATHONS</span>
+                {yearFilter && <span className="block text-2xl md:text-3xl text-slate-500 font-bold mt-2">({yearFilter})</span>}
               </h1>
-              <p className="text-slate-600 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
-                Discover workshops, hackathons, and tech talks to level up your skills.
-                Aug 2026 – Feb 2027 across 9 verticals.
+              <p className="text-slate-600 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed mb-6">
+                Discover workshops, hackathons, and tech talks for the {targetYear} academic session.
               </p>
+
+              {/* Academic Year Selection Tabs */}
+              <div className="flex items-center justify-center gap-2 flex-wrap">
+                {['2026-27', '2025-26', '2024-25'].map((y) => (
+                  <Link
+                    key={y}
+                    href={`/events/${y}`}
+                    className={`px-4 py-2 rounded-full text-xs font-bold transition-all border ${
+                      targetYear === y
+                        ? 'bg-[#CD0000] text-white border-[#CD0000] shadow-sm'
+                        : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                    }`}
+                  >
+                    Academic Year {y}
+                  </Link>
+                ))}
+              </div>
             </div>
           </ScrollReveal>
 
@@ -519,9 +656,14 @@ const EventsPage: React.FC = () => {
                             <span>{carouselEvents[currentSlide].location}</span>
                           </div>
                         </div>
-                        <Button variant="secondary" size="sm" href="/contact">
-                          {carouselEvents[currentSlide].status === 'upcoming' ? 'Register Now' : 'View Details'}
-                        </Button>
+                        <a
+                          href={`/events/${carouselEvents[currentSlide].id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#CD0000] text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-[#A30000] transition-all shadow-xs"
+                        >
+                          {carouselEvents[currentSlide].status === 'upcoming' ? 'Register Now' : 'View Details'} <ExternalLink size={13} />
+                        </a>
                       </div>
                     </div>
                   </motion.div>
@@ -578,23 +720,25 @@ const EventsPage: React.FC = () => {
           {/* Filters */}
           <ScrollReveal animation="fade">
             <div className="bg-white border border-slate-200/80 rounded-2xl p-6 mb-8 shadow-xs space-y-5">
-              {/* Status & Search */}
+              {/* Status & Category */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Status &amp; Search</h3>
-                  <SearchFilter
-                    searchValue={search}
-                    onSearchChange={setSearch}
-                    activeFilter={filter}
-                    onFilterChange={setFilter}
-                    filters={[
-                      { label: 'All', value: 'all' },
-                      { label: 'Upcoming', value: 'upcoming' },
-                      { label: 'Past', value: 'past' }
-                    ]}
-                  />
-                </div>
-                <div>
+                {targetYear === '2026-27' && (
+                  <div>
+                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Status</h3>
+                    <SearchFilter
+                      searchValue={search}
+                      onSearchChange={setSearch}
+                      activeFilter={filter}
+                      onFilterChange={setFilter}
+                      filters={[
+                        { label: 'All', value: 'all' },
+                        { label: 'Upcoming', value: 'upcoming' },
+                        { label: 'Past', value: 'past' }
+                      ]}
+                    />
+                  </div>
+                )}
+                <div className={targetYear !== '2026-27' ? 'lg:col-span-2' : ''}>
                   <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Category</h3>
                   <div className="flex flex-wrap gap-2">
                     {[
@@ -621,42 +765,44 @@ const EventsPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Vertical Filter */}
-              <div>
-                <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
-                  <Tag size={10} /> Vertical
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => setVerticalFilter('all')}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border ${
-                      verticalFilter === 'all'
-                        ? 'bg-slate-900 text-white border-slate-900'
-                        : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                    }`}
-                  >
-                    <Sparkles size={9} /> All
-                  </button>
-                  {ALL_VERTICALS.map(v => {
-                    const color = VERTICAL_COLORS[v];
-                    const isActive = verticalFilter === v;
-                    return (
-                      <button
-                        key={v}
-                        onClick={() => setVerticalFilter(v)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border"
-                        style={isActive
-                          ? { background: color, color: '#fff', borderColor: color }
-                          : { background: '#fff', color: '#52525B', borderColor: '#E4E4E7' }
-                        }
-                      >
-                        <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: color }} />
-                        {v}
-                      </button>
-                    );
-                  })}
+              {/* Vertical Filter — reserved strictly for 2026-27 */}
+              {targetYear === '2026-27' && (
+                <div>
+                  <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                    <Tag size={10} /> Vertical
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => setVerticalFilter('all')}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border ${
+                        verticalFilter === 'all'
+                          ? 'bg-slate-900 text-white border-slate-900'
+                          : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+                      }`}
+                    >
+                      <Sparkles size={9} /> All
+                    </button>
+                    {ALL_VERTICALS.map(v => {
+                      const color = VERTICAL_COLORS[v];
+                      const isActive = verticalFilter === v;
+                      return (
+                        <button
+                          key={v}
+                          onClick={() => setVerticalFilter(v)}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border"
+                          style={isActive
+                            ? { background: color, color: '#fff', borderColor: color }
+                            : { background: '#fff', color: '#52525B', borderColor: '#E4E4E7' }
+                          }
+                        >
+                          <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: color }} />
+                          {v}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </ScrollReveal>
 
@@ -680,6 +826,7 @@ const EventsPage: React.FC = () => {
                 <CalendarView
                   events={calendarEvents}
                   verticalFilter={verticalFilter}
+                  targetYear={targetYear}
                   onSelectEvent={setSelectedEvent}
                 />
               </motion.div>
@@ -691,6 +838,7 @@ const EventsPage: React.FC = () => {
                     <EventCard
                       key={event.id}
                       event={event as any}
+                      academicYear={targetYear}
                       onPosterClick={setSelectedPoster}
                     />
                   ))}

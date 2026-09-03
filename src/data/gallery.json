@@ -1,5 +1,37 @@
 [
   {
+    "id": "g-infographic-1",
+    "title": "Interface 2026 Engagement Workshop",
+    "category": "workshops",
+    "description": "Labyrinth Student Engagement Workshop session during Interface 2026.",
+    "image": "/images/infographics_report/image1.jpg",
+    "date": "2026-06-26"
+  },
+  {
+    "id": "g-infographic-2",
+    "title": "Cognify AI Quiz & Infographics",
+    "category": "workshops",
+    "description": "Visual communications & AI Cognify quiz leaderboard showcase.",
+    "image": "/images/infographics_report/image2.png",
+    "date": "2026-06-26"
+  },
+  {
+    "id": "g-infographic-3",
+    "title": "Prompt Engineering & Tinkercad Workshop",
+    "category": "workshops",
+    "description": "Hands-on Tinkercad circuit simulation & Promptverse generative AI challenge.",
+    "image": "/images/infographics_report/image3.png",
+    "date": "2026-06-26"
+  },
+  {
+    "id": "g-infographic-4",
+    "title": "AI Debate & Speaker Session",
+    "category": "workshops",
+    "description": "Structured AI ethics debate and hands-on peer sessions for non-mainstage participants.",
+    "image": "/images/infographics_report/image4.jpg",
+    "date": "2026-06-26"
+  },
+  {
     "id": "g1",
     "title": "HackMatrix Opening Ceremony",
     "category": "hackathons",

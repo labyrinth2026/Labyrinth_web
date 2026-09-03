@@ -19,6 +19,7 @@ export interface EventType {
 
 interface EventCardProps {
   event: EventType;
+  academicYear?: string;
   onPosterClick?: (imageUrl: string) => void;
 }
 
@@ -30,7 +31,7 @@ const categoryConfig: Record<string, { bg: string; text: string; label: string }
   social:    { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: 'Social' },
 };
 
-const EventCard: React.FC<EventCardProps> = ({ event, onPosterClick }) => {
+const EventCard: React.FC<EventCardProps> = ({ event, academicYear, onPosterClick }) => {
   const catConfig = categoryConfig[event.category] || { bg: 'bg-slate-50 border-slate-200/80', text: 'text-slate-700', label: event.category };
 
   const formatDate = (dateString: string) => {
@@ -41,8 +42,10 @@ const EventCard: React.FC<EventCardProps> = ({ event, onPosterClick }) => {
     });
   };
 
+  const targetHref = `/events/${event.id}${academicYear ? `?year=${academicYear}` : ''}`;
+
   return (
-    <Link href="/events" className="block group">
+    <Link href={targetHref} className="block group">
       <motion.div
         whileHover={{ 
           y: -5, 

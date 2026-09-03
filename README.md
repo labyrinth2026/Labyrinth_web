@@ -3,10 +3,9 @@
   <img src="./public/labyrinth-logo.png" alt="Labyrinth Logo" width="180" height="180" />
 
   # LABYRINTH
-
   **The Official Computer Science Club Portal of Christ University**
 
-  [![Next.js](https://img.shields.io/badge/Next.js-16.2.9-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+ [![Next.js](https://img.shields.io/badge/Next.js-16.2.9-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-6.0.2-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
   [![React](https://img.shields.io/badge/React-19.2.7-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3.2-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
@@ -14,7 +13,6 @@
   [![Vercel](https://img.shields.io/badge/Vercel-Deployment-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
   [![Framer Motion](https://img.shields.io/badge/Framer_Motion-12.41-0055FF?style=for-the-badge&logo=framer)](https://www.framer.com/motion/)
 </div>
-
 ---
 
 ## Overview

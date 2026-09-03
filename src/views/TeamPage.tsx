@@ -45,7 +45,7 @@ const WEBSITE_DESIGNERS_DATA = [
     designation: 'System Design & Development',
     department: 'Department of Computer Science',
     email: 'suryachalam.vm@bsccmh.christuniversity.in',
-    linkedin: '#',
+    linkedin: 'https://www.linkedin.com/in/suryachalam/',
     github: 'https://github.com/sgk18',
     avatar: 'https://github.com/sgk18.png',
   },
@@ -56,7 +56,8 @@ const WEBSITE_DESIGNERS_DATA = [
     designation: 'System Design & Development',
     department: 'Department of Computer Science',
     email: 'bhargav.g@bsccmh.christuniversity.in',
-    linkedin: '#',
+    linkedin: 'https://www.linkedin.com/in/bhargav-shree-raj-g/',
+    github: 'https://github.com/Bhargav120606',
     avatar: 'https://paqpkdipiyvwdneeghin.supabase.co/storage/v1/object/public/gallery/avatars/u-bhargav-g-1784697037114.jpg',
   },
 ];
