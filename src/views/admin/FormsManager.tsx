@@ -4,7 +4,7 @@ import { fetchFromSheet } from '@/services/api';
 import {
   Plus, Edit2, Trash2, Copy, Link as LinkIcon, RefreshCw, Check,
   Download, Eye, Save, Calendar, Settings, ArrowLeft, FileText,
-  Search, ChevronUp, ChevronDown, Upload, Mail, Filter
+  Search, ChevronUp, ChevronDown, Upload, Mail, Filter, Loader2
 } from 'lucide-react';
 
 import { DashboardStats } from '@/components/admin/recruitment/DashboardStats';
@@ -75,6 +75,9 @@ export default function FormsManager() {
   // Builder state
   const [builderFields, setBuilderFields] = useState<CustomFormField[]>([]);
   const [formMeta, setFormMeta] = useState<Partial<CustomForm>>({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveProgress, setSaveProgress] = useState(0);
+  const [saveStatus, setSaveStatus] = useState('');
 
   // Responses ATS state
   const [responses, setResponses] = useState<CustomResponse[]>([]);
@@ -381,13 +384,32 @@ export default function FormsManager() {
       return;
     }
 
-    setLoading(true);
+    setIsSaving(true);
+    setSaveProgress(15);
+    setSaveStatus('Validating form structure...');
+
+    // Progress timer to advance progress smoothly
+    const progressTimer = setInterval(() => {
+      setSaveProgress((prev) => {
+        if (prev < 40) return prev + 10;
+        if (prev < 70) return prev + 5;
+        if (prev < 90) return prev + 2;
+        return prev;
+      });
+    }, 120);
+
     try {
+      setSaveStatus(selectedForm ? 'Preparing form updates...' : 'Creating new form definition...');
+      setSaveProgress(40);
+
       const payloadFields = builderFields.map((f, i) => ({
         ...f,
         order: i,
         options: f.options ? f.options : null,
       }));
+
+      setSaveStatus('Syncing fields and question schema...');
+      setSaveProgress(65);
 
       if (selectedForm) {
         await fetchFromSheet('updateForm', {
@@ -404,11 +426,23 @@ export default function FormsManager() {
           fields: payloadFields,
         });
       }
+
+      setSaveStatus('Finalizing & publishing...');
+      setSaveProgress(100);
+      clearInterval(progressTimer);
+
+      // Brief delay so the user clearly sees 100% completion
+      await new Promise((resolve) => setTimeout(resolve, 400));
+
       setView('list');
       loadAllForms();
     } catch (err: any) {
+      clearInterval(progressTimer);
       alert(err.message || 'Failed to save form.');
-      setLoading(false);
+    } finally {
+      setIsSaving(false);
+      setSaveProgress(0);
+      setSaveStatus('');
     }
   };
 
@@ -784,27 +818,70 @@ export default function FormsManager() {
       {/* 2. BUILDER VIEW */}
       {view === 'build' && (
         <div className="space-y-6">
-          <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 flex justify-between items-center shadow-xs">
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setView('list')}
-                className="p-2 text-slate-500 hover:text-[#CD0000] hover:bg-slate-50 rounded-xl transition-all"
-              >
-                <ArrowLeft size={16} />
-              </button>
-              <div>
-                <h1 className="text-xl font-bold font-grotesk text-[#CD0000]">
-                  {selectedForm ? 'Edit Custom Form' : 'Create Custom Form'}
-                </h1>
-                <p className="text-[#667085] text-sm mt-0.5">Configure form settings and design input fields.</p>
+          <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-xs relative overflow-hidden">
+            {/* Top edge animated progress bar when saving */}
+            {isSaving && (
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-red-100 overflow-hidden">
+                <div 
+                  className="h-full bg-[#CD0000] transition-all duration-300 ease-out"
+                  style={{ width: `${saveProgress}%` }}
+                />
               </div>
+            )}
+
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setView('list')}
+                  disabled={isSaving}
+                  className="p-2 text-slate-500 hover:text-[#CD0000] hover:bg-slate-50 rounded-xl transition-all disabled:opacity-50"
+                >
+                  <ArrowLeft size={16} />
+                </button>
+                <div>
+                  <h1 className="text-xl font-bold font-grotesk text-[#CD0000]">
+                    {selectedForm ? 'Edit Custom Form' : 'Create Custom Form'}
+                  </h1>
+                  <p className="text-[#667085] text-sm mt-0.5">Configure form settings and design input fields.</p>
+                </div>
+              </div>
+              <button
+                onClick={handleSaveForm}
+                disabled={isSaving}
+                className="px-5 py-2.5 bg-[#CD0000] hover:bg-[#A30000] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all flex items-center gap-2 shadow-sm disabled:opacity-80 disabled:cursor-not-allowed"
+              >
+                {isSaving ? (
+                  <>
+                    <Loader2 size={15} className="animate-spin text-white" />
+                    <span>Saving... ({saveProgress}%)</span>
+                  </>
+                ) : (
+                  <>
+                    <Save size={15} />
+                    <span>Save Form</span>
+                  </>
+                )}
+              </button>
             </div>
-            <button
-              onClick={handleSaveForm}
-              className="px-5 py-2 bg-[#CD0000] hover:bg-[#A30000] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all flex items-center gap-1.5 shadow-sm"
-            >
-              <Save size={15} /> Save Form
-            </button>
+
+            {/* Detailed progress indicator bar inside header */}
+            {isSaving && (
+              <div className="mt-4 pt-3 border-t border-slate-100 animate-fadeIn">
+                <div className="flex items-center justify-between text-xs mb-1.5 font-medium">
+                  <span className="text-slate-600 flex items-center gap-1.5">
+                    <Loader2 size={13} className="animate-spin text-[#CD0000]" />
+                    {saveStatus || 'Saving form...'}
+                  </span>
+                  <span className="font-mono font-bold text-[#CD0000]">{saveProgress}%</span>
+                </div>
+                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-[#CD0000] to-[#E02424] rounded-full transition-all duration-200 ease-out"
+                    style={{ width: `${saveProgress}%` }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
